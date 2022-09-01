@@ -1,0 +1,42 @@
+
+syntax = "proto3";
+/// use google's well-known types for protobuf
+import "google/protobuf/timestamp.proto";
+
+/// The source is an abstract reference that could contain document info and other metadata that can have multiple. 
+///Can be used as source.
+/// Can be used as a reference 
+/// Can be used a digital object.
+package document;
+
+/// An abstract document.
+message Document {
+    /// Uuid of the source.
+    string id = 1;
+    string title = 2;
+    /// description
+    string description = 3;
+    /// citation information
+    string citation = 5;
+    /// publication date
+    google.protobuf.Timestamp publication_date = 6;
+    /// a unique id in the original place
+    /// In the case of a web page, this is the url.
+    /// In the case of a book, this is the isbn.
+    /// In the case of a journal, this is the issn.
+    /// In the case of a Zotero Item, this is the Zotero URI.
+    string source_id = 7;
+    /// Describes what the unique Id refers to.
+    string source_id_type = 8;
+    /// filename, with extension
+    string file_name = 9;
+    /// file extension
+    string file_extension = 10;
+    /// file directory
+    string file_dir = 11;
+    /// modified date
+    google.protobuf.Timestamp modified = 12;
+    /// created date
+    google.protobuf.Timestamp created = 13;
+    
+}
