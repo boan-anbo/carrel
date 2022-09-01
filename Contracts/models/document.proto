@@ -1,7 +1,8 @@
-
 syntax = "proto3";
+
 /// use google's well-known types for protobuf
 import "google/protobuf/timestamp.proto";
+
 
 /// The source is an abstract reference that could contain document info and other metadata that can have multiple. 
 ///Can be used as source.
@@ -38,5 +39,5 @@ message Document {
     google.protobuf.Timestamp modified = 12;
     /// created date
     google.protobuf.Timestamp created = 13;
-    
+
 }

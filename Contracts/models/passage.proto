@@ -1,7 +1,8 @@
 syntax = "proto3";
 
 /// import document from document.proto
-import "./document.proto";
+import "document.proto";
+
 
 
 package passage;
@@ -13,8 +14,6 @@ message Passage {
     string text = 2;
     // passage description
     string description = 3;
-    // comments
-    repeated Comment comments = 4;
-    // source
-    document.Document source = 5;
+    // passage document
+    document.Document document = 4;
 }
