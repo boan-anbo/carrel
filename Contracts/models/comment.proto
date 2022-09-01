@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+
+package comment;
+
+message Comment {
+    // id
+    string uuid = 1;
+    //  content
+    string content = 2;
+    //  author
+    string author = 3;
+    //  created, UNIX timestamp
+    int64 created = 4;
+    
+    //  updated 
+    int64 updated = 5;
+
+
+
+}

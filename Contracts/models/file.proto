@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+
+package file;
+
+message File {
+    // id
+    string uuid = 1;
+
+    /// filename, with extension
+    string file_name = 10;
+    /// file extension
+    string file_extension = 11;
+    /// file directory
+    string file_dir = 12;
+}

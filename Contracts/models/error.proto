@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package api.error;
+
+// The greeting service definition.
+// The request message containing the user's name.
+message ApiError {
+    /// code
+    string code = 1;
+    /// message
+    string message = 2;
+    /// suggestion
+
+    string suggestion = 3;
+    /// user payload
+    string user_payload = 4;
+    /// payload for user
+    string payload_for_user = 5;
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package person;
+
+
+/// a unique id in the original place
+/// In the case of a web page, this is the url.
+/// In the case of a book, this is the isbn.
+/// In the case of a journal, this is the issn.
+message Person {
+    string uuid = 1;
+    /// first name
+    string first_name = 2;
+    /// last name
+    string last_name = 3;
+    /// description
+    string description = 4;
+}
