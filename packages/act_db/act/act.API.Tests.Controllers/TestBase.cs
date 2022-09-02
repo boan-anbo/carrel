@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Repositories.Interface;
 

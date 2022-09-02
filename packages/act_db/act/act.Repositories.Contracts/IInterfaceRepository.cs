@@ -2,7 +2,7 @@
 
 using act.Services.Model;
 
-namespace act.Repositories.Interface;
+namespace act.Repositories.Contracts;
 
 public interface IInteractionRepository
 {

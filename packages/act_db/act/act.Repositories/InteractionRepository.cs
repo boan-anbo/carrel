@@ -1,4 +1,5 @@
-﻿using act.Repositories.Db;
+﻿using act.Repositories.Contracts;
+using act.Repositories.Db;
 using act.Services.Model;
 using Microsoft.EntityFrameworkCore;
 
@@ -114,6 +115,10 @@ public class InteractionRepository : IInteractionRepository
 
     public async Task<bool> CheckIfInteractionExists(int requestDtoId, Guid requestDtoUuid)
     {
+        if (requestDtoUuid == Guid.Empty || !(requestDtoId > 0))
+        {
+            return false;
+        }
         return await _dbContext.Interactions.AnyAsync(i => i.Id == requestDtoId && i.Uuid == requestDtoUuid);
     }
 }

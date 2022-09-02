@@ -7,8 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using act.Repositories.Contracts;
 using act.Repositories.Db;
-using act.Repositories.Interface;
 
 namespace act.Services
 {

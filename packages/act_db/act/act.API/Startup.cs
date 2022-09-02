@@ -22,6 +22,7 @@ using act.API.Common.Attributes;
 using act.API.Common.Settings;
 using act.API.Swagger;
 using act.IoC.Configuration.DI;
+using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Repositories.GraphQL;
 using act.Repositories.Interface;

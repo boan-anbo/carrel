@@ -42,6 +42,9 @@ namespace act.Repositories.Db.Migrations
                     b.Property<int>("TypeId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid>("Uuid")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TypeId");
@@ -57,7 +60,8 @@ namespace act.Repositories.Db.Migrations
                             Identity = 0,
                             Label = "World",
                             Start = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TypeId = 1
+                            TypeId = 1,
+                            Uuid = new Guid("74ebc892-15d3-4cb0-aa78-9a233bb2cd78")
                         },
                         new
                         {
@@ -67,7 +71,8 @@ namespace act.Repositories.Db.Migrations
                             Identity = 0,
                             Label = "People",
                             Start = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TypeId = 1
+                            TypeId = 1,
+                            Uuid = new Guid("25932952-a212-4f2f-9cde-d5d03b10017c")
                         });
                 });
 
@@ -94,7 +99,7 @@ namespace act.Repositories.Db.Migrations
                         new
                         {
                             Id = 1,
-                            Guid = new Guid("a56526bc-c109-4b0d-a9c3-8493d0b48fca"),
+                            Guid = new Guid("bf3f93bd-2ed9-49f2-a0e3-9d9ac91422fc"),
                             Label = "to be"
                         });
                 });
@@ -107,8 +112,10 @@ namespace act.Repositories.Db.Migrations
                     b.Property<int>("LinkedInteractionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("Uuid")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Weight")
@@ -129,8 +136,10 @@ namespace act.Repositories.Db.Migrations
                     b.Property<int>("LinkedInteractionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("Uuid")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Weight")
@@ -176,8 +185,10 @@ namespace act.Repositories.Db.Migrations
                     b.Property<int>("LinkedInteractionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("Uuid")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Weight")
