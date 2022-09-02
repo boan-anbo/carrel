@@ -1,8 +1,3 @@
-//! Run with
-//!
-//! ```not_rust
-//! cd examples && cargo run -p example-rest-grpc-multiplex
-//! ```
 
 use std::net::SocketAddr;
 
@@ -11,9 +6,13 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 mod generated;
 pub mod controller;
 mod app;
+
+/// Custom implementation of generated proto definitions.
+pub mod implementations;
+
 // Include the `items` module, which is generated from items.proto.
 pub mod distant_api {
-    include!("generated/distantapidto.rs");
+    include!("generated/distant_api_dtos.rs");
 }
 pub mod document {
     include!("generated/document.rs");
@@ -26,6 +25,10 @@ pub mod passage {
 }
 pub mod person {
     include!("generated/person.rs");
+}
+
+pub mod api_error {
+    include!("generated/api_error.rs");
 }
 
 

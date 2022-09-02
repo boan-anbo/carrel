@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package distant_api_dtos;
+
+import "models/passage.proto";
+import "models/api.error.proto";
+
+
+
+message DistantApiSearchRequest {
+  string query = 1;
+  repeated string indices = 2;
+}
+
+message DistantApiSearchResponse {
+
+  repeated passage.Passage passages = 1;
+  /// count
+  sint64 count = 2;
+  /// optional scroll_id
+  optional string scroll_id = 3;
+
+  bool has_more = 4;
+}
+
+message DistantApiScrollRequest {
+  string scroll_id = 1;
+}

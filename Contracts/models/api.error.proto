@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api.error;
+package api_error;
 
 // The greeting service definition.
 // The request message containing the user's name.

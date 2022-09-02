@@ -2,7 +2,7 @@ use std::{env, path::PathBuf};
 
 
 fn main() {
-    let proto_file = "distantapidto.proto";
+    let proto_file = "distant.api.dtos.proto";
     let out_dir = PathBuf::from("src/generated/");
 
     // let generated_file_path =   env!("OUT_DIR");
