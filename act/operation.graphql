@@ -1,0 +1,48 @@
+
+query GetInteractions {
+  interactions {
+    nodes {
+      id,
+      label,
+      ...typeFragment,
+      identity
+    }
+  }
+}
+
+mutation AddNewInteractionEntity($label: String!) {
+  addNewEntityInteraction(label: $label) {
+    id,
+    label,
+    ...typeFragment,
+    identity
+  }
+}
+
+fragment typeFragment on Interaction {
+  type {
+    id,
+    guid,
+    label,
+    description,
+
+  },
+}
+mutation DeleteInteraction($id: Int!) {
+  deleteInteraction(id: $id)
+}
+
+
+query GetInteractions($labelFilter: String!) {
+  interactions(where: { label: { startsWith: $labelFilter } }) {
+    nodes {
+      label
+      identity
+      ...typeFragment
+    }
+  }
+}
+
+type InteractionOperations {
+  findInteractions(labelFilter: String!): [Interaction]
+}

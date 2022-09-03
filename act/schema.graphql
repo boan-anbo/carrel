@@ -1,0 +1,341 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+  query: GraphQLQuery
+  mutation: GraphQLMutation
+}
+
+"The `@defer` directive may be provided for fragment spreads and inline fragments to inform the executor to delay the execution of the current fragment to indicate deprioritization of the current fragment. A query with `@defer` directive will cause the request to potentially return multiple responses, where non-deferred data is delivered in the initial response and data deferred is delivered in a subsequent response. `@include` and `@skip` take precedence over `@defer`."
+directive @defer(
+  "Deferred when true."
+  if: Boolean,
+  "If this argument label has a value other than null, it will be passed on to the result of this defer directive. This label is intended to give client applications a way to identify to which fragment a deferred result belongs to."
+  label: String
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"The `@stream` directive may be provided for a field of `List` type so that the backend can leverage technology such as asynchronous iterators to provide a partial list in the initial response, and additional list items in subsequent responses. `@include` and `@skip` take precedence over `@stream`."
+directive @stream(
+  "Streamed when true."
+  if: Boolean,
+  "The initial elements that shall be send down to the consumer."
+  initialCount: Int! = 0,
+  "If this argument label has a value other than null, it will be passed on to the result of this stream directive. This label is intended to give client applications a way to identify to which fragment a streamed result belongs to."
+  label: String
+) on FIELD
+
+type GraphQLMutation {
+  addNewEntityInteraction(label: String!): Interaction
+  deleteInteraction(id: Int!): Int!
+}
+
+type GraphQLQuery {
+  interactions(
+    "Returns the elements in the list that come after the specified cursor."
+    after: String,
+    "Returns the elements in the list that come before the specified cursor."
+    before: String,
+    "Returns the first _n_ elements from the list."
+    first: Int,
+    "Returns the last _n_ elements from the list."
+    last: Int,
+    order: [InteractionSortInput!],
+    where: InteractionFilterInput
+  ): InteractionsConnection
+}
+
+type Interaction {
+  description: String
+  end: DateTime
+  id: Int!
+  identity: InteractionIdentity!
+  label: String!
+  objects: [ObjectRelation]
+  properties: [Property]
+  related: [ParallelRelation]
+  start: DateTime
+  subjects: [SubjectRelation]
+  type: InteractionType!
+  typeId: Int!
+}
+
+type InteractionType {
+  description: String
+  guid: UUID!
+  id: Int!
+  interactions: [Interaction]
+  label: String
+}
+
+"A connection to a list of items."
+type InteractionsConnection {
+  "A list of edges."
+  edges: [InteractionsEdge!]
+  "A flattened list of the nodes."
+  nodes: [Interaction!]
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+"An edge in a connection."
+type InteractionsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Interaction!
+}
+
+type ObjectRelation {
+  hostInteraction: Interaction
+  hostInteractionId: Int!
+  id: UUID!
+  linkedInteraction: Interaction
+  linkedInteractionId: Int!
+  weight: Int!
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+  "When paginating forwards, the cursor to continue."
+  endCursor: String
+  "Indicates whether more edges exist following the set defined by the clients arguments."
+  hasNextPage: Boolean!
+  "Indicates whether more edges exist prior the set defined by the clients arguments."
+  hasPreviousPage: Boolean!
+  "When paginating backwards, the cursor to continue."
+  startCursor: String
+}
+
+type ParallelRelation {
+  hostInteraction: Interaction
+  hostInteractionId: Int!
+  id: UUID!
+  linkedInteraction: Interaction
+  linkedInteractionId: Int!
+  weight: Int!
+}
+
+type Property {
+  guid: UUID!
+  id: Int!
+  interaction: Interaction
+  interactionId: Int!
+  key: String
+  value: String
+}
+
+type SubjectRelation {
+  hostInteraction: Interaction
+  hostInteractionId: Int!
+  id: UUID!
+  linkedInteraction: Interaction
+  linkedInteractionId: Int!
+  weight: Int!
+}
+
+enum InteractionIdentity {
+  ACT
+  ENTITY
+  SOURCE
+}
+
+enum SortEnumType {
+  ASC
+  DESC
+}
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime
+
+scalar UUID
+
+input ComparableGuidOperationFilterInput {
+  eq: UUID
+  gt: UUID
+  gte: UUID
+  in: [UUID!]
+  lt: UUID
+  lte: UUID
+  neq: UUID
+  ngt: UUID
+  ngte: UUID
+  nin: [UUID!]
+  nlt: UUID
+  nlte: UUID
+}
+
+input ComparableInt32OperationFilterInput {
+  eq: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  neq: Int
+  ngt: Int
+  ngte: Int
+  nin: [Int!]
+  nlt: Int
+  nlte: Int
+}
+
+input ComparableNullableOfDateTimeOperationFilterInput {
+  eq: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime]
+  lt: DateTime
+  lte: DateTime
+  neq: DateTime
+  ngt: DateTime
+  ngte: DateTime
+  nin: [DateTime]
+  nlt: DateTime
+  nlte: DateTime
+}
+
+input InteractionFilterInput {
+  and: [InteractionFilterInput!]
+  description: StringOperationFilterInput
+  end: ComparableNullableOfDateTimeOperationFilterInput
+  id: ComparableInt32OperationFilterInput
+  identity: InteractionIdentityOperationFilterInput
+  label: StringOperationFilterInput
+  objects: ListFilterInputTypeOfObjectRelationFilterInput
+  or: [InteractionFilterInput!]
+  properties: ListFilterInputTypeOfPropertyFilterInput
+  related: ListFilterInputTypeOfParallelRelationFilterInput
+  start: ComparableNullableOfDateTimeOperationFilterInput
+  subjects: ListFilterInputTypeOfSubjectRelationFilterInput
+  type: InteractionTypeFilterInput
+  typeId: ComparableInt32OperationFilterInput
+}
+
+input InteractionIdentityOperationFilterInput {
+  eq: InteractionIdentity
+  in: [InteractionIdentity!]
+  neq: InteractionIdentity
+  nin: [InteractionIdentity!]
+}
+
+input InteractionSortInput {
+  description: SortEnumType
+  end: SortEnumType
+  id: SortEnumType
+  identity: SortEnumType
+  label: SortEnumType
+  start: SortEnumType
+  type: InteractionTypeSortInput
+  typeId: SortEnumType
+}
+
+input InteractionTypeFilterInput {
+  and: [InteractionTypeFilterInput!]
+  description: StringOperationFilterInput
+  guid: ComparableGuidOperationFilterInput
+  id: ComparableInt32OperationFilterInput
+  interactions: ListFilterInputTypeOfInteractionFilterInput
+  label: StringOperationFilterInput
+  or: [InteractionTypeFilterInput!]
+}
+
+input InteractionTypeSortInput {
+  description: SortEnumType
+  guid: SortEnumType
+  id: SortEnumType
+  label: SortEnumType
+}
+
+input ListFilterInputTypeOfInteractionFilterInput {
+  all: InteractionFilterInput
+  any: Boolean
+  none: InteractionFilterInput
+  some: InteractionFilterInput
+}
+
+input ListFilterInputTypeOfObjectRelationFilterInput {
+  all: ObjectRelationFilterInput
+  any: Boolean
+  none: ObjectRelationFilterInput
+  some: ObjectRelationFilterInput
+}
+
+input ListFilterInputTypeOfParallelRelationFilterInput {
+  all: ParallelRelationFilterInput
+  any: Boolean
+  none: ParallelRelationFilterInput
+  some: ParallelRelationFilterInput
+}
+
+input ListFilterInputTypeOfPropertyFilterInput {
+  all: PropertyFilterInput
+  any: Boolean
+  none: PropertyFilterInput
+  some: PropertyFilterInput
+}
+
+input ListFilterInputTypeOfSubjectRelationFilterInput {
+  all: SubjectRelationFilterInput
+  any: Boolean
+  none: SubjectRelationFilterInput
+  some: SubjectRelationFilterInput
+}
+
+input ObjectRelationFilterInput {
+  and: [ObjectRelationFilterInput!]
+  hostInteraction: InteractionFilterInput
+  hostInteractionId: ComparableInt32OperationFilterInput
+  id: ComparableGuidOperationFilterInput
+  linkedInteraction: InteractionFilterInput
+  linkedInteractionId: ComparableInt32OperationFilterInput
+  or: [ObjectRelationFilterInput!]
+  weight: ComparableInt32OperationFilterInput
+}
+
+input ParallelRelationFilterInput {
+  and: [ParallelRelationFilterInput!]
+  hostInteraction: InteractionFilterInput
+  hostInteractionId: ComparableInt32OperationFilterInput
+  id: ComparableGuidOperationFilterInput
+  linkedInteraction: InteractionFilterInput
+  linkedInteractionId: ComparableInt32OperationFilterInput
+  or: [ParallelRelationFilterInput!]
+  weight: ComparableInt32OperationFilterInput
+}
+
+input PropertyFilterInput {
+  and: [PropertyFilterInput!]
+  guid: ComparableGuidOperationFilterInput
+  id: ComparableInt32OperationFilterInput
+  interaction: InteractionFilterInput
+  interactionId: ComparableInt32OperationFilterInput
+  key: StringOperationFilterInput
+  or: [PropertyFilterInput!]
+  value: StringOperationFilterInput
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  contains: String
+  endsWith: String
+  eq: String
+  in: [String]
+  ncontains: String
+  nendsWith: String
+  neq: String
+  nin: [String]
+  nstartsWith: String
+  or: [StringOperationFilterInput!]
+  startsWith: String
+}
+
+input SubjectRelationFilterInput {
+  and: [SubjectRelationFilterInput!]
+  hostInteraction: InteractionFilterInput
+  hostInteractionId: ComparableInt32OperationFilterInput
+  id: ComparableGuidOperationFilterInput
+  linkedInteraction: InteractionFilterInput
+  linkedInteractionId: ComparableInt32OperationFilterInput
+  or: [SubjectRelationFilterInput!]
+  weight: ComparableInt32OperationFilterInput
+}
