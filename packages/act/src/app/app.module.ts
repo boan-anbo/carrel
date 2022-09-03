@@ -4,6 +4,9 @@ import {HomeComponent} from "./home/home/home.component";
 import {HomeModule} from "./home/home.module";
 import {AppComponent} from "./app.component";
 import {BrowserModule} from "@angular/platform-browser";
+import { AppRoutingModule } from './app-routing.module';
+import {EditorModule} from "./editor/editor.module";
+import {TextSelectDirective} from "./directives/text-edit-event";
 
 
 
@@ -14,7 +17,9 @@ import {BrowserModule} from "@angular/platform-browser";
   imports: [
     CommonModule,
     BrowserModule,
-    HomeModule
+    HomeModule,
+    EditorModule,
+    AppRoutingModule
   ],
   bootstrap: [AppComponent]
 })

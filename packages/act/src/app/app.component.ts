@@ -4,7 +4,7 @@ import { invoke } from '@tauri-apps/api/tauri';
 @Component({
   selector: 'app-root',
   template: `
-  <app-home></app-home>
+    <router-outlet> </router-outlet>
   `
 })
 export class AppComponent {

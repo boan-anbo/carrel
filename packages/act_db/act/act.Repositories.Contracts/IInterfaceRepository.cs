@@ -16,5 +16,6 @@ public interface IInteractionRepository
     Task<Property?> GetProperty(int propertyId);
     Task<ICollection<Property>> GetProperties(ICollection<int> propertyIds);
     Task<bool> CheckIfInteractionExists(int requestDtoId, Guid requestDtoUuid);
-    
+
+    IQueryable<Interaction?> GetInteractionScalarList();
 }

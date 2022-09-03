@@ -7,7 +7,9 @@ public class ActDbContext : DbContext
 {
     public ActDbContext()
     {
-        const Environment.SpecialFolder folder = Environment.SpecialFolder.LocalApplicationData;
+        // const Environment.SpecialFolder folder = Environment.SpecialFolder.LocalApplicationData;
+        // use project folder for now
+        const Environment.SpecialFolder folder = Environment.SpecialFolder.MyDocuments;
         var path = Environment.GetFolderPath(folder);
         DbPath = Path.Join(path, "act.db");
         Database.EnsureCreated();
@@ -135,6 +137,7 @@ public class ActDbContext : DbContext
             .HasOne<FirstAct>(x => x.FirstAct)
             .WithMany(g => g.Interactions)
             .HasForeignKey(x => x.FirstActId)
+            
             .OnDelete(DeleteBehavior.Restrict);
         
         // Second act

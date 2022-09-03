@@ -1,9 +1,12 @@
 schema: schema.graphql
-documents: operation.graphql
+documents: [
+             "operations/interaction_operations.graphql",
+             "operations/relation_operations.graphql"
+]
 config:
   addExplicitOverride: true
 generates:
-  ./graphql/generated.ts:
+  ../graphql/generated.ts:
     plugins:
       - typescript
       - typescript-operations

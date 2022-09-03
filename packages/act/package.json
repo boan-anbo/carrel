@@ -12,8 +12,8 @@
     "test": "ng test",
     "dev": "ng serve",
     "dev:tauri": "tauri dev",
-    "graphql:download-schema": "npx apollo service:download --endpoint=http://localhost:5000/graphql graphql-schema.json",
-    "graphql:codegen": "graphql-codegen",
+    "graphql:download-schema": "npx apollo service:download --endpoint=http://localhost:5000/graphql gql/schema.graphql",
+    "graphql:codegen": "cd gql && graphql-codegen --target=typescript",
     "codegen:distant_api": " ng-openapi-gen --input http://127.0.0.1:3000/api-doc/openapi.json --output src/app/distant_api"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "@types/graphql": "^14.5.0",
     "apollo-angular": "^4.0.1",
     "graphql": "^16.6.0",
+    "lorem-ipsum": "^2.0.8",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -46,12 +47,15 @@
     "apollo": "2.33.4",
     "apollo-codegen-core": "0.40.3",
     "apollo-language-server": "1.26.3",
+    "autoprefixer": "^10.4.8",
     "jasmine-core": "~4.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
+    "postcss": "^8.4.16",
+    "tailwindcss": "^3.1.8",
     "typescript": "~4.7.2"
   }
 }

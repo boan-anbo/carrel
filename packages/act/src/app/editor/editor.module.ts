@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { EditorComponent } from './editor.component';
 import { EditorInputComponent } from './editor-input/editor-input.component';
 import { EditorEditComponent } from './editor-edit/editor-edit.component';
+import {TextSelectDirective} from "../directives/text-edit-event";
 
 
 
@@ -10,7 +11,8 @@ import { EditorEditComponent } from './editor-edit/editor-edit.component';
   declarations: [
     EditorComponent,
     EditorInputComponent,
-    EditorEditComponent
+    EditorEditComponent,
+    TextSelectDirective
   ],
   imports: [
     CommonModule

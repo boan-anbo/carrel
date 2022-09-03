@@ -12,7 +12,8 @@ export class HomeComponent implements OnInit {
   constructor(
     public graphql: GraphqlService,
     private cd: ChangeDetectorRef
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.graphql.dataChanged.subscribe(() => {
@@ -20,6 +21,7 @@ export class HomeComponent implements OnInit {
       console.log("marked for change");
     })
   }
+
   newInteractionForm = new FormGroup({
     label: new FormControl(''),
   });
@@ -32,7 +34,10 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  delete(id: number) {
-    this.graphql.deleteInteraction(id);
+  delete(id: number | undefined) {
+    if (id) {
+      this.graphql.deleteInteraction(id);
+    }
+
   }
 }

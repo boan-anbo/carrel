@@ -120,4 +120,12 @@ public class InteractionRepository : IInteractionRepository
 
         return await _dbContext.Interactions.AnyAsync(i => i.Id == requestDtoId && i.Uuid == requestDtoUuid);
     }
+
+    public IQueryable<Interaction?> GetInteractionScalarList()
+    {
+        return _dbContext.Interactions
+            .Include(x => x.FirstAct)
+            .Include(x => x.SecondAct)
+            .AsQueryable();
+    }
 }

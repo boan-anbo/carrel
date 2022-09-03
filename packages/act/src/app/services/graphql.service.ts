@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, EventEmitter, Injectable} from '@angular/core';
-import {gql, Apollo, QueryRef} from "apollo-angular";
+import {gql, Apollo, QueryRef, MutationResult} from "apollo-angular";
 import {map, Observable, Subscription} from "rxjs";
 import {
   AddNewInteractionEntityGQL,
@@ -14,7 +14,8 @@ import {
   providedIn: 'root'
 })
 export class GraphqlService {
-  interactions: Observable<{ __typename?: "Interaction" | undefined; label: string; id: number }[]>;
+  // @ts-ignore
+  interactions: Observable<GetInteractionsQuery['interactions']['nodes']>
 
   // this is the query reference object returned by Apollo-angular's client's watch query method.
   // This reference has several uses: it allows subscription (which is one-time-thing), and refetching.
@@ -23,13 +24,13 @@ export class GraphqlService {
   dataChanged = new EventEmitter<void>();
 
   constructor(
-    private interactionGQL: GetInteractionsGQL,
+    private getInteractionGQL: GetInteractionsGQL,
     private addInteractGql: AddNewInteractionEntityGQL,
     private deleteInteractionGQL: DeleteInteractionGQL,
   ) {
 
 
-    this.queryRef = interactionGQL.watch(
+    this.queryRef = getInteractionGQL.watch(
       undefined,
       {
         fetchPolicy: "cache-and-network",
@@ -41,7 +42,7 @@ export class GraphqlService {
       .pipe(
         map(result => {
           console.log("Received new updates", result)
-          return result.data.interactions?.nodes ?? []
+          return result.data.interactions?.nodes;
         })
       )
   }
@@ -51,7 +52,7 @@ export class GraphqlService {
       {
         label
       }
-    ).subscribe(async data => {
+    ).subscribe(async (data) => {
       console.log(data);
       this.dataChanged.next();
       await this.queryRef.refetch();
@@ -63,7 +64,7 @@ export class GraphqlService {
       {
         id
       }
-    ).subscribe(async data => {
+    ).subscribe(async (data) => {
         console.log(data);
         await this.queryRef.refetch();
       }

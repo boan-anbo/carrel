@@ -1,6 +1,7 @@
 ﻿using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Services.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace act.Repositories.GraphQL;
 
@@ -20,10 +21,10 @@ public class GraphQLQuery
     [UseFiltering]
     [UseSorting]
     public IQueryable<Interaction?> GetInteractions(
-        [Service(ServiceKind.Synchronized)] ActDbContext dbContext
+        [Service(ServiceKind.Synchronized)] IInteractionRepository _repo
     )
     {
-        return dbContext.Interactions;
+        return _repo.GetInteractionScalarList();
     }
 
     /// <summary>
