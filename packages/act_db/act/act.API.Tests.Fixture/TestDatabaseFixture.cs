@@ -1,15 +1,13 @@
 ﻿using act.Repositories.Db;
 using act.Services.Model;
-using Microsoft.EntityFrameworkCore;
 
 namespace act.API.Tests.Fixture;
 
 public class TestDatabaseFixture
 {
-
     private static readonly object _lock = new();
     private static bool _databaseInitialized;
-    
+
     public TestDatabaseFixture()
     {
         lock (_lock)
@@ -24,7 +22,7 @@ public class TestDatabaseFixture
                     var interaction = new Interaction { Description = "Test Interaction" };
                     context.AddRange(
                         interaction
-                        );
+                    );
                     context.SaveChanges();
                 }
 

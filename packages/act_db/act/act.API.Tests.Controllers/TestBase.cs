@@ -1,47 +1,49 @@
-﻿using act.API.Common.Settings;
+﻿using System.IO;
+using act.API.Common.Settings;
 using act.IoC.Configuration.DI;
+using act.Repositories;
+using act.Repositories.Contracts;
+using act.Repositories.Db;
+using act.Repositories.GraphQL;
 using act.Tools.Configurations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
-using act.Repositories.Contracts;
-using act.Repositories.Db;
-using act.Repositories.Interface;
 
-namespace act.API.Tests.Controllers
+namespace act.API.Tests.Controllers;
+
+[TestClass]
+public class TestBase
 {
-    [TestClass]
-    public class TestBase
+    internal IConfigurationRoot _configurationRoot;
+    protected internal ServiceProvider _serviceProvider;
+    internal ServiceCollection _services;
+
+    public TestBase()
     {
-        internal IConfigurationRoot _configurationRoot;
-        internal ServiceCollection _services;
-        protected internal ServiceProvider _serviceProvider;
+        _configurationRoot = ConfigurationHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory());
+        var appSettings = _configurationRoot.GetSection(nameof(AppSettings));
 
-        public TestBase()
-        {
-            _configurationRoot = ConfigurationHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory());
-            var appSettings = _configurationRoot.GetSection(nameof(AppSettings));
+        _services = new ServiceCollection();
 
-            _services = new ServiceCollection();
-            
-            _services.AddDbContext<ActDbContext>();
-            _services.AddScoped<IInteractionRepository, InteractionRepository>();
-            
-            //We load EXACTLY the same settings (DI and others) than API real solution, what is much better for tests.
-            _services.ConfigureBusinessServices((IConfiguration)_configurationRoot);
+        _services.AddDbContext<ActDbContext>();
+        _services.AddScoped<IInteractionRepository, InteractionRepository>();
+        _services.AddScoped<IRelationRepository, RelationRepository>();
+        _services.AddScoped<IGraphQLMutation, GraphQLMutation>();
 
-            _services.ConfigureMappings();
-            _services.AddLogging();
-            _services.Configure<AppSettings>(appSettings);
+        //We load EXACTLY the same settings (DI and others) than API real solution, what is much better for tests.
+        _services.ConfigureBusinessServices(_configurationRoot);
 
-            _serviceProvider = _services.BuildServiceProvider();
-        }
+        _services.ConfigureMappings();
+        _services.AddLogging();
+        _services.Configure<AppSettings>(appSettings);
 
-        ~TestBase()
-        {
-            if (_serviceProvider != null)
-                _serviceProvider.Dispose();
-        }
+        _serviceProvider = _services.BuildServiceProvider();
+    }
+
+    ~TestBase()
+    {
+        if (_serviceProvider != null)
+            _serviceProvider.Dispose();
     }
 }

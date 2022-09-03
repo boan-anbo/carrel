@@ -1,28 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using act.Services.Model;
 
-namespace act.Services.Contracts
+namespace act.Services.Contracts;
+
+public interface IInteractionService
 {
-    public interface IInteractionService
-    {
-        Task<Interaction> CreateAsync(Interaction interaction);
+    Task<Interaction> CreateAsync(Interaction interaction);
 
 
-        Task<Interaction> CreateNewInteraction(String label);
-        
-        Task<Interaction> CreateInteraction(ICollection<Interaction> subjects, String relationType, ICollection<Interaction> objects);
+    Task<Interaction> CreateNewInteraction(string label);
 
-        Task<bool> UpdateAsync(Interaction interaction);
+    Task<Interaction> CreateInteraction(ICollection<Interaction> subjects, string relationType,
+        ICollection<Interaction> objects);
 
-        Task<bool> DeleteAsync(int id);
+    Task<bool> UpdateAsync(Interaction interaction);
 
-        Task<Interaction> GetAsync(int id);
+    Task<bool> DeleteAsync(int id);
 
-        Task<Boolean> Test();
+    Task<Interaction> GetAsync(int id);
 
-        IQueryable<Interaction> GetAllInteractions();
-    }
+    Task<bool> Test();
+
+    IQueryable<Interaction> GetAllInteractions();
 }

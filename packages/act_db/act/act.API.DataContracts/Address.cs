@@ -1,10 +1,9 @@
-﻿namespace act.API.DataContracts
+﻿namespace act.API.DataContracts;
+
+public class Address
 {
-    public class Address
-    {
-        public string City { get; set; }
-        public string Street { get; set; }
-        public string ZipCode { get; set; }
-        public string Country { get; set; }
-    }
+    public string City { get; set; }
+    public string Street { get; set; }
+    public string ZipCode { get; set; }
+    public string Country { get; set; }
 }

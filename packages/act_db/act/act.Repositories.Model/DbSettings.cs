@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿namespace act.Services.Model;
 
-namespace act.Services.Model
+public class DbSettings
 {
-    public class DbSettings
-    {
-        
-        
-        public InteractionType defaultInteractionType { get; set; }
-        
-    }
+    public Act DefaultAct { get; set; }
 }

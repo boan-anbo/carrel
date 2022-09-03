@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace act.API.Common.Settings
-{
-    public class ApplicationInsights
-    {
-        [Required]
-        public bool Enabled { get; set; }
+namespace act.API.Common.Settings;
 
-        public string ConnectionString { get; set; }
-    }
+public class ApplicationInsights
+{
+    [Required] public bool Enabled { get; set; }
+
+    public string ConnectionString { get; set; }
 }

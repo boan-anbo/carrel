@@ -1,40 +1,37 @@
 ﻿using System.Threading.Tasks;
-
+using act.API.Common.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using act.API.Common.Settings;
+namespace act.API.Tests.Controllers.TestBaseTests;
 
-namespace act.API.Tests.Controllers.TestBaseTests
+[TestClass]
+public class ConfigurationTests : TestBase
 {
-    [TestClass]
-    public class ConfigurationTests : TestBase
+    [TestMethod]
+    public async Task ConfigurationRoot_OK()
     {
-        [TestMethod]
-        public async Task ConfigurationRoot_OK()
-        {
-            Assert.IsNotNull(_configurationRoot);
-        }
+        Assert.IsNotNull(_configurationRoot);
+    }
 
-        [TestMethod]
-        public async Task AppSettingsIConfiguration_OK()
-        {
-            Assert.IsNotNull(_configurationRoot);
+    [TestMethod]
+    public async Task AppSettingsIConfiguration_OK()
+    {
+        Assert.IsNotNull(_configurationRoot);
 
-            var appSettings = _configurationRoot.GetSection(nameof(AppSettings));
-            Assert.IsNotNull(appSettings);
-        }
+        var appSettings = _configurationRoot.GetSection(nameof(AppSettings));
+        Assert.IsNotNull(appSettings);
+    }
 
-        [TestMethod]
-        public async Task AppSettings_OK()
-        {
-            Assert.IsNotNull(_configurationRoot);
+    [TestMethod]
+    public async Task AppSettings_OK()
+    {
+        Assert.IsNotNull(_configurationRoot);
 
-            var iConfiguration = _configurationRoot.GetSection(nameof(AppSettings));
-            Assert.IsNotNull(iConfiguration);
+        var iConfiguration = _configurationRoot.GetSection(nameof(AppSettings));
+        Assert.IsNotNull(iConfiguration);
 
-            var appSettings = iConfiguration.Get<AppSettings>();
-            Assert.IsNotNull(appSettings);
-        }
+        var appSettings = iConfiguration.Get<AppSettings>();
+        Assert.IsNotNull(appSettings);
     }
 }

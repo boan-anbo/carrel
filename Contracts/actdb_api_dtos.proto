@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+option csharp_namespace = "act.Repositories.GraphQLMutation.AddInteraction";
+
+package act.Repositories.addinteraction;
+enum AddInteractionIdentity {
+    ENTITY = 0;
+    ACT = 1;
+    SOURCE = 2;
+}
+
+message AddInteractionType {
+    string label = 1;
+    string description = 2;
+}
+ message AddProperty {
+    sint64 id = 1;
+    string guid = 2;
+    string key = 3;
+    string value = 4;
+ }
+
+message CreateOrUpdateInteraction {
+
+    int32 id = 1;
+    // two ids must be provided to make sure the right item is updated
+    string uuid = 2;
+
+    string label = 3;
+    string description = 4;
+
+    int32 typeId = 5;
+    /// Unix timestamp in  milliseconds.
+    int32 start = 6;
+    /// Unix timestamp in  milliseconds.
+    int32 end = 7;
+    repeated int32 subjectIds = 8;
+    repeated int32 relatedIds = 9;
+    repeated int32 objectIds = 10;
+    repeated int32 propertyIds = 11;
+    AddInteractionIdentity identity = 12;
+}  
+
+message AddNewEntityInteractionRequest {
+    string label = 1;
+}

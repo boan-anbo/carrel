@@ -2,34 +2,90 @@
 using act.Repositories.Db;
 using act.Services.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
-namespace act.Repositories.Interface;
+namespace act.Repositories;
 
 public class InteractionRepository : IInteractionRepository
 {
     private readonly ActDbContext _dbContext;
+    private readonly ILogger<InteractionRepository> _logger;
 
-    public InteractionRepository(ActDbContext dbContext)
-        => _dbContext = dbContext;
+    public InteractionRepository(
+        ActDbContext dbContext,
+        ILogger<InteractionRepository> logger
+    )
+    {
+        _dbContext = dbContext;
+        _logger = logger;
+    }
+
 
     public async Task<Interaction> GetInteractionScalar(int id)
     {
         return await _dbContext.Interactions
-            .Include(x => x.Type)
-            .FirstOrDefaultAsync(i => i.Id == id) ?? throw new InvalidOperationException();
+            .Include(x => x.FirstAct)
+            .Include(x => x.SecondAct)
+            .FirstOrDefaultAsync(i => i.Id == id) ?? throw new InvalidOperationException("Interaction not found");
     }
+
+    public async Task<Interaction?> GetInteractionFull(int id)
+    {
+        return await _dbContext.Interactions
+            .Include(x => x.FirstAct)
+            .Include(x => x.SecondAct)
+            
+            .Include(x => x.Subjects)
+                .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.Objects)
+                .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.Parallels)
+                .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.Settings)
+                .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.Contexts)
+                .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.IndirectObjects)
+                .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.Purposes)
+                .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.References)
+                .ThenInclude(x => x.LinkedInteraction)
+            
+            .FirstOrDefaultAsync(i => i.Id == id);
+    }
+
 
     public Task<IEnumerable<Interaction>> GetAllInteractions()
     {
         throw new NotImplementedException();
     }
 
-    public async Task<Interaction> AddInteraction(Interaction interaction)
+    public async Task<Interaction?> AddOrCreateInteraction(Interaction? interaction)
     {
-        // Add interaction to database, Id 0 means Add, and Id > 0 means Update
-        _dbContext.Interactions.Update(interaction);
-        await SaveChanges();
+        await AddOrCreateInteractionWithoutSaving(interaction);
+        try
+        {
+            await SaveChanges();
+        }
+        catch (Exception e)
+        {
+            // log interaction as pretty json
+            _logger.LogError(e, "Error saving interaction");
+            throw;
+        }
+
         return interaction;
+    }
+
+    public async Task<Interaction?> AddOrCreateInteractionWithoutSaving(Interaction? interaction)
+    {
+        // Add interactioun to database, Id 0 means Add, and Id > 0 means Update
+
+        // log
+        _logger.LogInformation($"Ready to persist {interaction.Id} {interaction.Description}");
+        
+        return _dbContext.Interactions.Update(interaction).Entity;
     }
 
 
@@ -45,61 +101,6 @@ public class InteractionRepository : IInteractionRepository
         await SaveChanges();
     }
 
-    public Task<Interaction> GetInteraction(int interactionId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<bool> HasSubjectRelation(int relationId)
-    {
-        return await _dbContext.SubjectRelations.AnyAsync(i => i.Id == relationId);
-    }
-
-    public async Task<bool> HasObjectRelation(int relationId)
-    {
-        return await _dbContext.ObjectRelations.AnyAsync(i => i.Id == relationId);
-    }
-
-    public async Task<bool> HasParallelRelation(int relationId)
-    {
-        return await _dbContext.ParallelRelations.AnyAsync(i => i.Id == relationId);
-    }
-
-    public async Task<SubjectRelation?> GetSubjectRelation(int relationId)
-    {
-        return await _dbContext.SubjectRelations.FindAsync(relationId);
-    }
-
-    public async Task<ICollection<SubjectRelation>> GetSubjectRelations(ICollection<int> subjectRelationIds)
-    {
-        return await _dbContext.SubjectRelations
-            .Where(i => subjectRelationIds.Contains(i.Id))
-            .ToListAsync();
-    }
-
-    public async Task<ObjectRelation?> GetObjectRelation(int relationId)
-    {
-        return await _dbContext.ObjectRelations.FindAsync(relationId);
-    }
-
-    public async Task<ICollection<ObjectRelation>> GetObjectRelations(ICollection<int> relationIds)
-    {
-        return await _dbContext.ObjectRelations
-            .Where(i => relationIds.Contains(i.Id))
-            .ToListAsync();
-    }
-
-    public async Task<ParallelRelation?> GetParallelRelation(int relationId)
-    {
-        return await _dbContext.ParallelRelations.FindAsync(relationId);
-    }
-
-    public async Task<ICollection<ParallelRelation>> GetParallelRelations(ICollection<int> relationIds)
-    {
-        return await _dbContext.ParallelRelations
-            .Where(i => relationIds.Contains(i.Id))
-            .ToListAsync();
-    }
 
     public async Task<Property?> GetProperty(int propertyId)
     {
@@ -115,10 +116,8 @@ public class InteractionRepository : IInteractionRepository
 
     public async Task<bool> CheckIfInteractionExists(int requestDtoId, Guid requestDtoUuid)
     {
-        if (requestDtoUuid == Guid.Empty || !(requestDtoId > 0))
-        {
-            return false;
-        }
+        if (requestDtoUuid == Guid.Empty || !(requestDtoId > 0)) return false;
+
         return await _dbContext.Interactions.AnyAsync(i => i.Id == requestDtoId && i.Uuid == requestDtoUuid);
     }
 }

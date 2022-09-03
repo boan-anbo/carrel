@@ -1,6 +1,5 @@
-﻿namespace act.API.DataContracts.Responses
+﻿namespace act.API.DataContracts.Responses;
+
+public class UserCreationResponse
 {
-    public class UserCreationResponse
-    {
-    }
 }

@@ -8,6 +8,5 @@ public class InteractionConfiguration : IEntityTypeConfiguration<Interaction>
 {
     public void Configure(EntityTypeBuilder<Interaction> builder)
     {
-
     }
 }

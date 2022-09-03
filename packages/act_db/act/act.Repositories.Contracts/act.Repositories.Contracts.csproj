@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\act.Repositories.Db\act.Repositories.Db.csproj" />
+        <ProjectReference Include="..\act.Repositories.Db\act.Repositories.Db.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Google.Protobuf" Version="3.21.5" />
+        <PackageReference Include="Google.Protobuf" Version="3.21.5" />
     </ItemGroup>
 
 </Project>
