@@ -1,6 +1,8 @@
-﻿using act.Repositories.Contracts;
+﻿using act.API.DataContracts;
+using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Services.Model;
+using HotChocolate.Execution;
 using Microsoft.EntityFrameworkCore;
 
 namespace act.Repositories.GraphQL;
@@ -17,7 +19,6 @@ public class GraphQLQuery
         MaxPageSize = 100,
         DefaultPageSize = 50
     )]
-
     [UseFiltering]
     [UseSorting]
     public IQueryable<Interaction?> GetInteractions(
@@ -31,11 +32,23 @@ public class GraphQLQuery
     /// Get full interaction
     ///     Get all interactions
     /// </summary>
-    public async Task<Interaction?> GetInteraction(
+    public async Task<InteractionResult> GetInteraction(
         [Service(ServiceKind.Synchronized)] IInteractionRepository _repo,
         int id
     )
     {
-        return await _repo.GetInteractionFull(id);
+        var interaction = await _repo.GetInteractionFull(id);
+        // check if interaction is null, if so throw an error
+        if (interaction == null)
+        {
+            throw new QueryException(
+                ErrorBuilder.New()
+                    .SetMessage("Interaction not found")
+                    .SetCode("NOT_FOUND")
+                    .SetExtension("id", id)
+                    .Build()
+            );
+        }
+        return new InteractionResult(interaction);
     }
 }

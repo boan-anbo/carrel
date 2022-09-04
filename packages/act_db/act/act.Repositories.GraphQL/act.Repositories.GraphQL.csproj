@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\act.API.DataContracts\act.API.DataContracts.csproj" />
         <ProjectReference Include="..\act.Repositories.Contracts\act.Repositories.Contracts.csproj" />
         <ProjectReference Include="..\act.Repositories.Db\act.Repositories.Db.csproj" />
         <ProjectReference Include="..\act.Repositories\act.Repositories.csproj" />
