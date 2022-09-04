@@ -1,6 +1,6 @@
 import { Edge, Node, ClusterNode } from '@swimlane/ngx-graph';
 
-export const nodes: Node[] = [
+export const sampleNodes: Node[] = [
   {
     id: 'first',
     label: 'A'
@@ -16,7 +16,7 @@ export const nodes: Node[] = [
   }
 ];
 
-export const clusters: ClusterNode[] = [
+export const sampleClusters: ClusterNode[] = [
   {
     id: 'third',
     label: 'C',
@@ -24,7 +24,7 @@ export const clusters: ClusterNode[] = [
   }
 ]
 
-export const links: Edge[] = [
+export const sampleLinks: Edge[] = [
   {
     id: 'a',
     source: 'first',

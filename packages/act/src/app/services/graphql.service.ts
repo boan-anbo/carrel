@@ -3,11 +3,19 @@ import {gql, Apollo, QueryRef, MutationResult} from "apollo-angular";
 import {map, Observable, Subscription} from "rxjs";
 import {
   AddNewInteractionEntityGQL,
-  AddNewInteractionEntityMutation, DeleteInteractionGQL, FilterInteractionsByLabelGQL, FilterInteractionsByLabelQuery,
-  GetInteractionsGQL, GetInteractionsQuery, GetInteractionsQueryVariables,
-  Interaction, InteractionFilterInput,
+  AddNewInteractionEntityMutation,
+  DeleteInteractionGQL,
+  FilterInteractionsByLabelGQL,
+  FilterInteractionsByLabelQuery,
+  GetFullInteractionGQL, GetFullInteractionQuery,
+  GetInteractionsGQL,
+  GetInteractionsQuery,
+  GetInteractionsQueryVariables,
+  Interaction,
+  InteractionFilterInput, InteractionResult,
   InteractionsConnection
 } from "../../../graphql/generated";
+import {ApolloQueryResult} from "@apollo/client/core";
 
 
 @Injectable({
@@ -25,6 +33,7 @@ export class GraphqlService {
 
   constructor(
     private getInteractionGQL: GetInteractionsGQL,
+    private getFullInteractionGQL: GetFullInteractionGQL,
     private addInteractGql: AddNewInteractionEntityGQL,
     private deleteInteractionGQL: DeleteInteractionGQL,
     private filterInteractionGQL: FilterInteractionsByLabelGQL,
@@ -72,4 +81,11 @@ export class GraphqlService {
     )
   }
 
+  getFullInteraction(number: number):  Observable<ApolloQueryResult<GetFullInteractionQuery>> {
+    return this.getFullInteractionGQL.fetch(
+      {
+        id: number
+      }
+    )
+  }
 }

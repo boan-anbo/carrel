@@ -37,6 +37,18 @@ type ContextRelation {
   weight: RelationWeight!
 }
 
+type EdgeOfRelation {
+  content: String
+  data: Relation
+  description: String
+  id: Int!
+  label: String
+  sourceId: Int!
+  targetId: Int!
+  uuid: UUID!
+  weight: Int!
+}
+
 type FirstAct {
   content: String
   description: String
@@ -44,6 +56,12 @@ type FirstAct {
   id: Int!
   interactions: [Interaction]
   label: String
+}
+
+type GraphOfRelationAndInteraction {
+  edges: [EdgeOfRelation]
+  nodes: [NodeOfInteraction]
+  uuid: UUID!
 }
 
 type GraphQLMutation {
@@ -55,7 +73,7 @@ type GraphQLMutation {
 }
 
 type GraphQLQuery {
-  interaction(id: Int!): Interaction
+  interaction(id: Int!): InteractionResult!
   interactions(
     "Returns the elements in the list that come after the specified cursor."
     after: String,
@@ -108,6 +126,11 @@ type Interaction {
   uuid: UUID!
 }
 
+type InteractionResult {
+  graph: GraphOfRelationAndInteraction
+  interaction: Interaction
+}
+
 "A connection to a list of items."
 type InteractionsConnection {
   "A list of edges."
@@ -125,6 +148,15 @@ type InteractionsEdge {
   cursor: String!
   "The item at the end of the edge."
   node: Interaction
+}
+
+type NodeOfInteraction {
+  content: String
+  data: Interaction
+  description: String
+  id: Int!
+  label: String
+  uuid: UUID!
 }
 
 type ObjectRelation {

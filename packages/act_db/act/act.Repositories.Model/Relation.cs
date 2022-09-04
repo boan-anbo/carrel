@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,6 +17,38 @@ public enum RelationTypes
     PurposeRelation,
     ParallelRelation,
     ReferenceRelation
+    
+    // to string method
+}
+
+// static to string for relation types
+public static class RelationTypesExtensions
+{
+    public static string ToDescriptionString(this RelationTypes value)
+    {
+        switch (value)
+        {
+            case RelationTypes.ContextRelation:
+                return "has the context of";
+            case RelationTypes.SubjectRelation:
+                return "is the subject of";
+            case RelationTypes.ObjectRelation:
+                return "has the object(s) of";
+            case RelationTypes.IndirectObjectRelation:
+                return "has the indirect object(s) of";
+            case RelationTypes.SettingRelation:
+                return "in the setting(s) of";
+            case RelationTypes.PurposeRelation:
+                return "for the purpose of";
+            case RelationTypes.ParallelRelation:
+                return "is related to";
+            
+            case RelationTypes.ReferenceRelation:
+                return "is cited from";
+            default:
+                throw new ArgumentOutOfRangeException(nameof(value), value, null);
+        }
+    }
 }
 
 /// <summary>
@@ -96,12 +129,11 @@ public enum RelationWeight
 /// </remarks>
 public abstract class Relation
 {
+
     /// constrcutor
     /// Id primary key
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-
     /// <summary>
     ///     Unique identifier for the relation.
     /// </summary>
@@ -164,7 +196,6 @@ public abstract class Relation
     {
         var relation = new T
         {
-            Id = Id,
             Uuid = uuid,
             HostInteractionId = hostInteractionId,
             LinkedInteractionId = linkedInteractionId,

@@ -50,7 +50,7 @@ public class ActDbContext : DbContext
     {
         // context relations
         modelBuilder.Entity<ContextRelation>()
-            .HasKey(x => x.Id);
+            .HasKey(x => x.Uuid);
 
         modelBuilder.Entity<ContextRelation>()
             .HasOne(x => x.HostInteraction)
@@ -60,7 +60,7 @@ public class ActDbContext : DbContext
 
         // subject relations
         modelBuilder.Entity<SubjectRelation>()
-            .HasKey(x => x.Id);
+            .HasKey(x => x.Uuid);
 
         modelBuilder.Entity<SubjectRelation>()
             .HasOne(x => x.HostInteraction)
@@ -71,7 +71,7 @@ public class ActDbContext : DbContext
 
         // Object relations
         modelBuilder.Entity<ObjectRelation>()
-            .HasKey(x => x.Id);
+            .HasKey(x => x.Uuid);
                 
 
         modelBuilder.Entity<ObjectRelation>()
@@ -83,7 +83,7 @@ public class ActDbContext : DbContext
 
         // setting relations
         modelBuilder.Entity<SettingRelation>()
-            .HasKey(x => x.Id);
+            .HasKey(x => x.Uuid);
 
         modelBuilder.Entity<SettingRelation>()
             .HasOne(x => x.HostInteraction)
@@ -94,7 +94,7 @@ public class ActDbContext : DbContext
         // indirect object relations
 
         modelBuilder.Entity<IndirectObjectRelation>()
-            .HasKey(x => x.Id);
+            .HasKey(x => x.Uuid);
 
         modelBuilder.Entity<IndirectObjectRelation>()
             .HasOne(x => x.HostInteraction)
@@ -104,7 +104,7 @@ public class ActDbContext : DbContext
 
         // purpose relations
         modelBuilder.Entity<PurposeRelation>()
-            .HasKey(x => x.Id);
+            .HasKey(x => x.Uuid);
 
         modelBuilder.Entity<PurposeRelation>()
             .HasOne(x => x.HostInteraction)
@@ -114,7 +114,7 @@ public class ActDbContext : DbContext
 
         // Parallel relations
         modelBuilder.Entity<ParallelRelation>()
-            .HasKey(x => x.Id);
+            .HasKey(x => x.Uuid);
 
         modelBuilder.Entity<ParallelRelation>()
             .HasOne(x => x.HostInteraction)
@@ -124,7 +124,7 @@ public class ActDbContext : DbContext
 
         // reference relations
         modelBuilder.Entity<ReferenceRelation>()
-            .HasKey(x => x.Id);
+            .HasKey(x => x.Uuid);
 
         modelBuilder.Entity<ReferenceRelation>()
             .HasOne(x => x.HostInteraction)

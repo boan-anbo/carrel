@@ -14,10 +14,15 @@ mutation DeleteRelation($relationId: UUID!, $hostInteractionId: Int!, $linkedInt
   )
 }
 
+
 fragment relationFragment on Relation {
-  uuid
-  hostInteractionId
+  id
   linkedInteractionId
-  weight
+  uuid
+  label
+  description
+  content
   type
+  weight
+  hostInteractionId
 }

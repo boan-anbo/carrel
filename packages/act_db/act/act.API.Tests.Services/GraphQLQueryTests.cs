@@ -2,11 +2,11 @@ using act.API.Tests.Controllers;
 using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Repositories.GraphQL;
-using act.Services.Contracts;
 using act.Services.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 
 namespace act.API.Tests.Services;
 [TestClass]
@@ -24,6 +24,8 @@ public class GraphQLQueryTests: TestBase
         _interactionRepository = _serviceProvider.GetRequiredService<IInteractionRepository>();
         _relationRepository = _serviceProvider.GetRequiredService<IRelationRepository>();
         _dbContext = _serviceProvider.GetRequiredService<ActDbContext>();
+        //Newtonsoft.Json serializer (should be replaced once the known issue in System.Text.Json will be solved)
+        
     }
 
     
@@ -73,7 +75,6 @@ public class GraphQLQueryTests: TestBase
         Assert.IsNotNull(createdRelation);
         Assert.AreEqual(testInteraction1.Id, createdRelation.HostInteractionId);
         Assert.AreEqual(testInteraction2.Id, createdRelation.LinkedInteractionId);
-        Assert.IsTrue(createdRelation.Id > 0);
         Assert.IsTrue(createdRelation.Uuid != Guid.Empty);
         Assert.AreEqual(RelationTypes.SettingRelation, createdRelation.Type);
         Assert.AreEqual("test_label", createdRelation.Label);
@@ -103,7 +104,6 @@ public class GraphQLQueryTests: TestBase
         Assert.IsNotNull(createdRelation);
         Assert.AreEqual(testInteraction1.Id, createdRelation.HostInteractionId);
         Assert.AreEqual(testInteraction2.Id, createdRelation.LinkedInteractionId);
-        Assert.IsTrue(createdRelation.Id > 0);
         Assert.IsTrue(createdRelation.Uuid != Guid.Empty);
         Assert.AreEqual(RelationTypes.SettingRelation, createdRelation.Type);
         Assert.AreEqual("test_label", createdRelation.Label);
@@ -115,7 +115,6 @@ public class GraphQLQueryTests: TestBase
 
         var updateDto = new CreateOrUpdateRelationDto
         {
-            Id = createdRelation.Id,
             Uuid = createdRelation.Uuid,
             HostInteractionId = testInteraction1.Id,
             RelationType = RelationTypes.SettingRelation,
@@ -129,7 +128,6 @@ public class GraphQLQueryTests: TestBase
         Assert.IsNotNull(updatedRelation);
         Assert.AreEqual(testInteraction1.Id, updatedRelation.HostInteractionId);
         Assert.AreEqual(testInteraction2.Id, updatedRelation.LinkedInteractionId);
-        Assert.AreEqual(createdRelation.Id, updatedRelation.Id);
         Assert.AreEqual(createdRelation.Uuid, updatedRelation.Uuid);
         Assert.AreEqual(RelationTypes.SettingRelation, updatedRelation.Type);
         Assert.AreEqual("test_label_updated", updatedRelation.Label);

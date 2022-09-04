@@ -142,7 +142,6 @@ public class CreateOrUpdateRelationDto
         {
             RelationTypes.ContextRelation => new ContextRelation
             {
-                Id = id,
                 Uuid = uuid,
                 HostInteractionId = dto.HostInteractionId,
                 Type = dto.RelationType,
@@ -154,7 +153,6 @@ public class CreateOrUpdateRelationDto
             } as T,
             RelationTypes.SubjectRelation => new SubjectRelation
             {
-                Id = id,
                 Uuid = uuid,
                 HostInteractionId = dto.HostInteractionId,
                 Type = dto.RelationType,
@@ -166,7 +164,6 @@ public class CreateOrUpdateRelationDto
             } as T,
             RelationTypes.ObjectRelation => new ObjectRelation
             {
-                Id = id,
                 Uuid = uuid,
                 HostInteractionId = dto.HostInteractionId,
                 Type = dto.RelationType,
@@ -178,7 +175,6 @@ public class CreateOrUpdateRelationDto
             } as T,
             RelationTypes.IndirectObjectRelation => new IndirectObjectRelation
             {
-                Id = id,
                 Uuid = uuid,
                 HostInteractionId = dto.HostInteractionId,
                 Type = dto.RelationType,
@@ -190,7 +186,6 @@ public class CreateOrUpdateRelationDto
             } as T,
             RelationTypes.SettingRelation => new SettingRelation
             {
-                Id = id,
                 Uuid = uuid,
                 HostInteractionId = dto.HostInteractionId,
                 Type = dto.RelationType,
@@ -202,7 +197,6 @@ public class CreateOrUpdateRelationDto
             } as T,
             RelationTypes.PurposeRelation => new PurposeRelation
             {
-                Id = id,
                 Uuid = uuid,
                 HostInteractionId = dto.HostInteractionId,
                 Type = dto.RelationType,
@@ -214,7 +208,6 @@ public class CreateOrUpdateRelationDto
             } as T,
             RelationTypes.ParallelRelation => new ParallelRelation
             {
-                Id = id,
                 Uuid = uuid,
                 HostInteractionId = dto.HostInteractionId,
                 Type = dto.RelationType,
@@ -226,7 +219,6 @@ public class CreateOrUpdateRelationDto
             } as T,
             RelationTypes.ReferenceRelation => new ReferenceRelation
             {
-                Id = id,
                 Uuid = uuid,
                 HostInteractionId = dto.HostInteractionId,
                 Type = dto.RelationType,

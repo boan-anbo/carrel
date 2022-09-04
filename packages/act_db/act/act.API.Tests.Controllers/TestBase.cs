@@ -9,6 +9,7 @@ using act.Tools.Configurations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 
 namespace act.API.Tests.Controllers;
 
@@ -25,6 +26,14 @@ public class TestBase
         var appSettings = _configurationRoot.GetSection(nameof(AppSettings));
 
         _services = new ServiceCollection();
+
+
+        JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+        {
+            Formatting = Formatting.Indented,
+            NullValueHandling = NullValueHandling.Ignore,
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        };
 
         _services.AddDbContext<ActDbContext>();
         _services.AddScoped<IInteractionRepository, InteractionRepository>();

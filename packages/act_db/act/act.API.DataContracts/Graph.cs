@@ -44,9 +44,8 @@ public class Edge<EDGE_TYPE>
     {
         return new Edge<Relation>
         {
-            Id = relation.Id,
             Uuid = relation.Uuid,
-            Label = relation.Label,
+            Label = relation.Label.Length > 0 ? relation.Label :  relation.Type.ToDescriptionString(),
             Description = relation.Description,
             Content = relation.Content,
             Weight = (int)relation.Weight,
