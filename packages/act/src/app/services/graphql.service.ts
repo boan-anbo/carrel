@@ -3,9 +3,9 @@ import {gql, Apollo, QueryRef, MutationResult} from "apollo-angular";
 import {map, Observable, Subscription} from "rxjs";
 import {
   AddNewInteractionEntityGQL,
-  AddNewInteractionEntityMutation, DeleteInteractionGQL,
+  AddNewInteractionEntityMutation, DeleteInteractionGQL, FilterInteractionsByLabelGQL, FilterInteractionsByLabelQuery,
   GetInteractionsGQL, GetInteractionsQuery, GetInteractionsQueryVariables,
-  Interaction,
+  Interaction, InteractionFilterInput,
   InteractionsConnection
 } from "../../../graphql/generated";
 
@@ -27,6 +27,7 @@ export class GraphqlService {
     private getInteractionGQL: GetInteractionsGQL,
     private addInteractGql: AddNewInteractionEntityGQL,
     private deleteInteractionGQL: DeleteInteractionGQL,
+    private filterInteractionGQL: FilterInteractionsByLabelGQL,
   ) {
 
 

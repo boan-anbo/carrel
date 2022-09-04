@@ -4,6 +4,11 @@ import { EditorComponent } from './editor.component';
 import { EditorInputComponent } from './editor-input/editor-input.component';
 import { EditorEditComponent } from './editor-edit/editor-edit.component';
 import {TextSelectDirective} from "../directives/text-edit-event";
+import { EditorFormComponent } from './editor-form/editor-form.component';
+import { ActNewEntityComponent } from './editor-form/act-new-entity/act-new-entity.component';
+import {ReactiveFormsModule} from "@angular/forms";
+import {HomeModule} from "../home/home.module";
+import {ActDbModule} from "../act-db/act-db.module";
 
 
 
@@ -12,10 +17,15 @@ import {TextSelectDirective} from "../directives/text-edit-event";
     EditorComponent,
     EditorInputComponent,
     EditorEditComponent,
-    TextSelectDirective
+    TextSelectDirective,
+    EditorFormComponent,
+    ActNewEntityComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule,
+    HomeModule,
+    ActDbModule
   ]
 })
 export class EditorModule { }

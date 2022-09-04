@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {LoremIpsum, loremIpsum} from "lorem-ipsum";
 // Import the application components and services.
 import { TextSelectEvent } from "src/app/directives/text-edit-event";
+import {EditorStateService} from "../editor-state.service";
 interface SelectionRectangle {
   left: number;
   top: number;
@@ -27,7 +28,7 @@ export class EditorInputComponent implements OnInit {
   private selectedText: string;
 
   // I initialize the app-component.
-  constructor() {
+  constructor(private editorState: EditorStateService) {
 
     this.hostRectangle = null;
     this.selectedText = "";
@@ -61,6 +62,7 @@ export class EditorInputComponent implements OnInit {
 
     }
 
+    this.editorState.editorSelection.next(event);
   }
 
 
@@ -81,6 +83,8 @@ export class EditorInputComponent implements OnInit {
     this.selectedText = "";
 
   }
+
+
 
 }
 

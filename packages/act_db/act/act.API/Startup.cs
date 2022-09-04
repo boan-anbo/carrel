@@ -8,6 +8,7 @@ using act.Repositories;
 using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Repositories.GraphQL;
+using act.Repositories.GraphQL.GraphQLConfiguration;
 using Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -92,7 +93,7 @@ public class Startup
             .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true)
             .AddQueryType<GraphQLQuery>()
             .AddProjections()
-            .AddFiltering()
+            .AddFiltering<CustomFilteringConvention>()
             .AddSorting()
             .AddMutationType<GraphQLMutation>()
             .AddDiagnosticEventListener(sp =>

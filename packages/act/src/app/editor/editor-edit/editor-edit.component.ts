@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {EditorStateService} from "../editor-state.service";
 
 @Component({
   selector: 'app-editor-edit',
@@ -7,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditorEditComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public editorState: EditorStateService
+
+  ) { }
 
   ngOnInit(): void {
   }
