@@ -54,6 +54,7 @@ public class GraphQLMutation : IGraphQLMutation
     )
     {
         _logger.LogInformation($"CreateOrUpdateInteraction: {requestDto.ToJson()}");
+        /// check validity of request
         requestDto.ValidateOrThrow();
         // convert identity
         var identity = InteractionIdentity.ACT;
@@ -84,8 +85,7 @@ public class GraphQLMutation : IGraphQLMutation
 
         // check existence if an ID and an GUID are provided
         // if not, create interaction as a new one
-        if (requestDto.Id != null && requestDto.Id > 0 && requestDto.Uuid is not null &&
-            requestDto.Uuid.ToString().Length > 0)
+        if (requestDto.Uuid is not null && requestDto.Uuid.ToString().Length > 0)
         {
             var exists =
                 await _interactionRepo.CheckIfInteractionExists(requestDto.Id ?? 0, requestDto.Uuid ?? Guid.Empty);
@@ -142,7 +142,7 @@ public class GraphQLMutation : IGraphQLMutation
     {
         requestDto.ValidateNewRelationOrThrow();
 
-        var relation = _relationRepo.CreateRelationWithId<Relation>(requestDto);
+        var relation = _relationRepo.CreateRelationWithHostInteractionId<Relation>(requestDto);
 
         try
         {

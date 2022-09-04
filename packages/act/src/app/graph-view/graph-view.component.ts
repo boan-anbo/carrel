@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import * as shape from 'd3-shape';
-import { Edge, Node, ClusterNode, Layout } from '@swimlane/ngx-graph';
-import { sampleNodes, sampleClusters, sampleLinks } from './data';
-import { Subject } from 'rxjs';
+import {ClusterNode, Edge, Layout, Node} from '@swimlane/ngx-graph';
+import {sampleClusters, sampleLinks, sampleNodes} from './data';
+import {Subject} from 'rxjs';
 import {GraphqlService} from "../services/graphql.service";
+import {GraphViewService} from "./graph-view.service";
+
 @Component({
   selector: 'app-graph-view',
   templateUrl: './graph-view.component.html',
@@ -12,7 +14,10 @@ import {GraphqlService} from "../services/graphql.service";
 export class GraphViewComponent implements OnInit {
   name = 'NGX-Graph Demo';
 
-  constructor(private graphQlService: GraphqlService) {
+  constructor(
+    private graphQlService: GraphqlService,
+    private graphViewService: GraphViewService
+  ) {
   }
 
   nodes: Node[] = sampleNodes;
@@ -78,31 +83,9 @@ export class GraphViewComponent implements OnInit {
   ngOnInit() {
     this.setInterpolationType(this.curveType);
 
-    this.graphQlService.getFullInteraction(12).subscribe((data) => {
+    this.graphQlService.getFullInteraction(11).subscribe((data) => {
       console.log(data);
-
-      const nodes: Node[] = [];
-      data.data.interaction.graph?.nodes?.forEach((node) => {
-        if (node && nodes.every((n) => n.id !== node.id.toString())) {
-          nodes.push({
-            id: node.id.toString(),
-            label: node.label || node.id.toString(),
-
-          });
-        }
-      });
-      const links: Edge[] = [];
-      data.data.interaction.graph?.edges?.forEach((edge) => {
-        if (edge) {
-          console.log(edge.sourceId, edge.targetId);
-          links.push({
-            id: `${edge.sourceId}-${edge.targetId}`,
-            source: edge.sourceId.toString(),
-            target: edge.targetId.toString(),
-            label: edge.label ?? edge.id.toString(),
-          });
-        }
-      });
+      const {nodes, links} = this.graphViewService.getNgxGraphDataFromInteractGraph(data);
       this.nodes = nodes;
       this.links = links;
 

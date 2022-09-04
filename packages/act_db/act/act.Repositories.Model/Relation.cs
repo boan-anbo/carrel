@@ -137,7 +137,7 @@ public abstract class Relation
     /// <summary>
     ///     Unique identifier for the relation.
     /// </summary>
-    public Guid Uuid { get; set; } = Guid.NewGuid();
+    public Guid? Uuid { get; set; } = Guid.NewGuid();
 
     /// <summary>
     ///     Label of the relation, unlike, Label on <see cref="Interaction" /> is optional, because its position, e.g. as

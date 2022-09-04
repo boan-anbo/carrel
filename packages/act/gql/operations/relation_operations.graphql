@@ -16,7 +16,6 @@ mutation DeleteRelation($relationId: UUID!, $hostInteractionId: Int!, $linkedInt
 
 
 fragment relationFragment on Relation {
-  id
   linkedInteractionId
   uuid
   label

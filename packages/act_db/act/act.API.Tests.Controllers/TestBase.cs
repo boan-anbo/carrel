@@ -39,6 +39,7 @@ public class TestBase
         _services.AddScoped<IInteractionRepository, InteractionRepository>();
         _services.AddScoped<IRelationRepository, RelationRepository>();
         _services.AddScoped<IGraphQLMutation, GraphQLMutation>();
+        _services.AddScoped<GraphQLQuery, GraphQLQuery>();
 
         //We load EXACTLY the same settings (DI and others) than API real solution, what is much better for tests.
         _services.ConfigureBusinessServices(_configurationRoot);

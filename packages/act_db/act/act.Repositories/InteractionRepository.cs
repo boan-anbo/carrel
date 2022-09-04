@@ -24,19 +24,16 @@ public class InteractionRepository : IInteractionRepository
     public async Task<Interaction> GetInteractionScalar(int id)
     {
         return await _dbContext.Interactions
-            .Include(x => x.FirstAct)
-            .Include(x => x.SecondAct)
             .FirstOrDefaultAsync(i => i.Id == id) ?? throw new InvalidOperationException("Interaction not found");
     }
 
     public async Task<Interaction?> GetInteractionFull(int id)
     {
         return await _dbContext.Interactions
-            .Include(x => x.FirstAct)
-            .Include(x => x.SecondAct)
             
             .Include(x => x.Subjects)
                 .ThenInclude(x => x.LinkedInteraction)
+                
             .Include(x => x.Objects)
                 .ThenInclude(x => x.LinkedInteraction)
             .Include(x => x.Parallels)
@@ -53,6 +50,56 @@ public class InteractionRepository : IInteractionRepository
                 .ThenInclude(x => x.LinkedInteraction)
             
             .FirstOrDefaultAsync(i => i.Id == id);
+    }
+
+    public async Task<Interaction?> GetInteractionFullWithAllRelations(int id)
+    {
+        // include all relations of full interaction (including reverse as relations)
+        return await _dbContext.Interactions
+            
+            .Include(x => x.Subjects)
+                .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsSubjects)
+                .ThenInclude(x => x.HostInteraction)
+            
+            .Include(x => x.Objects)
+                .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsObjects)                                
+                .ThenInclude(x => x.HostInteraction)
+            
+            .Include(x => x.Parallels)
+                .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsParallels)
+                .ThenInclude(x => x.HostInteraction)
+            
+            .Include(x => x.Settings)
+                .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsSettings)
+                .ThenInclude(x => x.HostInteraction)            
+            
+            .Include(x => x.Contexts)
+                .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsContexts)
+                .ThenInclude(x => x.HostInteraction)
+            
+            .Include(x => x.IndirectObjects)
+                .ThenInclude(x => x.LinkedInteraction)  
+            .Include(x => x.AsIndirectObjects)
+                .ThenInclude(x => x.HostInteraction)
+            
+            .Include(x => x.Purposes)
+                .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsPurposes)
+                .ThenInclude(x => x.HostInteraction)
+            
+            .Include(x => x.References)
+                .ThenInclude(x => x.LinkedInteraction)  
+            .Include(x => x.AsReferences)
+                .ThenInclude(x => x.HostInteraction)    
+            
+            .FirstOrDefaultAsync(i => i.Id == id);
+
+
     }
 
 

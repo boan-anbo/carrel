@@ -17,11 +17,11 @@ export const sampleNodes: Node[] = [
 ];
 
 export const sampleClusters: ClusterNode[] = [
-  {
-    id: 'third',
-    label: 'C',
-    childNodeIds: ['c1', 'c2']
-  }
+  // {
+  //   id: 'third',
+  //   label: 'C',
+  //   childNodeIds: ['c1', 'c2']
+  // }
 ]
 
 export const sampleLinks: Edge[] = [

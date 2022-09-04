@@ -164,7 +164,7 @@ public class RelationRepository : IRelationRepository
     }
 
 
-    public T? CreateRelationWithId<T>(CreateOrUpdateRelationDto request) where T : Relation
+    public T? CreateRelationWithHostInteractionId<T>(CreateOrUpdateRelationDto request) where T : Relation
     {
         // load host interaction
         var hostInteraction = _dbContext.Interactions.Find(request.HostInteractionId);

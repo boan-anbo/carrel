@@ -28,12 +28,11 @@ type ContextRelation {
   description: String
   hostInteraction: Interaction
   hostInteractionId: Int!
-  id: Int!
   label: String
   linkedInteraction: Interaction
   linkedInteractionId: Int!
   type: RelationTypes!
-  uuid: UUID!
+  uuid: UUID
   weight: RelationWeight!
 }
 
@@ -41,11 +40,12 @@ type EdgeOfRelation {
   content: String
   data: Relation
   description: String
-  id: Int!
+  displayId: String
+  id: String
   label: String
   sourceId: Int!
   targetId: Int!
-  uuid: UUID!
+  uuid: UUID
   weight: Int!
 }
 
@@ -93,12 +93,11 @@ type IndirectObjectRelation {
   description: String
   hostInteraction: Interaction
   hostInteractionId: Int!
-  id: Int!
   label: String
   linkedInteraction: Interaction
   linkedInteractionId: Int!
   type: RelationTypes!
-  uuid: UUID!
+  uuid: UUID
   weight: RelationWeight!
 }
 
@@ -164,12 +163,11 @@ type ObjectRelation {
   description: String
   hostInteraction: Interaction
   hostInteractionId: Int!
-  id: Int!
   label: String
   linkedInteraction: Interaction
   linkedInteractionId: Int!
   type: RelationTypes!
-  uuid: UUID!
+  uuid: UUID
   weight: RelationWeight!
 }
 
@@ -190,12 +188,11 @@ type ParallelRelation {
   description: String
   hostInteraction: Interaction
   hostInteractionId: Int!
-  id: Int!
   label: String
   linkedInteraction: Interaction
   linkedInteractionId: Int!
   type: RelationTypes!
-  uuid: UUID!
+  uuid: UUID
   weight: RelationWeight!
 }
 
@@ -214,12 +211,11 @@ type PurposeRelation {
   description: String
   hostInteraction: Interaction
   hostInteractionId: Int!
-  id: Int!
   label: String
   linkedInteraction: Interaction
   linkedInteractionId: Int!
   type: RelationTypes!
-  uuid: UUID!
+  uuid: UUID
   weight: RelationWeight!
 }
 
@@ -228,12 +224,11 @@ type ReferenceRelation {
   description: String
   hostInteraction: Interaction
   hostInteractionId: Int!
-  id: Int!
   label: String
   linkedInteraction: Interaction
   linkedInteractionId: Int!
   type: RelationTypes!
-  uuid: UUID!
+  uuid: UUID
   weight: RelationWeight!
 }
 
@@ -242,12 +237,11 @@ type Relation {
   description: String
   hostInteraction: Interaction
   hostInteractionId: Int!
-  id: Int!
   label: String
   linkedInteraction: Interaction
   linkedInteractionId: Int!
   type: RelationTypes!
-  uuid: UUID!
+  uuid: UUID
   weight: RelationWeight!
 }
 
@@ -265,12 +259,11 @@ type SettingRelation {
   description: String
   hostInteraction: Interaction
   hostInteractionId: Int!
-  id: Int!
   label: String
   linkedInteraction: Interaction
   linkedInteractionId: Int!
   type: RelationTypes!
-  uuid: UUID!
+  uuid: UUID
   weight: RelationWeight!
 }
 
@@ -279,12 +272,11 @@ type SubjectRelation {
   description: String
   hostInteraction: Interaction
   hostInteractionId: Int!
-  id: Int!
   label: String
   linkedInteraction: Interaction
   linkedInteractionId: Int!
   type: RelationTypes!
-  uuid: UUID!
+  uuid: UUID
   weight: RelationWeight!
 }
 
@@ -379,6 +371,21 @@ input ComparableNullableOfDateTimeOperationFilterInput {
   nlte: DateTime
 }
 
+input ComparableNullableOfGuidOperationFilterInput {
+  eq: UUID
+  gt: UUID
+  gte: UUID
+  in: [UUID]
+  lt: UUID
+  lte: UUID
+  neq: UUID
+  ngt: UUID
+  ngte: UUID
+  nin: [UUID]
+  nlt: UUID
+  nlte: UUID
+}
+
 input ComparableNullableOfInt32OperationFilterInput {
   eq: Int
   gt: Int
@@ -400,13 +407,12 @@ input ContextRelationFilterInput {
   description: StringOperationFilterInput
   hostInteraction: InteractionFilterInput
   hostInteractionId: ComparableInt32OperationFilterInput
-  id: ComparableInt32OperationFilterInput
   label: StringOperationFilterInput
   linkedInteraction: InteractionFilterInput
   linkedInteractionId: ComparableInt32OperationFilterInput
   or: [ContextRelationFilterInput!]
   type: RelationTypesOperationFilterInput
-  uuid: ComparableGuidOperationFilterInput
+  uuid: ComparableNullableOfGuidOperationFilterInput
   weight: RelationWeightOperationFilterInput
 }
 
@@ -468,13 +474,12 @@ input IndirectObjectRelationFilterInput {
   description: StringOperationFilterInput
   hostInteraction: InteractionFilterInput
   hostInteractionId: ComparableInt32OperationFilterInput
-  id: ComparableInt32OperationFilterInput
   label: StringOperationFilterInput
   linkedInteraction: InteractionFilterInput
   linkedInteractionId: ComparableInt32OperationFilterInput
   or: [IndirectObjectRelationFilterInput!]
   type: RelationTypesOperationFilterInput
-  uuid: ComparableGuidOperationFilterInput
+  uuid: ComparableNullableOfGuidOperationFilterInput
   weight: RelationWeightOperationFilterInput
 }
 
@@ -602,13 +607,12 @@ input ObjectRelationFilterInput {
   description: StringOperationFilterInput
   hostInteraction: InteractionFilterInput
   hostInteractionId: ComparableInt32OperationFilterInput
-  id: ComparableInt32OperationFilterInput
   label: StringOperationFilterInput
   linkedInteraction: InteractionFilterInput
   linkedInteractionId: ComparableInt32OperationFilterInput
   or: [ObjectRelationFilterInput!]
   type: RelationTypesOperationFilterInput
-  uuid: ComparableGuidOperationFilterInput
+  uuid: ComparableNullableOfGuidOperationFilterInput
   weight: RelationWeightOperationFilterInput
 }
 
@@ -618,13 +622,12 @@ input ParallelRelationFilterInput {
   description: StringOperationFilterInput
   hostInteraction: InteractionFilterInput
   hostInteractionId: ComparableInt32OperationFilterInput
-  id: ComparableInt32OperationFilterInput
   label: StringOperationFilterInput
   linkedInteraction: InteractionFilterInput
   linkedInteractionId: ComparableInt32OperationFilterInput
   or: [ParallelRelationFilterInput!]
   type: RelationTypesOperationFilterInput
-  uuid: ComparableGuidOperationFilterInput
+  uuid: ComparableNullableOfGuidOperationFilterInput
   weight: RelationWeightOperationFilterInput
 }
 
@@ -646,13 +649,12 @@ input PurposeRelationFilterInput {
   description: StringOperationFilterInput
   hostInteraction: InteractionFilterInput
   hostInteractionId: ComparableInt32OperationFilterInput
-  id: ComparableInt32OperationFilterInput
   label: StringOperationFilterInput
   linkedInteraction: InteractionFilterInput
   linkedInteractionId: ComparableInt32OperationFilterInput
   or: [PurposeRelationFilterInput!]
   type: RelationTypesOperationFilterInput
-  uuid: ComparableGuidOperationFilterInput
+  uuid: ComparableNullableOfGuidOperationFilterInput
   weight: RelationWeightOperationFilterInput
 }
 
@@ -662,13 +664,12 @@ input ReferenceRelationFilterInput {
   description: StringOperationFilterInput
   hostInteraction: InteractionFilterInput
   hostInteractionId: ComparableInt32OperationFilterInput
-  id: ComparableInt32OperationFilterInput
   label: StringOperationFilterInput
   linkedInteraction: InteractionFilterInput
   linkedInteractionId: ComparableInt32OperationFilterInput
   or: [ReferenceRelationFilterInput!]
   type: RelationTypesOperationFilterInput
-  uuid: ComparableGuidOperationFilterInput
+  uuid: ComparableNullableOfGuidOperationFilterInput
   weight: RelationWeightOperationFilterInput
 }
 
@@ -711,13 +712,12 @@ input SettingRelationFilterInput {
   description: StringOperationFilterInput
   hostInteraction: InteractionFilterInput
   hostInteractionId: ComparableInt32OperationFilterInput
-  id: ComparableInt32OperationFilterInput
   label: StringOperationFilterInput
   linkedInteraction: InteractionFilterInput
   linkedInteractionId: ComparableInt32OperationFilterInput
   or: [SettingRelationFilterInput!]
   type: RelationTypesOperationFilterInput
-  uuid: ComparableGuidOperationFilterInput
+  uuid: ComparableNullableOfGuidOperationFilterInput
   weight: RelationWeightOperationFilterInput
 }
 
@@ -742,12 +742,11 @@ input SubjectRelationFilterInput {
   description: StringOperationFilterInput
   hostInteraction: InteractionFilterInput
   hostInteractionId: ComparableInt32OperationFilterInput
-  id: ComparableInt32OperationFilterInput
   label: StringOperationFilterInput
   linkedInteraction: InteractionFilterInput
   linkedInteractionId: ComparableInt32OperationFilterInput
   or: [SubjectRelationFilterInput!]
   type: RelationTypesOperationFilterInput
-  uuid: ComparableGuidOperationFilterInput
+  uuid: ComparableNullableOfGuidOperationFilterInput
   weight: RelationWeightOperationFilterInput
 }

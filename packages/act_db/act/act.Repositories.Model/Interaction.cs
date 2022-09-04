@@ -92,29 +92,48 @@ public class Interaction
 
     /// <inheritdoc cref="Relation" />
     public virtual ICollection<ContextRelation> Contexts { get; set; } = new List<ContextRelation>();
+    /// as contexts
+    public virtual ICollection<ContextRelation> AsContexts { get; set; } = new List<ContextRelation>();  
 
 
     /// <inheritdoc cref="SubjectRelation" />
     public virtual ICollection<SubjectRelation> Subjects { get; set; } = new List<SubjectRelation>();
+    
+    /// as subject
+    public virtual ICollection<SubjectRelation> AsSubjects { get; set; } = new List<SubjectRelation>();
+    
 
     /// <inheritdoc cref="ParallelRelation" />
     public virtual ICollection<ParallelRelation> Parallels { get; set; } = new List<ParallelRelation>();
+    /// as parallel
+    public virtual ICollection<ParallelRelation> AsParallels { get; set; } = new List<ParallelRelation>();
 
     /// <inheritdoc cref="SubjectRelation" />
     public virtual ICollection<ObjectRelation> Objects { get; set; } = new List<ObjectRelation>();
+    /// as object
+    public virtual ICollection<ObjectRelation> AsObjects { get; set; } = new List<ObjectRelation>();
 
     /// <inheritdoc cref="SettingRelation" />
     public virtual ICollection<SettingRelation> Settings { get; set; } = new List<SettingRelation>();
+    /// as setting
+    public virtual ICollection<SettingRelation> AsSettings { get; set; } = new List<SettingRelation>();
 
     /// <inheritdoc cref="SettingRelation" />
     public virtual ICollection<PurposeRelation> Purposes { get; set; } = new List<PurposeRelation>();
+    /// as purpose
+    public virtual ICollection<PurposeRelation> AsPurposes { get; set; } = new List<PurposeRelation>();
 
     /// <inheritdoc cref="SettingRelation" />
     public virtual ICollection<IndirectObjectRelation> IndirectObjects { get; set; } =
         new List<IndirectObjectRelation>();
+    /// as indirect object
+    public virtual ICollection<IndirectObjectRelation> AsIndirectObjects { get; set; } =
+        new List<IndirectObjectRelation>();
 
     /// <inheritdoc cref="ReferenceRelation" />
     public virtual ICollection<ReferenceRelation> References { get; set; }   = new List<ReferenceRelation>();
+    /// as reference
+    public virtual ICollection<ReferenceRelation> AsReferences { get; set; } = new List<ReferenceRelation>();
 
     /// <inheritdoc cref="Property" />
     public virtual ICollection<Property> Properties { get; set; } = new List<Property>();

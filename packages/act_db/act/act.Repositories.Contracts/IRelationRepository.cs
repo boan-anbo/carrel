@@ -35,7 +35,7 @@ public interface IRelationRepository
     /// <param name="relationType"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    T? CreateRelationWithId<T>(CreateOrUpdateRelationDto request) where T : Relation;
+    T? CreateRelationWithHostInteractionId<T>(CreateOrUpdateRelationDto request) where T : Relation;
 
     Task DeleteRelation(Guid relationId, int hostInteractionId, int linkedInteractionId, RelationTypes type);
 }

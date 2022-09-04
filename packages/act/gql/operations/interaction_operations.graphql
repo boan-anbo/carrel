@@ -267,6 +267,7 @@ fragment nodeFragment on NodeOfInteraction {
 fragment edgeFragment on EdgeOfRelation {
   id
   uuid
+  displayId
   label
   description
   content
@@ -277,4 +278,3 @@ fragment edgeFragment on EdgeOfRelation {
   sourceId
   targetId
 }
-

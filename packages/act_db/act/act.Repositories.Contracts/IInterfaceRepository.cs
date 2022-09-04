@@ -6,6 +6,7 @@ public interface IInteractionRepository
 {
     Task<Interaction> GetInteractionScalar(int id);
     Task<Interaction?> GetInteractionFull(int id);
+    Task<Interaction?> GetInteractionFullWithAllRelations(int id);
     Task<IEnumerable<Interaction>> GetAllInteractions();
     Task<Interaction?> AddOrCreateInteraction(Interaction? interaction);
     Task<Interaction?> AddOrCreateInteractionWithoutSaving(Interaction? interaction);

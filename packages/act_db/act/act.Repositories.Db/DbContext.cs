@@ -58,6 +58,13 @@ public class ActDbContext : DbContext
             .HasForeignKey(x => x.HostInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // reverse navigation
+        modelBuilder.Entity<ContextRelation>()
+            .HasOne(x => x.LinkedInteraction)
+            .WithMany(x => x.AsContexts)
+            .HasForeignKey(x => x.LinkedInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         // subject relations
         modelBuilder.Entity<SubjectRelation>()
             .HasKey(x => x.Uuid);
@@ -68,16 +75,29 @@ public class ActDbContext : DbContext
             .HasForeignKey(x => x.HostInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        /// reverse relation
+        modelBuilder.Entity<SubjectRelation>()
+            .HasOne(x => x.LinkedInteraction)
+            .WithMany(x => x.AsSubjects)
+            .HasForeignKey(x => x.LinkedInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Object relations
         modelBuilder.Entity<ObjectRelation>()
             .HasKey(x => x.Uuid);
-                
+
 
         modelBuilder.Entity<ObjectRelation>()
             .HasOne(x => x.HostInteraction)
             .WithMany(x => x.Objects)
             .HasForeignKey(x => x.HostInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // reverse relation
+        modelBuilder.Entity<ObjectRelation>()
+            .HasOne(x => x.LinkedInteraction)
+            .WithMany(x => x.AsObjects)
+            .HasForeignKey(x => x.LinkedInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
 
 
@@ -91,6 +111,15 @@ public class ActDbContext : DbContext
             .HasForeignKey(x => x.HostInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // reverse setting relation
+
+        modelBuilder.Entity<SettingRelation>()
+            .HasOne(x => x.LinkedInteraction)
+            .WithMany(x => x.AsSettings)
+            .HasForeignKey(x => x.LinkedInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
         // indirect object relations
 
         modelBuilder.Entity<IndirectObjectRelation>()
@@ -100,6 +129,14 @@ public class ActDbContext : DbContext
             .HasOne(x => x.HostInteraction)
             .WithMany(x => x.IndirectObjects)
             .HasForeignKey(x => x.HostInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // reverse indrect object relation
+
+        modelBuilder.Entity<IndirectObjectRelation>()
+            .HasOne(x => x.LinkedInteraction)
+            .WithMany(x => x.AsIndirectObjects)
+            .HasForeignKey(x => x.LinkedInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // purpose relations
@@ -112,6 +149,13 @@ public class ActDbContext : DbContext
             .HasForeignKey(x => x.HostInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // reverse purpose relation
+        modelBuilder.Entity<PurposeRelation>()
+            .HasOne(x => x.LinkedInteraction)
+            .WithMany(x => x.AsPurposes)
+            .HasForeignKey(x => x.LinkedInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         // Parallel relations
         modelBuilder.Entity<ParallelRelation>()
             .HasKey(x => x.Uuid);
@@ -120,6 +164,13 @@ public class ActDbContext : DbContext
             .HasOne(x => x.HostInteraction)
             .WithMany(x => x.Parallels)
             .HasForeignKey(x => x.HostInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // reverse parallel relation
+        modelBuilder.Entity<ParallelRelation>()
+            .HasOne(x => x.LinkedInteraction)
+            .WithMany(x => x.AsParallels)
+            .HasForeignKey(x => x.LinkedInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // reference relations
@@ -132,14 +183,22 @@ public class ActDbContext : DbContext
             .HasForeignKey(x => x.HostInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
 
+
+        // reverse reference relation
+        modelBuilder.Entity<ReferenceRelation>()
+            .HasOne(x => x.LinkedInteraction)
+            .WithMany(x => x.AsReferences)
+            .HasForeignKey(x => x.LinkedInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
         // First act
         modelBuilder.Entity<Interaction>()
             .HasOne<FirstAct>(x => x.FirstAct)
             .WithMany(g => g.Interactions)
             .HasForeignKey(x => x.FirstActId)
-            
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         // Second act
         modelBuilder.Entity<Interaction>()
             .HasOne<SecondAct>(x => x.SecondAct)
@@ -155,12 +214,48 @@ public class ActDbContext : DbContext
             .HasForeignKey(x => x.InteractionId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // configure eager loading for first and second act
+        modelBuilder.Entity<Interaction>()
+            .Navigation(x => x.FirstAct)
+            .AutoInclude();
+
+        modelBuilder.Entity<Interaction>()
+            .Navigation(x => x.SecondAct)
+            .AutoInclude();
+
+        // Create a sample sentence representation.
+
+        // Context: Air pollution
+
+        // Subjects: I, you
+
+        // First Act: to avoid
+        // Objects: plastic bottles
+
+        // Second Act: to preserve
+        // Indirect Objects: the environment
+
+        // Purpose: for the future
+
+        // Settings: on the earth
+        // Reference: common sense
+        // Parallel: climate change
         modelBuilder.Entity<FirstAct>()
             .HasData(
                 new FirstAct
                 {
                     Id = 1,
                     Label = "to be"
+                },
+                new FirstAct
+                {
+                    Id = 2,
+                    Label = "to avoid"
+                },
+                new FirstAct
+                {
+                    Id = 3,
+                    Label = "to preserve"
                 }
             );
 
@@ -169,31 +264,65 @@ public class ActDbContext : DbContext
                 new Interaction
                 {
                     Id = 1,
-                    Label = "World",
+                    Label = "Air pollution",
                     FirstActId = 1,
                     Identity = InteractionIdentity.ENTITY
                 },
                 new Interaction
                 {
                     Id = 2,
-                    Label = "People",
+                    Label = "I",
                     FirstActId = 1,
                     Identity = InteractionIdentity.ENTITY
                 },
-                // idea 
                 new Interaction
-                    {
-                        Id = 3,
-                        Label = "Idea",
-                        FirstActId = 1,
-                        Identity = InteractionIdentity.ENTITY
-                    },
-                // creation
+                {
+                    Id = 3,
+                    Label = "you",
+                    FirstActId = 1,
+                    Identity = InteractionIdentity.ENTITY
+                },
                 new Interaction
                 {
                     Id = 4,
-                    Label = "Creation",
+                    Label = "plastic bottles",
                     FirstActId = 1,
+                    Identity = InteractionIdentity.ENTITY
+                },
+                new Interaction
+                {
+                    Id = 5,
+                    Label = "the environment",
+                    FirstActId = 1,
+                    Identity = InteractionIdentity.ENTITY
+                },
+                new Interaction
+                {
+                    Id = 6,
+                    Label = "future",
+                    FirstActId = 1,
+                    Identity = InteractionIdentity.ENTITY
+                },
+                new Interaction
+                {
+                    Id = 7,
+                    Label = "earth",
+                    FirstActId = 1,
+                    Identity = InteractionIdentity.ENTITY
+                },
+                new Interaction
+                {
+                    Id = 8,
+                    Label = "common sense",
+                    FirstActId = 1,
+                    Identity = InteractionIdentity.ENTITY
+                },
+                new Interaction
+                {
+                    Id = 9,
+                    Label = "climate change",
+                    FirstActId = 1,
+                    Identity = InteractionIdentity.ENTITY
                 }
             );
 

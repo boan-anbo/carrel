@@ -45,49 +45,58 @@ public class CreateOrUpdateInteractionRequestDto
         if (!(FirstActId > 0)) throw new Exception("TypeId is required");
 
         // check relation ids, throw if linked interaction ids are 0
+        
+        // check relation types
+        if (ContextIds.Any(x => !(x.LinkedInteractionId > 0)))
+            throw new Exception("ContextIds must be larger than 0");
+        if (ContextIds.Any(x => x.RelationType != RelationTypes.ContextRelation))
+            
+            throw new Exception(
+                $"Relation items in contextIds must be of the type ContextRelation, but you provided {ContextIds.FindAll(x => x.RelationType != RelationTypes.ContextRelation).FirstOrDefault().RelationType}");
+            
         if (SubjectIds.Any(x => !(x.LinkedInteractionId > 0)))
             throw new Exception("SubjectIds must be larger than 0");
         // check relation type  
         if (SubjectIds.Any(x => x.RelationType != RelationTypes.SubjectRelation))
             throw new Exception(
-                $"Items in subjectIds must be of type SubjectRelation, but you provided {SubjectIds.FindAll(x => x.RelationType != RelationTypes.SubjectRelation).ToString()}");
+                $"Relation items in subjectIds must be of the type SubjectRelation, but you provided {SubjectIds.FindAll(x => x.RelationType != RelationTypes.SubjectRelation).FirstOrDefault().RelationType}");
+        
 
         if (ObjectIds.Any(x => !(x.LinkedInteractionId > 0)))
             throw new Exception("ObjectIds must be larger than 0");
         if (ObjectIds.Any(x => x.RelationType != RelationTypes.ObjectRelation))
             throw new Exception(
-                $"Items in objectIds must be of type ObjectRelation, but you provided {ObjectIds.FindAll(x => x.RelationType != RelationTypes.ObjectRelation).ToString()}");
+                $"Relation items in objectIds must be of the type ObjectRelation, but you provided {ObjectIds.FindAll(x => x.RelationType != RelationTypes.ObjectRelation).FirstOrDefault().RelationType}");
 
         if (ParallelIds.Any(x => !(x.LinkedInteractionId > 0)))
             throw new Exception("ParallelIds must be larger than 0");
         if (ParallelIds.Any(x => x.RelationType != RelationTypes.ParallelRelation))
             throw new Exception(
-                $"Items in parallelIds must be of type ParallelRelation, but you provided {ParallelIds.FindAll(x => x.RelationType != RelationTypes.ParallelRelation).ToString()}");
+                $"Relation items in parallelIds must be of the type ParallelRelation, but you provided {ParallelIds.FindAll(x => x.RelationType != RelationTypes.ParallelRelation).FirstOrDefault().RelationType}");
 
         if (IndirectObjectIds.Any(x => !(x.LinkedInteractionId > 0)))
             throw new Exception("IndirectObjectIds must be larger than 0");
         if (IndirectObjectIds.Any(x => x.RelationType != RelationTypes.IndirectObjectRelation))
             throw new Exception(
-                $"Items in indirectObjectIds must be of type IndirectObjectRelation, but you provided {IndirectObjectIds.FindAll(x => x.RelationType != RelationTypes.IndirectObjectRelation).ToString()}");
+                $"Relation items in indirectObjectIds must be of the type IndirectObjectRelation, but you provided {IndirectObjectIds.FindAll(x => x.RelationType != RelationTypes.IndirectObjectRelation).FirstOrDefault().RelationType}");
 
         if (SettingIds.Any(x => !(x.LinkedInteractionId > 0)))
             throw new Exception("SettingIds must be larger than 0");
         if (SettingIds.Any(x => x.RelationType != RelationTypes.SettingRelation))
             throw new Exception(
-                $"Items in settingIds must be of type SettingRelation, but you provided {SettingIds.FindAll(x => x.RelationType != RelationTypes.SettingRelation).ToString()}");
+                $"Relation items in settingIds must be of the type SettingRelation, but you provided {SettingIds.FindAll(x => x.RelationType != RelationTypes.SettingRelation).FirstOrDefault().RelationType}");
 
         if (ReferenceIds.Any(x => !(x.LinkedInteractionId > 0)))
             throw new Exception("ReferenceIds must be larger than 0");
         if (ReferenceIds.Any(x => x.RelationType != RelationTypes.ReferenceRelation))
             throw new Exception(
-                $"Items in referenceIds must be of type ReferenceRelation, but you provided {ReferenceIds.FindAll(x => x.RelationType != RelationTypes.ReferenceRelation).ToString()}");
+                $"Relation items in referenceIds must be of the type ReferenceRelation, but you provided {ReferenceIds.FindAll(x => x.RelationType != RelationTypes.ReferenceRelation).FirstOrDefault().RelationType}");
 
         if (PurposeIds.Any(x => !(x.LinkedInteractionId > 0)))
             throw new Exception("PurposeIds must be larger than 0");
         if (PurposeIds.Any(x => x.RelationType != RelationTypes.PurposeRelation))
             throw new Exception(
-                $"Items in purposeIds must be of type PurposeRelation, but you provided {PurposeIds.FindAll(x => x.RelationType != RelationTypes.PurposeRelation).ToString()}");
-
+                $"Relation items in purposeIds must be of the type PurposeRelation, but you provided {PurposeIds.FindAll(x => x.RelationType != RelationTypes.PurposeRelation).FirstOrDefault().RelationType}");
 
         return true;
     }
@@ -134,7 +143,7 @@ public class CreateOrUpdateRelationDto
     public static T? toRelation<T>(CreateOrUpdateRelationDto dto) where T : Relation
     {
         var id = dto.Id ?? 0;
-        var uuid = dto.Uuid ?? Guid.NewGuid();
+        var uuid = dto.Uuid ?? null;
         var label = dto.Label ?? "";
         var description = dto.Description ?? "";
         var content = dto.Content ?? "";

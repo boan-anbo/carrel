@@ -1,3 +1,4 @@
+using act.API.DataContracts;
 using act.API.Tests.Controllers;
 using act.Repositories.Contracts;
 using act.Repositories.Db;
@@ -9,47 +10,49 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
 namespace act.API.Tests.Services;
+
 [TestClass]
-public class GraphQLQueryTests: TestBase
+public class GraphQLQueryTests : TestBase
 {
     //NOTE: should be replaced by an interface
-    private readonly IGraphQLMutation _service;
+    private readonly IGraphQLMutation _mutationService;
+    private readonly GraphQLQuery _queryService;
     private readonly IInteractionRepository _interactionRepository;
     private readonly IRelationRepository _relationRepository;
     private readonly ActDbContext _dbContext;
 
     public GraphQLQueryTests()
     {
-        _service = _serviceProvider.GetRequiredService<IGraphQLMutation>();
+        _mutationService = _serviceProvider.GetRequiredService<IGraphQLMutation>();
+        _queryService = _serviceProvider.GetRequiredService<GraphQLQuery>();
         _interactionRepository = _serviceProvider.GetRequiredService<IInteractionRepository>();
         _relationRepository = _serviceProvider.GetRequiredService<IRelationRepository>();
         _dbContext = _serviceProvider.GetRequiredService<ActDbContext>();
         //Newtonsoft.Json serializer (should be replaced once the known issue in System.Text.Json will be solved)
-        
     }
 
-    
+
     [TestMethod]
     public async Task Add_New_Entity_Should_Work()
     {
-        var result = await _service.AddNewEntityInteraction(_interactionRepository, "test");
-        
+        var result = await _mutationService.AddNewEntityInteraction(_interactionRepository, "test");
+
         Assert.IsNotNull(result);
         Assert.IsTrue(result.FirstActId > 0);
     }
-    
+
     [TestMethod]
     public async Task Delete_Interaction_Works()
     {
-        var createdInteraction = await _service.AddNewEntityInteraction(_interactionRepository, "test");
-        
+        var createdInteraction = await _mutationService.AddNewEntityInteraction(_interactionRepository, "test");
+
         Assert.IsNotNull(createdInteraction);
         var foundInteract = await _interactionRepository.GetInteractionFull(createdInteraction.Id);
         Assert.IsNotNull(foundInteract);
         Assert.AreEqual(createdInteraction.Id, foundInteract.Id);
-        
-        await _service.DeleteInteraction(createdInteraction.Id, _interactionRepository);
-        
+
+        await _mutationService.DeleteInteraction(createdInteraction.Id, _interactionRepository);
+
         var deletedInteraction = await _interactionRepository.GetInteractionFull(createdInteraction.Id);
         Assert.IsNull(deletedInteraction);
     }
@@ -57,8 +60,8 @@ public class GraphQLQueryTests: TestBase
     [TestMethod]
     public async Task Create_Relation_Works()
     {
-        var testInteraction1 = await _service.AddNewEntityInteraction(_interactionRepository, "test1");
-        var testInteraction2 = await _service.AddNewEntityInteraction(_interactionRepository, "test2");
+        var testInteraction1 = await _mutationService.AddNewEntityInteraction(_interactionRepository, "test1");
+        var testInteraction2 = await _mutationService.AddNewEntityInteraction(_interactionRepository, "test2");
         var requestDto = new CreateOrUpdateRelationDto
         {
             Id = null,
@@ -71,7 +74,8 @@ public class GraphQLQueryTests: TestBase
             Weight = RelationWeight.NotImportant,
             LinkedInteractionId = testInteraction2.Id
         };
-        var createdRelation = await _service.CreateOrUpdateRelation(_relationRepository, requestDto) as SettingRelation;
+        var createdRelation =
+            await _mutationService.CreateOrUpdateRelation(_relationRepository, requestDto) as SettingRelation;
         Assert.IsNotNull(createdRelation);
         Assert.AreEqual(testInteraction1.Id, createdRelation.HostInteractionId);
         Assert.AreEqual(testInteraction2.Id, createdRelation.LinkedInteractionId);
@@ -86,8 +90,8 @@ public class GraphQLQueryTests: TestBase
     [TestMethod]
     public async Task Update_Relation_Works()
     {
-        var testInteraction1 = await _service.AddNewEntityInteraction(_interactionRepository, "test1");
-        var testInteraction2 = await _service.AddNewEntityInteraction(_interactionRepository, "test2");
+        var testInteraction1 = await _mutationService.AddNewEntityInteraction(_interactionRepository, "test1");
+        var testInteraction2 = await _mutationService.AddNewEntityInteraction(_interactionRepository, "test2");
         var requestDto = new CreateOrUpdateRelationDto
         {
             Id = null,
@@ -100,7 +104,8 @@ public class GraphQLQueryTests: TestBase
             Weight = RelationWeight.NotImportant,
             LinkedInteractionId = testInteraction2.Id
         };
-        var createdRelation = await _service.CreateOrUpdateRelation(_relationRepository, requestDto) as SettingRelation;
+        var createdRelation =
+            await _mutationService.CreateOrUpdateRelation(_relationRepository, requestDto) as SettingRelation;
         Assert.IsNotNull(createdRelation);
         Assert.AreEqual(testInteraction1.Id, createdRelation.HostInteractionId);
         Assert.AreEqual(testInteraction2.Id, createdRelation.LinkedInteractionId);
@@ -124,7 +129,8 @@ public class GraphQLQueryTests: TestBase
             Weight = RelationWeight.Important,
             LinkedInteractionId = testInteraction2.Id
         };
-        var updatedRelation = await _service.CreateOrUpdateRelation(_relationRepository, updateDto) as SettingRelation;
+        var updatedRelation =
+            await _mutationService.CreateOrUpdateRelation(_relationRepository, updateDto) as SettingRelation;
         Assert.IsNotNull(updatedRelation);
         Assert.AreEqual(testInteraction1.Id, updatedRelation.HostInteractionId);
         Assert.AreEqual(testInteraction2.Id, updatedRelation.LinkedInteractionId);
@@ -137,5 +143,55 @@ public class GraphQLQueryTests: TestBase
     }
 
 
+    /// <summary>
+    /// Test get full and get full with relations
+    ///  </summary>
+    [TestMethod]
+    public async Task Get_Full_Interaction_Works()
+    {
+        var firstInteraction = await _queryService.GetInteractionFull(_interactionRepository, 1);
+        Assert.AreEqual(firstInteraction.Interaction.Label, "Air pollution");
+        Assert.IsNotNull(firstInteraction);
+        Assert.AreEqual(1, firstInteraction.Interaction.Id);
+        Assert.AreEqual(InteractionResultType.FullInteraction, firstInteraction.ResultType);
+        Assert.IsTrue(firstInteraction.Interaction.FirstAct != null);
+        /// create a new entity interaction
+        var createdInteraction = await _mutationService.AddNewEntityInteraction(_interactionRepository, "health");
+        Assert.IsNotNull(createdInteraction);
+        Assert.AreEqual(createdInteraction.Label, "health");
+        var createAct = await _mutationService.AddNewAct(_actRepository, createdInteraction.Id, "test");
+        
+        /// add a subject relation to the first interaction
+        var createOrUpdateInteractionDto = new CreateOrUpdateInteractionRequestDto
+        {
+            Id = firstInteraction.Interaction.Id,
+            Uuid = firstInteraction.Interaction.Uuid,
+            Label = null,
+            Description = null,
+            FirstActId = 0,
+            SecondActId = 0,
+            Start = 0,
+            End = 0,
+            ContextIds = null,
+            SubjectIds = null,
+            ObjectIds = null,
+            ParallelIds = null,
+            IndirectObjectIds = null,
+            SettingIds = null,
+            ReferenceIds = null,
+            PurposeIds = null,
+            PropertyIds = null,
+            Identity = null,
+        };
+    }
 
+    /// <summary>
+    /// Test graph generation on interactions with all relations
+    /// </summary>
+    [TestMethod]
+    public async Task Generate_Graph_Works()
+    {
+        // var queryResult = _mutationService.
+        return;
+    }
 }
