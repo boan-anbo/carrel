@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {RouterModule, Routes} from "@angular/router";
 import {EditorComponent} from "./editor/editor.component";
+import {GraphViewComponent} from "./graph-view/graph-view.component";
 
 const routes: Routes = [
   {
-    path: '', component: EditorComponent
+    path: '', component: GraphViewComponent
   }
 ]
 @NgModule({
