@@ -1,4 +1,4 @@
-import {getApolloClient} from "../utils/get-apollo-client";
+import {getApolloClient} from "../../utils/get-apollo-client";
 import {
     FilterInteractionsByLabelDocument,
     GetInteractionsQuery, Interaction,
