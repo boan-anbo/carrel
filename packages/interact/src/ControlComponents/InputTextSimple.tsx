@@ -1,21 +1,31 @@
 import Search from "antd/lib/input/Search";
-import {CSSProperties} from "react";
+import {CSSProperties, ReactNode, useRef} from "react";
+import {Input} from "antd";
+import {SizeType} from "antd/lib/config-provider/SizeContext";
 
-export interface SearchSimpleProps {
+export class InputTextSimpleProps {
+    size: SizeType;
     style?: CSSProperties;
-    onSearch: (value: string) => void
-    placeholder?: string
+    onInputChange?: (value: string) => void;
+    onInputEnter?: (value: string) => void;
+    placeholder?: string;
+    children?: ReactNode;
 }
 
-export const SearchSimple = (props: SearchSimpleProps) => {
+
+export const InputTextSimple = (props: InputTextSimpleProps) => {
 
     function onSearchSearch(value: string, event?: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLInputElement>) {
 
     }
 
-    return (<Search placeholder={props.placeholder}
-                    onSearch={props.onSearch}
-                    style={props.style}
-                    
-    ></Search>)
+    return (<Input size={props.size}
+                   placeholder={props.placeholder}
+                   prefix={props.children}>
+
+    </Input>)
+}
+
+InputTextSimple.defaultProps = {
+    size: "small"
 }

@@ -5,13 +5,14 @@ edition = "2018"
 
 
 [dependencies]
-axum = "0.5.15"
+axum = { version = "0.5.15" }
 futures = "0.3"
 prost = "0.11.0"
 prost-types = "0.11.1"
 bytes = "1.2.1"
 tokio = { version = "1", features = ["full"] }
 tower = { version = "0.4", features = ["full"] }
+tower-http = { "version" = "0.3.4", features = ["cors"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 dotenv = "0.15.0"
@@ -26,7 +27,7 @@ serde_json = "^1"
 chrono = { version = "0.4", features = ["serde"] }
 
 # es client
-distant_es_client = {path = "../distant_es_client"}
+distant_es_client = { path = "../distant_es_client" }
 
 [build-dependencies]
 prost-build = { version = "0.11.0" }

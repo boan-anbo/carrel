@@ -1,6 +1,6 @@
 import {EdgeStyle, IUserEdge, IUserNode, NodeStyle} from "@antv/graphin";
 import {ElementStatus, RestEdge} from "@antv/graphin/es/typings/type";
-import {EdgeOfRelation, GraphOfRelationAndInteraction, NodeOfInteraction} from "../grl-client/interact_db_client";
+import {EdgeOfRelation, GraphOfRelationAndInteraction, NodeOfInteraction} from "../clients/grl-client/interact_db_client";
 
 
 export class InteractGraphNode implements IUserNode {

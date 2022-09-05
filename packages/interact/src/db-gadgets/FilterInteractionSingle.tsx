@@ -1,7 +1,7 @@
 import {Select} from 'antd';
 import React, {useState} from 'react';
-import {filterInteractions} from "../db-operations/filter-operations";
-import {Interaction} from "../grl-client/interact_db_client";
+import {filterInteractions} from "../clients/interact-db-client/filter-operations";
+import {Interaction} from "../clients/grl-client/interact_db_client";
 
 const {Option} = Select;
 

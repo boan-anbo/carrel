@@ -1,5 +1,7 @@
+use axum::http::Method;
 use axum::routing::{post};
 use axum::Router;
+use tower_http::cors::{any, Any, CorsLayer};
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 use crate::controller::search::search;
@@ -37,10 +39,17 @@ pub fn get_app() -> Router {
     )
     )]
     pub(crate) struct ApiDoc;
+
+    let cors = CorsLayer::new()
+        // allow `GET` and `POST` when accessing the resource
+        .allow_methods(vec![Method::GET, Method::POST])
+        .allow_headers(Any)
+        // allow requests from any origin
+        .allow_origin(Any);
     // build our application with a route
     let app = Router::new()
         .merge(SwaggerUi::new("/swagger-ui/*tail").url("/api-doc/openapi.json", ApiDoc::openapi()))
         .route("/search", post(search))
         .route("/scroll", post(scroll));
-    app
+    app.layer(cors)
 }

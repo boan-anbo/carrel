@@ -2,7 +2,7 @@ import {IUserEdge, IUserNode} from "@antv/graphin";
 import {useState} from "react";
 import {Graph} from "./Graph";
 import {extractGraphData} from "./extract-graph-data";
-import {useGetInteractionFullQuery} from "../grl-client/interact_db_client";
+import {useGetInteractionFullQuery} from "../clients/grl-client/interact_db_client";
 
 export function GraphComponent(props: { id: number }) {
 

@@ -1,5 +1,7 @@
 
 use std::net::SocketAddr;
+use axum::http::Method;
+use tower_http::cors::{any, CorsLayer};
 
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -35,6 +37,7 @@ pub mod api_error {
 
 #[tokio::main]
 async fn main() {
+
 
     // initialize .env
     dotenv::dotenv().ok();

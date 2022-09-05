@@ -1,4 +1,4 @@
-import {CratecontrollerscrollApi, CratecontrollersearchApi, DistantApiSearchResponse} from "../generated/distant_api";
+import {CratecontrollerscrollApi, CratecontrollersearchApi, DistantApiSearchResponse} from "../distant_api";
 
 export const searchDistant: (searchTerm: string) => Promise<DistantApiSearchResponse> = async (searchTerm: string) => {
     const client = new CratecontrollersearchApi(

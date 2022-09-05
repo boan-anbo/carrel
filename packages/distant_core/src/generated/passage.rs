@@ -11,7 +11,7 @@ pub struct Passage {
     /// passage description
     #[prost(string, tag="3")]
     pub description: ::prost::alloc::string::String,
-    /// location, e.g. page number or url
+    /// e.g. "book1/chapter1" or page number
     #[prost(string, tag="4")]
     pub location: ::prost::alloc::string::String,
     /// passage document

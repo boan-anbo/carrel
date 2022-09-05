@@ -21,7 +21,7 @@ impl From<&distant_es_client::responses::search_result::Hit> for Passage {
         Passage {
             text: hit.highlight.text.join("\n"),
             description: source.file_name.to_string(),
-            location: hit.index.to_string(),
+            location: hit.source.page_index.to_string(),
             document: None,
             ..Default::default()
         }

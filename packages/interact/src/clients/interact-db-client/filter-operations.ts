@@ -1,9 +1,5 @@
 import {getApolloClient} from "../../utils/get-apollo-client";
-import {
-    FilterInteractionsByLabelDocument,
-    GetInteractionsQuery, Interaction,
-    InteractionsConnection
-} from "../grl-client/interact_db_client";
+import {FilterInteractionsByLabelDocument, GetInteractionsQuery, Interaction} from "../grl-client/interact_db_client";
 
 export async function filterInteractions(label: string): Promise<Interaction[]> {
     const {data}: {data: GetInteractionsQuery} = await getApolloClient().query({
@@ -16,3 +12,4 @@ export async function filterInteractions(label: string): Promise<Interaction[]> 
     console.log('data', data);
     return data.interactions?.nodes as Interaction[] ?? [];
 }
+

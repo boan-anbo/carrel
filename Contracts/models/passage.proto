@@ -9,11 +9,13 @@ package passage;
 
 message Passage {
     // id
-    string id = 1;
+    string uuid = 1;
     // passage text
     string text = 2;
     // passage description
     string description = 3;
+    // e.g. "book1/chapter1" or page number
+    string location = 4;
     // passage document
-    document.Document document = 4;
+    document.Document document = 5;
 }
