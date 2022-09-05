@@ -5,17 +5,17 @@ import "./App.css";
 
 import GridLayout, {Layout, Responsive, WidthProvider} from "react-grid-layout";
 import FilterInteractions, {SelectValue} from "./db-gadgets/FilterInteractions";
+import FilterInteractionSingle from "./db-gadgets/FilterInteractionSingle";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 function App() {
 
     const layout1: Layout[] = [
-        {i: "left_panel", x: 0, y: 0, w:8, h: 4,  static: false},
-        {i: "mid_panel", x: 8, y: 0, w:8, h: 4,   static: false},
-        {i: "right_panel", x: 16, y: 0, w:8, h: 4,   static: false}
+        {i: "left_panel", x: 0, y: 0, w: 8, h: 4, static: false},
+        {i: "mid_panel", x: 8, y: 0, w: 8, h: 4, static: false},
+        {i: "right_panel", x: 16, y: 0, w: 8, h: 4, static: false}
     ]
-
 
 
     return (
@@ -34,6 +34,7 @@ function App() {
                 <div key="left_panel" className='bg-red-500'>1</div>
                 <div key="mid_panel" className='bg-red-300'>
 
+                 <FilterInteractionSingle></FilterInteractionSingle>
                 </div>
                 <div key="right_panel" className='bg-blue-200'>3</div>
             </ResponsiveGridLayout>

@@ -1345,6 +1345,18 @@
   dependencies:
     "@babel/runtime" "^7.0.0"
 
+"@react-buddy/ide-toolbox@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@react-buddy/ide-toolbox/-/ide-toolbox-2.2.1.tgz#44d5977fbd9459d0221dce9f558f09032864eba9"
+  integrity sha512-oQWiiY0MJKeeHjW0wm6mO4ebarUdAW5z2g2p3gY5lF4ybDqm6CSU0oA9A6VFqGHLyG93w9W6rvRt/Ajd5cNNAQ==
+
+"@react-buddy/palette-antd@^4.1.2":
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@react-buddy/palette-antd/-/palette-antd-4.1.2.tgz#e621cf914cd7a3ddbc820cef8ac4c246ac2f113d"
+  integrity sha512-h9mk6rzRU0b332YhLwOgR1M6F+Y0KLzpo+SpOeS91jtJXdUBj7+I60Zf8Du3LwmRmVYtWp+QCZNwBjkEB7N8yw==
+  dependencies:
+    "@react-buddy/ide-toolbox" "^2.2.1"
+
 "@tauri-apps/api@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@tauri-apps/api/-/api-1.0.2.tgz#5228720e35d50fd08df87067dc29e7306c1f7a10"
