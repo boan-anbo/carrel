@@ -1,0 +1,14 @@
+<label for="name">Name: </label>
+<form
+  [formGroup]="newInteractionForm" (ngSubmit)="onSubmit()">
+>
+<input id="name" type="text" [formControlName]="'label'">
+</form>
+
+<ul>
+  <li *ngFor="let interaction of (graphql.interactions | async)">
+   1 {{interaction.label}}
+
+    <button (click)="delete(interaction.id)">Delete </button>
+  </li>
+</ul>

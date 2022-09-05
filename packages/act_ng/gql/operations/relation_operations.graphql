@@ -1,0 +1,27 @@
+
+mutation CreateOrUpdateRelation($input: CreateOrUpdateRelationDtoInput!) {
+  createOrUpdateRelation(requestDto: $input) {
+    ...relationFragment
+  }
+}
+
+mutation DeleteRelation($relationId: UUID!, $hostInteractionId: Int!, $linkedInteractionId: Int!, $relationTypes: RelationTypes!) {
+  deleteRelation(
+    relationId: $relationId,
+    hostInteractionId: $hostInteractionId,
+    linkedInteractionId: $linkedInteractionId,
+    type: $relationTypes
+  )
+}
+
+
+fragment relationFragment on Relation {
+  linkedInteractionId
+  uuid
+  label
+  description
+  content
+  type
+  weight
+  hostInteractionId
+}

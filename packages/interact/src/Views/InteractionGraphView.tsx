@@ -1,26 +1,22 @@
 import {GraphComponent} from "../graph/GraphComponent";
 import {useState} from "react";
-import FilterInteractions, {SelectValue} from "../db-gadgets/FilterInteractions";
+import FilterInteractionSingle, {SelectValue} from "../db-gadgets/FilterInteractionSingle";
+import {Interaction} from "../grl-client/interact_db_client";
 
-export function InteractionGraphView() {
+export const InteractionGraphView = () => {
     const [id, setId] = useState(0);
 
-    function onFilterInteractionsInteractionSelected(interactions: SelectValue[]) {
-        console.log(interactions);
 
+    function onInteractionSelected(value: SelectValue<Interaction>) {
+        setId(value.data.id);
     }
 
     return (
         <div>
-            <FilterInteractions
 
-                onInteractionSelected={onFilterInteractionsInteractionSelected}></FilterInteractions>
-            {/*    Conditional rendering*/}
-            {id > 0 ?
-                <GraphComponent id={id}/>
-                :
-                <div> Select interaction to browse </div>}
-        {/*    Else */}
+            <FilterInteractionSingle placeholder={'View interaction'} style={{width: '100%'}} onSelect={onInteractionSelected}/>
+
+            {id > 0 && <GraphComponent id={id}/>}
         </div>
     )
 }

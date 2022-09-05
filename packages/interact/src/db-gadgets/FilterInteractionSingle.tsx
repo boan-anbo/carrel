@@ -2,32 +2,41 @@ import {Select} from 'antd';
 import React, {useState} from 'react';
 import {filterInteractions} from "../db-operations/filter-operations";
 import {Interaction} from "../grl-client/interact_db_client";
-import {SelectValue} from "./FilterInteractions";
 
 const {Option} = Select;
 
-let timeout: ReturnType<typeof setTimeout> | null;
-let currentValue: string;
+
+export interface SelectValue<T> {
+    key: string;
+    label: string;
+    value: string;
+    data: T;
+}
 
 const fetch = async (value: string, callback: (data: { value: string; label: string }[]) => void) => {
-    if (timeout) {
-        clearTimeout(timeout);
-        timeout = null;
-    }
-    currentValue = value;
 
+    // Get filtered interactions from backend
     let filteredData = await filterInteractions(value);
     let data = filteredData.map((interaction: Interaction) => {
         return {
             label: interaction.label,
-            value: interaction.uuid?.toString()
-        } as SelectValue;
+            value: interaction.uuid?.toString(),
+            data: interaction
+        } as SelectValue<Interaction>;
     });
+    // provide data to the callback
+    console.log('providing data', data);
     callback(data);
 
 };
 
-const SearchInput: React.FC<{ placeholder: string; style: React.CSSProperties }> = props => {
+export interface FilterInteractionSingleProps<T> {
+    placeholder: string;
+    style: React.CSSProperties,
+    onSelect: (value: SelectValue<T>) => void;
+}
+
+const FilterInteractionSingle: React.FC<FilterInteractionSingleProps<Interaction>> = (props) => {
     const [data, setData] = useState<any[]>([]);
     const [value, setValue] = useState<string>();
 
@@ -41,9 +50,10 @@ const SearchInput: React.FC<{ placeholder: string; style: React.CSSProperties }>
 
     const handleChange = (newValue: string) => {
         setValue(newValue);
+        props.onSelect(data.find((d) => d.value === newValue));
     };
 
-    const options = data.map(d => <Option key={d.value}>{d.label}</Option>);
+    const options = data.map((d, index) => <Option key={d.value}>{d.label}</Option>);
 
     return (
         <Select
@@ -63,7 +73,5 @@ const SearchInput: React.FC<{ placeholder: string; style: React.CSSProperties }>
     );
 };
 
-const SearchAndSelectionInteraction = () =>
-    <SearchInput placeholder="input search text" style={{width: 200}}/>;
 
-export default SearchAndSelectionInteraction;
+export default FilterInteractionSingle;

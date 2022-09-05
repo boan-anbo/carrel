@@ -6,6 +6,7 @@ import {useGetInteractionFullQuery} from "../grl-client/interact_db_client";
 
 export function GraphComponent(props: { id: number }) {
 
+
     if (!props.id) {
         return <div>No id is provided for the graph</div>
     }
@@ -26,6 +27,8 @@ export function GraphComponent(props: { id: number }) {
     if (loading) {
         return <div>Loading...</div>
     }
+
+
     const load = () => {
         if (graph) {
             console.log(graph);
@@ -37,6 +40,7 @@ export function GraphComponent(props: { id: number }) {
         }
     }
 
+
     return (
         <div>
             <div>
@@ -45,12 +49,15 @@ export function GraphComponent(props: { id: number }) {
                 }}>Load
                 </button>
             </div>
-            <div style={{
-                width: "100vw",
-                height: "80vh"
-            }}>
-            <Graph edges={edges} nodes={nodes}  />
-                </div>
+            <div
+                onMouseDown={e => e.stopPropagation()}
+                style={{
+                    width: "100%",
+                    height: "100%",
+                }}>
+                <Graph
+                    edges={edges} nodes={nodes}/>
+            </div>
         </div>
     )
 }

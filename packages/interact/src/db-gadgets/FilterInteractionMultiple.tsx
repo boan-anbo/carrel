@@ -2,16 +2,11 @@ import {Select} from 'antd';
 import React, {useState} from 'react';
 import {filterInteractions} from "../db-operations/filter-operations";
 import {Interaction} from "../grl-client/interact_db_client";
+import { SelectValue } from './FilterInteractionSingle';
 
 const {Option} = Select;
 
 
-export interface SelectValue<T> {
-    key: string;
-    label: string;
-    value: string;
-    data: T;
-}
 
 const fetch = async (value: string, callback: (data: { value: string; label: string }[]) => void) => {
 
@@ -33,12 +28,12 @@ const fetch = async (value: string, callback: (data: { value: string; label: str
 export interface FilterInteractionSingleProps<T> {
     placeholder: string;
     style: React.CSSProperties,
-    onSelect: (value: SelectValue<T>) => void;
+    onSelect: (value: SelectValue<T>[]) => void;
 }
 
-const FilterInteractionSingle: React.FC<FilterInteractionSingleProps<Interaction>> = (props) => {
+const FilterInteractionMultiple: React.FC<FilterInteractionSingleProps<Interaction>> = (props) => {
     const [data, setData] = useState<any[]>([]);
-    const [value, setValue] = useState<string>();
+    const [value, setValue] = useState<string[]>();
 
     const handleSearch = (newValue: string) => {
         if (newValue) {
@@ -48,17 +43,16 @@ const FilterInteractionSingle: React.FC<FilterInteractionSingleProps<Interaction
         }
     };
 
-    const handleChange = (newValue: string) => {
+    const handleChange = (newValue: string[]) => {
         setValue(newValue);
-        console.log('handleChange', newValue);
-        console.log('data', data);
-        props.onSelect(data.find((d) => d.value === newValue));
+        props.onSelect(data.filter((d) => newValue.includes(d.value)));
     };
 
     const options = data.map((d, index) => <Option key={d.value}>{d.label}</Option>);
 
     return (
         <Select
+            mode="multiple"
             showSearch
             value={value}
             placeholder={props.placeholder}
@@ -76,4 +70,4 @@ const FilterInteractionSingle: React.FC<FilterInteractionSingleProps<Interaction
 };
 
 
-export default FilterInteractionSingle;
+export default FilterInteractionMultiple;

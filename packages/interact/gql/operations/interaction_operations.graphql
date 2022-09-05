@@ -6,6 +6,7 @@ query GetInteractions {
       node {
         id
         label
+        uuid
       }
     }
     nodes {
@@ -61,6 +62,7 @@ mutation AddInteraction($request: CreateOrUpdateInteractionRequestDtoInput!) {
 
 fragment interactionFragment on Interaction {
   id,
+  uuid
   label,
   ...actsFragment,
   identity,

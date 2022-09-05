@@ -12,10 +12,16 @@ export interface GraphProps extends GraphinData {
 // include data props of graphic user nodes
 export const Graph = (pros: GraphProps) => {
     return (
-        <Graphin data={{
-            nodes: pros.nodes,
-            edges: pros.edges,
-        }} >
+        <Graphin
+
+            data={{
+                nodes: pros.nodes,
+                edges: pros.edges,
+            }}
+            layout={{
+                type: 'dagre'
+            }}
+        >
             {/*show labels*/}
             <MiniMap visible={true}/>
         </Graphin>
