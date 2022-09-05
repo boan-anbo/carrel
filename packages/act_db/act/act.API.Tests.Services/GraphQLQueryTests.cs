@@ -159,7 +159,7 @@ public class GraphQLQueryTests : TestBase
         var createdInteraction = await _mutationService.AddNewEntityInteraction(_interactionRepository, "health");
         Assert.IsNotNull(createdInteraction);
         Assert.AreEqual(createdInteraction.Label, "health");
-        var createAct = await _mutationService.AddNewAct(_actRepository, createdInteraction.Id, "test");
+        // var createAct = await _mutationService.AddNewAct(_actRepository, createdInteraction.Id, "test");
         
         /// add a subject relation to the first interaction
         var createOrUpdateInteractionDto = new CreateOrUpdateInteractionRequestDto

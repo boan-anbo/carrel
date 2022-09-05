@@ -326,6 +326,110 @@ public class ActDbContext : DbContext
                 }
             );
 
+        /// a synthesis of the above entities and acts
+        modelBuilder.Entity<Interaction>().HasData(
+            new Interaction
+            {
+                Id = 10,
+                Label = "In the world, You and I avoid plastic bottle to save the environment on earth for the future",
+                FirstActId = 2,
+                Identity = InteractionIdentity.INTERACTION,
+            }
+        );
+        
+        // /// add context relations
+        modelBuilder.Entity<ContextRelation>().HasData(
+            new ContextRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 10,
+                LinkedInteractionId = 1
+            }
+        );
+        
+        // add subject relations
+        modelBuilder.Entity<SubjectRelation>().HasData(
+            new SubjectRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 10,
+                LinkedInteractionId = 2
+            },
+            new SubjectRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 10,
+                LinkedInteractionId = 3
+            }
+        );
+        
+        // add object relations
+        modelBuilder.Entity<ObjectRelation>().HasData(
+            new ObjectRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 10,
+                LinkedInteractionId = 4
+            }
+        );
+        
+        // add indirect object relations
+        
+        modelBuilder.Entity<IndirectObjectRelation>().HasData(
+            new IndirectObjectRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 10,
+                LinkedInteractionId = 5
+            }
+        );
+        
+        // add purpose relations
+        
+        modelBuilder.Entity<PurposeRelation>().HasData(
+            new PurposeRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 10,
+                LinkedInteractionId = 6
+            }
+        );
+        
+        // add setting relations
+        
+        modelBuilder.Entity<SettingRelation>().HasData(
+            new SettingRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 10,
+                LinkedInteractionId = 7
+            }
+        );
+        
+        // add reference relations
+        
+        modelBuilder.Entity<ReferenceRelation>().HasData(
+            new ReferenceRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 10,
+                LinkedInteractionId = 8
+            }
+        );
+        
+        // add parallel relations
+        
+        modelBuilder.Entity<ParallelRelation>().HasData(
+            new ParallelRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 10,
+                LinkedInteractionId = 9
+            }
+        );
+
+        
+
         // data seeding for interaction table
         // modelBuilder.ApplyConfiguration(new InteractionTypeConfiguration());
         // modelBuilder.ApplyConfiguration(new InteractionConfiguration());

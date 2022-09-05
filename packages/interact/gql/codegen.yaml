@@ -1,0 +1,13 @@
+schema: http://localhost:5000/graphql
+documents: [
+             "operations/interaction_operations.graphql",
+             "operations/relation_operations.graphql"
+]
+generates:
+  ../src/grl-client/interact_db_client.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      withRefetchFn: true

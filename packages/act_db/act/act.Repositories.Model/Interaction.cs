@@ -20,7 +20,7 @@ namespace act.Services.Model;
 public enum InteractionIdentity
 {
     ENTITY,
-    ACT,
+    INTERACTION,
     SOURCE
 }
 
@@ -67,7 +67,7 @@ public class Interaction
     public string Content { get; set; } = string.Empty;
 
     /// <inheritdoc cref="InteractionIdentity" />
-    public InteractionIdentity Identity { get; set; } = InteractionIdentity.ACT;
+    public InteractionIdentity Identity { get; set; } = InteractionIdentity.INTERACTION;
 
     /// <inheritdoc cref="Act" />
     [Required]

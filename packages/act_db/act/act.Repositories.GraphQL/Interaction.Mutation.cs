@@ -57,7 +57,7 @@ public class GraphQLMutation : IGraphQLMutation
         /// check validity of request
         requestDto.ValidateOrThrow();
         // convert identity
-        var identity = InteractionIdentity.ACT;
+        var identity = InteractionIdentity.INTERACTION;
         // switch (request.Identity)
 
         switch (requestDto.Identity)
@@ -66,7 +66,7 @@ public class GraphQLMutation : IGraphQLMutation
                 identity = InteractionIdentity.ENTITY;
                 break;
             case AddInteractionIdentity.ACT:
-                identity = InteractionIdentity.ACT;
+                identity = InteractionIdentity.INTERACTION;
                 break;
             case AddInteractionIdentity.SOURCE:
                 identity = InteractionIdentity.SOURCE;
