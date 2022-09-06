@@ -28,7 +28,7 @@ namespace act.Services.Model;
 /// </remarks>
 public class Property
 {
-    [Key] public int Id { get; set; }
+    [Key] public long Id { get; set; }
 
     public Guid Guid { get; set; } = Guid.NewGuid();
 
@@ -43,5 +43,5 @@ public class Property
 
 
     public Interaction Interaction { get; set; }
-    public int InteractionId { get; set; }
+    public long InteractionId { get; set; }
 }

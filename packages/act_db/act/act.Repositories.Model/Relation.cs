@@ -11,7 +11,9 @@ public enum RelationTypes
 {
     ContextRelation,
     SubjectRelation,
+    FirstActRelation,
     ObjectRelation,
+    SecondActRelation,
     IndirectObjectRelation,
     SettingRelation,
     PurposeRelation,
@@ -29,13 +31,17 @@ public static class RelationTypesExtensions
         switch (value)
         {
             case RelationTypes.ContextRelation:
-                return "has the context of";
+                return "is the context of";
             case RelationTypes.SubjectRelation:
                 return "is the subject of";
+            case RelationTypes.FirstActRelation:
+                return "is the first act of";
             case RelationTypes.ObjectRelation:
-                return "has the object(s) of";
+                return "is the object(s) of";
+            case RelationTypes.SecondActRelation:
+                return "is the second act of";
             case RelationTypes.IndirectObjectRelation:
-                return "has the indirect object(s) of";
+                return "is the indirect object(s) of";
             case RelationTypes.SettingRelation:
                 return "in the setting(s) of";
             case RelationTypes.PurposeRelation:
@@ -174,19 +180,19 @@ public abstract class Relation
     /// </summary>
     public virtual Interaction HostInteraction { get; set; }
 
-    public int HostInteractionId { get; set; }
+    public long HostInteractionId { get; set; }
 
     /// <summary>
     ///     The B of the A-B relation. Usually only this side is loaded because it's usually loaded as part of the A entity.
     /// </summary>
     public virtual Interaction LinkedInteraction { get; set; }
 
-    public int LinkedInteractionId { get; set; }
+    public long LinkedInteractionId { get; set; }
 
     public static T Create<T>(
-        int Id, Guid uuid,
-        int hostInteractionId, 
-        int linkedInteractionId, 
+        long Id, Guid uuid,
+        long hostInteractionId, 
+        long linkedInteractionId, 
         RelationTypes type, 
         string label,
         string description, 
@@ -308,5 +314,19 @@ public class ContextRelation : Relation
 ///     covered by direct <see cref="ObjectRelation" />. See <see cref="Relation" /> for more details.
 /// </summary>
 public class IndirectObjectRelation : Relation
+{
+}
+
+/// <summary>
+/// First act relations
+/// </summary>
+public class FirstActRelation : Relation
+{
+}
+
+/// <summary>
+/// Second act relations
+///     </summary>
+public class SecondActRelation : Relation
 {
 }

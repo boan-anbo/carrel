@@ -22,8 +22,6 @@ public class ActDbContext : DbContext
     public DbSet<Interaction?> Interactions { get; set; }
 
     // interaction type table
-    public DbSet<FirstAct> FirstActs { get; set; }
-    public DbSet<SecondAct> SecondActs { get; set; }
 
     // interaction properties
     public DbSet<Property?> Properties { get; set; }
@@ -37,6 +35,9 @@ public class ActDbContext : DbContext
     public DbSet<IndirectObjectRelation?> IndirectObjectRelations { get; set; }
     public DbSet<PurposeRelation?> PurposeRelations { get; set; }
     public DbSet<ContextRelation?> ContextRelations { get; set; }
+
+    public DbSet<FirstActRelation?> FirstActRelations { get; set; }
+    public DbSet<SecondActRelation?> SecondActRelations { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
@@ -56,7 +57,9 @@ public class ActDbContext : DbContext
             .HasOne(x => x.HostInteraction)
             .WithMany(x => x.Contexts)
             .HasForeignKey(x => x.HostInteractionId)
+
             .OnDelete(DeleteBehavior.Restrict);
+        
 
         // reverse navigation
         modelBuilder.Entity<ContextRelation>()
@@ -82,6 +85,23 @@ public class ActDbContext : DbContext
             .HasForeignKey(x => x.LinkedInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // first act relations
+        modelBuilder.Entity<FirstActRelation>()
+            .HasKey(x => x.Uuid);
+
+        modelBuilder.Entity<FirstActRelation>()
+            .HasOne(x => x.HostInteraction)
+            .WithMany(x => x.FirstActs)
+            .HasForeignKey(x => x.HostInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // reverse relation
+        modelBuilder.Entity<FirstActRelation>()
+            .HasOne(x => x.LinkedInteraction)
+            .WithMany(x => x.AsFirstActs)
+            .HasForeignKey(x => x.LinkedInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         // Object relations
         modelBuilder.Entity<ObjectRelation>()
             .HasKey(x => x.Uuid);
@@ -98,6 +118,16 @@ public class ActDbContext : DbContext
             .HasOne(x => x.LinkedInteraction)
             .WithMany(x => x.AsObjects)
             .HasForeignKey(x => x.LinkedInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // second act relations
+        modelBuilder.Entity<SecondActRelation>()
+            .HasKey(x => x.Uuid);
+
+        modelBuilder.Entity<SecondActRelation>()
+            .HasOne(x => x.HostInteraction)
+            .WithMany(x => x.SecondActs)
+            .HasForeignKey(x => x.HostInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
 
 
@@ -192,37 +222,29 @@ public class ActDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
 
 
-        // First act
-        modelBuilder.Entity<Interaction>()
-            .HasOne<FirstAct>(x => x.FirstAct)
-            .WithMany(g => g.Interactions)
-            .HasForeignKey(x => x.FirstActId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        // Second act
-        modelBuilder.Entity<Interaction>()
-            .HasOne<SecondAct>(x => x.SecondAct)
-            .WithMany(g => g.Interactions)
-            .HasForeignKey(x => x.SecondActId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-
         // interaction properties
         modelBuilder.Entity<Property>()
             .HasOne<Interaction>(x => x.Interaction)
             .WithMany(x => x.Properties)
             .HasForeignKey(x => x.InteractionId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+            
 
         // configure eager loading for first and second act
-        modelBuilder.Entity<Interaction>()
-            .Navigation(x => x.FirstAct)
+        
+        // first acts alway include the linked act interaction
+        modelBuilder.Entity<FirstActRelation>()
+            .Navigation(x => x.LinkedInteraction)
             .AutoInclude();
 
-        modelBuilder.Entity<Interaction>()
-            .Navigation(x => x.SecondAct)
+        
+        // second acts alway include the linked act interaction
+        modelBuilder.Entity<SecondActRelation>()
+            .Navigation(x => x.LinkedInteraction)
             .AutoInclude();
 
+        
         // Create a sample sentence representation.
 
         // Context: Air pollution
@@ -240,22 +262,31 @@ public class ActDbContext : DbContext
         // Settings: on the earth
         // Reference: common sense
         // Parallel: climate change
-        modelBuilder.Entity<FirstAct>()
+        modelBuilder.Entity<Interaction>()
             .HasData(
-                new FirstAct
+                new Interaction
                 {
                     Id = 1,
-                    Label = "to be"
+                    Label = "to be",
+                    Identity = InteractionIdentity.ACT
                 },
-                new FirstAct
+                new Interaction
                 {
                     Id = 2,
-                    Label = "to avoid"
+                    Label = "to do",
+                    Identity = InteractionIdentity.ACT
                 },
-                new FirstAct
+                new Interaction
                 {
                     Id = 3,
-                    Label = "to preserve"
+                    Label = "to avoid",
+                    Identity = InteractionIdentity.ACT
+                },
+                new Interaction
+                {
+                    Id = 4,
+                    Label = "to preserve",
+                    Identity = InteractionIdentity.ACT
                 }
             );
 
@@ -263,65 +294,56 @@ public class ActDbContext : DbContext
             .HasData(
                 new Interaction
                 {
-                    Id = 1,
-                    Label = "Air pollution",
-                    FirstActId = 1,
-                    Identity = InteractionIdentity.ENTITY
-                },
-                new Interaction
-                {
-                    Id = 2,
-                    Label = "I",
-                    FirstActId = 1,
-                    Identity = InteractionIdentity.ENTITY
-                },
-                new Interaction
-                {
-                    Id = 3,
-                    Label = "you",
-                    FirstActId = 1,
-                    Identity = InteractionIdentity.ENTITY
-                },
-                new Interaction
-                {
-                    Id = 4,
-                    Label = "plastic bottles",
-                    FirstActId = 1,
-                    Identity = InteractionIdentity.ENTITY
-                },
-                new Interaction
-                {
                     Id = 5,
-                    Label = "the environment",
-                    FirstActId = 1,
+                    Label = "Air pollution",
                     Identity = InteractionIdentity.ENTITY
                 },
                 new Interaction
                 {
                     Id = 6,
-                    Label = "future",
-                    FirstActId = 1,
+                    Label = "I",
                     Identity = InteractionIdentity.ENTITY
                 },
                 new Interaction
                 {
                     Id = 7,
-                    Label = "earth",
-                    FirstActId = 1,
+                    Label = "you",
                     Identity = InteractionIdentity.ENTITY
                 },
                 new Interaction
                 {
                     Id = 8,
-                    Label = "common sense",
-                    FirstActId = 1,
+                    Label = "plastic bottles",
                     Identity = InteractionIdentity.ENTITY
                 },
                 new Interaction
                 {
                     Id = 9,
+                    Label = "the environment",
+                    Identity = InteractionIdentity.ENTITY
+                },
+                new Interaction
+                {
+                    Id = 10,
+                    Label = "future",
+                    Identity = InteractionIdentity.ENTITY
+                },
+                new Interaction
+                {
+                    Id = 11,
+                    Label = "earth",
+                    Identity = InteractionIdentity.ENTITY
+                },
+                new Interaction
+                {
+                    Id = 12,
+                    Label = "common sense",
+                    Identity = InteractionIdentity.ENTITY
+                },
+                new Interaction
+                {
+                    Id = 13,
                     Label = "climate change",
-                    FirstActId = 1,
                     Identity = InteractionIdentity.ENTITY
                 }
             );
@@ -330,105 +352,124 @@ public class ActDbContext : DbContext
         modelBuilder.Entity<Interaction>().HasData(
             new Interaction
             {
-                Id = 10,
+                Id = 14,
                 Label = "In the world, You and I avoid plastic bottle to save the environment on earth for the future",
-                FirstActId = 2,
                 Identity = InteractionIdentity.INTERACTION,
             }
         );
-        
+
         // /// add context relations
         modelBuilder.Entity<ContextRelation>().HasData(
             new ContextRelation
             {
                 Uuid = Guid.NewGuid(),
-                HostInteractionId = 10,
-                LinkedInteractionId = 1
+                HostInteractionId = 14,
+                LinkedInteractionId = 5
             }
         );
-        
+
         // add subject relations
         modelBuilder.Entity<SubjectRelation>().HasData(
             new SubjectRelation
             {
                 Uuid = Guid.NewGuid(),
-                HostInteractionId = 10,
-                LinkedInteractionId = 2
+                HostInteractionId = 14,
+                LinkedInteractionId = 6
             },
             new SubjectRelation
             {
                 Uuid = Guid.NewGuid(),
-                HostInteractionId = 10,
-                LinkedInteractionId = 3
+                HostInteractionId = 14,
+                LinkedInteractionId = 7
             }
         );
         
+        // add first act relations
+        modelBuilder.Entity<FirstActRelation>().HasData(
+            new FirstActRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 14,
+                LinkedInteractionId = 3
+            }
+        );
+
         // add object relations
         modelBuilder.Entity<ObjectRelation>().HasData(
             new ObjectRelation
             {
                 Uuid = Guid.NewGuid(),
-                HostInteractionId = 10,
-                LinkedInteractionId = 4
-            }
-        );
-        
-        // add indirect object relations
-        
-        modelBuilder.Entity<IndirectObjectRelation>().HasData(
-            new IndirectObjectRelation
-            {
-                Uuid = Guid.NewGuid(),
-                HostInteractionId = 10,
-                LinkedInteractionId = 5
-            }
-        );
-        
-        // add purpose relations
-        
-        modelBuilder.Entity<PurposeRelation>().HasData(
-            new PurposeRelation
-            {
-                Uuid = Guid.NewGuid(),
-                HostInteractionId = 10,
-                LinkedInteractionId = 6
-            }
-        );
-        
-        // add setting relations
-        
-        modelBuilder.Entity<SettingRelation>().HasData(
-            new SettingRelation
-            {
-                Uuid = Guid.NewGuid(),
-                HostInteractionId = 10,
-                LinkedInteractionId = 7
-            }
-        );
-        
-        // add reference relations
-        
-        modelBuilder.Entity<ReferenceRelation>().HasData(
-            new ReferenceRelation
-            {
-                Uuid = Guid.NewGuid(),
-                HostInteractionId = 10,
+                HostInteractionId = 14,
                 LinkedInteractionId = 8
             }
         );
         
-        // add parallel relations
-        
-        modelBuilder.Entity<ParallelRelation>().HasData(
-            new ParallelRelation
+        // add second act relations
+        modelBuilder.Entity<SecondActRelation>().HasData(
+            new SecondActRelation
             {
                 Uuid = Guid.NewGuid(),
-                HostInteractionId = 10,
+                HostInteractionId = 14,
+                LinkedInteractionId = 4
+            }
+        );
+        
+
+        // add indirect object relations
+
+        modelBuilder.Entity<IndirectObjectRelation>().HasData(
+            new IndirectObjectRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 14,
                 LinkedInteractionId = 9
             }
         );
 
-        
+        // add purpose relations
+
+        modelBuilder.Entity<PurposeRelation>().HasData(
+            new PurposeRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 14,
+                LinkedInteractionId = 10
+            }
+        );
+
+        // add setting relations
+
+        modelBuilder.Entity<SettingRelation>().HasData(
+            new SettingRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 14,
+                LinkedInteractionId = 11
+            }
+        );
+
+        // add reference relations
+
+        modelBuilder.Entity<ReferenceRelation>().HasData(
+            new ReferenceRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 14,
+                LinkedInteractionId = 12
+            }
+        );
+
+        // add parallel relations
+
+        modelBuilder.Entity<ParallelRelation>().HasData(
+            new ParallelRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 14,
+                LinkedInteractionId = 13
+            }
+        );
+
 
         // data seeding for interaction table
         // modelBuilder.ApplyConfiguration(new InteractionTypeConfiguration());

@@ -18,11 +18,20 @@ export type Scalars = {
   UUID: any;
 };
 
-export enum AddInteractionIdentity {
-  Act = 'ACT',
-  Entity = 'ENTITY',
-  Source = 'SOURCE'
-}
+export type ComparableDateTimeOperationFilterInput = {
+  eq?: InputMaybe<Scalars['DateTime']>;
+  gt?: InputMaybe<Scalars['DateTime']>;
+  gte?: InputMaybe<Scalars['DateTime']>;
+  in?: InputMaybe<Array<Scalars['DateTime']>>;
+  lt?: InputMaybe<Scalars['DateTime']>;
+  lte?: InputMaybe<Scalars['DateTime']>;
+  neq?: InputMaybe<Scalars['DateTime']>;
+  ngt?: InputMaybe<Scalars['DateTime']>;
+  ngte?: InputMaybe<Scalars['DateTime']>;
+  nin?: InputMaybe<Array<Scalars['DateTime']>>;
+  nlt?: InputMaybe<Scalars['DateTime']>;
+  nlte?: InputMaybe<Scalars['DateTime']>;
+};
 
 export type ComparableGuidOperationFilterInput = {
   eq?: InputMaybe<Scalars['UUID']>;
@@ -39,19 +48,19 @@ export type ComparableGuidOperationFilterInput = {
   nlte?: InputMaybe<Scalars['UUID']>;
 };
 
-export type ComparableInt32OperationFilterInput = {
-  eq?: InputMaybe<Scalars['Int']>;
-  gt?: InputMaybe<Scalars['Int']>;
-  gte?: InputMaybe<Scalars['Int']>;
-  in?: InputMaybe<Array<Scalars['Int']>>;
-  lt?: InputMaybe<Scalars['Int']>;
-  lte?: InputMaybe<Scalars['Int']>;
-  neq?: InputMaybe<Scalars['Int']>;
-  ngt?: InputMaybe<Scalars['Int']>;
-  ngte?: InputMaybe<Scalars['Int']>;
-  nin?: InputMaybe<Array<Scalars['Int']>>;
-  nlt?: InputMaybe<Scalars['Int']>;
-  nlte?: InputMaybe<Scalars['Int']>;
+export type ComparableInt64OperationFilterInput = {
+  eq?: InputMaybe<Scalars['Long']>;
+  gt?: InputMaybe<Scalars['Long']>;
+  gte?: InputMaybe<Scalars['Long']>;
+  in?: InputMaybe<Array<Scalars['Long']>>;
+  lt?: InputMaybe<Scalars['Long']>;
+  lte?: InputMaybe<Scalars['Long']>;
+  neq?: InputMaybe<Scalars['Long']>;
+  ngt?: InputMaybe<Scalars['Long']>;
+  ngte?: InputMaybe<Scalars['Long']>;
+  nin?: InputMaybe<Array<Scalars['Long']>>;
+  nlt?: InputMaybe<Scalars['Long']>;
+  nlte?: InputMaybe<Scalars['Long']>;
 };
 
 export type ComparableNullableOfDateTimeOperationFilterInput = {
@@ -84,30 +93,15 @@ export type ComparableNullableOfGuidOperationFilterInput = {
   nlte?: InputMaybe<Scalars['UUID']>;
 };
 
-export type ComparableNullableOfInt32OperationFilterInput = {
-  eq?: InputMaybe<Scalars['Int']>;
-  gt?: InputMaybe<Scalars['Int']>;
-  gte?: InputMaybe<Scalars['Int']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  lt?: InputMaybe<Scalars['Int']>;
-  lte?: InputMaybe<Scalars['Int']>;
-  neq?: InputMaybe<Scalars['Int']>;
-  ngt?: InputMaybe<Scalars['Int']>;
-  ngte?: InputMaybe<Scalars['Int']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['Int']>>>;
-  nlt?: InputMaybe<Scalars['Int']>;
-  nlte?: InputMaybe<Scalars['Int']>;
-};
-
 export type ContextRelation = {
   __typename?: 'ContextRelation';
   content?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   hostInteraction?: Maybe<Interaction>;
-  hostInteractionId: Scalars['Int'];
+  hostInteractionId: Scalars['Long'];
   label?: Maybe<Scalars['String']>;
   linkedInteraction?: Maybe<Interaction>;
-  linkedInteractionId: Scalars['Int'];
+  linkedInteractionId: Scalars['Long'];
   type: RelationTypes;
   uuid?: Maybe<Scalars['UUID']>;
   weight: RelationWeight;
@@ -118,10 +112,10 @@ export type ContextRelationFilterInput = {
   content?: InputMaybe<StringOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   hostInteraction?: InputMaybe<InteractionFilterInput>;
-  hostInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  hostInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   label?: InputMaybe<StringOperationFilterInput>;
   linkedInteraction?: InputMaybe<InteractionFilterInput>;
-  linkedInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  linkedInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   or?: InputMaybe<Array<ContextRelationFilterInput>>;
   type?: InputMaybe<RelationTypesOperationFilterInput>;
   uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
@@ -130,33 +124,33 @@ export type ContextRelationFilterInput = {
 
 export type CreateOrUpdateInteractionRequestDtoInput = {
   content: Scalars['String'];
-  contextIds: Array<CreateOrUpdateRelationDtoInput>;
+  contextDtos?: InputMaybe<Array<CreateOrUpdateRelationDtoInput>>;
   description: Scalars['String'];
-  end: Scalars['Long'];
-  firstActId: Scalars['Int'];
-  id?: InputMaybe<Scalars['Int']>;
-  identity?: InputMaybe<AddInteractionIdentity>;
-  indirectObjectIds: Array<CreateOrUpdateRelationDtoInput>;
+  end?: InputMaybe<Scalars['DateTime']>;
+  firstActDtos: Array<CreateOrUpdateRelationDtoInput>;
+  id?: InputMaybe<Scalars['Long']>;
+  identity: InteractionIdentity;
+  indirectObjectDtos?: InputMaybe<Array<CreateOrUpdateRelationDtoInput>>;
   label: Scalars['String'];
-  objectIds: Array<CreateOrUpdateRelationDtoInput>;
-  parallelIds: Array<CreateOrUpdateRelationDtoInput>;
-  propertyIds?: InputMaybe<Array<Scalars['Int']>>;
-  purposeIds: Array<CreateOrUpdateRelationDtoInput>;
-  referenceIds: Array<CreateOrUpdateRelationDtoInput>;
-  secondActId: Scalars['Int'];
-  settingIds: Array<CreateOrUpdateRelationDtoInput>;
-  start: Scalars['Long'];
-  subjectIds: Array<CreateOrUpdateRelationDtoInput>;
+  objectDtos?: InputMaybe<Array<CreateOrUpdateRelationDtoInput>>;
+  parallelDtos?: InputMaybe<Array<CreateOrUpdateRelationDtoInput>>;
+  propertyIds?: InputMaybe<Array<Scalars['Long']>>;
+  purposeDtos?: InputMaybe<Array<CreateOrUpdateRelationDtoInput>>;
+  referenceDtos?: InputMaybe<Array<CreateOrUpdateRelationDtoInput>>;
+  secondActDtos?: InputMaybe<Array<CreateOrUpdateRelationDtoInput>>;
+  settingDtos?: InputMaybe<Array<CreateOrUpdateRelationDtoInput>>;
+  start?: InputMaybe<Scalars['DateTime']>;
+  subjectDtos?: InputMaybe<Array<CreateOrUpdateRelationDtoInput>>;
   uuid?: InputMaybe<Scalars['UUID']>;
 };
 
 export type CreateOrUpdateRelationDtoInput = {
   content?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
-  hostInteractionId: Scalars['Int'];
-  id?: InputMaybe<Scalars['Int']>;
+  hostInteractionId: Scalars['Long'];
+  id?: InputMaybe<Scalars['Long']>;
   label?: InputMaybe<Scalars['String']>;
-  linkedInteractionId: Scalars['Int'];
+  linkedInteractionId: Scalars['Long'];
   relationType: RelationTypes;
   uuid?: InputMaybe<Scalars['UUID']>;
   weight: RelationWeight;
@@ -170,39 +164,39 @@ export type EdgeOfRelation = {
   displayId?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   label?: Maybe<Scalars['String']>;
-  sourceId: Scalars['Int'];
-  targetId: Scalars['Int'];
+  sourceId: Scalars['Long'];
+  targetId: Scalars['Long'];
   uuid?: Maybe<Scalars['UUID']>;
-  weight: Scalars['Int'];
+  weight: Scalars['Long'];
 };
 
-export type FirstAct = {
-  __typename?: 'FirstAct';
+export type FirstActRelation = {
+  __typename?: 'FirstActRelation';
   content?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  guid: Scalars['UUID'];
-  id: Scalars['Int'];
-  interactions?: Maybe<Array<Maybe<Interaction>>>;
+  hostInteraction?: Maybe<Interaction>;
+  hostInteractionId: Scalars['Long'];
   label?: Maybe<Scalars['String']>;
+  linkedInteraction?: Maybe<Interaction>;
+  linkedInteractionId: Scalars['Long'];
+  type: RelationTypes;
+  uuid?: Maybe<Scalars['UUID']>;
+  weight: RelationWeight;
 };
 
-export type FirstActFilterInput = {
-  and?: InputMaybe<Array<FirstActFilterInput>>;
+export type FirstActRelationFilterInput = {
+  and?: InputMaybe<Array<FirstActRelationFilterInput>>;
   content?: InputMaybe<StringOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
-  guid?: InputMaybe<ComparableGuidOperationFilterInput>;
-  id?: InputMaybe<ComparableInt32OperationFilterInput>;
-  interactions?: InputMaybe<ListFilterInputTypeOfInteractionFilterInput>;
+  hostInteraction?: InputMaybe<InteractionFilterInput>;
+  hostInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   label?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<FirstActFilterInput>>;
-};
-
-export type FirstActSortInput = {
-  content?: InputMaybe<SortEnumType>;
-  description?: InputMaybe<SortEnumType>;
-  guid?: InputMaybe<SortEnumType>;
-  id?: InputMaybe<SortEnumType>;
-  label?: InputMaybe<SortEnumType>;
+  linkedInteraction?: InputMaybe<InteractionFilterInput>;
+  linkedInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
+  or?: InputMaybe<Array<FirstActRelationFilterInput>>;
+  type?: InputMaybe<RelationTypesOperationFilterInput>;
+  uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
+  weight?: InputMaybe<RelationWeightOperationFilterInput>;
 };
 
 export type GraphOfRelationAndInteraction = {
@@ -217,8 +211,8 @@ export type GraphQlMutation = {
   addNewEntityInteraction?: Maybe<Interaction>;
   createOrUpdateInteraction?: Maybe<Interaction>;
   createOrUpdateRelation: Relation;
-  deleteInteraction: Scalars['Int'];
-  deleteRelation: Scalars['Int'];
+  deleteInteraction: Scalars['Long'];
+  deleteRelation: Scalars['Long'];
 };
 
 
@@ -238,13 +232,13 @@ export type GraphQlMutationCreateOrUpdateRelationArgs = {
 
 
 export type GraphQlMutationDeleteInteractionArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Long'];
 };
 
 
 export type GraphQlMutationDeleteRelationArgs = {
-  hostInteractionId: Scalars['Int'];
-  linkedInteractionId: Scalars['Int'];
+  hostInteractionId: Scalars['Long'];
+  linkedInteractionId: Scalars['Long'];
   relationId: Scalars['UUID'];
   type: RelationTypes;
 };
@@ -258,12 +252,12 @@ export type GraphQlQuery = {
 
 
 export type GraphQlQueryFullInteractionWithAllRelationsArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Long'];
 };
 
 
 export type GraphQlQueryInteractionFullArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Long'];
 };
 
 
@@ -281,10 +275,10 @@ export type IndirectObjectRelation = {
   content?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   hostInteraction?: Maybe<Interaction>;
-  hostInteractionId: Scalars['Int'];
+  hostInteractionId: Scalars['Long'];
   label?: Maybe<Scalars['String']>;
   linkedInteraction?: Maybe<Interaction>;
-  linkedInteractionId: Scalars['Int'];
+  linkedInteractionId: Scalars['Long'];
   type: RelationTypes;
   uuid?: Maybe<Scalars['UUID']>;
   weight: RelationWeight;
@@ -295,10 +289,10 @@ export type IndirectObjectRelationFilterInput = {
   content?: InputMaybe<StringOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   hostInteraction?: InputMaybe<InteractionFilterInput>;
-  hostInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  hostInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   label?: InputMaybe<StringOperationFilterInput>;
   linkedInteraction?: InputMaybe<InteractionFilterInput>;
-  linkedInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  linkedInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   or?: InputMaybe<Array<IndirectObjectRelationFilterInput>>;
   type?: InputMaybe<RelationTypesOperationFilterInput>;
   uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
@@ -308,71 +302,120 @@ export type IndirectObjectRelationFilterInput = {
 export type Interaction = {
   __typename?: 'Interaction';
   asContexts?: Maybe<Array<Maybe<ContextRelation>>>;
+  asContextsCount: Scalars['Long'];
+  asFirstActs?: Maybe<Array<Maybe<FirstActRelation>>>;
+  asFirstActsCount: Scalars['Long'];
   asIndirectObjects?: Maybe<Array<Maybe<IndirectObjectRelation>>>;
+  asIndirectObjectsCount: Scalars['Long'];
   asObjects?: Maybe<Array<Maybe<ObjectRelation>>>;
+  asObjectsCount: Scalars['Long'];
   asParallels?: Maybe<Array<Maybe<ParallelRelation>>>;
+  asParallelsCount: Scalars['Long'];
   asPurposes?: Maybe<Array<Maybe<PurposeRelation>>>;
+  asPurposesCount: Scalars['Long'];
   asReferences?: Maybe<Array<Maybe<ReferenceRelation>>>;
+  asReferencesCount: Scalars['Long'];
+  asSecondActs?: Maybe<Array<Maybe<SecondActRelation>>>;
+  asSecondActsCount: Scalars['Long'];
   asSettings?: Maybe<Array<Maybe<SettingRelation>>>;
+  asSettingsCount: Scalars['Long'];
   asSubjects?: Maybe<Array<Maybe<SubjectRelation>>>;
+  asSubjectsCount: Scalars['Long'];
   content?: Maybe<Scalars['String']>;
   contexts?: Maybe<Array<Maybe<ContextRelation>>>;
+  contextsCount: Scalars['Long'];
+  created: Scalars['DateTime'];
   description?: Maybe<Scalars['String']>;
   end?: Maybe<Scalars['DateTime']>;
-  firstAct: FirstAct;
-  firstActId: Scalars['Int'];
-  id: Scalars['Int'];
+  firstActs?: Maybe<Array<Maybe<FirstActRelation>>>;
+  firstActsCount: Scalars['Long'];
+  id: Scalars['Long'];
   identity: InteractionIdentity;
   indirectObjects?: Maybe<Array<Maybe<IndirectObjectRelation>>>;
+  indirectObjectsCount: Scalars['Long'];
   label: Scalars['String'];
+  modified: Scalars['DateTime'];
   objects?: Maybe<Array<Maybe<ObjectRelation>>>;
+  objectsCount: Scalars['Long'];
   parallels?: Maybe<Array<Maybe<ParallelRelation>>>;
+  parallelsCount: Scalars['Long'];
   properties?: Maybe<Array<Maybe<Property>>>;
+  propertiesCount: Scalars['Long'];
   purposes?: Maybe<Array<Maybe<PurposeRelation>>>;
+  purposesCount: Scalars['Long'];
   references?: Maybe<Array<Maybe<ReferenceRelation>>>;
-  secondAct?: Maybe<SecondAct>;
-  secondActId?: Maybe<Scalars['Int']>;
+  referencesCount: Scalars['Long'];
+  secondActs?: Maybe<Array<Maybe<SecondActRelation>>>;
+  secondActsCount: Scalars['Long'];
+  sentence?: Maybe<Scalars['String']>;
   settings?: Maybe<Array<Maybe<SettingRelation>>>;
+  settingsCount: Scalars['Long'];
   start?: Maybe<Scalars['DateTime']>;
   subjects?: Maybe<Array<Maybe<SubjectRelation>>>;
+  subjectsCount: Scalars['Long'];
   uuid: Scalars['UUID'];
 };
 
 export type InteractionFilterInput = {
   and?: InputMaybe<Array<InteractionFilterInput>>;
   asContexts?: InputMaybe<ListFilterInputTypeOfContextRelationFilterInput>;
+  asContextsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
+  asFirstActs?: InputMaybe<ListFilterInputTypeOfFirstActRelationFilterInput>;
+  asFirstActsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   asIndirectObjects?: InputMaybe<ListFilterInputTypeOfIndirectObjectRelationFilterInput>;
+  asIndirectObjectsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   asObjects?: InputMaybe<ListFilterInputTypeOfObjectRelationFilterInput>;
+  asObjectsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   asParallels?: InputMaybe<ListFilterInputTypeOfParallelRelationFilterInput>;
+  asParallelsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   asPurposes?: InputMaybe<ListFilterInputTypeOfPurposeRelationFilterInput>;
+  asPurposesCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   asReferences?: InputMaybe<ListFilterInputTypeOfReferenceRelationFilterInput>;
+  asReferencesCount?: InputMaybe<ComparableInt64OperationFilterInput>;
+  asSecondActs?: InputMaybe<ListFilterInputTypeOfSecondActRelationFilterInput>;
+  asSecondActsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   asSettings?: InputMaybe<ListFilterInputTypeOfSettingRelationFilterInput>;
+  asSettingsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   asSubjects?: InputMaybe<ListFilterInputTypeOfSubjectRelationFilterInput>;
+  asSubjectsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   content?: InputMaybe<StringOperationFilterInput>;
   contexts?: InputMaybe<ListFilterInputTypeOfContextRelationFilterInput>;
+  contextsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
+  created?: InputMaybe<ComparableDateTimeOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   end?: InputMaybe<ComparableNullableOfDateTimeOperationFilterInput>;
-  firstAct?: InputMaybe<FirstActFilterInput>;
-  firstActId?: InputMaybe<ComparableInt32OperationFilterInput>;
-  id?: InputMaybe<ComparableInt32OperationFilterInput>;
+  firstActs?: InputMaybe<ListFilterInputTypeOfFirstActRelationFilterInput>;
+  firstActsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
+  id?: InputMaybe<ComparableInt64OperationFilterInput>;
   identity?: InputMaybe<InteractionIdentityOperationFilterInput>;
   indirectObjects?: InputMaybe<ListFilterInputTypeOfIndirectObjectRelationFilterInput>;
+  indirectObjectsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   label?: InputMaybe<StringOperationFilterInput>;
+  modified?: InputMaybe<ComparableDateTimeOperationFilterInput>;
   objects?: InputMaybe<ListFilterInputTypeOfObjectRelationFilterInput>;
+  objectsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   or?: InputMaybe<Array<InteractionFilterInput>>;
   parallels?: InputMaybe<ListFilterInputTypeOfParallelRelationFilterInput>;
+  parallelsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   properties?: InputMaybe<ListFilterInputTypeOfPropertyFilterInput>;
+  propertiesCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   purposes?: InputMaybe<ListFilterInputTypeOfPurposeRelationFilterInput>;
+  purposesCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   references?: InputMaybe<ListFilterInputTypeOfReferenceRelationFilterInput>;
-  secondAct?: InputMaybe<SecondActFilterInput>;
-  secondActId?: InputMaybe<ComparableNullableOfInt32OperationFilterInput>;
+  referencesCount?: InputMaybe<ComparableInt64OperationFilterInput>;
+  secondActs?: InputMaybe<ListFilterInputTypeOfSecondActRelationFilterInput>;
+  secondActsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
+  sentence?: InputMaybe<StringOperationFilterInput>;
   settings?: InputMaybe<ListFilterInputTypeOfSettingRelationFilterInput>;
+  settingsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   start?: InputMaybe<ComparableNullableOfDateTimeOperationFilterInput>;
   subjects?: InputMaybe<ListFilterInputTypeOfSubjectRelationFilterInput>;
+  subjectsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   uuid?: InputMaybe<ComparableGuidOperationFilterInput>;
 };
 
 export enum InteractionIdentity {
+  Act = 'ACT',
   Entity = 'ENTITY',
   Interaction = 'INTERACTION',
   Source = 'SOURCE'
@@ -402,17 +445,37 @@ export enum InteractionResultType {
 }
 
 export type InteractionSortInput = {
+  asContextsCount?: InputMaybe<SortEnumType>;
+  asFirstActsCount?: InputMaybe<SortEnumType>;
+  asIndirectObjectsCount?: InputMaybe<SortEnumType>;
+  asObjectsCount?: InputMaybe<SortEnumType>;
+  asParallelsCount?: InputMaybe<SortEnumType>;
+  asPurposesCount?: InputMaybe<SortEnumType>;
+  asReferencesCount?: InputMaybe<SortEnumType>;
+  asSecondActsCount?: InputMaybe<SortEnumType>;
+  asSettingsCount?: InputMaybe<SortEnumType>;
+  asSubjectsCount?: InputMaybe<SortEnumType>;
   content?: InputMaybe<SortEnumType>;
+  contextsCount?: InputMaybe<SortEnumType>;
+  created?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
   end?: InputMaybe<SortEnumType>;
-  firstAct?: InputMaybe<FirstActSortInput>;
-  firstActId?: InputMaybe<SortEnumType>;
+  firstActsCount?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   identity?: InputMaybe<SortEnumType>;
+  indirectObjectsCount?: InputMaybe<SortEnumType>;
   label?: InputMaybe<SortEnumType>;
-  secondAct?: InputMaybe<SecondActSortInput>;
-  secondActId?: InputMaybe<SortEnumType>;
+  modified?: InputMaybe<SortEnumType>;
+  objectsCount?: InputMaybe<SortEnumType>;
+  parallelsCount?: InputMaybe<SortEnumType>;
+  propertiesCount?: InputMaybe<SortEnumType>;
+  purposesCount?: InputMaybe<SortEnumType>;
+  referencesCount?: InputMaybe<SortEnumType>;
+  secondActsCount?: InputMaybe<SortEnumType>;
+  sentence?: InputMaybe<SortEnumType>;
+  settingsCount?: InputMaybe<SortEnumType>;
   start?: InputMaybe<SortEnumType>;
+  subjectsCount?: InputMaybe<SortEnumType>;
   uuid?: InputMaybe<SortEnumType>;
 };
 
@@ -444,18 +507,18 @@ export type ListFilterInputTypeOfContextRelationFilterInput = {
   some?: InputMaybe<ContextRelationFilterInput>;
 };
 
+export type ListFilterInputTypeOfFirstActRelationFilterInput = {
+  all?: InputMaybe<FirstActRelationFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']>;
+  none?: InputMaybe<FirstActRelationFilterInput>;
+  some?: InputMaybe<FirstActRelationFilterInput>;
+};
+
 export type ListFilterInputTypeOfIndirectObjectRelationFilterInput = {
   all?: InputMaybe<IndirectObjectRelationFilterInput>;
   any?: InputMaybe<Scalars['Boolean']>;
   none?: InputMaybe<IndirectObjectRelationFilterInput>;
   some?: InputMaybe<IndirectObjectRelationFilterInput>;
-};
-
-export type ListFilterInputTypeOfInteractionFilterInput = {
-  all?: InputMaybe<InteractionFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
-  none?: InputMaybe<InteractionFilterInput>;
-  some?: InputMaybe<InteractionFilterInput>;
 };
 
 export type ListFilterInputTypeOfObjectRelationFilterInput = {
@@ -493,6 +556,13 @@ export type ListFilterInputTypeOfReferenceRelationFilterInput = {
   some?: InputMaybe<ReferenceRelationFilterInput>;
 };
 
+export type ListFilterInputTypeOfSecondActRelationFilterInput = {
+  all?: InputMaybe<SecondActRelationFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']>;
+  none?: InputMaybe<SecondActRelationFilterInput>;
+  some?: InputMaybe<SecondActRelationFilterInput>;
+};
+
 export type ListFilterInputTypeOfSettingRelationFilterInput = {
   all?: InputMaybe<SettingRelationFilterInput>;
   any?: InputMaybe<Scalars['Boolean']>;
@@ -512,7 +582,7 @@ export type NodeOfInteraction = {
   content?: Maybe<Scalars['String']>;
   data?: Maybe<Interaction>;
   description?: Maybe<Scalars['String']>;
-  id: Scalars['Int'];
+  id: Scalars['Long'];
   label?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
@@ -522,10 +592,10 @@ export type ObjectRelation = {
   content?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   hostInteraction?: Maybe<Interaction>;
-  hostInteractionId: Scalars['Int'];
+  hostInteractionId: Scalars['Long'];
   label?: Maybe<Scalars['String']>;
   linkedInteraction?: Maybe<Interaction>;
-  linkedInteractionId: Scalars['Int'];
+  linkedInteractionId: Scalars['Long'];
   type: RelationTypes;
   uuid?: Maybe<Scalars['UUID']>;
   weight: RelationWeight;
@@ -536,10 +606,10 @@ export type ObjectRelationFilterInput = {
   content?: InputMaybe<StringOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   hostInteraction?: InputMaybe<InteractionFilterInput>;
-  hostInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  hostInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   label?: InputMaybe<StringOperationFilterInput>;
   linkedInteraction?: InputMaybe<InteractionFilterInput>;
-  linkedInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  linkedInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   or?: InputMaybe<Array<ObjectRelationFilterInput>>;
   type?: InputMaybe<RelationTypesOperationFilterInput>;
   uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
@@ -564,10 +634,10 @@ export type ParallelRelation = {
   content?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   hostInteraction?: Maybe<Interaction>;
-  hostInteractionId: Scalars['Int'];
+  hostInteractionId: Scalars['Long'];
   label?: Maybe<Scalars['String']>;
   linkedInteraction?: Maybe<Interaction>;
-  linkedInteractionId: Scalars['Int'];
+  linkedInteractionId: Scalars['Long'];
   type: RelationTypes;
   uuid?: Maybe<Scalars['UUID']>;
   weight: RelationWeight;
@@ -578,10 +648,10 @@ export type ParallelRelationFilterInput = {
   content?: InputMaybe<StringOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   hostInteraction?: InputMaybe<InteractionFilterInput>;
-  hostInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  hostInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   label?: InputMaybe<StringOperationFilterInput>;
   linkedInteraction?: InputMaybe<InteractionFilterInput>;
-  linkedInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  linkedInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   or?: InputMaybe<Array<ParallelRelationFilterInput>>;
   type?: InputMaybe<RelationTypesOperationFilterInput>;
   uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
@@ -592,9 +662,9 @@ export type Property = {
   __typename?: 'Property';
   description?: Maybe<Scalars['String']>;
   guid: Scalars['UUID'];
-  id: Scalars['Int'];
+  id: Scalars['Long'];
   interaction?: Maybe<Interaction>;
-  interactionId: Scalars['Int'];
+  interactionId: Scalars['Long'];
   key?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
 };
@@ -603,9 +673,9 @@ export type PropertyFilterInput = {
   and?: InputMaybe<Array<PropertyFilterInput>>;
   description?: InputMaybe<StringOperationFilterInput>;
   guid?: InputMaybe<ComparableGuidOperationFilterInput>;
-  id?: InputMaybe<ComparableInt32OperationFilterInput>;
+  id?: InputMaybe<ComparableInt64OperationFilterInput>;
   interaction?: InputMaybe<InteractionFilterInput>;
-  interactionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  interactionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   key?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<PropertyFilterInput>>;
   value?: InputMaybe<StringOperationFilterInput>;
@@ -616,10 +686,10 @@ export type PurposeRelation = {
   content?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   hostInteraction?: Maybe<Interaction>;
-  hostInteractionId: Scalars['Int'];
+  hostInteractionId: Scalars['Long'];
   label?: Maybe<Scalars['String']>;
   linkedInteraction?: Maybe<Interaction>;
-  linkedInteractionId: Scalars['Int'];
+  linkedInteractionId: Scalars['Long'];
   type: RelationTypes;
   uuid?: Maybe<Scalars['UUID']>;
   weight: RelationWeight;
@@ -630,10 +700,10 @@ export type PurposeRelationFilterInput = {
   content?: InputMaybe<StringOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   hostInteraction?: InputMaybe<InteractionFilterInput>;
-  hostInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  hostInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   label?: InputMaybe<StringOperationFilterInput>;
   linkedInteraction?: InputMaybe<InteractionFilterInput>;
-  linkedInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  linkedInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   or?: InputMaybe<Array<PurposeRelationFilterInput>>;
   type?: InputMaybe<RelationTypesOperationFilterInput>;
   uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
@@ -645,10 +715,10 @@ export type ReferenceRelation = {
   content?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   hostInteraction?: Maybe<Interaction>;
-  hostInteractionId: Scalars['Int'];
+  hostInteractionId: Scalars['Long'];
   label?: Maybe<Scalars['String']>;
   linkedInteraction?: Maybe<Interaction>;
-  linkedInteractionId: Scalars['Int'];
+  linkedInteractionId: Scalars['Long'];
   type: RelationTypes;
   uuid?: Maybe<Scalars['UUID']>;
   weight: RelationWeight;
@@ -659,10 +729,10 @@ export type ReferenceRelationFilterInput = {
   content?: InputMaybe<StringOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   hostInteraction?: InputMaybe<InteractionFilterInput>;
-  hostInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  hostInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   label?: InputMaybe<StringOperationFilterInput>;
   linkedInteraction?: InputMaybe<InteractionFilterInput>;
-  linkedInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  linkedInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   or?: InputMaybe<Array<ReferenceRelationFilterInput>>;
   type?: InputMaybe<RelationTypesOperationFilterInput>;
   uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
@@ -674,10 +744,10 @@ export type Relation = {
   content?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   hostInteraction?: Maybe<Interaction>;
-  hostInteractionId: Scalars['Int'];
+  hostInteractionId: Scalars['Long'];
   label?: Maybe<Scalars['String']>;
   linkedInteraction?: Maybe<Interaction>;
-  linkedInteractionId: Scalars['Int'];
+  linkedInteractionId: Scalars['Long'];
   type: RelationTypes;
   uuid?: Maybe<Scalars['UUID']>;
   weight: RelationWeight;
@@ -685,11 +755,13 @@ export type Relation = {
 
 export enum RelationTypes {
   ContextRelation = 'CONTEXT_RELATION',
+  FirstActRelation = 'FIRST_ACT_RELATION',
   IndirectObjectRelation = 'INDIRECT_OBJECT_RELATION',
   ObjectRelation = 'OBJECT_RELATION',
   ParallelRelation = 'PARALLEL_RELATION',
   PurposeRelation = 'PURPOSE_RELATION',
   ReferenceRelation = 'REFERENCE_RELATION',
+  SecondActRelation = 'SECOND_ACT_RELATION',
   SettingRelation = 'SETTING_RELATION',
   SubjectRelation = 'SUBJECT_RELATION'
 }
@@ -718,33 +790,33 @@ export type RelationWeightOperationFilterInput = {
   nin?: InputMaybe<Array<RelationWeight>>;
 };
 
-export type SecondAct = {
-  __typename?: 'SecondAct';
+export type SecondActRelation = {
+  __typename?: 'SecondActRelation';
   content?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  guid: Scalars['UUID'];
-  id: Scalars['Int'];
-  interactions?: Maybe<Array<Maybe<Interaction>>>;
+  hostInteraction?: Maybe<Interaction>;
+  hostInteractionId: Scalars['Long'];
   label?: Maybe<Scalars['String']>;
+  linkedInteraction?: Maybe<Interaction>;
+  linkedInteractionId: Scalars['Long'];
+  type: RelationTypes;
+  uuid?: Maybe<Scalars['UUID']>;
+  weight: RelationWeight;
 };
 
-export type SecondActFilterInput = {
-  and?: InputMaybe<Array<SecondActFilterInput>>;
+export type SecondActRelationFilterInput = {
+  and?: InputMaybe<Array<SecondActRelationFilterInput>>;
   content?: InputMaybe<StringOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
-  guid?: InputMaybe<ComparableGuidOperationFilterInput>;
-  id?: InputMaybe<ComparableInt32OperationFilterInput>;
-  interactions?: InputMaybe<ListFilterInputTypeOfInteractionFilterInput>;
+  hostInteraction?: InputMaybe<InteractionFilterInput>;
+  hostInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   label?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<SecondActFilterInput>>;
-};
-
-export type SecondActSortInput = {
-  content?: InputMaybe<SortEnumType>;
-  description?: InputMaybe<SortEnumType>;
-  guid?: InputMaybe<SortEnumType>;
-  id?: InputMaybe<SortEnumType>;
-  label?: InputMaybe<SortEnumType>;
+  linkedInteraction?: InputMaybe<InteractionFilterInput>;
+  linkedInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
+  or?: InputMaybe<Array<SecondActRelationFilterInput>>;
+  type?: InputMaybe<RelationTypesOperationFilterInput>;
+  uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
+  weight?: InputMaybe<RelationWeightOperationFilterInput>;
 };
 
 export type SettingRelation = {
@@ -752,10 +824,10 @@ export type SettingRelation = {
   content?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   hostInteraction?: Maybe<Interaction>;
-  hostInteractionId: Scalars['Int'];
+  hostInteractionId: Scalars['Long'];
   label?: Maybe<Scalars['String']>;
   linkedInteraction?: Maybe<Interaction>;
-  linkedInteractionId: Scalars['Int'];
+  linkedInteractionId: Scalars['Long'];
   type: RelationTypes;
   uuid?: Maybe<Scalars['UUID']>;
   weight: RelationWeight;
@@ -766,10 +838,10 @@ export type SettingRelationFilterInput = {
   content?: InputMaybe<StringOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   hostInteraction?: InputMaybe<InteractionFilterInput>;
-  hostInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  hostInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   label?: InputMaybe<StringOperationFilterInput>;
   linkedInteraction?: InputMaybe<InteractionFilterInput>;
-  linkedInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  linkedInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   or?: InputMaybe<Array<SettingRelationFilterInput>>;
   type?: InputMaybe<RelationTypesOperationFilterInput>;
   uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
@@ -801,10 +873,10 @@ export type SubjectRelation = {
   content?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   hostInteraction?: Maybe<Interaction>;
-  hostInteractionId: Scalars['Int'];
+  hostInteractionId: Scalars['Long'];
   label?: Maybe<Scalars['String']>;
   linkedInteraction?: Maybe<Interaction>;
-  linkedInteractionId: Scalars['Int'];
+  linkedInteractionId: Scalars['Long'];
   type: RelationTypes;
   uuid?: Maybe<Scalars['UUID']>;
   weight: RelationWeight;
@@ -815,10 +887,10 @@ export type SubjectRelationFilterInput = {
   content?: InputMaybe<StringOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   hostInteraction?: InputMaybe<InteractionFilterInput>;
-  hostInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  hostInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   label?: InputMaybe<StringOperationFilterInput>;
   linkedInteraction?: InputMaybe<InteractionFilterInput>;
-  linkedInteractionId?: InputMaybe<ComparableInt32OperationFilterInput>;
+  linkedInteractionId?: InputMaybe<ComparableInt64OperationFilterInput>;
   or?: InputMaybe<Array<SubjectRelationFilterInput>>;
   type?: InputMaybe<RelationTypesOperationFilterInput>;
   uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
@@ -828,104 +900,107 @@ export type SubjectRelationFilterInput = {
 export type GetInteractionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetInteractionsQuery = { __typename?: 'GraphQLQuery', interactions?: { __typename?: 'InteractionsConnection', totalCount: number, edges?: Array<{ __typename?: 'InteractionsEdge', cursor: string, node?: { __typename?: 'Interaction', id: number, label: string, uuid: any } | null }> | null, nodes?: Array<{ __typename?: 'Interaction', id: number, uuid: any, label: string, identity: InteractionIdentity, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null } | null> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
+export type GetInteractionsQuery = { __typename?: 'GraphQLQuery', interactions?: { __typename?: 'InteractionsConnection', totalCount: number, edges?: Array<{ __typename?: 'InteractionsEdge', cursor: string, node?: { __typename?: 'Interaction', id: any, label: string, uuid: any } | null }> | null, nodes?: Array<{ __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } } | null };
 
 export type GetInteractionFullWithAllRelationsQueryVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Long'];
 }>;
 
 
-export type GetInteractionFullWithAllRelationsQuery = { __typename?: 'GraphQLQuery', fullInteractionWithAllRelations: { __typename?: 'InteractionResult', interaction?: { __typename?: 'Interaction', id: number, uuid: any, label: string, identity: InteractionIdentity, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null } | null, graph?: { __typename?: 'GraphOfRelationAndInteraction', uuid: any, nodes?: Array<{ __typename?: 'NodeOfInteraction', id: number, uuid: any, label?: string | null, description?: string | null, content?: string | null, data?: { __typename?: 'Interaction', id: number, uuid: any, label: string, identity: InteractionIdentity, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null } | null } | null> | null, edges?: Array<{ __typename?: 'EdgeOfRelation', id?: string | null, uuid?: any | null, displayId?: string | null, label?: string | null, description?: string | null, content?: string | null, weight: number, sourceId: number, targetId: number, data?: { __typename?: 'Relation', linkedInteractionId: number, uuid?: any | null, label?: string | null, description?: string | null, content?: string | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: number } | null } | null> | null } | null } };
+export type GetInteractionFullWithAllRelationsQuery = { __typename?: 'GraphQLQuery', fullInteractionWithAllRelations: { __typename?: 'InteractionResult', interaction?: { __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null, graph?: { __typename?: 'GraphOfRelationAndInteraction', uuid: any, nodes?: Array<{ __typename?: 'NodeOfInteraction', id: any, uuid: any, label?: string | null, description?: string | null, content?: string | null, data?: { __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null } | null> | null, edges?: Array<{ __typename?: 'EdgeOfRelation', id?: string | null, uuid?: any | null, displayId?: string | null, label?: string | null, description?: string | null, content?: string | null, weight: any, sourceId: any, targetId: any, data?: { __typename?: 'Relation', label?: string | null, description?: string | null, content?: string | null, linkedInteractionId: any, uuid?: any | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: any } | null } | null> | null } | null } };
+
+export type GetRecentInteractionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetRecentInteractionsQuery = { __typename?: 'GraphQLQuery', interactions?: { __typename?: 'InteractionsConnection', nodes?: Array<{ __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null> | null } | null };
 
 export type FilterInteractionsByLabelQueryVariables = Exact<{
   labelFilter: Scalars['String'];
 }>;
 
 
-export type FilterInteractionsByLabelQuery = { __typename?: 'GraphQLQuery', interactions?: { __typename?: 'InteractionsConnection', nodes?: Array<{ __typename?: 'Interaction', id: number, uuid: any, label: string, identity: InteractionIdentity, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null } | null> | null } | null };
+export type FilterInteractionsByLabelQuery = { __typename?: 'GraphQLQuery', interactions?: { __typename?: 'InteractionsConnection', nodes?: Array<{ __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null> | null } | null };
 
 export type GetInteractionFullQueryVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Long'];
 }>;
 
 
-export type GetInteractionFullQuery = { __typename?: 'GraphQLQuery', interactionFull: { __typename?: 'InteractionResult', interaction?: { __typename?: 'Interaction', id: number, uuid: any, label: string, identity: InteractionIdentity, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null } | null, graph?: { __typename?: 'GraphOfRelationAndInteraction', uuid: any, nodes?: Array<{ __typename?: 'NodeOfInteraction', id: number, uuid: any, label?: string | null, description?: string | null, content?: string | null, data?: { __typename?: 'Interaction', id: number, uuid: any, label: string, identity: InteractionIdentity, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null } | null } | null> | null, edges?: Array<{ __typename?: 'EdgeOfRelation', id?: string | null, uuid?: any | null, displayId?: string | null, label?: string | null, description?: string | null, content?: string | null, weight: number, sourceId: number, targetId: number, data?: { __typename?: 'Relation', linkedInteractionId: number, uuid?: any | null, label?: string | null, description?: string | null, content?: string | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: number } | null } | null> | null } | null } };
+export type GetInteractionFullQuery = { __typename?: 'GraphQLQuery', interactionFull: { __typename?: 'InteractionResult', interaction?: { __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null, graph?: { __typename?: 'GraphOfRelationAndInteraction', uuid: any, nodes?: Array<{ __typename?: 'NodeOfInteraction', id: any, uuid: any, label?: string | null, description?: string | null, content?: string | null, data?: { __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null } | null> | null, edges?: Array<{ __typename?: 'EdgeOfRelation', id?: string | null, uuid?: any | null, displayId?: string | null, label?: string | null, description?: string | null, content?: string | null, weight: any, sourceId: any, targetId: any, data?: { __typename?: 'Relation', label?: string | null, description?: string | null, content?: string | null, linkedInteractionId: any, uuid?: any | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: any } | null } | null> | null } | null } };
 
 export type DeleteInteractionMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Long'];
 }>;
 
 
-export type DeleteInteractionMutation = { __typename?: 'GraphQLMutation', deleteInteraction: number };
+export type DeleteInteractionMutation = { __typename?: 'GraphQLMutation', deleteInteraction: any };
 
 export type AddNewInteractionEntityMutationVariables = Exact<{
   label: Scalars['String'];
 }>;
 
 
-export type AddNewInteractionEntityMutation = { __typename?: 'GraphQLMutation', addNewEntityInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string, identity: InteractionIdentity, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null } | null };
+export type AddNewInteractionEntityMutation = { __typename?: 'GraphQLMutation', addNewEntityInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null };
 
 export type AddInteractionMutationVariables = Exact<{
   request: CreateOrUpdateInteractionRequestDtoInput;
 }>;
 
 
-export type AddInteractionMutation = { __typename?: 'GraphQLMutation', createOrUpdateInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string, identity: InteractionIdentity, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null } | null };
+export type AddInteractionMutation = { __typename?: 'GraphQLMutation', createOrUpdateInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null };
 
-export type InteractionFragmentFragment = { __typename?: 'Interaction', id: number, uuid: any, label: string, identity: InteractionIdentity, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null };
+export type InteractionFragmentFragment = { __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null };
 
-export type SubjectFragmentFragment = { __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null };
+export type FirstActFragmentFragment = { __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null };
 
-export type ObjectFragmentFragment = { __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null };
+export type SecondActFragmentFragment = { __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null };
 
-export type ParallelFragmentFragment = { __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null };
+export type SubjectFragmentFragment = { __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null };
 
-export type SettingFragmentFragment = { __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null };
+export type ObjectFragmentFragment = { __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null };
 
-export type ContextFragmentFragment = { __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null };
+export type ParallelFragmentFragment = { __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null };
 
-export type PurposeFragmentFragment = { __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null };
+export type SettingFragmentFragment = { __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null };
 
-export type ReferenceFragmentFragment = { __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null };
+export type ContextFragmentFragment = { __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null };
 
-export type IndirectObjectFragmentFragment = { __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null };
+export type PurposeFragmentFragment = { __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null };
 
-export type MinimalInteractionFragmentFragment = { __typename?: 'Interaction', id: number, uuid: any, label: string };
+export type ReferenceFragmentFragment = { __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null };
 
-export type ActsFragmentFragment = { __typename?: 'Interaction', firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null };
+export type IndirectObjectFragmentFragment = { __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null };
 
-export type FirstActFragmentFragment = { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null };
-
-export type SecondActFragmentFragment = { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null };
+export type MinimalInteractionFragmentFragment = { __typename?: 'Interaction', id: any, uuid: any, label: string };
 
 export type PageInforFragmentFragment = { __typename?: 'InteractionsConnection', pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null, endCursor?: string | null } };
 
-export type InteractionResultFragmentFragment = { __typename?: 'InteractionResult', interaction?: { __typename?: 'Interaction', id: number, uuid: any, label: string, identity: InteractionIdentity, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null } | null, graph?: { __typename?: 'GraphOfRelationAndInteraction', uuid: any, nodes?: Array<{ __typename?: 'NodeOfInteraction', id: number, uuid: any, label?: string | null, description?: string | null, content?: string | null, data?: { __typename?: 'Interaction', id: number, uuid: any, label: string, identity: InteractionIdentity, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null } | null } | null> | null, edges?: Array<{ __typename?: 'EdgeOfRelation', id?: string | null, uuid?: any | null, displayId?: string | null, label?: string | null, description?: string | null, content?: string | null, weight: number, sourceId: number, targetId: number, data?: { __typename?: 'Relation', linkedInteractionId: number, uuid?: any | null, label?: string | null, description?: string | null, content?: string | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: number } | null } | null> | null } | null };
+export type InteractionResultFragmentFragment = { __typename?: 'InteractionResult', interaction?: { __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null, graph?: { __typename?: 'GraphOfRelationAndInteraction', uuid: any, nodes?: Array<{ __typename?: 'NodeOfInteraction', id: any, uuid: any, label?: string | null, description?: string | null, content?: string | null, data?: { __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null } | null> | null, edges?: Array<{ __typename?: 'EdgeOfRelation', id?: string | null, uuid?: any | null, displayId?: string | null, label?: string | null, description?: string | null, content?: string | null, weight: any, sourceId: any, targetId: any, data?: { __typename?: 'Relation', label?: string | null, description?: string | null, content?: string | null, linkedInteractionId: any, uuid?: any | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: any } | null } | null> | null } | null };
 
-export type GraphFragmentFragment = { __typename?: 'GraphOfRelationAndInteraction', uuid: any, nodes?: Array<{ __typename?: 'NodeOfInteraction', id: number, uuid: any, label?: string | null, description?: string | null, content?: string | null, data?: { __typename?: 'Interaction', id: number, uuid: any, label: string, identity: InteractionIdentity, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null } | null } | null> | null, edges?: Array<{ __typename?: 'EdgeOfRelation', id?: string | null, uuid?: any | null, displayId?: string | null, label?: string | null, description?: string | null, content?: string | null, weight: number, sourceId: number, targetId: number, data?: { __typename?: 'Relation', linkedInteractionId: number, uuid?: any | null, label?: string | null, description?: string | null, content?: string | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: number } | null } | null> | null };
+export type GraphFragmentFragment = { __typename?: 'GraphOfRelationAndInteraction', uuid: any, nodes?: Array<{ __typename?: 'NodeOfInteraction', id: any, uuid: any, label?: string | null, description?: string | null, content?: string | null, data?: { __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null } | null> | null, edges?: Array<{ __typename?: 'EdgeOfRelation', id?: string | null, uuid?: any | null, displayId?: string | null, label?: string | null, description?: string | null, content?: string | null, weight: any, sourceId: any, targetId: any, data?: { __typename?: 'Relation', label?: string | null, description?: string | null, content?: string | null, linkedInteractionId: any, uuid?: any | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: any } | null } | null> | null };
 
-export type NodeFragmentFragment = { __typename?: 'NodeOfInteraction', id: number, uuid: any, label?: string | null, description?: string | null, content?: string | null, data?: { __typename?: 'Interaction', id: number, uuid: any, label: string, identity: InteractionIdentity, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: number, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: number, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: number, linkedInteraction?: { __typename?: 'Interaction', id: number, uuid: any, label: string } | null } | null> | null, firstAct: { __typename?: 'FirstAct', id: number, guid: any, label?: string | null, description?: string | null }, secondAct?: { __typename?: 'SecondAct', id: number, guid: any, label?: string | null, description?: string | null } | null } | null };
+export type NodeFragmentFragment = { __typename?: 'NodeOfInteraction', id: any, uuid: any, label?: string | null, description?: string | null, content?: string | null, data?: { __typename?: 'Interaction', id: any, uuid: any, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null };
 
-export type EdgeFragmentFragment = { __typename?: 'EdgeOfRelation', id?: string | null, uuid?: any | null, displayId?: string | null, label?: string | null, description?: string | null, content?: string | null, weight: number, sourceId: number, targetId: number, data?: { __typename?: 'Relation', linkedInteractionId: number, uuid?: any | null, label?: string | null, description?: string | null, content?: string | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: number } | null };
+export type EdgeFragmentFragment = { __typename?: 'EdgeOfRelation', id?: string | null, uuid?: any | null, displayId?: string | null, label?: string | null, description?: string | null, content?: string | null, weight: any, sourceId: any, targetId: any, data?: { __typename?: 'Relation', label?: string | null, description?: string | null, content?: string | null, linkedInteractionId: any, uuid?: any | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: any } | null };
 
 export type CreateOrUpdateRelationMutationVariables = Exact<{
   input: CreateOrUpdateRelationDtoInput;
 }>;
 
 
-export type CreateOrUpdateRelationMutation = { __typename?: 'GraphQLMutation', createOrUpdateRelation: { __typename?: 'Relation', linkedInteractionId: number, uuid?: any | null, label?: string | null, description?: string | null, content?: string | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: number } };
+export type CreateOrUpdateRelationMutation = { __typename?: 'GraphQLMutation', createOrUpdateRelation: { __typename?: 'Relation', label?: string | null, description?: string | null, content?: string | null, linkedInteractionId: any, uuid?: any | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: any } };
 
 export type DeleteRelationMutationVariables = Exact<{
   relationId: Scalars['UUID'];
-  hostInteractionId: Scalars['Int'];
-  linkedInteractionId: Scalars['Int'];
+  hostInteractionId: Scalars['Long'];
+  linkedInteractionId: Scalars['Long'];
   relationTypes: RelationTypes;
 }>;
 
 
-export type DeleteRelationMutation = { __typename?: 'GraphQLMutation', deleteRelation: number };
+export type DeleteRelationMutation = { __typename?: 'GraphQLMutation', deleteRelation: any };
 
-export type RelationFragmentFragment = { __typename?: 'Relation', linkedInteractionId: number, uuid?: any | null, label?: string | null, description?: string | null, content?: string | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: number };
+export type RelationFragmentFragment = { __typename?: 'Relation', label?: string | null, description?: string | null, content?: string | null, linkedInteractionId: any, uuid?: any | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: any };
 
 export const PageInforFragmentFragmentDoc = gql`
     fragment pageInforFragment on InteractionsConnection {
@@ -937,33 +1012,6 @@ export const PageInforFragmentFragmentDoc = gql`
   }
 }
     `;
-export const FirstActFragmentFragmentDoc = gql`
-    fragment firstActFragment on FirstAct {
-  id
-  guid
-  label
-  description
-}
-    `;
-export const SecondActFragmentFragmentDoc = gql`
-    fragment secondActFragment on SecondAct {
-  id
-  guid
-  label
-  description
-}
-    `;
-export const ActsFragmentFragmentDoc = gql`
-    fragment actsFragment on Interaction {
-  firstAct {
-    ...firstActFragment
-  }
-  secondAct {
-    ...secondActFragment
-  }
-}
-    ${FirstActFragmentFragmentDoc}
-${SecondActFragmentFragmentDoc}`;
 export const MinimalInteractionFragmentFragmentDoc = gql`
     fragment MinimalInteractionFragment on Interaction {
   id
@@ -978,6 +1026,21 @@ export const SubjectFragmentFragmentDoc = gql`
   uuid
   description
   label
+  weight
+  linkedInteraction {
+    ...MinimalInteractionFragment
+  }
+  linkedInteractionId
+}
+    ${MinimalInteractionFragmentFragmentDoc}`;
+export const FirstActFragmentFragmentDoc = gql`
+    fragment firstActFragment on FirstActRelation {
+  description
+  content
+  label
+  hostInteractionId
+  type
+  uuid
   weight
   linkedInteraction {
     ...MinimalInteractionFragment
@@ -1020,6 +1083,21 @@ export const SettingFragmentFragmentDoc = gql`
   uuid
   description
   label
+  weight
+  linkedInteraction {
+    ...MinimalInteractionFragment
+  }
+  linkedInteractionId
+}
+    ${MinimalInteractionFragmentFragmentDoc}`;
+export const SecondActFragmentFragmentDoc = gql`
+    fragment secondActFragment on SecondActRelation {
+  description
+  content
+  label
+  hostInteractionId
+  type
+  uuid
   weight
   linkedInteraction {
     ...MinimalInteractionFragment
@@ -1088,38 +1166,67 @@ export const InteractionFragmentFragmentDoc = gql`
   id
   uuid
   label
-  ...actsFragment
   identity
   subjects {
     ...subjectFragment
   }
+  subjectsCount
+  asSubjectsCount
+  firstActs {
+    ...firstActFragment
+  }
+  firstActsCount
+  asFirstActsCount
   objects {
     ...objectFragment
   }
+  objectsCount
+  asObjectsCount
   parallels {
     ...parallelFragment
   }
+  parallelsCount
+  asParallelsCount
   settings {
     ...settingFragment
   }
+  settingsCount
+  asSettingsCount
+  secondActs {
+    ...secondActFragment
+  }
+  secondActsCount
   indirectObjects {
     ...indirectObjectFragment
   }
+  indirectObjectsCount
+  asIndirectObjectsCount
   references {
     ...referenceFragment
   }
+  referencesCount
+  asReferencesCount
   contexts {
     ...contextFragment
   }
+  contextsCount
+  asContextsCount
   purposes {
     ...purposeFragment
   }
+  purposesCount
+  asPurposesCount
+  start
+  end
+  created
+  modified
 }
-    ${ActsFragmentFragmentDoc}
-${SubjectFragmentFragmentDoc}
+    ${SubjectFragmentFragmentDoc}
+${FirstActFragmentFragmentDoc}
 ${ObjectFragmentFragmentDoc}
 ${ParallelFragmentFragmentDoc}
 ${SettingFragmentFragmentDoc}
+${SecondActFragmentFragmentDoc}
 ${IndirectObjectFragmentFragmentDoc}
 ${ReferenceFragmentFragmentDoc}
 ${ContextFragmentFragmentDoc}
@@ -1138,11 +1245,11 @@ export const NodeFragmentFragmentDoc = gql`
     ${InteractionFragmentFragmentDoc}`;
 export const RelationFragmentFragmentDoc = gql`
     fragment relationFragment on Relation {
-  linkedInteractionId
-  uuid
   label
   description
   content
+  linkedInteractionId
+  uuid
   type
   weight
   hostInteractionId
@@ -1238,7 +1345,7 @@ export function refetchGetInteractionsQuery(variables?: GetInteractionsQueryVari
       return { query: GetInteractionsDocument, variables: variables }
     }
 export const GetInteractionFullWithAllRelationsDocument = gql`
-    query GetInteractionFullWithAllRelations($id: Int!) {
+    query GetInteractionFullWithAllRelations($id: Long!) {
   fullInteractionWithAllRelations(id: $id) {
     ...interactionResultFragment
   }
@@ -1274,6 +1381,45 @@ export type GetInteractionFullWithAllRelationsLazyQueryHookResult = ReturnType<t
 export type GetInteractionFullWithAllRelationsQueryResult = Apollo.QueryResult<GetInteractionFullWithAllRelationsQuery, GetInteractionFullWithAllRelationsQueryVariables>;
 export function refetchGetInteractionFullWithAllRelationsQuery(variables: GetInteractionFullWithAllRelationsQueryVariables) {
       return { query: GetInteractionFullWithAllRelationsDocument, variables: variables }
+    }
+export const GetRecentInteractionsDocument = gql`
+    query GetRecentInteractions {
+  interactions(order: {created: DESC}) {
+    nodes {
+      ...interactionFragment
+    }
+  }
+}
+    ${InteractionFragmentFragmentDoc}`;
+
+/**
+ * __useGetRecentInteractionsQuery__
+ *
+ * To run a query within a React component, call `useGetRecentInteractionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRecentInteractionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRecentInteractionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetRecentInteractionsQuery(baseOptions?: Apollo.QueryHookOptions<GetRecentInteractionsQuery, GetRecentInteractionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRecentInteractionsQuery, GetRecentInteractionsQueryVariables>(GetRecentInteractionsDocument, options);
+      }
+export function useGetRecentInteractionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRecentInteractionsQuery, GetRecentInteractionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRecentInteractionsQuery, GetRecentInteractionsQueryVariables>(GetRecentInteractionsDocument, options);
+        }
+export type GetRecentInteractionsQueryHookResult = ReturnType<typeof useGetRecentInteractionsQuery>;
+export type GetRecentInteractionsLazyQueryHookResult = ReturnType<typeof useGetRecentInteractionsLazyQuery>;
+export type GetRecentInteractionsQueryResult = Apollo.QueryResult<GetRecentInteractionsQuery, GetRecentInteractionsQueryVariables>;
+export function refetchGetRecentInteractionsQuery(variables?: GetRecentInteractionsQueryVariables) {
+      return { query: GetRecentInteractionsDocument, variables: variables }
     }
 export const FilterInteractionsByLabelDocument = gql`
     query FilterInteractionsByLabel($labelFilter: String!) {
@@ -1316,7 +1462,7 @@ export function refetchFilterInteractionsByLabelQuery(variables: FilterInteracti
       return { query: FilterInteractionsByLabelDocument, variables: variables }
     }
 export const GetInteractionFullDocument = gql`
-    query GetInteractionFull($id: Int!) {
+    query GetInteractionFull($id: Long!) {
   interactionFull(id: $id) {
     ...interactionResultFragment
   }
@@ -1354,7 +1500,7 @@ export function refetchGetInteractionFullQuery(variables: GetInteractionFullQuer
       return { query: GetInteractionFullDocument, variables: variables }
     }
 export const DeleteInteractionDocument = gql`
-    mutation DeleteInteraction($id: Int!) {
+    mutation DeleteInteraction($id: Long!) {
   deleteInteraction(id: $id)
 }
     `;
@@ -1484,7 +1630,7 @@ export type CreateOrUpdateRelationMutationHookResult = ReturnType<typeof useCrea
 export type CreateOrUpdateRelationMutationResult = Apollo.MutationResult<CreateOrUpdateRelationMutation>;
 export type CreateOrUpdateRelationMutationOptions = Apollo.BaseMutationOptions<CreateOrUpdateRelationMutation, CreateOrUpdateRelationMutationVariables>;
 export const DeleteRelationDocument = gql`
-    mutation DeleteRelation($relationId: UUID!, $hostInteractionId: Int!, $linkedInteractionId: Int!, $relationTypes: RelationTypes!) {
+    mutation DeleteRelation($relationId: UUID!, $hostInteractionId: Long!, $linkedInteractionId: Long!, $relationTypes: RelationTypes!) {
   deleteRelation(
     relationId: $relationId
     hostInteractionId: $hostInteractionId

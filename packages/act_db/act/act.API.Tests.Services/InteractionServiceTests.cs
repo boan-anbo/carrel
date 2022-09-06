@@ -48,4 +48,19 @@ public class InteractionServiceTests : TestBase
         Assert.AreEqual(interaction1.Id, result.Subjects.First().LinkedInteraction.Id);
         Assert.AreEqual(interaction2.Id, result.Objects.First().LinkedInteraction.Id);
     }
+    
+    // [TestMethod]
+    // public async Task Update_Sentence_Should_work()
+    // {
+    //     var interaction = await _service.CreateNewInteraction("Sample sentence");
+    //     var subjectInteract = await _service.CreateNewInteraction("Qian Xuesen");
+    //     var subject2Interact = await _service.CreateNewInteraction("Xu Guozhi");
+    //     // add subject
+    //     var subject = await _service.CreateInteraction(
+    //         new List<Interaction> { interaction },
+    //         "subject",
+    //         new List<Interaction> { subjectInteract }
+    //     );
+    //     
+    // }
 }

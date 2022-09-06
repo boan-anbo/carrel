@@ -1,6 +1,6 @@
 import {DistantPassageInputEditor} from "./DistantPassageInputEditor";
 import {useSelector} from "react-redux";
-import {RootState} from "../store";
+import {RootState} from "../../store";
 
 export const SelectedPassageViewer = () => {
     const {selectedPassage} = useSelector((state: RootState) => {

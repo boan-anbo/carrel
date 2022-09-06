@@ -1,10 +1,10 @@
 import {MouseEvent, useEffect, useState} from "react";
-import {DistantApiSearchResponse, Passage} from "../clients/distant_api";
-import {searchDistant} from "../clients/distant-core-ops/search-distant";
-import {SearchSimple} from "../ControlComponents/SearchSimple";
-import {DistantDocumentView} from "./ViewComponents/Distant/DistantDocumentItem";
+import {DistantApiSearchResponse, Passage} from "../../clients/distant_api";
+import {searchDistant} from "../../clients/distant-core-ops/search-distant";
+import {SearchSimple} from "../../ControlComponents/SearchSimple";
+import {DistantDocumentView} from "../ViewComponents/Distant/DistantDocumentItem";
 import {useDispatch} from "react-redux";
-import {selectPassage} from "../features/app-state/appStateSlice";
+import {selectPassage} from "../../features/app-state/appStateSlice";
 
 export const DistantDocumentList = () => {
     const [searchResult, setSearchResult] = useState<DistantApiSearchResponse | null>(null);

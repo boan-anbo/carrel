@@ -2,9 +2,9 @@ import {IUserEdge, IUserNode} from "@antv/graphin";
 import {useState} from "react";
 import {Graph} from "./Graph";
 import {extractGraphData} from "./extract-graph-data";
-import {useGetInteractionFullQuery} from "../clients/grl-client/interact_db_client";
+import {useGetInteractionFullQuery} from "../../clients/grl-client/interact_db_client";
 
-export function GraphComponent(props: { id: number }) {
+export function GraphView(props: { id: number }) {
 
 
     if (!props.id) {
@@ -13,6 +13,7 @@ export function GraphComponent(props: { id: number }) {
 
     const [nodes, setNodes] = useState<IUserNode[]>([]);
     const [edges, setEdges] = useState<IUserEdge[]>([]);
+    const [showRawInteraction, setShowRawInteraction] = useState<boolean>(false);
 
     // get data from apollo client
     const {data, loading, error} = useGetInteractionFullQuery(
@@ -28,15 +29,21 @@ export function GraphComponent(props: { id: number }) {
         return <div>Loading...</div>
     }
 
+    console.log('Loaded data', data);
+
 
     const load = () => {
+        console.log("Loading raw  graph");
         if (graph) {
-            console.log(graph);
+            console.log("Raw  graph", graph);
             // @ts-ignore
             const {nodes, edges} = extractGraphData(graph);
+            console.log("Extracted nodes", nodes);
             setEdges(edges);
             setNodes(nodes);
             console.log(nodes);
+        } else {
+            console.log("No graph data");
         }
     }
 
@@ -48,6 +55,12 @@ export function GraphComponent(props: { id: number }) {
                     load();
                 }}>Load
                 </button>
+                <button
+                    type="button"
+                    onClick={() => {
+                        setShowRawInteraction(!showRawInteraction);
+                    }}>Show raw interaction
+                </button>
             </div>
             <div
                 onMouseDown={e => e.stopPropagation()}
@@ -56,8 +69,15 @@ export function GraphComponent(props: { id: number }) {
                     height: "100%",
                 }}>
                 <Graph
+
                     edges={edges} nodes={nodes}/>
+
+                {showRawInteraction && <pre>{JSON.stringify({
+                    nodes,
+                    edges
+                })}</pre>}
             </div>
+
         </div>
     )
 }

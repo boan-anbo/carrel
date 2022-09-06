@@ -27,7 +27,7 @@ public class RelationRepository : IRelationRepository
     }
 
 
-    public async Task<T?> GetRelation<T>(int relationId, RelationTypes relationType) where T : Relation
+    public async Task<T?> GetRelation<T>(long relationId, RelationTypes relationType) where T : Relation
     {
         switch (relationType)
         {
@@ -52,7 +52,7 @@ public class RelationRepository : IRelationRepository
         }
     }
 
-    public async Task DeleteRelation(int id, RelationTypes type)
+    public async Task DeleteRelation(long id, RelationTypes type)
     {
         switch (type)
         {
@@ -88,7 +88,7 @@ public class RelationRepository : IRelationRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<bool> CheckIfRelationExists(int relationId, Guid relationUuid, RelationTypes relationType)
+    public async Task<bool> CheckIfRelationExists(long relationId, Guid relationUuid, RelationTypes relationType)
     {
         if (relationUuid == Guid.Empty || !(relationId > 0)) return false;
 
@@ -129,10 +129,22 @@ public class RelationRepository : IRelationRepository
                 var subjectRelation = CreateOrUpdateRelationDto.toRelation<SubjectRelation>(request);
                 _dbContext.SubjectRelations.Update(subjectRelation);
                 return subjectRelation as T;
+            case RelationTypes.FirstActRelation:
+                var firstActRelation = CreateOrUpdateRelationDto.toRelation<FirstActRelation>(request);
+                _dbContext.FirstActRelations.Update(firstActRelation);
+                return firstActRelation as T;
             case RelationTypes.ObjectRelation:
                 var objectRelation = CreateOrUpdateRelationDto.toRelation<ObjectRelation>(request);
                 _dbContext.ObjectRelations.Update(objectRelation);
                 return objectRelation as T;
+            case RelationTypes.SecondActRelation:
+                var secondActRelation = CreateOrUpdateRelationDto.toRelation<SecondActRelation>(request);
+                _dbContext.SecondActRelations.Update(secondActRelation);
+                return secondActRelation as T;
+            case RelationTypes.IndirectObjectRelation:
+                var indirectObjectRelation = CreateOrUpdateRelationDto.toRelation<IndirectObjectRelation>(request);
+                _dbContext.IndirectObjectRelations.Update(indirectObjectRelation);
+                return indirectObjectRelation as T;
             case RelationTypes.ParallelRelation:
                 var parallelRelation = CreateOrUpdateRelationDto.toRelation<ParallelRelation>(request);
                 _dbContext.ParallelRelations.Update(parallelRelation);
@@ -145,10 +157,6 @@ public class RelationRepository : IRelationRepository
                 var contextRelation = CreateOrUpdateRelationDto.toRelation<ContextRelation>(request);
                 _dbContext.ContextRelations.Update(contextRelation);
                 return contextRelation as T;
-            case RelationTypes.IndirectObjectRelation:
-                var indirectObjectRelation = CreateOrUpdateRelationDto.toRelation<IndirectObjectRelation>(request);
-                _dbContext.IndirectObjectRelations.Update(indirectObjectRelation);
-                return indirectObjectRelation as T;
             case RelationTypes.PurposeRelation:
                 var purposeRelation = CreateOrUpdateRelationDto.toRelation<PurposeRelation>(request);
                 _dbContext.PurposeRelations.Update(purposeRelation);
@@ -176,7 +184,7 @@ public class RelationRepository : IRelationRepository
         return CreateRelation<T>(request, hostInteraction);
     }
 
-    public async Task DeleteRelation(Guid relationId, int hostInteractionId, int linkedInteractionId,
+    public async Task DeleteRelation(Guid relationId, long hostInteractionId, long linkedInteractionId,
         RelationTypes type)
     {
         switch (type)

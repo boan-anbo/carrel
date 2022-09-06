@@ -6,7 +6,7 @@ namespace act.API.DataContracts;
 
 public class Node<NODE_TYPE>
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     public Guid Uuid { get; set; }
     public string Label { get; set; }
     public string Description { get; set; }
@@ -41,11 +41,11 @@ public class Edge<EDGE_TYPE>
     public string Label { get; set; }
     public string Description { get; set; }
     public string Content { get; set; }
-    public int Weight { get; set; }
+    public long Weight { get; set; }
     public EDGE_TYPE Data { get; set; }
 
-    public int SourceId { get; set; }
-    public int TargetId { get; set; }
+    public long SourceId { get; set; }
+    public long TargetId { get; set; }
 
     public static Edge<Relation> FromInteraction(Relation relation)
     {
@@ -103,8 +103,20 @@ public class Graph<NODE_TYPE, EDGE_TYPE>
             graph.Edges.Add(Edge<Relation>.FromInteraction(relation));
             graph.Nodes.Add(Node<Interaction>.FromInteraction(relation.LinkedInteraction));
         }
+        
+        foreach (var relation in hostInteraction.FirstActs)
+        {
+            graph.Edges.Add(Edge<Relation>.FromInteraction(relation));
+            graph.Nodes.Add(Node<Interaction>.FromInteraction(relation.LinkedInteraction));
+        }
 
         foreach (var relation in hostInteraction.Objects)
+        {
+            graph.Edges.Add(Edge<Relation>.FromInteraction(relation));
+            graph.Nodes.Add(Node<Interaction>.FromInteraction(relation.LinkedInteraction));
+        }
+        
+        foreach (var relation in hostInteraction.SecondActs)
         {
             graph.Edges.Add(Edge<Relation>.FromInteraction(relation));
             graph.Nodes.Add(Node<Interaction>.FromInteraction(relation.LinkedInteraction));

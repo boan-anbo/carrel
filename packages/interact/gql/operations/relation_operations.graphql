@@ -5,7 +5,7 @@ mutation CreateOrUpdateRelation($input: CreateOrUpdateRelationDtoInput!) {
   }
 }
 
-mutation DeleteRelation($relationId: UUID!, $hostInteractionId: Int!, $linkedInteractionId: Int!, $relationTypes: RelationTypes!) {
+mutation DeleteRelation($relationId: UUID!, $hostInteractionId: Long!, $linkedInteractionId: Long!, $relationTypes: RelationTypes!) {
   deleteRelation(
     relationId: $relationId,
     hostInteractionId: $hostInteractionId,
@@ -16,11 +16,12 @@ mutation DeleteRelation($relationId: UUID!, $hostInteractionId: Int!, $linkedInt
 
 
 fragment relationFragment on Relation {
-  linkedInteractionId
-  uuid
   label
   description
   content
+
+  linkedInteractionId
+  uuid
   type
   weight
   hostInteractionId

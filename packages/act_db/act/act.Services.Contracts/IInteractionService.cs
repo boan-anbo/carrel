@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using act.Services.Model;
@@ -12,6 +13,7 @@ public interface IInteractionService
 
     Task<Interaction> CreateNewInteraction(string label);
 
+    [Obsolete("Use GraphQL Mutation method instead")]
     Task<Interaction> CreateInteraction(ICollection<Interaction> subjects, string relationType,
         ICollection<Interaction> objects);
 

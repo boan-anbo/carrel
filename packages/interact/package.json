@@ -8,6 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
+    "test": "vitest",
     "codegen:interact_client": "cd gql && graphql-codegen",
     "codegen:distant_core": "openapi-generator-cli generate -i http://127.0.0.1:3000/api-doc/openapi.json -g typescript-axios -o  src/clients/distant_api"
   },
@@ -52,6 +53,7 @@
     "tailwindcss": "^3.1.8",
     "typescript": "^4.6.4",
     "vite": "^3.0.2",
-    "vite-plugin-imp": "^2.3.0"
+    "vite-plugin-imp": "^2.3.0",
+    "vitest": "^0.23.1"
   }
 }

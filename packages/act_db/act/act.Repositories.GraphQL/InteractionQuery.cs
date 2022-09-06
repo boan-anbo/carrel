@@ -41,7 +41,7 @@ public class GraphQLQuery
     /// </summary>
     public async Task<InteractionResult> GetInteractionFull(
         [Service(ServiceKind.Synchronized)] IInteractionRepository _repo,
-        int id
+        long id
     )
     {
         var interaction = await _repo.GetInteractionFull(id);
@@ -65,7 +65,7 @@ public class GraphQLQuery
     /// </summary>
     public async Task<InteractionResult> GetFullInteractionWithAllRelations(
         [Service(ServiceKind.Synchronized)] IInteractionRepository _repo,
-        int id
+        long id
     )
     {
         var interaction = await _repo.GetInteractionFullWithAllRelations(id);

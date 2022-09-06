@@ -3,21 +3,17 @@ import "/node_modules/react-resizable/css/styles.css";
 
 import "./App.css";
 
-import GridLayout, {Layout, Responsive, WidthProvider} from "react-grid-layout";
-import {InteractionGraphView} from "./Views/InteractionGraphView";
+import {Layout, Responsive, WidthProvider} from "react-grid-layout";
+import {InteractionGraphView} from "./Views/InteractViews/InteractionGraphView";
 import {Button} from "antd";
 import {useState} from "react";
-import {DistantDocumentList} from "./Views/DistantDocumentList";
 import {useSelector} from "react-redux";
 import {RootState} from "./store";
-import {DistantDocumentView} from "./Views/ViewComponents/Distant/DistantDocumentItem";
-import {CreateInteractionEntityForm} from "./Views/CreateInteractionEntityForm";
-import {SelectedInteractionViewer} from "./Views/SelectedInteractionViewer";
-import {SelectedPassageViewer} from "./Views/SelectedPassageViewer";
+import {SelectedPassageViewer} from "./Views/InteractViews/SelectedPassageViewer";
 import {SelectedTextViewer} from "./Views/ViewComponents/InteractViewComponent/SelectedTextViewer";
-import {SelectTextAction} from "./Views/ViewComponents/InteractViewComponent/SelectTextAction";
-import FilterInteractionSingleProps from "./db-gadgets/FilterInteractionSingleProps";
-import {CreateOrUpdateInteractionForm} from "./Views/CreateorUpdateInteractionForm";
+import {CreateOrUpdateInteractionForm} from "./Views/InteractViews/CreateorUpdateInteractionForm";
+import {SelectedInteractionDataViewer} from "./Views/InteractViews/SelectedInteractionDataViewer";
+import {GridViewTypes, GridView} from "./Views/GridView";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -93,20 +89,16 @@ function App() {
                 </div>
 
                 <div key="mid_panel" className='bg-red-300'>
-                    <SelectedInteractionViewer/>
+                    <SelectedInteractionDataViewer></SelectedInteractionDataViewer>
                 </div>
 
-                <div key="right_panel" className='bg-blue-200'>
+                <div key="right_panel" className='bg-blue-200 overflow-y-scroll'>
 
-                    <SelectTextAction/>
+                    <GridView selectedView={GridViewTypes.FILTERED_INTERACTION_LIST}></GridView>
                 </div>
 
                 <div key="below_panel" className='bg-amber-200'>
-                    <FilterInteractionSingleProps placeholder={"Filter multiple"} style={{
-                        width: "100%",
-                    }} onSelect={(value) => {
-                        console.log(value)}}/>
-                    <CreateInteractionEntityForm/>
+                    <InteractionGraphView/>
                 </div>
             </ResponsiveGridLayout>
         </div>

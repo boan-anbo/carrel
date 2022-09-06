@@ -5,12 +5,12 @@ namespace act.Repositories.Contracts;
 public interface IRelationRepository
 {
     Task SaveChangesAsync();
-    Task DeleteRelation(int id, RelationTypes type);
+    Task DeleteRelation(long id, RelationTypes type);
 
 
-    Task<T?> GetRelation<T>(int relationId, RelationTypes relationType) where T : Relation;
+    Task<T?> GetRelation<T>(long relationId, RelationTypes relationType) where T : Relation;
 
-    Task<bool> CheckIfRelationExists(int requestDtoId, Guid requestDtoUuid, RelationTypes relationType);
+    Task<bool> CheckIfRelationExists(long requestDtoId, Guid requestDtoUuid, RelationTypes relationType);
 
     /// <summary>
     /// This is for when interaction instance is ready
@@ -37,5 +37,5 @@ public interface IRelationRepository
     /// <returns></returns>
     T? CreateRelationWithHostInteractionId<T>(CreateOrUpdateRelationDto request) where T : Relation;
 
-    Task DeleteRelation(Guid relationId, int hostInteractionId, int linkedInteractionId, RelationTypes type);
+    Task DeleteRelation(Guid relationId, long hostInteractionId, long linkedInteractionId, RelationTypes type);
 }

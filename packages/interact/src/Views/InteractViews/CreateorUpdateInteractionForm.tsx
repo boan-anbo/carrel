@@ -6,16 +6,16 @@ import {
     RelationTypes,
     RelationWeight,
     Scalars
-} from "../clients/grl-client/interact_db_client";
+} from "../../clients/grl-client/interact_db_client";
 import {
     createInteractionEntity,
     createOrUpdateInteraction,
-} from "../clients/interact-db-client/create-interaction-entity";
-import {notify} from "../utils/toast/notify";
-import {selectInteraction} from "../features/app-state/appStateSlice";
+} from "../../clients/interact-db-client/create-interaction-entity";
+import {notify} from "../../utils/toast/notify";
+import {selectInteraction} from "../../features/app-state/appStateSlice";
 import {useDispatch} from "react-redux";
-import FilterInteractionSingleProps from "../db-gadgets/FilterInteractionSingleProps";
-import {SelectValue} from "../db-gadgets/FilterInteractionSingle";
+import FilterInteractionMultiple from "../../db-gadgets/FilterInteractionMultiple";
+import {SelectValue} from "../../db-gadgets/FilterInteractionSingle";
 
 export interface CreateRelationDto {
     content?: string;
@@ -33,28 +33,28 @@ export interface CreateRelationDto {
 export class CreateInteractionFormData {
 
     id?: number
-    uuid: string | null;
+    uuid: string | null = null;
 
     label: string = '';
     description: string = '';
     content: string = '';
     identity: InteractionIdentity = InteractionIdentity.Entity
 
-    contextIds: CreateRelationDto[] = [];
+    contextDtos: CreateRelationDto[] = [];
     end: number = 0;
-    firstActId: number = 1;
-    indirectObjectIds: CreateRelationDto[] = [];
-    objectIds: CreateRelationDto[] = [];
-    parallelIds: CreateRelationDto[] = [];
+    firstActDtos: CreateRelationDto[] = [];
+    secondActDtos: CreateRelationDto[] = [];
+    indirectObjectDtos: CreateRelationDto[] = [];
+    objectDtos: CreateRelationDto[] = [];
+    parallelDtos: CreateRelationDto[] = [];
     propertyIds: [] = [];
-    purposeIds: CreateRelationDto[] = [];
-    referenceIds: CreateRelationDto[] = [];
-    secondActId: number  = 1;
-    settingIds: CreateRelationDto[] = [];
+    purposeDtos: CreateRelationDto[] = [];
+    referenceDtos: CreateRelationDto[] = [];
+    settingDtos: CreateRelationDto[] = [];
 
-    start: long = 0;
+    start: number = 0;
 
-    subjectIds: CreateRelationDto[] = [];
+    subjectDtos: CreateRelationDto[] = [];
 
 }
 
@@ -69,7 +69,6 @@ export const CreateOrUpdateInteractionForm = () => {
 
 
     async function onFormFinish(values: any) {
-        const {label, description, content, identity} = values;
         console.log(values)
         const result = await createOrUpdateInteraction(formData);
 
@@ -77,7 +76,7 @@ export const CreateOrUpdateInteractionForm = () => {
         if (result.id) {
             notify('Created interaction entity', `${result.label} (click to show)`, 'success',
                 () => {
-
+                    dispatch(selectInteraction(null))
                     dispatch(
                         selectInteraction(result)
                     )
@@ -91,43 +90,49 @@ export const CreateOrUpdateInteractionForm = () => {
         setFormData(values)
     }
 
-    const SelectedInteractionToRelationDto = (selectedInteraction: SelectValue<Interaction>[], relationType: RelationTypes): CreateRelationDto[] => {
-        return selectedInteraction.map((value) => {
+    const SelectedInteractionToRelationDto = (selectedInteractionIds: string[], relationType: RelationTypes): CreateRelationDto[] => {
+        return selectedInteractionIds.map((id) => {
             return {
-                linkedInteractionId: value.data.id,
+                linkedInteractionId: parseInt(id, 10),
                 relationType: relationType,
                 weight: RelationWeight.NotImportant,
             }
         })
     }
 
-    const onInteractionSelect = (e: SelectValue<Interaction>[], SubjectRelation: RelationTypes) => {
+    const onInteractionSelect = (e: string[], SubjectRelation: RelationTypes) => {
         console.log("Ready to load payload", e, SubjectRelation)
-        const createDtos =  SelectedInteractionToRelationDto(e, SubjectRelation)
+        const createDtos = SelectedInteractionToRelationDto(e, SubjectRelation)
         switch (SubjectRelation) {
             case RelationTypes.ContextRelation:
-                setFormData({...formData, contextIds: createDtos})
-                break;
-            case RelationTypes.IndirectObjectRelation:
-                setFormData({...formData, indirectObjectIds: createDtos})
-                break;
-            case RelationTypes.ObjectRelation:
-                setFormData({...formData, objectIds: createDtos})
-                break;
-            case RelationTypes.ParallelRelation:
-                setFormData({...formData, parallelIds: createDtos})
-                break;
-            case RelationTypes.PurposeRelation:
-                setFormData({...formData, purposeIds: createDtos})
-                break;
-            case RelationTypes.ReferenceRelation:
-                setFormData({...formData, referenceIds: createDtos})
-                break;
-            case RelationTypes.SettingRelation:
-                setFormData({...formData, settingIds: createDtos})
+                setFormData({...formData, contextDtos: createDtos})
                 break;
             case RelationTypes.SubjectRelation:
-                setFormData({...formData, subjectIds: createDtos})
+                setFormData({...formData, subjectDtos: createDtos})
+                break;
+            case RelationTypes.FirstActRelation:
+                setFormData({...formData, firstActDtos: createDtos})
+                break;
+            case RelationTypes.ObjectRelation:
+                setFormData({...formData, objectDtos: createDtos})
+                break;
+            case RelationTypes.SecondActRelation:
+                setFormData({...formData, secondActDtos: createDtos})
+                break;
+            case RelationTypes.IndirectObjectRelation:
+                setFormData({...formData, indirectObjectDtos: createDtos})
+                break;
+            case RelationTypes.ParallelRelation:
+                setFormData({...formData, parallelDtos: createDtos})
+                break;
+            case RelationTypes.PurposeRelation:
+                setFormData({...formData, purposeDtos: createDtos})
+                break;
+            case RelationTypes.ReferenceRelation:
+                setFormData({...formData, referenceDtos: createDtos})
+                break;
+            case RelationTypes.SettingRelation:
+                setFormData({...formData, settingDtos: createDtos})
                 break;
         }
     }
@@ -144,7 +149,8 @@ export const CreateOrUpdateInteractionForm = () => {
                 onFinish={onFormFinish}
                 onValuesChange={onFormValuesChange}>
 
-                {formData.id && <Form.Item name="id" label="Id*" tooltip="Existing interaction. This will perform update."/>}
+                {formData.id &&
+                    <Form.Item name="id" label="Id*" tooltip="Existing interaction. This will perform update."/>}
 
                 <Form.Item label={`Identity: ${formData.identity.toLowerCase()}`} name="identity">
                     <Radio.Group size={'small'}>
@@ -187,54 +193,70 @@ export const CreateOrUpdateInteractionForm = () => {
                 </Form.Item>
 
 
-                <FilterInteractionSingleProps
+                <FilterInteractionMultiple
                     label='Contexts'
                     placeholder={'Context interactions'} style={{width: '100%'}} onSelect={
-                    (e) =>  onInteractionSelect(e, RelationTypes.ContextRelation)
-                }></FilterInteractionSingleProps>
+                    (e) => onInteractionSelect(e, RelationTypes.ContextRelation)
+                }></FilterInteractionMultiple>
 
-                <FilterInteractionSingleProps
+                <FilterInteractionMultiple
                     label='Subjects'
                     placeholder={'subject interactions'} style={{width: '100%'}} onSelect={
-                    (e) =>  onInteractionSelect(e, RelationTypes.SubjectRelation)
-                }></FilterInteractionSingleProps>
+                    (e) => onInteractionSelect(e, RelationTypes.SubjectRelation)
+                }></FilterInteractionMultiple>
 
-                <FilterInteractionSingleProps
+                {/*Controls for first act*/}
+                <FilterInteractionMultiple
+                    label='First Acts'
+                    placeholder={'First act interactions'} style={{width: '100%'}} onSelect={
+                    (e) => onInteractionSelect(e, RelationTypes.FirstActRelation)
+                }></FilterInteractionMultiple>
+
+
+                <FilterInteractionMultiple
                     label='Objects'
                     placeholder={'Object interactions'} style={{width: '100%'}} onSelect={
-                    (e) =>  onInteractionSelect(e, RelationTypes.ObjectRelation)
-                }></FilterInteractionSingleProps>
+                    (e) => onInteractionSelect(e, RelationTypes.ObjectRelation)
+                }></FilterInteractionMultiple>
 
-                <FilterInteractionSingleProps
+                {/*Controls for second act*/}
+                 <FilterInteractionMultiple
+                    label='Second Acts'
+                    placeholder={'Second act interactions'} style={{width: '100%'}} onSelect={
+                    (e) => onInteractionSelect(e, RelationTypes.SecondActRelation)
+                }></FilterInteractionMultiple>
+
+
+                <FilterInteractionMultiple
                     label='Indirect Objects'
                     placeholder={'Indirect object interactions'} style={{width: '100%'}} onSelect={
-                    (e) =>  onInteractionSelect(e, RelationTypes.IndirectObjectRelation)
-                }></FilterInteractionSingleProps>
+                    (e) => onInteractionSelect(e, RelationTypes.IndirectObjectRelation)
+                }></FilterInteractionMultiple>
 
-                <FilterInteractionSingleProps
+                <FilterInteractionMultiple
                     label='Settings'
                     placeholder={'Settings interactions'} style={{width: '100%'}} onSelect={
-                    (e) =>  onInteractionSelect(e, RelationTypes.SettingRelation)
-                }></FilterInteractionSingleProps>
+                    (e) => onInteractionSelect(e, RelationTypes.SettingRelation)
+                }></FilterInteractionMultiple>
 
 
-                <FilterInteractionSingleProps
+                <FilterInteractionMultiple
                     label='Purposes'
                     placeholder={'Purpose interactions'} style={{width: '100%'}} onSelect={
-                    (e) =>  onInteractionSelect(e, RelationTypes.PurposeRelation)
-                }></FilterInteractionSingleProps>
+                    (e) => onInteractionSelect(e, RelationTypes.PurposeRelation)
+                }></FilterInteractionMultiple>
 
-                <FilterInteractionSingleProps
+                <FilterInteractionMultiple
                     label='Parallels'
                     placeholder={'Parallel interactions'} style={{width: '100%'}} onSelect={
-                    (e) =>  onInteractionSelect(e, RelationTypes.ParallelRelation)
-                }></FilterInteractionSingleProps>
+                    (e) => onInteractionSelect(e, RelationTypes.ParallelRelation)
+                }></FilterInteractionMultiple>
 
-                <FilterInteractionSingleProps
+                <FilterInteractionMultiple
                     label='References'
                     placeholder={'reference interactions'} style={{width: '100%'}} onSelect={
-                    (e) =>  onInteractionSelect(e, RelationTypes.ReferenceRelation)
-                }></FilterInteractionSingleProps>
+                    (e) => onInteractionSelect(e, RelationTypes.ReferenceRelation)
+                }></FilterInteractionMultiple>
 
                 <Form.Item>
                     <Button type="primary" htmlType="submit">Submit</Button>

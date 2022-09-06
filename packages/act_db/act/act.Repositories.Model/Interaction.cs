@@ -1,24 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
 
 namespace act.Services.Model;
 
 /// <summary>
-///     This describes the identity of the interaction. Three types identities: Entity (person, etc.), Act (interaction),
+///     This describes the *FLUID* identity of the interaction. Three types identities: Entity (person, etc.), Act (interaction),
 ///     Source (Source for the interaction).
+/// 
 /// </summary>
 /// <remarks>
+/// <para>
+/// Fluidity is central to this property: it's only a suggestion, because any of these categories can and should be used interchangeably. E.g. a book can be a reference and an entity.
+/// </para>
+/// <para>
+/// An act such as "to kill" can be both an entity when used in a sentence like "to kill is not good", or as a verb, "She kills him". 
+/// </para>
 ///     <para>
 ///         Since the db is act-based and has no identity per se, this is only a convenient helper to identify a specific
 ///         kind of interaction: for something to exists, which means to claim an identity.
 ///     </para>
+/// <para>
+/// This is most useful to help, for example, limiting search scope: when you only wants what is usually used a acts. This could potentially be substituted by "as" properties.
+/// </para>
+/// <para>
+/// TODO: add count properties of as the acts, entities, sources, etc. And use the count as a measure for the likelihood some interaction, such as to kill, is USUALLY used as an act.
+/// </para>
 ///     <para>
 ///         So <see cref="InteractionIdentity" />.Entity must be the creation act of the name.
 ///     </para>
 /// </remarks>
 public enum InteractionIdentity
 {
+    ACT,
     ENTITY,
     INTERACTION,
     SOURCE
@@ -26,7 +42,11 @@ public enum InteractionIdentity
 
 public class Interaction
 {
-    [Key] public int Id { get; set; }
+    /// <summary>
+    /// Primary key
+    /// </summary>
+    [Key]
+    public long Id { get; set; }
 
     /// <summary>
     ///     unique Uuid for double checking
@@ -66,77 +86,149 @@ public class Interaction
     /// </remarks>
     public string Content { get; set; } = string.Empty;
 
+    /// <summary>
+    /// A generated sentence basaed on the current relations
+    /// </summary>
+    public string Sentence { get; set; } = string.Empty;
+
     /// <inheritdoc cref="InteractionIdentity" />
     public InteractionIdentity Identity { get; set; } = InteractionIdentity.INTERACTION;
-
-    /// <inheritdoc cref="Act" />
-    [Required]
-    public FirstAct FirstAct { get; set; }
-    public int FirstActId { get; set; } = 1;
-    
-    public SecondAct? SecondAct { get; set; }
-    public int? SecondActId { get; set; }
 
 
     /// <summary>
     ///     Start date of the interaction.
     /// </summary>
 
-    public DateTime? Start { get; set; } = DateTime.MinValue;
+    public DateTime? Start { get; set; } = null;
 
     /// <summary>
     ///     End date of the interaction.
     /// </summary>
-    public DateTime? End { get; set; } = DateTime.MinValue;
+    public DateTime? End { get; set; } = null;
+
+    /// <summary>
+    /// Created
+    /// </summary>
+    public DateTime Created { get; set; } = DateTime.Now;
+
+    /// <summary>
+    /// Modified
+    ///  </summary>
+    public DateTime Modified { get; set; } = DateTime.Now;
 
 
     /// <inheritdoc cref="Relation" />
     public virtual ICollection<ContextRelation> Contexts { get; set; } = new List<ContextRelation>();
+
+    // Entity framework computed field. Count of contexts
+    public long ContextsCount => Contexts.Count;
+
     /// as contexts
-    public virtual ICollection<ContextRelation> AsContexts { get; set; } = new List<ContextRelation>();  
+    public virtual ICollection<ContextRelation> AsContexts { get; set; } = new List<ContextRelation>();
 
+    /// computed field of number of times the interaction is used AS context in the DB. Should hold large number of contexts.
+    public long AsContextsCount => AsContexts.Count;
 
+    /// <inheritdoc cref="Act"/>
+    public virtual ICollection<FirstActRelation> FirstActs { get; set; } = new List<FirstActRelation>();
+    
+    public long FirstActsCount => FirstActs.Count;
+
+    // as first acts
+    public virtual ICollection<FirstActRelation> AsFirstActs { get; set; } = new List<FirstActRelation>();
+    
+    public long AsFirstActsCount => AsFirstActs.Count;
+
+    /// Link to Act: <see cref="Act"/>
+    /// <inheritdoc cref="Act"/> 
+    public virtual ICollection<SecondActRelation> SecondActs { get; set; } = new List<SecondActRelation>();
+    
+    public long SecondActsCount => SecondActs.Count;
+     
+
+    // as second acts
+    public virtual ICollection<SecondActRelation> AsSecondActs { get; set; } = new List<SecondActRelation>();
+        
+    public long AsSecondActsCount => AsSecondActs.Count;
+
+    
     /// <inheritdoc cref="SubjectRelation" />
     public virtual ICollection<SubjectRelation> Subjects { get; set; } = new List<SubjectRelation>();
     
+    public long SubjectsCount => Subjects.Count;
+    
+
     /// as subject
     public virtual ICollection<SubjectRelation> AsSubjects { get; set; } = new List<SubjectRelation>();
-    
+
+    public long AsSubjectsCount => AsSubjects.Count;
 
     /// <inheritdoc cref="ParallelRelation" />
     public virtual ICollection<ParallelRelation> Parallels { get; set; } = new List<ParallelRelation>();
+     
+    public long ParallelsCount => Parallels.Count;
+
     /// as parallel
     public virtual ICollection<ParallelRelation> AsParallels { get; set; } = new List<ParallelRelation>();
+    
+    public long AsParallelsCount => AsParallels.Count;
 
     /// <inheritdoc cref="SubjectRelation" />
     public virtual ICollection<ObjectRelation> Objects { get; set; } = new List<ObjectRelation>();
+    
+    public long ObjectsCount => Objects.Count;
+
     /// as object
     public virtual ICollection<ObjectRelation> AsObjects { get; set; } = new List<ObjectRelation>();
+    
+    public long AsObjectsCount => AsObjects.Count;
 
     /// <inheritdoc cref="SettingRelation" />
     public virtual ICollection<SettingRelation> Settings { get; set; } = new List<SettingRelation>();
+    
+    public long SettingsCount => Settings.Count;
+
     /// as setting
     public virtual ICollection<SettingRelation> AsSettings { get; set; } = new List<SettingRelation>();
+    
+    public long AsSettingsCount => AsSettings.Count;
 
     /// <inheritdoc cref="SettingRelation" />
     public virtual ICollection<PurposeRelation> Purposes { get; set; } = new List<PurposeRelation>();
+    
+    public long PurposesCount => Purposes.Count;
+
     /// as purpose
     public virtual ICollection<PurposeRelation> AsPurposes { get; set; } = new List<PurposeRelation>();
+    
+    public long AsPurposesCount => AsPurposes.Count;
 
     /// <inheritdoc cref="SettingRelation" />
     public virtual ICollection<IndirectObjectRelation> IndirectObjects { get; set; } =
         new List<IndirectObjectRelation>();
+    
+    public long IndirectObjectsCount => IndirectObjects.Count;
+
     /// as indirect object
     public virtual ICollection<IndirectObjectRelation> AsIndirectObjects { get; set; } =
         new List<IndirectObjectRelation>();
+    
+    public long AsIndirectObjectsCount => AsIndirectObjects.Count;
 
     /// <inheritdoc cref="ReferenceRelation" />
-    public virtual ICollection<ReferenceRelation> References { get; set; }   = new List<ReferenceRelation>();
+    public virtual ICollection<ReferenceRelation> References { get; set; } = new List<ReferenceRelation>();
+    
+    public long ReferencesCount => References.Count;
+
     /// as reference
     public virtual ICollection<ReferenceRelation> AsReferences { get; set; } = new List<ReferenceRelation>();
+    
+    public long AsReferencesCount => AsReferences.Count;
 
     /// <inheritdoc cref="Property" />
     public virtual ICollection<Property> Properties { get; set; } = new List<Property>();
+    
+    public long PropertiesCount => Properties.Count;
 
 
     /// <summary>
@@ -146,7 +238,6 @@ public class Interaction
     public void SetEntityIdentityAndType()
     {
         Identity = InteractionIdentity.ENTITY;
-        FirstActId = 1;
     }
 
     /// <summary>
@@ -156,5 +247,96 @@ public class Interaction
     {
         var interaction = new Interaction { Label = label };
         return interaction;
+    }
+
+    /// <summary>
+    /// Update sentence based on current entities and relations
+    ///  </summary>
+    public void UpdateSentence()
+    {
+        var sb = new StringBuilder();
+        var contexts = this.Contexts.Select(s => s.LinkedInteraction.Label).ToList();
+        var subjects = this.Subjects.Select(s => s.LinkedInteraction.Label).ToList();
+        var firstActs = this.FirstActs.Select(s => s.LinkedInteraction.Label).ToList();
+        var objects = this.Objects.Select(s => s.LinkedInteraction.Label).ToList();
+        var secondActs = this.SecondActs.Select(s => s.LinkedInteraction.Label).ToList();
+        var indirectObjects = this.IndirectObjects.Select(s => s.LinkedInteraction.Label).ToList();
+        var settings = this.Settings.Select(s => s.LinkedInteraction.Label).ToList();
+        var purposes = this.Purposes.Select(s => s.LinkedInteraction.Label).ToList();
+        var parallels = this.Parallels.Select(s => s.LinkedInteraction.Label).ToList();
+        var references = this.References.Select(s => s.LinkedInteraction.Label).ToList();
+
+        if (contexts.Any())
+        {
+            sb.Append("In the context(s) of");
+            // for each loop with index
+            foreach (var (label, index) in contexts.Select((value, i) => (value, i)))
+            {
+                sb = SentenceClauseBuilder(index, sb, label, contexts.Count - 1);
+            }
+        }
+
+        if (subjects.Any())
+        {
+            // for each loop with index
+            foreach (var (label, index) in subjects.Select((value, i) => (value, i)))
+            {
+                sb = SentenceClauseBuilder(index, sb, label, subjects.Count - 1);
+            }
+        }
+
+        if (objects.Any())
+        {
+            // for each loop with index
+            foreach (var (label, index) in objects.Select((value, i) => (value, i)))
+            {
+                sb = SentenceClauseBuilder(index, sb, label, objects.Count - 1);
+            }
+        }
+        
+        if (firstActs.Any())
+        {
+            // for each loop with index
+            foreach (var (label, index) in firstActs.Select((value, i) => (value, i)))
+            {
+                sb = SentenceClauseBuilder(index, sb, label, firstActs.Count - 1);
+            }
+        }
+
+        if (settings.Any())
+        {
+            if (sb.Length > 0)
+            {
+                sb.Append(' ');
+                sb.Append("in the setting(s) of");
+            }
+
+            // for each loop with index
+            foreach (var (label, index) in settings.Select((value, i) => (value, i)))
+            {
+                sb = SentenceClauseBuilder(index, sb, label, settings.Count - 1);
+            }
+        }
+
+
+        Sentence = sb.ToString().Trim();
+    }
+
+    private static StringBuilder SentenceClauseBuilder(int index, StringBuilder sb, string label, int lastIndex)
+    {
+        if (index > 1)
+        {
+            sb.Append(',');
+        }
+
+        // if it's the last index
+        if (index > 0 && index == lastIndex)
+        {
+            sb.Append(" and");
+        }
+
+        sb.Append(' ');
+        sb.Append(label);
+        return sb;
     }
 }

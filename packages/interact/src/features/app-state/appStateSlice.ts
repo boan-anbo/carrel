@@ -37,7 +37,7 @@ export const appstateSlice = createSlice({
             state.selectedInputText = null;
         },
 
-        selectInteraction: (state, action: PayloadAction<Interaction>) => {
+        selectInteraction: (state, action: PayloadAction<Interaction | null>) => {
             state.selectedInteraction = action.payload;
         },
         unselectInteraction: (state) => {

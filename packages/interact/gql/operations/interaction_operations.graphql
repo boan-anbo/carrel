@@ -1,288 +1,347 @@
 # Query
 query GetInteractions {
-  interactions {
-    edges {
-      cursor
-      node {
-        id
-        label
-        uuid
-      }
+    interactions {
+        edges {
+            cursor
+            node {
+                id
+                label
+                uuid
+            }
+        }
+        nodes {
+            ...interactionFragment
+        }
+        totalCount
+        ...pageInforFragment
     }
-    nodes {
-      ...interactionFragment
-    }
-    totalCount
-    ...pageInforFragment
-  }
 }
 
 
-query GetInteractionFullWithAllRelations($id: Int!) {
-  fullInteractionWithAllRelations(id: $id) {
-    ...interactionResultFragment
-  }
+query GetInteractionFullWithAllRelations($id: Long!) {
+    fullInteractionWithAllRelations(id: $id) {
+        ...interactionResultFragment
+    }
 }
 
+
+query GetRecentInteractions {
+    interactions(order: {
+        created: DESC
+    }) {
+        nodes {
+            ...interactionFragment
+        }
+    }
+
+}
 
 query FilterInteractionsByLabel($labelFilter: String!) {
-  interactions(where: { label: { contains: $labelFilter } }) {
-    nodes {
-      ...interactionFragment
+    interactions(where: { label: { contains: $labelFilter } }) {
+        nodes {
+            ...interactionFragment
+        }
     }
-  }
 }
 
-query GetInteractionFull($id: Int!) {
-  interactionFull(id: $id) {
-    ...interactionResultFragment
-  }
+query GetInteractionFull($id: Long!) {
+    interactionFull(id: $id) {
+        ...interactionResultFragment
+    }
 }
 
 # Delete
-mutation DeleteInteraction($id: Int!) {
-  deleteInteraction(id: $id)
+mutation DeleteInteraction($id: Long!) {
+    deleteInteraction(id: $id)
 }
 
 # Add new entity
 mutation AddNewInteractionEntity($label: String!) {
-  addNewEntityInteraction(label: $label) {
-    ...interactionFragment
-  }
+    addNewEntityInteraction(label: $label) {
+        ...interactionFragment
+    }
 }
 
 # Add interaction.
 mutation AddInteraction($request: CreateOrUpdateInteractionRequestDtoInput!) {
-  createOrUpdateInteraction(requestDto: $request) {
+    createOrUpdateInteraction(requestDto: $request) {
 
-    ...interactionFragment
-  }
+        ...interactionFragment
+    }
 }
 
 
 fragment interactionFragment on Interaction {
-  id,
-  uuid
-  label,
-  ...actsFragment,
-  identity,
-  subjects {
-    ...subjectFragment
-  }
-  objects {
-    ...objectFragment
-  }
-  parallels {
-    ...parallelFragment
-  },
+    id,
+    uuid
+    label,
+    identity,
+    subjects {
+        ...subjectFragment
+    }
+    subjectsCount
+    asSubjectsCount
 
-  settings {
-    ...settingFragment
-  }
-  indirectObjects {
-    ...indirectObjectFragment
-  }
-  references {
-    ...referenceFragment
-  }
-  contexts {
-    ...contextFragment
-  }
-  purposes {
-    ...purposeFragment
-  }
+    firstActs {
+        ...firstActFragment
+    }
+    firstActsCount
+    asFirstActsCount
+
+    objects {
+        ...objectFragment
+    }
+    objectsCount
+    asObjectsCount
+
+    parallels {
+        ...parallelFragment
+    }
+    parallelsCount
+    asParallelsCount
+
+    settings {
+        ...settingFragment
+    }
+    settingsCount
+    asSettingsCount
+
+    secondActs {
+        ...secondActFragment
+    }
+    secondActsCount
+
+    indirectObjects {
+        ...indirectObjectFragment
+    }
+    indirectObjectsCount
+    asIndirectObjectsCount
+
+    references {
+        ...referenceFragment
+    }
+    referencesCount
+    asReferencesCount
+
+    contexts {
+        ...contextFragment
+    }
+    contextsCount
+    asContextsCount
+
+    purposes {
+        ...purposeFragment
+    }
+    purposesCount
+    asPurposesCount
+
+    start
+    end
+
+    created
+    modified
 }
 
 
+fragment firstActFragment on FirstActRelation {
+    description
+    content
+    label
+
+    hostInteractionId
+    type
+    uuid
+    weight
+    linkedInteraction {
+        ...MinimalInteractionFragment
+    }
+    linkedInteractionId
+}
+
+fragment secondActFragment on SecondActRelation {
+    description
+    content
+    label
+
+    hostInteractionId
+    type
+    uuid
+    weight
+    linkedInteraction {
+        ...MinimalInteractionFragment
+    }
+    linkedInteractionId
+}
+
 fragment subjectFragment on SubjectRelation {
-  hostInteractionId
-  type
-  uuid
-  description
-  label
-  weight
-  linkedInteraction {
-    ...MinimalInteractionFragment
-  }
-  linkedInteractionId
+    hostInteractionId
+    type
+    uuid
+    description
+    label
+    weight
+    linkedInteraction {
+        ...MinimalInteractionFragment
+    }
+    linkedInteractionId
 }
 
 fragment objectFragment on ObjectRelation {
-  hostInteractionId
-  type
-  uuid
-  description
-  label
-  weight
-  linkedInteraction {
-    ...MinimalInteractionFragment
-  }
-  linkedInteractionId
+    hostInteractionId
+    type
+    uuid
+    description
+    label
+    weight
+    linkedInteraction {
+        ...MinimalInteractionFragment
+    }
+    linkedInteractionId
 }
 
 fragment parallelFragment on ParallelRelation {
-  hostInteractionId
-  type
-  uuid
-  description
-  label
-  weight
-  linkedInteraction {
-    ...MinimalInteractionFragment
-  }
-  linkedInteractionId
+    hostInteractionId
+    type
+    uuid
+    description
+    label
+    weight
+    linkedInteraction {
+        ...MinimalInteractionFragment
+    }
+    linkedInteractionId
 }
 
 fragment settingFragment on SettingRelation {
-  hostInteractionId
-  type
-  uuid
-  description
-  label
-  weight
-  linkedInteraction {
-    ...MinimalInteractionFragment
-  }
-  linkedInteractionId
+    hostInteractionId
+    type
+    uuid
+    description
+    label
+    weight
+    linkedInteraction {
+        ...MinimalInteractionFragment
+    }
+    linkedInteractionId
 }
 
 fragment contextFragment on ContextRelation {
-  hostInteractionId
-  type
-  uuid
-  description
-  label
-  weight
-  linkedInteraction {
-    ...MinimalInteractionFragment
-  }
-  linkedInteractionId
+    hostInteractionId
+    type
+    uuid
+    description
+    label
+    weight
+    linkedInteraction {
+        ...MinimalInteractionFragment
+    }
+    linkedInteractionId
 }
 
 fragment purposeFragment on PurposeRelation {
-  hostInteractionId
-  type
-  uuid
-  description
-  label
-  weight
-  linkedInteraction {
-    ...MinimalInteractionFragment
-  }
-  linkedInteractionId
+    hostInteractionId
+    type
+    uuid
+    description
+    label
+    weight
+    linkedInteraction {
+        ...MinimalInteractionFragment
+    }
+    linkedInteractionId
 }
 
 fragment referenceFragment on ReferenceRelation {
-  hostInteractionId
-  type
-  uuid
-  description
-  label
-  weight
-  linkedInteraction {
-    ...MinimalInteractionFragment
-  }
-  linkedInteractionId
+    hostInteractionId
+    type
+    uuid
+    description
+    label
+    weight
+    linkedInteraction {
+        ...MinimalInteractionFragment
+    }
+    linkedInteractionId
 }
 
 fragment indirectObjectFragment on IndirectObjectRelation {
 
-  type
-  uuid
-  description
-  label
-  weight
-  hostInteractionId
-  linkedInteraction {
-    ...MinimalInteractionFragment
-  }
-  linkedInteractionId
+    type
+    uuid
+    description
+    label
+    weight
+    hostInteractionId
+    linkedInteraction {
+        ...MinimalInteractionFragment
+    }
+    linkedInteractionId
 }
 
 
 fragment MinimalInteractionFragment on Interaction {
-  id
-  uuid
-  label
+    id
+    uuid
+    label
 }
 
 
-# Fragments
-fragment actsFragment on Interaction {
-  firstAct  {
-    ...firstActFragment
-  },
-  secondAct {
-    ...secondActFragment
-  },
-}
-fragment firstActFragment on FirstAct {
-  id,
-  guid,
-  label,
-  description,
-}
-fragment secondActFragment on SecondAct {
-  id,
-  guid,
-  label,
-  description,
-}
+
 
 
 fragment pageInforFragment on InteractionsConnection {
-  pageInfo {
-    hasNextPage
+    pageInfo {
+        hasNextPage
 
-    hasPreviousPage
+        hasPreviousPage
 
-    startCursor
+        startCursor
 
-    endCursor
-  }
+        endCursor
+    }
 }
 
 fragment interactionResultFragment on InteractionResult {
-  interaction {
-    ...interactionFragment
-  }
-  graph {
-    ...graphFragment
-  }
+    interaction {
+        ...interactionFragment
+    }
+    graph {
+        ...graphFragment
+    }
 }
 
 fragment graphFragment on GraphOfRelationAndInteraction {
-  uuid
-  nodes {
-    ...nodeFragment
-  }
-  edges {
-    ...edgeFragment
-  }
+    uuid
+    nodes {
+        ...nodeFragment
+    }
+    edges {
+        ...edgeFragment
+    }
 }
 
 fragment nodeFragment on NodeOfInteraction {
-  id
-  uuid
-  label
-  description
-  content
-  data {
-    ...interactionFragment
-  }
+    id
+    uuid
+    label
+    description
+    content
+    data {
+        ...interactionFragment
+    }
 }
 
 fragment edgeFragment on EdgeOfRelation {
-  id
-  uuid
-  displayId
-  label
-  description
-  content
-  weight
-  data {
-    ...relationFragment
-  }
-  sourceId
-  targetId
+    id
+    uuid
+    displayId
+    label
+    description
+    content
+    weight
+    data {
+        ...relationFragment
+    }
+    sourceId
+    targetId
 }

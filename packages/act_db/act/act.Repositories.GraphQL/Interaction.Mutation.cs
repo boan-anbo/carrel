@@ -18,19 +18,25 @@ public class GraphQLMutation : IGraphQLMutation
 
     public async Task<Interaction?> AddNewEntityInteraction(
         [Service(ServiceKind.Synchronized)] IInteractionRepository _repo,
+        [Service(ServiceKind.Synchronized)] IRelationRepository _relation,
         string label
     )
     {
         var interaction = Interaction.FromLabel(label);
         interaction.SetEntityIdentityAndType();
-        await _repo.AddOrCreateInteraction(interaction);
+        var createdInteraction = await _repo.AddOrCreateInteraction(interaction);
+
+        _repo.AddToBeFirstActToInteractionWithoutSaving(_relation, createdInteraction, interaction);
+
+        await _repo.SaveChanges();
 
 
         return await _repo.GetInteractionScalar(interaction.Id);
     }
 
-    public async Task<int> DeleteInteraction(
-        int id,
+
+    public async Task<long> DeleteInteraction(
+        long id,
         [Service(ServiceKind.Synchronized)] IInteractionRepository _repo
     )
     {
@@ -60,24 +66,9 @@ public class GraphQLMutation : IGraphQLMutation
         var identity = InteractionIdentity.INTERACTION;
         // switch (request.Identity)
 
-        switch (requestDto.Identity)
-        {
-            case AddInteractionIdentity.ENTITY:
-                identity = InteractionIdentity.ENTITY;
-                break;
-            case AddInteractionIdentity.ACT:
-                identity = InteractionIdentity.INTERACTION;
-                break;
-            case AddInteractionIdentity.SOURCE:
-                identity = InteractionIdentity.SOURCE;
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
+        identity = requestDto.Identity;
 
 
-        var end = DateTimeOffset.FromUnixTimeMilliseconds(requestDto.End ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
-        var start = DateTimeOffset.FromUnixTimeMilliseconds(requestDto.Start ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
         // load related entities
 
         var properties = await _interactionRepo.GetProperties(requestDto.PropertyIds);
@@ -101,9 +92,8 @@ public class GraphQLMutation : IGraphQLMutation
             Label = requestDto.Label,
             Description = requestDto.Description,
             Identity = identity,
-            FirstActId = requestDto.FirstActId,
-            Start = start.DateTime,
-            End = end.DateTime,
+            Start = requestDto.Start,
+            End = requestDto.End,
             Properties = properties
         };
 
@@ -130,8 +120,8 @@ public class GraphQLMutation : IGraphQLMutation
         }
     }
 
-    public async Task<int> deleteRelation([Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,
-        Guid relationId, int hostInteractionId, int linkedInteractionId, RelationTypes type)
+    public async Task<long> deleteRelation([Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,
+        Guid relationId, long hostInteractionId, long linkedInteractionId, RelationTypes type)
     {
         await _relationRepo.DeleteRelation(relationId, hostInteractionId, linkedInteractionId, type);
         return Task.FromResult(relationId.GetHashCode()).Result;
@@ -164,7 +154,7 @@ public class GraphQLMutation : IGraphQLMutation
         IRelationRepository _relationRepo
     )
     {
-        requestDto.SubjectIds.ForEach(createSubjectDto =>
+        requestDto.SubjectDtos?.ForEach(createSubjectDto =>
         {
             try
             {
@@ -178,7 +168,7 @@ public class GraphQLMutation : IGraphQLMutation
             }
         });
 
-        requestDto.ObjectIds.ForEach(objectId =>
+        requestDto.ObjectDtos?.ForEach(objectId =>
         {
             try
             {
@@ -192,7 +182,7 @@ public class GraphQLMutation : IGraphQLMutation
             }
         });
 
-        requestDto.ParallelIds.ForEach(relatedId =>
+        requestDto.ParallelDtos?.ForEach(relatedId =>
         {
             try
             {
@@ -206,7 +196,7 @@ public class GraphQLMutation : IGraphQLMutation
             }
         });
 
-        requestDto.SettingIds.ForEach(settingId =>
+        requestDto.SettingDtos?.ForEach(settingId =>
         {
             try
             {
@@ -220,7 +210,7 @@ public class GraphQLMutation : IGraphQLMutation
             }
         });
 
-        requestDto.ContextIds.ForEach(causeId =>
+        requestDto.ContextDtos?.ForEach(causeId =>
         {
             try
             {
@@ -234,7 +224,7 @@ public class GraphQLMutation : IGraphQLMutation
             }
         });
 
-        requestDto.ReferenceIds.ForEach(relatedId =>
+        requestDto.ReferenceDtos?.ForEach(relatedId =>
         {
             try
             {
@@ -248,7 +238,7 @@ public class GraphQLMutation : IGraphQLMutation
             }
         });
 
-        requestDto.PurposeIds.ForEach(purposeId =>
+        requestDto.PurposeDtos?.ForEach(purposeId =>
         {
             try
             {
@@ -262,7 +252,7 @@ public class GraphQLMutation : IGraphQLMutation
             }
         });
 
-        requestDto.IndirectObjectIds.ForEach(indirectObjectId =>
+        requestDto.IndirectObjectDtos?.ForEach(indirectObjectId =>
         {
             try
             {

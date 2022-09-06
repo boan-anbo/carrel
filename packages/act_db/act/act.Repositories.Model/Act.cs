@@ -64,11 +64,3 @@ public abstract class Act
     /// </summary>
     public virtual ICollection<Interaction> Interactions { get; set; }
 }
-
-public class FirstAct : Act
-{
-}
-
-public class SecondAct : Act
-{
-}

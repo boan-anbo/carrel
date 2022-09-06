@@ -38,7 +38,7 @@ public class GraphQLQueryTests : TestBase
         var result = await _mutationService.AddNewEntityInteraction(_interactionRepository, "test");
 
         Assert.IsNotNull(result);
-        Assert.IsTrue(result.FirstActId > 0);
+        Assert.IsTrue(result.FirstActs.Count > 0);
     }
 
     [TestMethod]
@@ -154,13 +154,13 @@ public class GraphQLQueryTests : TestBase
         Assert.IsNotNull(firstInteraction);
         Assert.AreEqual(1, firstInteraction.Interaction.Id);
         Assert.AreEqual(InteractionResultType.FullInteraction, firstInteraction.ResultType);
-        Assert.IsTrue(firstInteraction.Interaction.FirstAct != null);
+        Assert.IsTrue(firstInteraction.Interaction.FirstActs != null);
         /// create a new entity interaction
         var createdInteraction = await _mutationService.AddNewEntityInteraction(_interactionRepository, "health");
         Assert.IsNotNull(createdInteraction);
         Assert.AreEqual(createdInteraction.Label, "health");
         // var createAct = await _mutationService.AddNewAct(_actRepository, createdInteraction.Id, "test");
-        
+
         /// add a subject relation to the first interaction
         var createOrUpdateInteractionDto = new CreateOrUpdateInteractionRequestDto
         {
@@ -168,20 +168,18 @@ public class GraphQLQueryTests : TestBase
             Uuid = firstInteraction.Interaction.Uuid,
             Label = null,
             Description = null,
-            FirstActId = 0,
-            SecondActId = 0,
-            Start = 0,
-            End = 0,
-            ContextIds = null,
-            SubjectIds = null,
-            ObjectIds = null,
-            ParallelIds = null,
-            IndirectObjectIds = null,
-            SettingIds = null,
-            ReferenceIds = null,
-            PurposeIds = null,
+            Start = null,
+            End = null,
+            ContextDtos = null,
+            SubjectDtos = null,
+            ObjectDtos = null,
+            ParallelDtos = null,
+            IndirectObjectDtos = null,
+            SettingDtos = null,
+            ReferenceDtos = null,
+            PurposeDtos = null,
             PropertyIds = null,
-            Identity = null,
+            Identity = InteractionIdentity.ENTITY,
         };
     }
 
@@ -193,5 +191,314 @@ public class GraphQLQueryTests : TestBase
     {
         // var queryResult = _mutationService.
         return;
+    }
+
+    [TestMethod]
+    public async Task Adding_Subjects_Works()
+    {
+        var firstInteractionResult = await _queryService.GetInteractionFull(_interactionRepository, 1);
+        Assert.AreEqual(firstInteractionResult.Interaction.Label, "Air pollution");
+        var I = await _queryService.GetInteractionFull(_interactionRepository, 2);
+        Assert.AreEqual(I.Interaction.Label, "I");
+        var you = await _queryService.GetInteractionFull(_interactionRepository, 3);
+        Assert.AreEqual(you.Interaction.Label, "you");
+        
+        var firstInteractionID = firstInteractionResult.Interaction.Id;
+        var firstInteractionUUID = firstInteractionResult.Interaction.Uuid;
+        
+        var IId = I.Interaction.Id;
+        var YouId = you.Interaction.Id;
+
+        _dbContext.Entry(firstInteractionResult.Interaction).State = EntityState.Detached;
+        _dbContext.Entry(I.Interaction).State = EntityState.Detached;
+        _dbContext.Entry(you.Interaction).State = EntityState.Detached;
+
+        /// add you and I to the first interaction
+        var createOrUpdateInteractionDto = new CreateOrUpdateInteractionRequestDto
+        {
+            Id = 0,
+            Uuid = null,
+            Label = "Interaction with two subjects",
+            Description = null,
+            Start = null,
+            End = null,
+            ContextDtos = null,
+            SubjectDtos =
+            {
+                new CreateOrUpdateRelationDto
+                {
+                    HostInteractionId = firstInteractionID,
+                    RelationType = RelationTypes.SubjectRelation,
+                    Label = null,
+                    Description = null,
+                    Content = null,
+                    Weight = RelationWeight.Must,
+                    LinkedInteractionId = IId
+                },
+                new CreateOrUpdateRelationDto
+                {
+                    HostInteractionId = firstInteractionID,
+                    RelationType = RelationTypes.SubjectRelation,
+                    Label = null,
+                    Description = null,
+                    Content = null,
+                    Weight = RelationWeight.Must,
+                    LinkedInteractionId = YouId
+                }
+            },
+            ObjectDtos = null,
+            ParallelDtos = null,
+            IndirectObjectDtos = null,
+            SettingDtos = null,
+            ReferenceDtos = null,
+            PurposeDtos = null,
+            PropertyIds = null,
+            Identity = InteractionIdentity.ENTITY,
+        };
+
+
+        var createdInteraction = await _mutationService.CreateOrUpdateInteraction(
+            _interactionRepository,
+            _relationRepository,
+            createOrUpdateInteractionDto);
+
+        Assert.IsNotNull(createdInteraction);
+        Assert.AreEqual(createdInteraction.Label, "Interaction with two subjects");
+        Assert.AreEqual( 2, createdInteraction.Subjects.Count);
+        var fullInteraction = await _queryService.GetInteractionFull(_interactionRepository, createdInteraction.Id);
+        Assert.AreEqual(2, fullInteraction.Interaction.Subjects.Count);
+        // It should have three nodes, You, I, And Interaction with two subjects
+        Assert.AreEqual(3, fullInteraction.Graph.Nodes.Count);
+        // check if the three nodes exist
+        Assert.IsTrue(fullInteraction.Graph.Nodes.Any(n => n.Label == "you"));
+        Assert.IsTrue(fullInteraction.Graph.Nodes.Any(n => n.Label == "I"));
+        Assert.IsTrue(fullInteraction.Graph.Nodes.Any(n => n.Label == "Interaction with two subjects"));
+        // It should have two subject relations with you and I
+        Assert.AreEqual(2, fullInteraction.Graph.Edges.Count);
+        
+        // create another interaction with two subjects and one context
+        var createOrUpdateInteractionDto2 = new CreateOrUpdateInteractionRequestDto
+        {
+            Id = 0,
+            Uuid = null,
+            Label = "Interaction with two subjects and one context",
+            Description = null,
+            Start = null,
+            End = null,
+            ContextDtos = new List<CreateOrUpdateRelationDto>
+            {
+                new CreateOrUpdateRelationDto
+                {
+                    HostInteractionId = 0,
+                    RelationType = RelationTypes.ContextRelation,
+                    Label = null,
+                    Description = null,
+                    Content = null,
+                    Weight = RelationWeight.Must,
+                    LinkedInteractionId = 7
+                }
+            },
+            SubjectDtos =
+            {
+                new CreateOrUpdateRelationDto
+                {
+                    HostInteractionId = 0,
+                    RelationType = RelationTypes.SubjectRelation,
+                    Label = null,
+                    Description = null,
+                    Content = null,
+                    Weight = RelationWeight.Must,
+                    LinkedInteractionId = IId
+                },
+                new CreateOrUpdateRelationDto
+                {
+                    HostInteractionId = 0,
+                    RelationType = RelationTypes.SubjectRelation,
+                    Label = null,
+                    Description = null,
+                    Content = null,
+                    Weight = RelationWeight.Must,
+                    LinkedInteractionId = YouId
+                }
+            },
+            ObjectDtos = null,
+            ParallelDtos = null,
+            IndirectObjectDtos = null,
+            SettingDtos = null,
+            ReferenceDtos = null,
+            PurposeDtos = null,
+            PropertyIds = null,
+            Identity = InteractionIdentity.ENTITY,
+        };
+
+        var createdInteraction2 = await _mutationService.CreateOrUpdateInteraction(
+            _interactionRepository,
+            _relationRepository,
+            createOrUpdateInteractionDto2);
+         
+        Assert.IsNotNull(createdInteraction2);
+        Assert.AreEqual(createdInteraction2.Label, "Interaction with two subjects and one context");
+        Assert.AreEqual(2, createdInteraction2.Subjects.Count);
+        Assert.AreEqual(1, createdInteraction2.Contexts.Count);
+        var fullInteraction2 = await _queryService.GetInteractionFull(_interactionRepository, createdInteraction2.Id);
+        Assert.AreEqual(2, fullInteraction2.Interaction.Subjects.Count);
+        Assert.AreEqual(1, fullInteraction2.Interaction.Contexts.Count);
+        // It should have four nodes, You, I, Interaction with two subjects and one context, and the context
+        Assert.AreEqual(4, fullInteraction2.Graph.Nodes.Count);
+        // check if the four nodes exist
+        Assert.IsTrue(fullInteraction2.Graph.Nodes.Any(n => n.Label == "you"));
+        Assert.IsTrue(fullInteraction2.Graph.Nodes.Any(n => n.Label == "I"));
+        Assert.IsTrue(fullInteraction2.Graph.Nodes.Any(n => n.Label == "Interaction with two subjects and one context"));
+        Assert.IsTrue(fullInteraction2.Graph.Nodes.Any(n => n.Label == "earth"));
+        // It should have three subject relations with you and I and one context relation
+        Assert.AreEqual(3, fullInteraction2.Graph.Edges.Count);
+        
+        fullInteraction2.Interaction.UpdateSentence();
+        
+        Assert.AreEqual("I and you interact with earth.", fullInteraction2.Interaction.Sentence);
+        
+    }
+
+    [TestMethod]
+    public async Task Full_Sentence_Should_Workd()
+    {
+        //   new Interaction
+        // {
+        //     Id = 5,
+        //     Label = "the environment",
+        //     FirstActId = 1,
+        //     Identity = InteractionIdentity.ENTITY
+        // },
+        // new Interaction
+        // {
+        //     Id = 6,
+        //     Label = "future",
+        //     FirstActId = 1,
+        //     Identity = InteractionIdentity.ENTITY
+        // },
+        // new Interaction
+        // {
+        //     Id = 7,
+        //     Label = "earth",
+        //     FirstActId = 1,
+        //     Identity = InteractionIdentity.ENTITY
+        // },
+        // new Interaction
+        // {
+        //     Id = 8,
+        //     Label = "common sense",
+        //     FirstActId = 1,
+        //     Identity = InteractionIdentity.ENTITY
+        // },
+        // new Interaction
+        // {
+        //     Id = 9,
+        //     Label = "climate change",
+        //     FirstActId = 1,
+        //     Identity = InteractionIdentity.ENTITY
+        // }
+        var firstInteractionResult = await _queryService.GetInteractionFull(_interactionRepository, 5);
+        Assert.AreEqual(firstInteractionResult.Interaction.Label, "Air pollution");
+        var I = await _queryService.GetInteractionFull(_interactionRepository, 2);
+        Assert.AreEqual(I.Interaction.Label, "I");
+        var you = await _queryService.GetInteractionFull(_interactionRepository, 3);
+        Assert.AreEqual(you.Interaction.Label, "you");
+        var plasticBottle = await _queryService.GetInteractionFull(_interactionRepository, 4);
+        Assert.AreEqual(plasticBottle.Interaction.Label, "plastic bottles");
+        var theEnvironment = await _queryService.GetInteractionFull(_interactionRepository, 5);
+        Assert.AreEqual(theEnvironment.Interaction.Label, "the environment");
+        var future = await _queryService.GetInteractionFull(_interactionRepository, 6);
+        Assert.AreEqual(future.Interaction.Label, "future");
+        var earth = await _queryService.GetInteractionFull(_interactionRepository, 7);
+        Assert.AreEqual(earth.Interaction.Label, "earth");
+        var commonSense = await _queryService.GetInteractionFull(_interactionRepository, 8);
+        Assert.AreEqual(commonSense.Interaction.Label, "common sense");
+        var climateChange = await _queryService.GetInteractionFull(_interactionRepository, 9);
+        Assert.AreEqual(climateChange.Interaction.Label, "climate change");
+        var firstInteractionID = firstInteractionResult.Interaction.Id;
+        var IId = I.Interaction.Id;
+        var firstInteractionUUID = firstInteractionResult.Interaction.Uuid; 
+        var YouId = you.Interaction.Id;
+        
+        var createOrUpdateInteractionDto = new CreateOrUpdateInteractionRequestDto
+        {
+            Id = 0,
+            Uuid = null,
+            Label = "full sentence",
+            Description = null,
+            Start = null,
+            End = null,
+            ContextDtos = null,
+            SubjectDtos =
+            {
+                new CreateOrUpdateRelationDto
+                {
+                    HostInteractionId = firstInteractionID,
+                    RelationType = RelationTypes.SubjectRelation,
+                    Label = null,
+                    Description = null,
+                    Content = null,
+                    Weight = RelationWeight.Must,
+                    LinkedInteractionId = IId
+                },
+                new CreateOrUpdateRelationDto
+                {
+                    HostInteractionId = firstInteractionID,
+                    RelationType = RelationTypes.SubjectRelation,
+                    Label = null,
+                    Description = null,
+                    Content = null,
+                    Weight = RelationWeight.Must,
+                    LinkedInteractionId = YouId
+                }
+            },
+            ObjectDtos =
+            {
+                new CreateOrUpdateRelationDto
+                {
+                    HostInteractionId = firstInteractionID,
+                    RelationType = RelationTypes.ObjectRelation,
+                    Label = null,
+                    Description = null,
+                    Content = null,
+                    Weight = RelationWeight.Must,
+                    LinkedInteractionId = plasticBottle.Interaction.Id
+                },
+                new CreateOrUpdateRelationDto
+                {
+                    HostInteractionId = firstInteractionID,
+                    RelationType = RelationTypes.ObjectRelation,
+                    Label = null,
+                    Description = null,
+                    Content = null,
+                    Weight = RelationWeight.Must,
+                    LinkedInteractionId = theEnvironment.Interaction.Id
+                },
+            },
+            IndirectObjectDtos = null,
+            SettingDtos =
+            {
+                new CreateOrUpdateRelationDto
+                {
+                    HostInteractionId = firstInteractionID,
+                    RelationType = RelationTypes.SettingRelation,
+                    Label = null,
+                    Description = null,
+                    Content = null,
+                    Weight = RelationWeight.Must,
+                    LinkedInteractionId = earth.Interaction.Id
+                },
+            },
+            ReferenceDtos = null,
+            PurposeDtos = null,
+            ParallelDtos = null,
+            PropertyIds = null,
+            Identity = InteractionIdentity.ENTITY,
+        }; 
+        
+        var fullInteraction = await _mutationService.CreateOrUpdateInteraction(_interactionRepository, _relationRepository, createOrUpdateInteractionDto);
+        Assert.AreEqual(fullInteraction.Label, "full sentence");
+        fullInteraction.UpdateSentence();
+        Assert.AreEqual(fullInteraction.Sentence, "I and you plastic bottles and the environment in the setting(s) of earth");
     }
 }

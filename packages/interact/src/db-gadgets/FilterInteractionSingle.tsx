@@ -20,7 +20,7 @@ const fetch = async (value: string, callback: (data: { value: string; label: str
     let data = filteredData.map((interaction: Interaction) => {
         return {
             label: interaction.label,
-            value: interaction.uuid?.toString(),
+            value: interaction.id.toString(),
             data: interaction
         } as SelectValue<Interaction>;
     });
@@ -53,7 +53,7 @@ const FilterInteractionSingle: React.FC<FilterInteractionSingleProps<Interaction
         props.onSelect(data.find((d) => d.value === newValue));
     };
 
-    const options = data.map((d, index) => <Option key={d.value}>{d.label}</Option>);
+    const options = data.map((d, index) => <Option key={d.value}>{d.value + ': ' + d.label}</Option>);
 
     return (
         <Select

@@ -1,5 +1,5 @@
-import {Passage} from "../clients/distant_api";
-import {DistantDocumentView} from "./ViewComponents/Distant/DistantDocumentItem";
+import {Passage} from "../../clients/distant_api";
+import {DistantDocumentView} from "../ViewComponents/Distant/DistantDocumentItem";
 import {useSelector} from "react-redux";
 
 export interface DistantPassageInputEditorProps {

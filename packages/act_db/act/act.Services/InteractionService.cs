@@ -55,6 +55,14 @@ public class InteractionService : IInteractionService
     }
 
 
+    
+    /// <summary>
+    ///     Get all interactions
+    /// </summary>
+    /// <param name="subjects"></param>
+    /// <param name="relationType"></param>
+    /// <param name="objects"></param>
+    /// <returns></returns>
     public async Task<Interaction> CreateInteraction(ICollection<Interaction> subjects, string relationType,
         ICollection<Interaction> objects)
     {

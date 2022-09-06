@@ -27,10 +27,10 @@ type ContextRelation {
     content: String
     description: String
     hostInteraction: Interaction
-    hostInteractionId: Int!
+    hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
-    linkedInteractionId: Int!
+    linkedInteractionId: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
@@ -43,19 +43,23 @@ type EdgeOfRelation {
     displayId: String
     id: String
     label: String
-    sourceId: Int!
-    targetId: Int!
+    sourceId: Long!
+    targetId: Long!
     uuid: UUID
-    weight: Int!
+    weight: Long!
 }
 
-type FirstAct {
+type FirstActRelation {
     content: String
     description: String
-    guid: UUID!
-    id: Int!
-    interactions: [Interaction]
+    hostInteraction: Interaction
+    hostInteractionId: Long!
     label: String
+    linkedInteraction: Interaction
+    linkedInteractionId: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
 }
 
 type GraphOfRelationAndInteraction {
@@ -68,13 +72,13 @@ type GraphQLMutation {
     addNewEntityInteraction(label: String!): Interaction
     createOrUpdateInteraction(requestDto: CreateOrUpdateInteractionRequestDtoInput!): Interaction
     createOrUpdateRelation(requestDto: CreateOrUpdateRelationDtoInput!): Relation!
-    deleteInteraction(id: Int!): Int!
-    deleteRelation(hostInteractionId: Int!, linkedInteractionId: Int!, relationId: UUID!, type: RelationTypes!): Int!
+    deleteInteraction(id: Long!): Long!
+    deleteRelation(hostInteractionId: Long!, linkedInteractionId: Long!, relationId: UUID!, type: RelationTypes!): Long!
 }
 
 type GraphQLQuery {
-    fullInteractionWithAllRelations(id: Int!): InteractionResult!
-    interactionFull(id: Int!): InteractionResult!
+    fullInteractionWithAllRelations(id: Long!): InteractionResult!
+    interactionFull(id: Long!): InteractionResult!
     interactions(
         "Returns the elements in the list that come after the specified cursor."
         after: String,
@@ -93,10 +97,10 @@ type IndirectObjectRelation {
     content: String
     description: String
     hostInteraction: Interaction
-    hostInteractionId: Int!
+    hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
-    linkedInteractionId: Int!
+    linkedInteractionId: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
@@ -104,33 +108,57 @@ type IndirectObjectRelation {
 
 type Interaction {
     asContexts: [ContextRelation]
+    asContextsCount: Long!
+    asFirstActs: [FirstActRelation]
+    asFirstActsCount: Long!
     asIndirectObjects: [IndirectObjectRelation]
+    asIndirectObjectsCount: Long!
     asObjects: [ObjectRelation]
+    asObjectsCount: Long!
     asParallels: [ParallelRelation]
+    asParallelsCount: Long!
     asPurposes: [PurposeRelation]
+    asPurposesCount: Long!
     asReferences: [ReferenceRelation]
+    asReferencesCount: Long!
+    asSecondActs: [SecondActRelation]
+    asSecondActsCount: Long!
     asSettings: [SettingRelation]
+    asSettingsCount: Long!
     asSubjects: [SubjectRelation]
+    asSubjectsCount: Long!
     content: String
     contexts: [ContextRelation]
+    contextsCount: Long!
+    created: DateTime!
     description: String
     end: DateTime
-    firstAct: FirstAct!
-    firstActId: Int!
-    id: Int!
+    firstActs: [FirstActRelation]
+    firstActsCount: Long!
+    id: Long!
     identity: InteractionIdentity!
     indirectObjects: [IndirectObjectRelation]
+    indirectObjectsCount: Long!
     label: String!
+    modified: DateTime!
     objects: [ObjectRelation]
+    objectsCount: Long!
     parallels: [ParallelRelation]
+    parallelsCount: Long!
     properties: [Property]
+    propertiesCount: Long!
     purposes: [PurposeRelation]
+    purposesCount: Long!
     references: [ReferenceRelation]
-    secondAct: SecondAct
-    secondActId: Int
+    referencesCount: Long!
+    secondActs: [SecondActRelation]
+    secondActsCount: Long!
+    sentence: String
     settings: [SettingRelation]
+    settingsCount: Long!
     start: DateTime
     subjects: [SubjectRelation]
+    subjectsCount: Long!
     uuid: UUID!
 }
 
@@ -163,7 +191,7 @@ type NodeOfInteraction {
     content: String
     data: Interaction
     description: String
-    id: Int!
+    id: Long!
     label: String
     uuid: UUID!
 }
@@ -172,10 +200,10 @@ type ObjectRelation {
     content: String
     description: String
     hostInteraction: Interaction
-    hostInteractionId: Int!
+    hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
-    linkedInteractionId: Int!
+    linkedInteractionId: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
@@ -197,10 +225,10 @@ type ParallelRelation {
     content: String
     description: String
     hostInteraction: Interaction
-    hostInteractionId: Int!
+    hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
-    linkedInteractionId: Int!
+    linkedInteractionId: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
@@ -209,9 +237,9 @@ type ParallelRelation {
 type Property {
     description: String
     guid: UUID!
-    id: Int!
+    id: Long!
     interaction: Interaction
-    interactionId: Int!
+    interactionId: Long!
     key: String
     value: String
 }
@@ -220,10 +248,10 @@ type PurposeRelation {
     content: String
     description: String
     hostInteraction: Interaction
-    hostInteractionId: Int!
+    hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
-    linkedInteractionId: Int!
+    linkedInteractionId: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
@@ -233,10 +261,10 @@ type ReferenceRelation {
     content: String
     description: String
     hostInteraction: Interaction
-    hostInteractionId: Int!
+    hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
-    linkedInteractionId: Int!
+    linkedInteractionId: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
@@ -246,32 +274,36 @@ type Relation {
     content: String
     description: String
     hostInteraction: Interaction
-    hostInteractionId: Int!
+    hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
-    linkedInteractionId: Int!
+    linkedInteractionId: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
 }
 
-type SecondAct {
+type SecondActRelation {
     content: String
     description: String
-    guid: UUID!
-    id: Int!
-    interactions: [Interaction]
+    hostInteraction: Interaction
+    hostInteractionId: Long!
     label: String
+    linkedInteraction: Interaction
+    linkedInteractionId: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
 }
 
 type SettingRelation {
     content: String
     description: String
     hostInteraction: Interaction
-    hostInteractionId: Int!
+    hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
-    linkedInteractionId: Int!
+    linkedInteractionId: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
@@ -281,22 +313,17 @@ type SubjectRelation {
     content: String
     description: String
     hostInteraction: Interaction
-    hostInteractionId: Int!
+    hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
-    linkedInteractionId: Int!
+    linkedInteractionId: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
 }
 
-enum AddInteractionIdentity {
-    ACT
-    ENTITY
-    SOURCE
-}
-
 enum InteractionIdentity {
+    ACT
     ENTITY
     INTERACTION
     SOURCE
@@ -313,11 +340,13 @@ enum InteractionResultType {
 
 enum RelationTypes {
     CONTEXT_RELATION
+    FIRST_ACT_RELATION
     INDIRECT_OBJECT_RELATION
     OBJECT_RELATION
     PARALLEL_RELATION
     PURPOSE_RELATION
     REFERENCE_RELATION
+    SECOND_ACT_RELATION
     SETTING_RELATION
     SUBJECT_RELATION
 }
@@ -345,6 +374,21 @@ scalar Long
 
 scalar UUID
 
+input ComparableDateTimeOperationFilterInput {
+    eq: DateTime
+    gt: DateTime
+    gte: DateTime
+    in: [DateTime!]
+    lt: DateTime
+    lte: DateTime
+    neq: DateTime
+    ngt: DateTime
+    ngte: DateTime
+    nin: [DateTime!]
+    nlt: DateTime
+    nlte: DateTime
+}
+
 input ComparableGuidOperationFilterInput {
     eq: UUID
     gt: UUID
@@ -360,19 +404,19 @@ input ComparableGuidOperationFilterInput {
     nlte: UUID
 }
 
-input ComparableInt32OperationFilterInput {
-    eq: Int
-    gt: Int
-    gte: Int
-    in: [Int!]
-    lt: Int
-    lte: Int
-    neq: Int
-    ngt: Int
-    ngte: Int
-    nin: [Int!]
-    nlt: Int
-    nlte: Int
+input ComparableInt64OperationFilterInput {
+    eq: Long
+    gt: Long
+    gte: Long
+    in: [Long!]
+    lt: Long
+    lte: Long
+    neq: Long
+    ngt: Long
+    ngte: Long
+    nin: [Long!]
+    nlt: Long
+    nlte: Long
 }
 
 input ComparableNullableOfDateTimeOperationFilterInput {
@@ -405,30 +449,15 @@ input ComparableNullableOfGuidOperationFilterInput {
     nlte: UUID
 }
 
-input ComparableNullableOfInt32OperationFilterInput {
-    eq: Int
-    gt: Int
-    gte: Int
-    in: [Int]
-    lt: Int
-    lte: Int
-    neq: Int
-    ngt: Int
-    ngte: Int
-    nin: [Int]
-    nlt: Int
-    nlte: Int
-}
-
 input ContextRelationFilterInput {
     and: [ContextRelationFilterInput!]
     content: StringOperationFilterInput
     description: StringOperationFilterInput
     hostInteraction: InteractionFilterInput
-    hostInteractionId: ComparableInt32OperationFilterInput
+    hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
-    linkedInteractionId: ComparableInt32OperationFilterInput
+    linkedInteractionId: ComparableInt64OperationFilterInput
     or: [ContextRelationFilterInput!]
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
@@ -437,55 +466,51 @@ input ContextRelationFilterInput {
 
 input CreateOrUpdateInteractionRequestDtoInput {
     content: String!
-    contextIds: [CreateOrUpdateRelationDtoInput!]!
+    contextDtos: [CreateOrUpdateRelationDtoInput!]
     description: String!
-    end: Long!
-    firstActId: Int!
-    id: Int
-    identity: AddInteractionIdentity
-    indirectObjectIds: [CreateOrUpdateRelationDtoInput!]!
+    end: DateTime
+    firstActDtos: [CreateOrUpdateRelationDtoInput!]!
+    id: Long
+    identity: InteractionIdentity!
+    indirectObjectDtos: [CreateOrUpdateRelationDtoInput!]
     label: String!
-    objectIds: [CreateOrUpdateRelationDtoInput!]!
-    parallelIds: [CreateOrUpdateRelationDtoInput!]!
-    propertyIds: [Int!]
-    purposeIds: [CreateOrUpdateRelationDtoInput!]!
-    referenceIds: [CreateOrUpdateRelationDtoInput!]!
-    secondActId: Int!
-    settingIds: [CreateOrUpdateRelationDtoInput!]!
-    start: Long!
-    subjectIds: [CreateOrUpdateRelationDtoInput!]!
+    objectDtos: [CreateOrUpdateRelationDtoInput!]
+    parallelDtos: [CreateOrUpdateRelationDtoInput!]
+    propertyIds: [Long!]
+    purposeDtos: [CreateOrUpdateRelationDtoInput!]
+    referenceDtos: [CreateOrUpdateRelationDtoInput!]
+    secondActDtos: [CreateOrUpdateRelationDtoInput!]
+    settingDtos: [CreateOrUpdateRelationDtoInput!]
+    start: DateTime
+    subjectDtos: [CreateOrUpdateRelationDtoInput!]
     uuid: UUID
 }
 
 input CreateOrUpdateRelationDtoInput {
     content: String
     description: String
-    hostInteractionId: Int!
-    id: Int
+    hostInteractionId: Long!
+    id: Long
     label: String
-    linkedInteractionId: Int!
+    linkedInteractionId: Long!
     relationType: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
 }
 
-input FirstActFilterInput {
-    and: [FirstActFilterInput!]
+input FirstActRelationFilterInput {
+    and: [FirstActRelationFilterInput!]
     content: StringOperationFilterInput
     description: StringOperationFilterInput
-    guid: ComparableGuidOperationFilterInput
-    id: ComparableInt32OperationFilterInput
-    interactions: ListFilterInputTypeOfInteractionFilterInput
+    hostInteraction: InteractionFilterInput
+    hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
-    or: [FirstActFilterInput!]
-}
-
-input FirstActSortInput {
-    content: SortEnumType
-    description: SortEnumType
-    guid: SortEnumType
-    id: SortEnumType
-    label: SortEnumType
+    linkedInteraction: InteractionFilterInput
+    linkedInteractionId: ComparableInt64OperationFilterInput
+    or: [FirstActRelationFilterInput!]
+    type: RelationTypesOperationFilterInput
+    uuid: ComparableNullableOfGuidOperationFilterInput
+    weight: RelationWeightOperationFilterInput
 }
 
 input IndirectObjectRelationFilterInput {
@@ -493,10 +518,10 @@ input IndirectObjectRelationFilterInput {
     content: StringOperationFilterInput
     description: StringOperationFilterInput
     hostInteraction: InteractionFilterInput
-    hostInteractionId: ComparableInt32OperationFilterInput
+    hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
-    linkedInteractionId: ComparableInt32OperationFilterInput
+    linkedInteractionId: ComparableInt64OperationFilterInput
     or: [IndirectObjectRelationFilterInput!]
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
@@ -506,34 +531,58 @@ input IndirectObjectRelationFilterInput {
 input InteractionFilterInput {
     and: [InteractionFilterInput!]
     asContexts: ListFilterInputTypeOfContextRelationFilterInput
+    asContextsCount: ComparableInt64OperationFilterInput
+    asFirstActs: ListFilterInputTypeOfFirstActRelationFilterInput
+    asFirstActsCount: ComparableInt64OperationFilterInput
     asIndirectObjects: ListFilterInputTypeOfIndirectObjectRelationFilterInput
+    asIndirectObjectsCount: ComparableInt64OperationFilterInput
     asObjects: ListFilterInputTypeOfObjectRelationFilterInput
+    asObjectsCount: ComparableInt64OperationFilterInput
     asParallels: ListFilterInputTypeOfParallelRelationFilterInput
+    asParallelsCount: ComparableInt64OperationFilterInput
     asPurposes: ListFilterInputTypeOfPurposeRelationFilterInput
+    asPurposesCount: ComparableInt64OperationFilterInput
     asReferences: ListFilterInputTypeOfReferenceRelationFilterInput
+    asReferencesCount: ComparableInt64OperationFilterInput
+    asSecondActs: ListFilterInputTypeOfSecondActRelationFilterInput
+    asSecondActsCount: ComparableInt64OperationFilterInput
     asSettings: ListFilterInputTypeOfSettingRelationFilterInput
+    asSettingsCount: ComparableInt64OperationFilterInput
     asSubjects: ListFilterInputTypeOfSubjectRelationFilterInput
+    asSubjectsCount: ComparableInt64OperationFilterInput
     content: StringOperationFilterInput
     contexts: ListFilterInputTypeOfContextRelationFilterInput
+    contextsCount: ComparableInt64OperationFilterInput
+    created: ComparableDateTimeOperationFilterInput
     description: StringOperationFilterInput
     end: ComparableNullableOfDateTimeOperationFilterInput
-    firstAct: FirstActFilterInput
-    firstActId: ComparableInt32OperationFilterInput
-    id: ComparableInt32OperationFilterInput
+    firstActs: ListFilterInputTypeOfFirstActRelationFilterInput
+    firstActsCount: ComparableInt64OperationFilterInput
+    id: ComparableInt64OperationFilterInput
     identity: InteractionIdentityOperationFilterInput
     indirectObjects: ListFilterInputTypeOfIndirectObjectRelationFilterInput
+    indirectObjectsCount: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
+    modified: ComparableDateTimeOperationFilterInput
     objects: ListFilterInputTypeOfObjectRelationFilterInput
+    objectsCount: ComparableInt64OperationFilterInput
     or: [InteractionFilterInput!]
     parallels: ListFilterInputTypeOfParallelRelationFilterInput
+    parallelsCount: ComparableInt64OperationFilterInput
     properties: ListFilterInputTypeOfPropertyFilterInput
+    propertiesCount: ComparableInt64OperationFilterInput
     purposes: ListFilterInputTypeOfPurposeRelationFilterInput
+    purposesCount: ComparableInt64OperationFilterInput
     references: ListFilterInputTypeOfReferenceRelationFilterInput
-    secondAct: SecondActFilterInput
-    secondActId: ComparableNullableOfInt32OperationFilterInput
+    referencesCount: ComparableInt64OperationFilterInput
+    secondActs: ListFilterInputTypeOfSecondActRelationFilterInput
+    secondActsCount: ComparableInt64OperationFilterInput
+    sentence: StringOperationFilterInput
     settings: ListFilterInputTypeOfSettingRelationFilterInput
+    settingsCount: ComparableInt64OperationFilterInput
     start: ComparableNullableOfDateTimeOperationFilterInput
     subjects: ListFilterInputTypeOfSubjectRelationFilterInput
+    subjectsCount: ComparableInt64OperationFilterInput
     uuid: ComparableGuidOperationFilterInput
 }
 
@@ -545,17 +594,37 @@ input InteractionIdentityOperationFilterInput {
 }
 
 input InteractionSortInput {
+    asContextsCount: SortEnumType
+    asFirstActsCount: SortEnumType
+    asIndirectObjectsCount: SortEnumType
+    asObjectsCount: SortEnumType
+    asParallelsCount: SortEnumType
+    asPurposesCount: SortEnumType
+    asReferencesCount: SortEnumType
+    asSecondActsCount: SortEnumType
+    asSettingsCount: SortEnumType
+    asSubjectsCount: SortEnumType
     content: SortEnumType
+    contextsCount: SortEnumType
+    created: SortEnumType
     description: SortEnumType
     end: SortEnumType
-    firstAct: FirstActSortInput
-    firstActId: SortEnumType
+    firstActsCount: SortEnumType
     id: SortEnumType
     identity: SortEnumType
+    indirectObjectsCount: SortEnumType
     label: SortEnumType
-    secondAct: SecondActSortInput
-    secondActId: SortEnumType
+    modified: SortEnumType
+    objectsCount: SortEnumType
+    parallelsCount: SortEnumType
+    propertiesCount: SortEnumType
+    purposesCount: SortEnumType
+    referencesCount: SortEnumType
+    secondActsCount: SortEnumType
+    sentence: SortEnumType
+    settingsCount: SortEnumType
     start: SortEnumType
+    subjectsCount: SortEnumType
     uuid: SortEnumType
 }
 
@@ -566,18 +635,18 @@ input ListFilterInputTypeOfContextRelationFilterInput {
     some: ContextRelationFilterInput
 }
 
+input ListFilterInputTypeOfFirstActRelationFilterInput {
+    all: FirstActRelationFilterInput
+    any: Boolean
+    none: FirstActRelationFilterInput
+    some: FirstActRelationFilterInput
+}
+
 input ListFilterInputTypeOfIndirectObjectRelationFilterInput {
     all: IndirectObjectRelationFilterInput
     any: Boolean
     none: IndirectObjectRelationFilterInput
     some: IndirectObjectRelationFilterInput
-}
-
-input ListFilterInputTypeOfInteractionFilterInput {
-    all: InteractionFilterInput
-    any: Boolean
-    none: InteractionFilterInput
-    some: InteractionFilterInput
 }
 
 input ListFilterInputTypeOfObjectRelationFilterInput {
@@ -615,6 +684,13 @@ input ListFilterInputTypeOfReferenceRelationFilterInput {
     some: ReferenceRelationFilterInput
 }
 
+input ListFilterInputTypeOfSecondActRelationFilterInput {
+    all: SecondActRelationFilterInput
+    any: Boolean
+    none: SecondActRelationFilterInput
+    some: SecondActRelationFilterInput
+}
+
 input ListFilterInputTypeOfSettingRelationFilterInput {
     all: SettingRelationFilterInput
     any: Boolean
@@ -634,10 +710,10 @@ input ObjectRelationFilterInput {
     content: StringOperationFilterInput
     description: StringOperationFilterInput
     hostInteraction: InteractionFilterInput
-    hostInteractionId: ComparableInt32OperationFilterInput
+    hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
-    linkedInteractionId: ComparableInt32OperationFilterInput
+    linkedInteractionId: ComparableInt64OperationFilterInput
     or: [ObjectRelationFilterInput!]
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
@@ -649,10 +725,10 @@ input ParallelRelationFilterInput {
     content: StringOperationFilterInput
     description: StringOperationFilterInput
     hostInteraction: InteractionFilterInput
-    hostInteractionId: ComparableInt32OperationFilterInput
+    hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
-    linkedInteractionId: ComparableInt32OperationFilterInput
+    linkedInteractionId: ComparableInt64OperationFilterInput
     or: [ParallelRelationFilterInput!]
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
@@ -663,9 +739,9 @@ input PropertyFilterInput {
     and: [PropertyFilterInput!]
     description: StringOperationFilterInput
     guid: ComparableGuidOperationFilterInput
-    id: ComparableInt32OperationFilterInput
+    id: ComparableInt64OperationFilterInput
     interaction: InteractionFilterInput
-    interactionId: ComparableInt32OperationFilterInput
+    interactionId: ComparableInt64OperationFilterInput
     key: StringOperationFilterInput
     or: [PropertyFilterInput!]
     value: StringOperationFilterInput
@@ -676,10 +752,10 @@ input PurposeRelationFilterInput {
     content: StringOperationFilterInput
     description: StringOperationFilterInput
     hostInteraction: InteractionFilterInput
-    hostInteractionId: ComparableInt32OperationFilterInput
+    hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
-    linkedInteractionId: ComparableInt32OperationFilterInput
+    linkedInteractionId: ComparableInt64OperationFilterInput
     or: [PurposeRelationFilterInput!]
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
@@ -691,10 +767,10 @@ input ReferenceRelationFilterInput {
     content: StringOperationFilterInput
     description: StringOperationFilterInput
     hostInteraction: InteractionFilterInput
-    hostInteractionId: ComparableInt32OperationFilterInput
+    hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
-    linkedInteractionId: ComparableInt32OperationFilterInput
+    linkedInteractionId: ComparableInt64OperationFilterInput
     or: [ReferenceRelationFilterInput!]
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
@@ -715,23 +791,19 @@ input RelationWeightOperationFilterInput {
     nin: [RelationWeight!]
 }
 
-input SecondActFilterInput {
-    and: [SecondActFilterInput!]
+input SecondActRelationFilterInput {
+    and: [SecondActRelationFilterInput!]
     content: StringOperationFilterInput
     description: StringOperationFilterInput
-    guid: ComparableGuidOperationFilterInput
-    id: ComparableInt32OperationFilterInput
-    interactions: ListFilterInputTypeOfInteractionFilterInput
+    hostInteraction: InteractionFilterInput
+    hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
-    or: [SecondActFilterInput!]
-}
-
-input SecondActSortInput {
-    content: SortEnumType
-    description: SortEnumType
-    guid: SortEnumType
-    id: SortEnumType
-    label: SortEnumType
+    linkedInteraction: InteractionFilterInput
+    linkedInteractionId: ComparableInt64OperationFilterInput
+    or: [SecondActRelationFilterInput!]
+    type: RelationTypesOperationFilterInput
+    uuid: ComparableNullableOfGuidOperationFilterInput
+    weight: RelationWeightOperationFilterInput
 }
 
 input SettingRelationFilterInput {
@@ -739,10 +811,10 @@ input SettingRelationFilterInput {
     content: StringOperationFilterInput
     description: StringOperationFilterInput
     hostInteraction: InteractionFilterInput
-    hostInteractionId: ComparableInt32OperationFilterInput
+    hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
-    linkedInteractionId: ComparableInt32OperationFilterInput
+    linkedInteractionId: ComparableInt64OperationFilterInput
     or: [SettingRelationFilterInput!]
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
@@ -769,10 +841,10 @@ input SubjectRelationFilterInput {
     content: StringOperationFilterInput
     description: StringOperationFilterInput
     hostInteraction: InteractionFilterInput
-    hostInteractionId: ComparableInt32OperationFilterInput
+    hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
-    linkedInteractionId: ComparableInt32OperationFilterInput
+    linkedInteractionId: ComparableInt64OperationFilterInput
     or: [SubjectRelationFilterInput!]
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
