@@ -76,8 +76,8 @@ public class GraphQLMutation : IGraphQLMutation
         }
 
 
-        var end = DateTimeOffset.FromUnixTimeMilliseconds(requestDto.End);
-        var start = DateTimeOffset.FromUnixTimeMilliseconds(requestDto.Start);
+        var end = DateTimeOffset.FromUnixTimeMilliseconds(requestDto.End ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
+        var start = DateTimeOffset.FromUnixTimeMilliseconds(requestDto.Start ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
         // load related entities
 
         var properties = await _interactionRepo.GetProperties(requestDto.PropertyIds);
