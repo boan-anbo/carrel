@@ -1,4 +1,4 @@
-import {Select} from 'antd';
+import {Form, Select} from 'antd';
 import React, {useState} from 'react';
 import {filterInteractions} from "../clients/interact-db-client/filter-operations";
 import {Interaction} from "../clients/grl-client/interact_db_client";
@@ -28,9 +28,10 @@ export interface FilterInteractionSingleProps<T> {
     placeholder: string;
     style: React.CSSProperties,
     onSelect: (value: SelectValue<T>[]) => void;
+    label?: string;
 }
 
-const FilterInteractionMultiple: React.FC<FilterInteractionSingleProps<Interaction>> = (props) => {
+const FilterInteractionSingleProps: React.FC<FilterInteractionSingleProps<Interaction>> = (props) => {
     const [data, setData] = useState<any[]>([]);
     const [value, setValue] = useState<string[]>();
 
@@ -54,35 +55,38 @@ const FilterInteractionMultiple: React.FC<FilterInteractionSingleProps<Interacti
     }
 
     return (
-        <Select
-            mode="multiple"
-            showSearch
-            value={value}
-            placeholder={props.placeholder}
-            style={props.style}
-            defaultActiveFirstOption={false}
-            showArrow={true}
-            filterOption={false}
-            onInputKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                    console.log('onInputKeyDown', e.key);
-                    const firstOption = data[1];
-                    if (firstOption) {
-                        handleChange((value || []).concat('123'));
+        <div>
+            <Form.Item label={props.label}>
+                <Select
+                    mode="multiple"
+                    showSearch
+                    value={value}
+                    placeholder={props.placeholder}
+                    style={props.style}
+                    defaultActiveFirstOption={false}
+                    showArrow={true}
+                    filterOption={false}
+                    onInputKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            // console.log('onInputKeyDown', e.key);
+                            // const firstOption = data[1];
+                            // if (firstOption) {
+                            // }
+                            // setValue()
+                        }
                     }
-                    // setValue()
-                }
-            }
-            }
-            allowClear={true}
-            onSearch={handleSearch}
-            onChange={handleChange}
-            notFoundContent={null}
-        >
-            {options}
-        </Select>
+                    }
+                    allowClear={true}
+                    onSearch={handleSearch}
+                    onChange={handleChange}
+                    notFoundContent={null}
+                >
+                    {options}
+                </Select>
+            </Form.Item>
+        </div>
     );
 };
 
 
-export default FilterInteractionMultiple;
+export default FilterInteractionSingleProps;

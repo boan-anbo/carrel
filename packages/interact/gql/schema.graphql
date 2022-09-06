@@ -297,8 +297,8 @@ enum AddInteractionIdentity {
 }
 
 enum InteractionIdentity {
-    ACT
     ENTITY
+    INTERACTION
     SOURCE
 }
 
@@ -436,8 +436,9 @@ input ContextRelationFilterInput {
 }
 
 input CreateOrUpdateInteractionRequestDtoInput {
+    content: String!
     contextIds: [CreateOrUpdateRelationDtoInput!]!
-    description: String
+    description: String!
     end: Long!
     firstActId: Int!
     id: Int

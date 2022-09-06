@@ -129,8 +129,9 @@ export type ContextRelationFilterInput = {
 };
 
 export type CreateOrUpdateInteractionRequestDtoInput = {
+  content: Scalars['String'];
   contextIds: Array<CreateOrUpdateRelationDtoInput>;
-  description?: InputMaybe<Scalars['String']>;
+  description: Scalars['String'];
   end: Scalars['Long'];
   firstActId: Scalars['Int'];
   id?: InputMaybe<Scalars['Int']>;

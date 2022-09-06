@@ -16,8 +16,8 @@ import {SelectedInteractionViewer} from "./Views/SelectedInteractionViewer";
 import {SelectedPassageViewer} from "./Views/SelectedPassageViewer";
 import {SelectedTextViewer} from "./Views/ViewComponents/InteractViewComponent/SelectedTextViewer";
 import {SelectTextAction} from "./Views/ViewComponents/InteractViewComponent/SelectTextAction";
-import FilterInteractionMultiple from "./db-gadgets/FilterInteractionMultiple";
-import {CreateOrUpdateInteraction} from "./Views/CreateOrUpdateInteraction";
+import FilterInteractionSingleProps from "./db-gadgets/FilterInteractionSingleProps";
+import {CreateOrUpdateInteractionForm} from "./Views/CreateorUpdateInteractionForm";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -85,9 +85,7 @@ function App() {
 
                 <div key="input_panel" className="bg-gray-200 overflow-y-scroll">
                     {/*<DistantDocumentList/>*/}
-                    <CreateOrUpdateInteraction>
-                        <div>hehe</div>
-                    </CreateOrUpdateInteraction>
+                    <CreateOrUpdateInteractionForm/>
                 </div>
 
                 <div key="left_panel" className='bg-red-500'>
@@ -104,7 +102,7 @@ function App() {
                 </div>
 
                 <div key="below_panel" className='bg-amber-200'>
-                    <FilterInteractionMultiple placeholder={"Filter multiple"} style={{
+                    <FilterInteractionSingleProps placeholder={"Filter multiple"} style={{
                         width: "100%",
                     }} onSelect={(value) => {
                         console.log(value)}}/>

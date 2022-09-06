@@ -1,15 +1,17 @@
 import Search from "antd/lib/input/Search";
-import {CSSProperties, ReactNode, useRef} from "react";
+import {ChangeEventHandler, CSSProperties, FormEventHandler, ReactNode, useRef} from "react";
 import {Input} from "antd";
 import {SizeType} from "antd/lib/config-provider/SizeContext";
 
-export class InputTextSimpleProps {
-    size: SizeType;
+export interface InputTextSimpleProps {
+    min?: number;
+    size?: SizeType;
     style?: CSSProperties;
-    onInputChange?: (value: string) => void;
-    onInputEnter?: (value: string) => void;
+    onInputChange?: ChangeEventHandler<HTMLInputElement> | undefined;
+    onSubmit?: FormEventHandler<HTMLInputElement> | undefined;
     placeholder?: string;
-    children?: ReactNode;
+    children?: JSX.Element | JSX.Element[];
+    prefix?: JSX.Element | JSX.Element[];
 }
 
 
@@ -19,13 +21,20 @@ export const InputTextSimple = (props: InputTextSimpleProps) => {
 
     }
 
+
     return (<Input size={props.size}
                    placeholder={props.placeholder}
-                   prefix={props.children}>
+                   onChange={props.onInputChange}
+                   allowClear={true}
+                   onSubmit={props.onSubmit}
+                   prefix={props.prefix}
+                   min={props.min}
+    >
 
     </Input>)
 }
 
 InputTextSimple.defaultProps = {
-    size: "small"
-}
+    size: "small",
+    children: []
+} as Partial<InputTextSimpleProps>

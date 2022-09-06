@@ -13,11 +13,14 @@ public class CreateOrUpdateInteractionRequestDto
     // if id is provided, uuid is required for double-checking
     public Guid? Uuid { get; set; }
     public string Label { get; set; }
-    public string? Description { get; set; }
+    public string Description { get; set; } = string.Empty;
+    
+    public string Content { get; set; } = string.Empty;
     public int FirstActId { get; set; }
     public int SecondActId { get; set; }
-    public long Start { get; set; }
-    public long End { get; set; }
+    public long? Start { get; set; }
+    public long? End { get; set; }
+    
 
     public List<CreateOrUpdateRelationDto> ContextIds { get; set; } = new();
     public List<CreateOrUpdateRelationDto> SubjectIds { get; set; } = new();
@@ -27,7 +30,7 @@ public class CreateOrUpdateInteractionRequestDto
     public List<CreateOrUpdateRelationDto> SettingIds { get; set; } = new();
     public List<CreateOrUpdateRelationDto> ReferenceIds { get; set; } = new();
     public List<CreateOrUpdateRelationDto> PurposeIds { get; set; } = new();
-    public List<int>? PropertyIds { get; set; }
+    public List<int>? PropertyIds { get; set; } = new();
     public AddInteractionIdentity? Identity { get; set; }
 
 

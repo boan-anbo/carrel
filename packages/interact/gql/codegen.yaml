@@ -4,7 +4,7 @@ documents: [
              "operations/relation_operations.graphql"
 ]
 generates:
-  ../src/grl-client/interact_db_client.ts:
+  ../src/clients/grl-client/interact_db_client.ts:
     plugins:
       - typescript
       - typescript-operations
