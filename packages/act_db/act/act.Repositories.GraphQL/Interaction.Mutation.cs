@@ -1,5 +1,7 @@
 using act.Repositories.Contracts;
+using act.Repositories.Db;
 using act.Services.Model;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StackExchange.Profiling.Internal;
 
@@ -8,12 +10,16 @@ namespace act.Repositories.GraphQL;
 public class GraphQLMutation : IGraphQLMutation
 {
     private readonly ILogger _logger;
+    private readonly ActDbContext _dbContext;
 
     // constructor
+    // inject db context 
     public GraphQLMutation(
-        ILogger<GraphQLMutation> logger)
+        ILogger<GraphQLMutation> logger,
+        ActDbContext dbContext)
     {
         _logger = logger;
+        _dbContext = dbContext;
     }
 
     public async Task<Interaction?> AddNewEntityInteraction(
@@ -67,10 +73,6 @@ public class GraphQLMutation : IGraphQLMutation
         _logger.LogInformation($"CreateOrUpdateInteraction: {requestDto.ToJson()}");
         /// check validity of request
         requestDto.ValidateOrThrow();
-        // convert identity
-
-        var identity = requestDto.Identity;
-
 
         // load related entities
 
@@ -88,28 +90,21 @@ public class GraphQLMutation : IGraphQLMutation
                     "Update Interaction with ID and GUID are provided but they do not match any interactions in the DB.");
         }
 
-        var interaction = new Interaction
-        {
-            Id = requestDto.Id ?? 0,
-            Uuid = requestDto.Uuid ?? Guid.NewGuid(),
-            Label = requestDto.Label,
-            Description = requestDto.Description,
-            Identity = identity,
-            Start = requestDto.Start,
-            End = requestDto.End,
-            Properties = properties
-        };
+        Interaction interaction = requestDto.toInteraction();
+
+        // check if all subject relations are not tracked by dbcontext's change tracker
 
 
-        await _interactionRepo.AddOrCreateInteractionWithoutSaving(interaction);
+        await _interactionRepo.CreateOrUpdateInteractionWithoutSaving(interaction);
         // log ready to persis
         _logger.LogInformation($"Interaction Scalar Added Without Saving: {interaction.ToJson()}");
 
         // saving relations
         try
         {
-            loadRelations(requestDto, interaction, _relationRepo);
+            updateInteractionRelations(requestDto, interaction, _relationRepo, _interactionRepo);
             // check if interaction has at least first acts
+
 
             // persist
             await _interactionRepo.SaveChanges();
@@ -131,7 +126,9 @@ public class GraphQLMutation : IGraphQLMutation
             _logger.LogInformation($"Interaction Scalar Added: {interaction.ToJson()}");
 
             // return a new interaction with all essential relations.
-            return await _interactionRepo.GetInteractionFull(interaction.Id);
+            var result = await _interactionRepo.GetInteractionFull(interaction.Id);
+            // detach all subject relations
+            return result;
         }
         catch (Exception e)
         {
@@ -168,30 +165,58 @@ public class GraphQLMutation : IGraphQLMutation
     }
 
 
-    private void loadRelations(
+    private async Task updateInteractionRelations(
         CreateOrUpdateInteractionRequestDto requestDto,
         Interaction? interaction,
-        IRelationRepository _relationRepo
+        [Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,
+        [Service(ServiceKind.Synchronized)] IInteractionRepository _interactionRepo
     )
     {
-        requestDto.SubjectDtos?.ForEach(createSubjectDto =>
+        // if no subjects are provided, remove all subjects
+        await _interactionRepo.LoadAllRelationsOfInteraction(interaction);
+
+        if (requestDto.SubjectDtos is null)
         {
-            try
-            {
-                var relation = _relationRepo.CreateRelation<SubjectRelation>(createSubjectDto, interaction);
+            interaction.Subjects.Clear();
+        }
+
+        foreach (var interactionSubject in interaction.Subjects)
+        {
+            // if the subject is not in the requestDto.subjectDtos, remove it
+            if (!requestDto.SubjectDtos.Any(s => s.Uuid == interactionSubject.Uuid))
+            {   
+                _logger.LogInformation($"Removing subject {interactionSubject.Uuid}");
+                _dbContext.SubjectRelations.Remove(interactionSubject);
             }
-            catch (Exception e)
+        }
+
+        if (requestDto.SubjectDtos is not null)
+        {
+            requestDto.SubjectDtos?.ForEach(createSubjectDto =>
             {
-                _logger.LogError(e, "Error creating subject relation");
-                throw;
-            }
-        });
+                try
+                {
+                    // remove subjects that are not present in the request from the ICollection
+                    _relationRepo.CreateOrUpdateRelation<SubjectRelation>(createSubjectDto, interaction);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error creating subject relation");
+                    throw;
+                }
+            });
+        }
+
+        // // filter out subject relations that are not in the request
+        // interaction.Subjects = interaction?.Subjects?.Where(subjectRelation =>
+        //     requestDto.SubjectDtos?.Any(createSubjectDto =>
+        //         createSubjectDto.Uuid == subjectRelation.Uuid) ?? false).ToList();
 
         requestDto.ObjectDtos?.ForEach(objectId =>
         {
             try
             {
-                var relation = _relationRepo.CreateRelation<ObjectRelation>(objectId, interaction);
+                var relation = _relationRepo.CreateOrUpdateRelation<ObjectRelation>(objectId, interaction);
             }
             catch (Exception e)
             {
@@ -200,11 +225,12 @@ public class GraphQLMutation : IGraphQLMutation
             }
         });
 
+
         requestDto.ParallelDtos?.ForEach(relatedId =>
         {
             try
             {
-                var relation = _relationRepo.CreateRelation<ParallelRelation>(relatedId, interaction);
+                var relation = _relationRepo.CreateOrUpdateRelation<ParallelRelation>(relatedId, interaction);
             }
             catch (Exception e)
             {
@@ -217,7 +243,7 @@ public class GraphQLMutation : IGraphQLMutation
         {
             try
             {
-                var relation = _relationRepo.CreateRelation<SettingRelation>(settingId, interaction);
+                var relation = _relationRepo.CreateOrUpdateRelation<SettingRelation>(settingId, interaction);
             }
             catch (Exception e)
             {
@@ -230,7 +256,7 @@ public class GraphQLMutation : IGraphQLMutation
         {
             try
             {
-                var relation = _relationRepo.CreateRelation<ContextRelation>(causeId, interaction);
+                var relation = _relationRepo.CreateOrUpdateRelation<ContextRelation>(causeId, interaction);
             }
             catch (Exception e)
             {
@@ -243,7 +269,7 @@ public class GraphQLMutation : IGraphQLMutation
         {
             try
             {
-                var relation = _relationRepo.CreateRelation<ReferenceRelation>(relatedId, interaction);
+                var relation = _relationRepo.CreateOrUpdateRelation<ReferenceRelation>(relatedId, interaction);
             }
             catch (Exception e)
             {
@@ -256,7 +282,7 @@ public class GraphQLMutation : IGraphQLMutation
         {
             try
             {
-                var relation = _relationRepo.CreateRelation<PurposeRelation>(purposeId, interaction);
+                var relation = _relationRepo.CreateOrUpdateRelation<PurposeRelation>(purposeId, interaction);
             }
             catch (Exception e)
             {
@@ -264,12 +290,12 @@ public class GraphQLMutation : IGraphQLMutation
                 throw;
             }
         });
-
         requestDto.IndirectObjectDtos?.ForEach(indirectObjectId =>
         {
             try
             {
-                var relation = _relationRepo.CreateRelation<IndirectObjectRelation>(indirectObjectId, interaction);
+                var relation =
+                    _relationRepo.CreateOrUpdateRelation<IndirectObjectRelation>(indirectObjectId, interaction);
             }
             catch (Exception e)
             {

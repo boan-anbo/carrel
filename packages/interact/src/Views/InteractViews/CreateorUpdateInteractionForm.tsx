@@ -154,6 +154,7 @@ export const CreateOrUpdateInteractionForm = () => {
 
                 <Form.Item label={`Identity: ${formData.identity.toLowerCase()}`} name="identity">
                     <Radio.Group size={'small'}>
+                        <Radio.Button value={InteractionIdentity.Act}>Act</Radio.Button>
                         <Radio.Button value={InteractionIdentity.Entity}>Entity</Radio.Button>
                         <Radio.Button value={InteractionIdentity.Interaction}>Interaction</Radio.Button>
                         <Radio.Button value={InteractionIdentity.Source}>Source</Radio.Button>
@@ -208,6 +209,7 @@ export const CreateOrUpdateInteractionForm = () => {
                 {/*Controls for first act*/}
                 <FilterInteractionMultiple
                     label='First Acts'
+                    defaultInteractionType={InteractionIdentity.Act}
                     placeholder={'First act interactions'} style={{width: '100%'}} onSelect={
                     (e) => onInteractionSelect(e, RelationTypes.FirstActRelation)
                 }></FilterInteractionMultiple>
@@ -222,6 +224,7 @@ export const CreateOrUpdateInteractionForm = () => {
                 {/*Controls for second act*/}
                  <FilterInteractionMultiple
                     label='Second Acts'
+                    defaultInteractionType={InteractionIdentity.Act}
                     placeholder={'Second act interactions'} style={{width: '100%'}} onSelect={
                     (e) => onInteractionSelect(e, RelationTypes.SecondActRelation)
                 }></FilterInteractionMultiple>

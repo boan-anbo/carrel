@@ -110,7 +110,7 @@ public class InteractionRepository : IInteractionRepository
 
     public async Task<Interaction?> AddOrCreateInteraction(Interaction? interaction)
     {
-        await AddOrCreateInteractionWithoutSaving(interaction);
+        await CreateOrUpdateInteractionWithoutSaving(interaction);
         try
         {
             await SaveChanges();
@@ -143,7 +143,7 @@ public class InteractionRepository : IInteractionRepository
         );
     }
 
-    public async Task<Interaction?> AddOrCreateInteractionWithoutSaving(Interaction? interaction)
+    public async Task<Interaction?> CreateOrUpdateInteractionWithoutSaving(Interaction? interaction)
     {
         // Add interactioun to database, Id 0 means Add, and Id > 0 means Update
 
@@ -199,5 +199,22 @@ public class InteractionRepository : IInteractionRepository
             .Include(x => x.SecondActs)
             .ThenInclude(x => x.LinkedInteraction)
             .AsQueryable();
+    }
+
+    public async Task LoadAllRelationsOfInteraction(Interaction interaction)
+    {
+        
+        _dbContext.Interactions.Where(x => x.Id == interaction.Id)
+            .Include(x => x.Subjects)
+            .Include(x => x.Objects)
+            .Include(x => x.Parallels)
+            .Include(x => x.Settings)
+            .Include(x => x.Contexts)
+            .Include(x => x.IndirectObjects)
+            .Include(x => x.Purposes)
+            .Include(x => x.References)
+            .Include(x => x.FirstActs)
+            .Include(x => x.SecondActs).Load();
+
     }
 }

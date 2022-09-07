@@ -4,7 +4,7 @@ namespace act.Repositories.Contracts;
 
 public interface IInteractionRepository
 {
-    Task<Interaction> GetInteractionScalar(long id);
+    Task<Interaction?> GetInteractionScalar(long id);
     Task<Interaction?> GetInteractionFull(long id);
     Task<Interaction?> GetInteractionFullWithAllRelations(long id);
     Task<IEnumerable<Interaction>> GetAllInteractions();
@@ -13,7 +13,7 @@ public interface IInteractionRepository
     // This does not persist
     public void AddToBeFirstActToInteractionWithoutSaving(IRelationRepository _relation,
         Interaction interaction);
-    Task<Interaction?> AddOrCreateInteractionWithoutSaving(Interaction? interaction);
+    Task<Interaction?> CreateOrUpdateInteractionWithoutSaving(Interaction? interaction);
 
     Task SaveChanges();
     Task DeleteInteraction(long id);
@@ -23,4 +23,11 @@ public interface IInteractionRepository
     Task<bool> CheckIfInteractionExists(long requestDtoId, Guid requestDtoUuid);
 
     IQueryable<Interaction?> GetInteractionScalarList();
+    
+    /// <summary>
+    /// This include all relations from an interaction from DBContext. Used when modifying relations of an interaction. Without loading this, the interaction object might not have all the relations represented in the DBContext.
+    /// </summary>
+    /// <param name="interaction"></param>
+    /// <returns></returns>
+    Task LoadAllRelationsOfInteraction(Interaction interaction);
 }

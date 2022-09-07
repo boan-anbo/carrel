@@ -8,7 +8,7 @@ public interface IRelationRepository
     Task DeleteRelation(long id, RelationTypes type);
 
 
-    Task<T?> GetRelation<T>(long relationId, RelationTypes relationType) where T : Relation;
+    Task<T?> GetRelation<T>(Guid relationId, RelationTypes relationType) where T : Relation;
 
     Task<bool> CheckIfRelationExists(long requestDtoId, Guid requestDtoUuid, RelationTypes relationType);
 
@@ -21,7 +21,7 @@ public interface IRelationRepository
     /// <param name="relationType"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    T? CreateRelation<T>(
+    T? CreateOrUpdateRelation<T>(
        CreateOrUpdateRelationDto requestDto,
        Interaction? hostInteraction
     ) where T : Relation;

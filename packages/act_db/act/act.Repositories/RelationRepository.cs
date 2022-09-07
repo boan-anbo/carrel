@@ -27,7 +27,7 @@ public class RelationRepository : IRelationRepository
     }
 
 
-    public async Task<T?> GetRelation<T>(long relationId, RelationTypes relationType) where T : Relation
+    public async Task<T?> GetRelation<T>(Guid relationId, RelationTypes relationType) where T : Relation
     {
         switch (relationType)
         {
@@ -108,7 +108,7 @@ public class RelationRepository : IRelationRepository
         };
     }
 
-    public T? CreateRelation<T>(CreateOrUpdateRelationDto request, Interaction? hostInteraction) where T : Relation
+    public T? CreateOrUpdateRelation<T>(CreateOrUpdateRelationDto request, Interaction? hostInteraction) where T : Relation
     {
         // check if linked interaction exists
         if (!(request.LinkedInteractionId > 0))
@@ -181,7 +181,7 @@ public class RelationRepository : IRelationRepository
             throw new InvalidOperationException(
                 $"Host interaction id {request.HostInteractionId} does not exist for creating relation with");
         // create relation
-        return CreateRelation<T>(request, hostInteraction);
+        return CreateOrUpdateRelation<T>(request, hostInteraction);
     }
 
     public async Task DeleteRelation(Guid relationId, long hostInteractionId, long linkedInteractionId,

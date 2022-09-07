@@ -42,13 +42,14 @@ public class ActDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        options.UseSqlite($"Data Source={DbPath}");
+        options.UseSqlite($"Data Source={DbPath}").EnableSensitiveDataLogging();
 
         // ensure the database is created
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
         // context relations
         modelBuilder.Entity<ContextRelation>()
             .HasKey(x => x.Uuid);
@@ -76,14 +77,14 @@ public class ActDbContext : DbContext
             .HasOne(x => x.HostInteraction)
             .WithMany(x => x.Subjects)
             .HasForeignKey(x => x.HostInteractionId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         /// reverse relation
         modelBuilder.Entity<SubjectRelation>()
             .HasOne(x => x.LinkedInteraction)
             .WithMany(x => x.AsSubjects)
             .HasForeignKey(x => x.LinkedInteractionId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         // first act relations
         modelBuilder.Entity<FirstActRelation>()

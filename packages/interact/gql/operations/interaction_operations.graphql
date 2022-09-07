@@ -56,8 +56,8 @@ mutation DeleteInteraction($id: Long!) {
 }
 
 # Add new entity
-mutation AddNewInteractionEntity($label: String!) {
-    addNewEntityInteraction(label: $label) {
+mutation AddNewInteractionEntity($label: String!, $identity: InteractionIdentity!) {
+    addNewEntityInteraction(label: $label, identity: $identity) {
         ...interactionFragment
     }
 }

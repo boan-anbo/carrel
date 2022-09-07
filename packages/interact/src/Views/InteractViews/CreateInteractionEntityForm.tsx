@@ -20,7 +20,7 @@ export const CreateInteractionEntityForm = () => {
     const [form] = Form.useForm();
 
     const [formData, setFormData] = useState<CreateInteractionFormData>({
-        identity: InteractionIdentity.Entity,
+        identity: InteractionIdentity.Act,
         content: "", description: "", label: ""
     });
 
@@ -68,13 +68,14 @@ export const CreateInteractionEntityForm = () => {
                 onFinish={onFormFinish}
                 onValuesChange={onFormValuesChange}>
 
-                {/*<Form.Item label="Required Mark" name="identity">*/}
-                {/*    <Radio.Group>*/}
-                {/*        <Radio.Button value={InteractionIdentity.Entity}>Entity</Radio.Button>*/}
-                {/*        <Radio.Button value={InteractionIdentity.Interaction}>Interaction</Radio.Button>*/}
-                {/*        <Radio.Button value={InteractionIdentity.Source}>Source</Radio.Button>*/}
-                {/*    </Radio.Group>*/}
-                {/*</Form.Item>*/}
+                <Form.Item label="Idenity" name="identity">
+                    <Radio.Group>
+                        <Radio.Button value={InteractionIdentity.Act}>Act</Radio.Button>
+                        <Radio.Button value={InteractionIdentity.Entity}>Entity</Radio.Button>
+                        <Radio.Button value={InteractionIdentity.Interaction}>Interaction</Radio.Button>
+                        <Radio.Button value={InteractionIdentity.Source}>Source</Radio.Button>
+                    </Radio.Group>
+                </Form.Item>
 
                 <Form.Item label="Label"
                            rules={

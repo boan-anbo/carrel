@@ -5,10 +5,11 @@ namespace act.Repositories.Contracts;
 /// <summary>
 ///     AddOrUpdate request DTO for Interaction entity.
 /// </summary>
-public class CreateOrUpdateInteractionRequestDto
+public class CreateOrUpdateInteractionRequestDto: Interaction
 {
     // if not provded, create new iteraction; if provided, update existing interaction
     public long? Id { get; set; }
+    
 
     // if id is provided, uuid is required for double-checking
     public Guid? Uuid { get; set; }
@@ -113,6 +114,26 @@ public class CreateOrUpdateInteractionRequestDto
                 $"Relation items in purposeIds must be of the type PurposeRelation, but you provided {PurposeDtos.FindAll(x => x.RelationType != RelationTypes.PurposeRelation).FirstOrDefault()!.RelationType}");
 
         return true;
+    }
+
+    /// <summary>
+    /// Get Interaction from DTO
+    /// </summary>
+    /// <returns></returns>
+    public Interaction toInteraction()
+    {
+        return new Interaction
+            {
+                Id = Id ?? 0,
+                Uuid = Uuid ?? Guid.NewGuid(),
+                Label = Label,
+                Description = Description,
+                Identity = Identity,
+                Start = Start,
+                End = End,
+                Properties = Properties,
+                Data = Data,
+            };
     }
 }
 
