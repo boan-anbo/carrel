@@ -18,6 +18,8 @@ public class CreateOrUpdateInteractionRequestDto
     public string Content { get; set; } = string.Empty;
     public DateTime? Start { get; set; } = null;
     public DateTime? End { get; set; } = null;
+    
+    public string? Data { get; set; } = null;
 
 
     public List<CreateOrUpdateRelationDto>? ContextDtos { get; set; } = new();
@@ -116,7 +118,6 @@ public class CreateOrUpdateInteractionRequestDto
 
 public class CreateOrUpdateRelationDto
 {
-    public long? Id { get; set; } = null;
 
     /// <summary>
     /// Optional fields for creating relations independent of interaction creation.
@@ -146,7 +147,6 @@ public class CreateOrUpdateRelationDto
 
     public static T? toRelation<T>(CreateOrUpdateRelationDto dto) where T : Relation
     {
-        var id = dto.Id ?? 0;
         var uuid = dto.Uuid ?? null;
         var label = dto.Label ?? "";
         var description = dto.Description ?? "";

@@ -23,10 +23,15 @@ public class GraphQLMutation : IGraphQLMutation
     )
     {
         var interaction = Interaction.FromLabel(label);
-        interaction.SetEntityIdentityAndType();
         var createdInteraction = await _repo.AddOrCreateInteraction(interaction);
 
-        _repo.AddToBeFirstActToInteractionWithoutSaving(_relation, createdInteraction, interaction);
+        if (createdInteraction == null)
+        {
+            _logger.LogError("Failed to create interaction");
+            return null;
+        }
+
+        _repo.AddToBeFirstActToInteractionWithoutSaving(_relation, createdInteraction);
 
         await _repo.SaveChanges();
 
@@ -63,10 +68,8 @@ public class GraphQLMutation : IGraphQLMutation
         /// check validity of request
         requestDto.ValidateOrThrow();
         // convert identity
-        var identity = InteractionIdentity.INTERACTION;
-        // switch (request.Identity)
 
-        identity = requestDto.Identity;
+        var identity = requestDto.Identity;
 
 
         // load related entities
@@ -98,24 +101,41 @@ public class GraphQLMutation : IGraphQLMutation
         };
 
 
-        var updatedButNotSavedInteraction = await _interactionRepo.AddOrCreateInteractionWithoutSaving(interaction);
+        await _interactionRepo.AddOrCreateInteractionWithoutSaving(interaction);
         // log ready to persis
         _logger.LogInformation($"Interaction Scalar Added Without Saving: {interaction.ToJson()}");
 
         // saving relations
         try
         {
-            loadRelations(requestDto, updatedButNotSavedInteraction, _relationRepo);
+            loadRelations(requestDto, interaction, _relationRepo);
+            // check if interaction has at least first acts
+
             // persist
             await _interactionRepo.SaveChanges();
+
             // log persisted
-            _logger.LogInformation($"Interaction Scalar Added: {updatedButNotSavedInteraction.ToJson()}");
-            var returnedInteraction = await _interactionRepo.GetInteractionFull(updatedButNotSavedInteraction.Id);
-            return returnedInteraction;
+            // add first act if not exists, this has to be done after saving changes
+            if (interaction.FirstActs.Count == 0)
+            {
+                _interactionRepo.AddToBeFirstActToInteractionWithoutSaving(_relationRepo,
+                    interaction);
+                // persist to save the relation
+                await _interactionRepo.SaveChanges();
+            }
+
+            // if interaction still has no first acts, throw
+            if (interaction.FirstActs.Count == 0)
+                throw new ArgumentException("Interaction must have at least one first act.");
+
+            _logger.LogInformation($"Interaction Scalar Added: {interaction.ToJson()}");
+
+            // return a new interaction with all essential relations.
+            return await _interactionRepo.GetInteractionFull(interaction.Id);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error creating relations for interaction {}", updatedButNotSavedInteraction.Id);
+            _logger.LogError(e, "Error creating relations for interaction {}", interaction.Id);
             throw;
         }
     }
@@ -159,7 +179,6 @@ public class GraphQLMutation : IGraphQLMutation
             try
             {
                 var relation = _relationRepo.CreateRelation<SubjectRelation>(createSubjectDto, interaction);
-                interaction.Subjects.Add(relation);
             }
             catch (Exception e)
             {
@@ -173,7 +192,6 @@ public class GraphQLMutation : IGraphQLMutation
             try
             {
                 var relation = _relationRepo.CreateRelation<ObjectRelation>(objectId, interaction);
-                interaction.Objects.Add(relation);
             }
             catch (Exception e)
             {
@@ -187,7 +205,6 @@ public class GraphQLMutation : IGraphQLMutation
             try
             {
                 var relation = _relationRepo.CreateRelation<ParallelRelation>(relatedId, interaction);
-                interaction.Parallels.Add(relation);
             }
             catch (Exception e)
             {
@@ -201,7 +218,6 @@ public class GraphQLMutation : IGraphQLMutation
             try
             {
                 var relation = _relationRepo.CreateRelation<SettingRelation>(settingId, interaction);
-                interaction.Settings.Add(relation);
             }
             catch (Exception e)
             {
@@ -215,7 +231,6 @@ public class GraphQLMutation : IGraphQLMutation
             try
             {
                 var relation = _relationRepo.CreateRelation<ContextRelation>(causeId, interaction);
-                interaction.Contexts.Add(relation);
             }
             catch (Exception e)
             {
@@ -229,7 +244,6 @@ public class GraphQLMutation : IGraphQLMutation
             try
             {
                 var relation = _relationRepo.CreateRelation<ReferenceRelation>(relatedId, interaction);
-                interaction.References.Add(relation);
             }
             catch (Exception e)
             {
@@ -243,7 +257,6 @@ public class GraphQLMutation : IGraphQLMutation
             try
             {
                 var relation = _relationRepo.CreateRelation<PurposeRelation>(purposeId, interaction);
-                interaction.Purposes.Add(relation);
             }
             catch (Exception e)
             {
@@ -257,7 +270,6 @@ public class GraphQLMutation : IGraphQLMutation
             try
             {
                 var relation = _relationRepo.CreateRelation<IndirectObjectRelation>(indirectObjectId, interaction);
-                interaction.IndirectObjects.Add(relation);
             }
             catch (Exception e)
             {

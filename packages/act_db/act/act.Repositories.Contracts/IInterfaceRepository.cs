@@ -11,7 +11,7 @@ public interface IInteractionRepository
     Task<Interaction?> AddOrCreateInteraction(Interaction? interaction);
 
     // This does not persist
-    public void AddToBeFirstActToInteractionWithoutSaving(IRelationRepository _relation, Interaction? createdInteraction,
+    public void AddToBeFirstActToInteractionWithoutSaving(IRelationRepository _relation,
         Interaction interaction);
     Task<Interaction?> AddOrCreateInteractionWithoutSaving(Interaction? interaction);
 

@@ -35,7 +35,7 @@ public class GraphQLQueryTests : TestBase
     [TestMethod]
     public async Task Add_New_Entity_Should_Work()
     {
-        var result = await _mutationService.AddNewEntityInteraction(_interactionRepository, "test");
+        var result = await _mutationService.AddNewEntityInteraction(_interactionRepository, _relationRepository, "test");
 
         Assert.IsNotNull(result);
         Assert.IsTrue(result.FirstActs.Count > 0);
@@ -44,7 +44,7 @@ public class GraphQLQueryTests : TestBase
     [TestMethod]
     public async Task Delete_Interaction_Works()
     {
-        var createdInteraction = await _mutationService.AddNewEntityInteraction(_interactionRepository, "test");
+        var createdInteraction = await _mutationService.AddNewEntityInteraction(_interactionRepository, _relationRepository, "test");
 
         Assert.IsNotNull(createdInteraction);
         var foundInteract = await _interactionRepository.GetInteractionFull(createdInteraction.Id);
@@ -60,11 +60,10 @@ public class GraphQLQueryTests : TestBase
     [TestMethod]
     public async Task Create_Relation_Works()
     {
-        var testInteraction1 = await _mutationService.AddNewEntityInteraction(_interactionRepository, "test1");
-        var testInteraction2 = await _mutationService.AddNewEntityInteraction(_interactionRepository, "test2");
+        var testInteraction1 = await _mutationService.AddNewEntityInteraction(_interactionRepository,_relationRepository, "test1");
+        var testInteraction2 = await _mutationService.AddNewEntityInteraction(_interactionRepository, _relationRepository, "test2");
         var requestDto = new CreateOrUpdateRelationDto
         {
-            Id = null,
             Uuid = null,
             HostInteractionId = testInteraction1.Id,
             RelationType = RelationTypes.SettingRelation,
@@ -90,11 +89,10 @@ public class GraphQLQueryTests : TestBase
     [TestMethod]
     public async Task Update_Relation_Works()
     {
-        var testInteraction1 = await _mutationService.AddNewEntityInteraction(_interactionRepository, "test1");
-        var testInteraction2 = await _mutationService.AddNewEntityInteraction(_interactionRepository, "test2");
+        var testInteraction1 = await _mutationService.AddNewEntityInteraction(_interactionRepository,_relationRepository, "test1");
+        var testInteraction2 = await _mutationService.AddNewEntityInteraction(_interactionRepository,_relationRepository, "test2");
         var requestDto = new CreateOrUpdateRelationDto
         {
-            Id = null,
             Uuid = null,
             HostInteractionId = testInteraction1.Id,
             RelationType = RelationTypes.SettingRelation,
@@ -156,7 +154,7 @@ public class GraphQLQueryTests : TestBase
         Assert.AreEqual(InteractionResultType.FullInteraction, firstInteraction.ResultType);
         Assert.IsTrue(firstInteraction.Interaction.FirstActs != null);
         /// create a new entity interaction
-        var createdInteraction = await _mutationService.AddNewEntityInteraction(_interactionRepository, "health");
+        var createdInteraction = await _mutationService.AddNewEntityInteraction(_interactionRepository, _relationRepository, "health");
         Assert.IsNotNull(createdInteraction);
         Assert.AreEqual(createdInteraction.Label, "health");
         // var createAct = await _mutationService.AddNewAct(_actRepository, createdInteraction.Id, "test");
@@ -197,7 +195,7 @@ public class GraphQLQueryTests : TestBase
     public async Task Adding_Subjects_Works()
     {
         var firstInteractionResult = await _queryService.GetInteractionFull(_interactionRepository, 1);
-        Assert.AreEqual(firstInteractionResult.Interaction.Label, "Air pollution");
+        Assert.AreEqual(firstInteractionResult.Interaction.Label, "to be");
         var I = await _queryService.GetInteractionFull(_interactionRepository, 2);
         Assert.AreEqual(I.Interaction.Label, "I");
         var you = await _queryService.GetInteractionFull(_interactionRepository, 3);

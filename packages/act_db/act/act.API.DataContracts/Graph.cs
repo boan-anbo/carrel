@@ -13,8 +13,10 @@ public class Node<NODE_TYPE>
     public string Content { get; set; }
     public NODE_TYPE Data { get; set; }
 
-    public static Node<Interaction> FromInteraction(Interaction interaction)
+    public static Node<Interaction> FromInteraction(Interaction? interaction)
     {
+        if (interaction == null)
+            throw new ArgumentNullException("Cannot create a Node from a null Interaction");
         return new Node<Interaction>
         {
             Id = interaction.Id,

@@ -19,7 +19,7 @@ public enum RelationTypes
     PurposeRelation,
     ParallelRelation,
     ReferenceRelation
-    
+
     // to string method
 }
 
@@ -48,7 +48,7 @@ public static class RelationTypesExtensions
                 return "for the purpose of";
             case RelationTypes.ParallelRelation:
                 return "is related to";
-            
+
             case RelationTypes.ReferenceRelation:
                 return "is cited from";
             default:
@@ -135,7 +135,6 @@ public enum RelationWeight
 /// </remarks>
 public abstract class Relation
 {
-
     /// constrcutor
     /// Id primary key
     [Key]
@@ -176,6 +175,16 @@ public abstract class Relation
     public RelationWeight Weight { get; set; } = RelationWeight.NotImportant;
 
     /// <summary>
+    /// Hits. A generic holder for values that are cumulative, such as number of visits etc.
+    /// </summary>
+    public int Hits { get; set; } = 0;
+
+    /// <summary>
+    /// Order of the relation. This is used to determine the order of the relation when it is displayed. Default to -1, which means no order.
+    ///  </summary>
+    public int Order { get; set; } = -1;
+
+    /// <summary>
     ///     The A of the A-B relation
     /// </summary>
     public virtual Interaction HostInteraction { get; set; }
@@ -191,14 +200,14 @@ public abstract class Relation
 
     public static T Create<T>(
         long Id, Guid uuid,
-        long hostInteractionId, 
-        long linkedInteractionId, 
-        RelationTypes type, 
+        long hostInteractionId,
+        long linkedInteractionId,
+        RelationTypes type,
         string label,
-        string description, 
-        string content, 
+        string description,
+        string content,
         RelationWeight weight
-        ) where T : Relation, new()
+    ) where T : Relation, new()
     {
         var relation = new T
         {

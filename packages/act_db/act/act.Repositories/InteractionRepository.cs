@@ -125,15 +125,14 @@ public class InteractionRepository : IInteractionRepository
         return interaction;
     }
 
-    public void AddToBeFirstActToInteractionWithoutSaving(IRelationRepository _relation, Interaction? createdInteraction,
-        Interaction interaction)
+    public void AddToBeFirstActToInteractionWithoutSaving(IRelationRepository _relation, 
+        Interaction hostInteraction)
     {
         var result = _relation.CreateRelationWithHostInteractionId<FirstActRelation>(
             new CreateOrUpdateRelationDto
             {
-                Id = null,
                 Uuid = null,
-                HostInteractionId = createdInteraction.Id,
+                HostInteractionId = hostInteraction.Id,
                 RelationType = RelationTypes.FirstActRelation,
                 Label = null,
                 Description = null,
@@ -142,7 +141,6 @@ public class InteractionRepository : IInteractionRepository
                 LinkedInteractionId = 1
             }
         );
-        interaction.FirstActs.Add(result);
     }
 
     public async Task<Interaction?> AddOrCreateInteractionWithoutSaving(Interaction? interaction)

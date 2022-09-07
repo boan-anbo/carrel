@@ -116,6 +116,11 @@ public class Interaction
     ///  </summary>
     public DateTime Modified { get; set; } = DateTime.Now;
 
+    /// <summary>
+    /// A general field for data objects such as file or photo.
+    ///     </summary>
+    public string? Data { get; set; } = null;
+
 
     /// <inheritdoc cref="Relation" />
     public virtual ICollection<ContextRelation> Contexts { get; set; } = new List<ContextRelation>();
