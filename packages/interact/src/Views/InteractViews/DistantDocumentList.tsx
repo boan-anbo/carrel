@@ -1,4 +1,4 @@
-import {MouseEvent, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {DistantApiSearchResponse, Passage} from "../../clients/distant_api";
 import {searchDistant} from "../../clients/distant-core-ops/search-distant";
 import {SearchSimple} from "../../ControlComponents/SearchSimple";

@@ -1,5 +1,4 @@
 import {EdgeStyle, IUserEdge, IUserNode, NodeStyle} from "@antv/graphin";
-import {ElementStatus, RestEdge} from "@antv/graphin/es/typings/type";
 import {
     EdgeOfRelation,
     GraphOfRelationAndInteraction,

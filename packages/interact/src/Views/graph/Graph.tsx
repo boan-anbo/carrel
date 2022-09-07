@@ -1,4 +1,4 @@
-import Graphin, {GraphinData, IUserEdge, IUserNode, Utils} from '@antv/graphin';
+import Graphin, {GraphinData, IUserEdge, IUserNode} from '@antv/graphin';
 import {MiniMap} from '@antv/graphin-components';
 // Import icon resource files
 import '@antv/graphin-icons/dist/index.css';

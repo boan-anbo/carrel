@@ -5,11 +5,20 @@ namespace act.Repositories.Contracts;
 /// <summary>
 ///     AddOrUpdate request DTO for Interaction entity.
 /// </summary>
-public class CreateOrUpdateInteractionRequestDto: Interaction
+public class CreateOrUpdateInteractionRequestDto
 {
+    public CreateOrUpdateInteractionRequestDto(string label)
+    {
+        Label = label;
+    }
+    
+    public CreateOrUpdateInteractionRequestDto()
+    {
+    }
+
     // if not provded, create new iteraction; if provided, update existing interaction
     public long? Id { get; set; }
-    
+
 
     // if id is provided, uuid is required for double-checking
     public Guid? Uuid { get; set; }
@@ -19,7 +28,7 @@ public class CreateOrUpdateInteractionRequestDto: Interaction
     public string Content { get; set; } = string.Empty;
     public DateTime? Start { get; set; } = null;
     public DateTime? End { get; set; } = null;
-    
+
     public string? Data { get; set; } = null;
 
 
@@ -43,9 +52,8 @@ public class CreateOrUpdateInteractionRequestDto: Interaction
     public bool ValidateOrThrow()
     {
         if (string.IsNullOrEmpty(Label))
-            // check request type Id
-            if (!(FirstActDtos.Count > 0))
-                throw new Exception("Interaction must have act least one act in FirstActDtos");
+            throw new ArgumentException("Label is required");
+
 
         // check identity
         if (Identity == null) throw new Exception("Identity is required");
@@ -53,7 +61,7 @@ public class CreateOrUpdateInteractionRequestDto: Interaction
 
         // check relation types
         if (ContextDtos != null && ContextDtos.Any(x => !(x.LinkedInteractionId > 0)))
-            throw new Exception("ContextIds must be larger than 0");
+            throw new Exception("Linked Interaction Id must be larger than 0");
 
         if (ContextDtos != null && ContextDtos.Any(x => x.RelationType != RelationTypes.ContextRelation))
 
@@ -80,8 +88,8 @@ public class CreateOrUpdateInteractionRequestDto: Interaction
             if (ParallelDtos != null)
                 throw new Exception(
                     $"Relation items in parallelIds must be of the type ParallelRelation, but you provided {ParallelDtos.FindAll(x => x.RelationType != RelationTypes.ParallelRelation).FirstOrDefault().RelationType}");
-        
-        
+
+
         if (SecondActDtos != null && SecondActDtos.Any(x => !(x.LinkedInteractionId > 0)))
             throw new Exception("SecondActIds must be larger than 0");
         if (SecondActDtos != null && SecondActDtos.Any(x => x.RelationType != RelationTypes.SecondActRelation))
@@ -123,23 +131,21 @@ public class CreateOrUpdateInteractionRequestDto: Interaction
     public Interaction toInteraction()
     {
         return new Interaction
-            {
-                Id = Id ?? 0,
-                Uuid = Uuid ?? Guid.NewGuid(),
-                Label = Label,
-                Description = Description,
-                Identity = Identity,
-                Start = Start,
-                End = End,
-                Properties = Properties,
-                Data = Data,
-            };
+        {
+            Id = Id ?? 0,
+            Uuid = Uuid ?? Guid.NewGuid(),
+            Label = Label,
+            Description = Description,
+            Identity = Identity,
+            Start = Start,
+            End = End,
+            Data = Data,
+        };
     }
 }
 
 public class CreateOrUpdateRelationDto
 {
-
     /// <summary>
     /// Optional fields for creating relations independent of interaction creation.
     /// </summary>
@@ -151,6 +157,12 @@ public class CreateOrUpdateRelationDto
     public string? Label { get; set; } = null;
     public string? Description { get; set; } = null;
     public string? Content { get; set; } = null;
+
+    // hits
+    public long? Hits { get; set; } = null;
+
+    // order
+    public long? Order { get; set; } = null;
 
 
     /// <summary>
@@ -172,118 +184,132 @@ public class CreateOrUpdateRelationDto
         var label = dto.Label ?? "";
         var description = dto.Description ?? "";
         var content = dto.Content ?? "";
+        var hits = dto.Hits ?? 0;
+        var order = dto.Order ?? -1;
+
         return dto.RelationType switch
         {
-            RelationTypes.ContextRelation => new ContextRelation
-            {
-                Uuid = uuid,
-                HostInteractionId = dto.HostInteractionId,
-                Type = dto.RelationType,
-                Label = label,
-                Description = description,
-                Content = content,
-                Weight = dto.Weight,
-                LinkedInteractionId = dto.LinkedInteractionId
-            } as T,
-            RelationTypes.SubjectRelation => new SubjectRelation
-            {
-                Uuid = uuid,
-                HostInteractionId = dto.HostInteractionId,
-                Type = dto.RelationType,
-                Label = label,
-                Description = description,
-                Content = content,
-                Weight = dto.Weight,
-                LinkedInteractionId = dto.LinkedInteractionId
-            } as T,
-            RelationTypes.ObjectRelation => new ObjectRelation
-            {
-                Uuid = uuid,
-                HostInteractionId = dto.HostInteractionId,
-                Type = dto.RelationType,
-                Label = label,
-                Description = description,
-                Content = content,
-                Weight = dto.Weight,
-                LinkedInteractionId = dto.LinkedInteractionId
-            } as T,
-            RelationTypes.IndirectObjectRelation => new IndirectObjectRelation
-            {
-                Uuid = uuid,
-                HostInteractionId = dto.HostInteractionId,
-                Type = dto.RelationType,
-                Label = label,
-                Description = description,
-                Content = content,
-                Weight = dto.Weight,
-                LinkedInteractionId = dto.LinkedInteractionId
-            } as T,
-            RelationTypes.SettingRelation => new SettingRelation
-            {
-                Uuid = uuid,
-                HostInteractionId = dto.HostInteractionId,
-                Type = dto.RelationType,
-                Label = label,
-                Description = description,
-                Content = content,
-                Weight = dto.Weight,
-                LinkedInteractionId = dto.LinkedInteractionId
-            } as T,
-            RelationTypes.PurposeRelation => new PurposeRelation
-            {
-                Uuid = uuid,
-                HostInteractionId = dto.HostInteractionId,
-                Type = dto.RelationType,
-                Label = label,
-                Description = description,
-                Content = content,
-                Weight = dto.Weight,
-                LinkedInteractionId = dto.LinkedInteractionId
-            } as T,
-            RelationTypes.ParallelRelation => new ParallelRelation
-            {
-                Uuid = uuid,
-                HostInteractionId = dto.HostInteractionId,
-                Type = dto.RelationType,
-                Label = label,
-                Description = description,
-                Content = content,
-                Weight = dto.Weight,
-                LinkedInteractionId = dto.LinkedInteractionId
-            } as T,
-            RelationTypes.ReferenceRelation => new ReferenceRelation
-            {
-                Uuid = uuid,
-                HostInteractionId = dto.HostInteractionId,
-                Type = dto.RelationType,
-                Label = label,
-                Description = description,
-                Content = content,
-                Weight = dto.Weight,
-                LinkedInteractionId = dto.LinkedInteractionId
-            } as T,
-            RelationTypes.FirstActRelation => new FirstActRelation
-            {
-                Uuid = uuid,
-                HostInteractionId = dto.HostInteractionId,
-                Type = dto.RelationType,
-                Label = label,
-                Description = description,
-                Content = content,
-                Weight = dto.Weight,
-                LinkedInteractionId = dto.LinkedInteractionId
-            } as T,
-            RelationTypes.SecondActRelation => new SecondActRelation
-            {
-                Uuid = uuid,
-                HostInteractionId = dto.HostInteractionId,
-                Type = dto.RelationType,
-                Label = label,
-                Description = description,
-                Content = content,
-                Weight = dto.Weight,
-                LinkedInteractionId = dto.LinkedInteractionId
-            } as T,
+            RelationTypes.ContextRelation => Relation.Create<ContextRelation>(
+                uuid,
+                dto.HostInteractionId,
+                dto.LinkedInteractionId,
+                dto.RelationType,
+                label,
+                description,
+                content,
+                dto.Weight,
+                hits,
+                order
+            ) as T,
+
+            RelationTypes.SubjectRelation => Relation.Create<SubjectRelation>(
+                uuid,
+                dto.HostInteractionId,
+                dto.LinkedInteractionId,
+                dto.RelationType,
+                label,
+                description,
+                content,
+                dto.Weight,
+                hits,
+                order
+            ) as T,
+            RelationTypes.ObjectRelation => Relation.Create<ObjectRelation>(
+                uuid,
+                dto.HostInteractionId,
+                dto.LinkedInteractionId,
+                dto.RelationType,
+                label,
+                description,
+                content,
+                dto.Weight,
+                hits,
+                order
+            ) as T,
+            RelationTypes.IndirectObjectRelation => Relation.Create<IndirectObjectRelation>(
+                uuid,
+                dto.HostInteractionId,
+                dto.LinkedInteractionId,
+                dto.RelationType,
+                label,
+                description,
+                content,
+                dto.Weight,
+                hits,
+                order
+            ) as T,
+            RelationTypes.SettingRelation => Relation.Create<SettingRelation>(
+                uuid,
+                dto.HostInteractionId,
+                dto.LinkedInteractionId,
+                dto.RelationType,
+                label,
+                description,
+                content,
+                dto.Weight,
+                hits,
+                order
+            ) as T,
+            RelationTypes.PurposeRelation => Relation.Create<PurposeRelation>(
+                uuid,
+                dto.HostInteractionId,
+                dto.LinkedInteractionId,
+                dto.RelationType,
+                label,
+                description,
+                content,
+                dto.Weight,
+                hits,
+                order
+            ) as T,
+            RelationTypes.ParallelRelation => Relation.Create<ParallelRelation>(
+                uuid,
+                dto.HostInteractionId,
+                dto.LinkedInteractionId,
+                dto.RelationType,
+                label,
+                description,
+                content,
+                dto.Weight,
+                hits,
+                order
+            ) as T,
+            RelationTypes.ReferenceRelation => Relation.Create<ReferenceRelation>(
+                uuid,
+                dto.HostInteractionId,
+                dto.LinkedInteractionId,
+                dto.RelationType,
+                label,
+                description,
+                content,
+                dto.Weight,
+                hits,
+                order
+            ) as T,
+            RelationTypes.FirstActRelation => Relation.Create<FirstActRelation>(
+                uuid,
+                dto.HostInteractionId,
+                dto.LinkedInteractionId,
+                dto.RelationType,
+                label,
+                description,
+                content,
+                dto.Weight,
+                hits,
+                order
+            ) as T,
+            RelationTypes.SecondActRelation => Relation.Create<SecondActRelation>(
+                uuid,
+                dto.HostInteractionId,
+                dto.LinkedInteractionId,
+                dto.RelationType,
+                label,
+                description,
+                content,
+                dto.Weight,
+                hits,
+                order
+            ) as T,
             _ => throw new ArgumentOutOfRangeException()
         };
     }

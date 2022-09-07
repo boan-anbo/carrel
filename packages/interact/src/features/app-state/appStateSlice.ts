@@ -1,5 +1,5 @@
-import {createSlice} from '@reduxjs/toolkit'
 import type {PayloadAction} from '@reduxjs/toolkit'
+import {createSlice} from '@reduxjs/toolkit'
 import {Passage} from '../../clients/distant_api';
 import {Interaction} from "../../clients/grl-client/interact_db_client";
 

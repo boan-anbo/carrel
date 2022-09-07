@@ -1,24 +1,26 @@
 import {
-    AddInteractionDocument, AddInteractionMutation, AddInteractionMutationResult,
+    AddInteractionDocument,
+    AddInteractionMutation,
     AddNewInteractionEntityDocument,
     AddNewInteractionEntityMutation,
-    CreateOrUpdateInteractionRequestDtoInput, CreateOrUpdateRelationDocument,
+    CreateOrUpdateInteractionRequestDtoInput,
     CreateOrUpdateRelationDtoInput,
-    CreateOrUpdateRelationMutation,
-    Interaction
+    Interaction,
+    InteractionIdentity
 } from "../grl-client/interact_db_client";
 import {getApolloClient} from "../../utils/get-apollo-client";
 import {FetchResult} from "@apollo/client";
 import {CreateInteractionFormData, CreateRelationDto} from "../../Views/InteractViews/CreateorUpdateInteractionForm";
 
-export async function createInteractionEntity(label: string, description: string, content: string): Promise<Interaction> {
+export async function createInteractionEntity(label: string, identity: InteractionIdentity, description?: string, content?: string): Promise<Interaction> {
     try {
 
-        console.log('createInteractionEntity with data:', {label, description, content});
+        console.log('createInteractionEntity with data:', {label, identity, description, content});
         const data: FetchResult<AddNewInteractionEntityMutation> = await getApolloClient().mutate({
             mutation: AddNewInteractionEntityDocument,
             variables: {
-                label: label,
+                label: label as string,
+                identity: identity as InteractionIdentity,
             }
         });
 
@@ -64,7 +66,7 @@ const CreateDtoToCreateOrUpdateInteractionRequestDtoInput = (createDto: CreateIn
         parallelDtos: dtoToInput(createDto.parallelDtos),
         referenceDtos: dtoToInput(createDto.referenceDtos),
 
-    };
+    } as CreateOrUpdateInteractionRequestDtoInput;
 
     console.log('CreateDtoToCreateOrUpdateInteractionRequestDtoInput', result);
     return result;
@@ -78,12 +80,13 @@ const dtoToInput = (createDtos?: CreateRelationDto[]): CreateOrUpdateRelationDto
                 content: createDto.content ?? "",
                 description: createDto.description ?? "",
                 hostInteractionId: createDto.hostInteractionId ?? 0,
-                id: createDto.id ?? 0,
                 label: createDto.label ?? "",
                 linkedInteractionId: createDto.linkedInteractionId ?? 0,
                 relationType: createDto.relationType,
                 uuid: createDto.uuid ?? null,
                 weight: createDto.weight,
+                hits: createDto.hits,
+                order: createDto.order,
             } as CreateOrUpdateRelationDtoInput;
         }
     ) ?? [];

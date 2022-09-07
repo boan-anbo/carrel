@@ -30,3 +30,7 @@
     width: 100vw;
 }
 
+.pretty-label-font {
+    @apply font-bold drop-shadow-lg text-yellow-900
+}
+

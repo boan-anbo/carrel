@@ -1,72 +1,69 @@
 import {Button, Form, Input, Radio} from "antd";
 import {useState} from "react";
-import {
-    Interaction,
-    InteractionIdentity,
-    RelationTypes,
-    RelationWeight,
-    Scalars
-} from "../../clients/grl-client/interact_db_client";
-import {
-    createInteractionEntity,
-    createOrUpdateInteraction,
-} from "../../clients/interact-db-client/create-interaction-entity";
+import {InteractionIdentity, RelationTypes, RelationWeight} from "../../clients/grl-client/interact_db_client";
+import {createOrUpdateInteraction,} from "../../clients/interact-db-client/create-interaction-entity";
 import {notify} from "../../utils/toast/notify";
 import {selectInteraction} from "../../features/app-state/appStateSlice";
 import {useDispatch} from "react-redux";
 import FilterInteractionMultiple from "../../db-gadgets/FilterInteractionMultiple";
-import {SelectValue} from "../../db-gadgets/FilterInteractionSingle";
+import {set} from "react-hook-form";
+import {SizeType} from "antd/lib/config-provider/SizeContext";
 
 export interface CreateRelationDto {
     content?: string;
     description?: string;
     hostInteractionId?: number;
-    id?: number;
     label?: string;
     linkedInteractionId: number;
     relationType: RelationTypes;
     uuid?: string;
     weight: RelationWeight;
+    hits?: number;
+    order?: number;
 
 }
 
 export class CreateInteractionFormData {
 
-    id?: number
+    id?: number = 0;
     uuid: string | null = null;
 
     label: string = '';
     description: string = '';
     content: string = '';
     identity: InteractionIdentity = InteractionIdentity.Entity
-
     contextDtos: CreateRelationDto[] = [];
-    end: number = 0;
+    end: Date | null = null;
     firstActDtos: CreateRelationDto[] = [];
     secondActDtos: CreateRelationDto[] = [];
     indirectObjectDtos: CreateRelationDto[] = [];
     objectDtos: CreateRelationDto[] = [];
     parallelDtos: CreateRelationDto[] = [];
-    propertyIds: [] = [];
     purposeDtos: CreateRelationDto[] = [];
     referenceDtos: CreateRelationDto[] = [];
     settingDtos: CreateRelationDto[] = [];
-
-    start: number = 0;
-
+    start: Date | null = null;
     subjectDtos: CreateRelationDto[] = [];
 
 }
 
 
-export const CreateOrUpdateInteractionForm = () => {
+export const CreateOrUpdateInteractionForm = (props: {
+    size: SizeType | undefined,
+}) => {
     const dispatch = useDispatch();
     const [form] = Form.useForm();
+
+    const [showRawJson, setShowRawJson] = useState(false);
 
     const [formData, setFormData] = useState<CreateInteractionFormData>(
         new CreateInteractionFormData()
     )
 
+
+    const clearFormData = () => {
+        setFormData(new CreateInteractionFormData());
+    }
 
     async function onFormFinish(values: any) {
         console.log(values)
@@ -83,6 +80,8 @@ export const CreateOrUpdateInteractionForm = () => {
                 }
             )
         }
+        // clear form
+        clearFormData();
     }
 
     function onFormValuesChange(changedValues: any, values: any) {
@@ -141,9 +140,13 @@ export const CreateOrUpdateInteractionForm = () => {
     return (
         <div onMouseDown={e => e.stopPropagation()}>
             // pretty json
-            <pre>{JSON.stringify(formData, null, 2)}</pre>
+            <button onClick={() => setShowRawJson(!showRawJson)}>Toggle Raw Json</button>
+            {showRawJson && <pre>{JSON.stringify(formData, null, 2)}</pre>}
             <Form
+                className={'px-4'}
+                size={props.size}
                 form={form}
+                title={'Create Interaction'}
                 layout="vertical"
                 initialValues={formData}
                 onFinish={onFormFinish}
@@ -152,8 +155,12 @@ export const CreateOrUpdateInteractionForm = () => {
                 {formData.id &&
                     <Form.Item name="id" label="Id*" tooltip="Existing interaction. This will perform update."/>}
 
-                <Form.Item label={`Identity: ${formData.identity.toLowerCase()}`} name="identity">
-                    <Radio.Group size={'small'}>
+                <Form.Item>
+                    <Radio.Group
+                        value={formData.identity}
+                        size={props.size}
+                        onChange={(e) => setFormData({...formData, identity: e.target.value})}
+                    >
                         <Radio.Button value={InteractionIdentity.Act}>Act</Radio.Button>
                         <Radio.Button value={InteractionIdentity.Entity}>Entity</Radio.Button>
                         <Radio.Button value={InteractionIdentity.Interaction}>Interaction</Radio.Button>
@@ -172,36 +179,49 @@ export const CreateOrUpdateInteractionForm = () => {
                                ]
                            }
                            required
-                           name="label"
                            tooltip="The name for new interaction entity">
-                    <Input placeholder="Label"/>
+                    <Input placeholder="Label"
+                           value={formData.label}
+                           size={props.size}
+                           onChange={(e) => {
+                               setFormData({...formData, label: e.target.value})
+                           }}
+                    />
                 </Form.Item>
 
                 <Form.Item
                     label="Description"
-                    name={"description"}
                     tooltip={{title: 'Tooltip with customize icon'}}
                 >
-                    <Input placeholder="Description"/>
+                    <Input
+                        value={formData.description}
+                        size={props.size}
+                        onChange={(e) => setFormData({...formData, description: e.target.value})}
+                        placeholder="Description"/>
                 </Form.Item>
-
                 <Form.Item
+
                     label="Content"
-                    name="content"
                     tooltip={{title: 'Tooltip with customize icon'}}
                 >
-                    <Input placeholder="Content"/>
+                    <Input
+                        size={props.size}
+                        value={formData.content}
+                        onChange={(e) => setFormData({...formData, content: e.target.value})}
+                        placeholder="Content"/>
                 </Form.Item>
 
-
+                {/*Relation inputs*/}
                 <FilterInteractionMultiple
                     label='Contexts'
+                    size={props.size}
                     placeholder={'Context interactions'} style={{width: '100%'}} onSelect={
                     (e) => onInteractionSelect(e, RelationTypes.ContextRelation)
                 }></FilterInteractionMultiple>
 
                 <FilterInteractionMultiple
                     label='Subjects'
+                    size={props.size}
                     placeholder={'subject interactions'} style={{width: '100%'}} onSelect={
                     (e) => onInteractionSelect(e, RelationTypes.SubjectRelation)
                 }></FilterInteractionMultiple>
@@ -209,7 +229,8 @@ export const CreateOrUpdateInteractionForm = () => {
                 {/*Controls for first act*/}
                 <FilterInteractionMultiple
                     label='First Acts'
-                    defaultInteractionType={InteractionIdentity.Act}
+                    size={props.size}
+                    createInteractionIdentity={InteractionIdentity.Act}
                     placeholder={'First act interactions'} style={{width: '100%'}} onSelect={
                     (e) => onInteractionSelect(e, RelationTypes.FirstActRelation)
                 }></FilterInteractionMultiple>
@@ -217,14 +238,16 @@ export const CreateOrUpdateInteractionForm = () => {
 
                 <FilterInteractionMultiple
                     label='Objects'
+                    size={props.size}
                     placeholder={'Object interactions'} style={{width: '100%'}} onSelect={
                     (e) => onInteractionSelect(e, RelationTypes.ObjectRelation)
                 }></FilterInteractionMultiple>
 
                 {/*Controls for second act*/}
-                 <FilterInteractionMultiple
+                <FilterInteractionMultiple
                     label='Second Acts'
-                    defaultInteractionType={InteractionIdentity.Act}
+                    size={props.size}
+                    createInteractionIdentity={InteractionIdentity.Act}
                     placeholder={'Second act interactions'} style={{width: '100%'}} onSelect={
                     (e) => onInteractionSelect(e, RelationTypes.SecondActRelation)
                 }></FilterInteractionMultiple>
@@ -232,12 +255,14 @@ export const CreateOrUpdateInteractionForm = () => {
 
                 <FilterInteractionMultiple
                     label='Indirect Objects'
+                    size={props.size}
                     placeholder={'Indirect object interactions'} style={{width: '100%'}} onSelect={
                     (e) => onInteractionSelect(e, RelationTypes.IndirectObjectRelation)
                 }></FilterInteractionMultiple>
 
                 <FilterInteractionMultiple
                     label='Settings'
+                    size={props.size}
                     placeholder={'Settings interactions'} style={{width: '100%'}} onSelect={
                     (e) => onInteractionSelect(e, RelationTypes.SettingRelation)
                 }></FilterInteractionMultiple>
@@ -245,18 +270,21 @@ export const CreateOrUpdateInteractionForm = () => {
 
                 <FilterInteractionMultiple
                     label='Purposes'
+                    size={props.size}
                     placeholder={'Purpose interactions'} style={{width: '100%'}} onSelect={
                     (e) => onInteractionSelect(e, RelationTypes.PurposeRelation)
                 }></FilterInteractionMultiple>
 
                 <FilterInteractionMultiple
                     label='Parallels'
+                    size={props.size}
                     placeholder={'Parallel interactions'} style={{width: '100%'}} onSelect={
                     (e) => onInteractionSelect(e, RelationTypes.ParallelRelation)
                 }></FilterInteractionMultiple>
 
                 <FilterInteractionMultiple
                     label='References'
+                    size={props.size}
                     placeholder={'reference interactions'} style={{width: '100%'}} onSelect={
                     (e) => onInteractionSelect(e, RelationTypes.ReferenceRelation)
                 }></FilterInteractionMultiple>
@@ -264,8 +292,18 @@ export const CreateOrUpdateInteractionForm = () => {
                 <Form.Item>
                     <Button type="primary" htmlType="submit">Submit</Button>
                 </Form.Item>
+                {/*    Clear button */}
+                <Form.Item>
+                    <Button type="primary" htmlType="reset" onClick={() => clearFormData()}>Clear</Button>
+                </Form.Item>
+
 
             </Form>
         </div>
     );
+}
+
+// Default props
+CreateOrUpdateInteractionForm.defaultProps = {
+    size: 'small',
 }

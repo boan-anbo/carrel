@@ -137,6 +137,11 @@ public class InteractionRepoUpdateTests : TestBase
 
         // detach to avoid tracking
         _dbContext.Entry(updatedI).State = EntityState.Detached;
+        // detach all subjects to avoid tracking
+        foreach (var subject in updatedI.Subjects)
+        {
+            _dbContext.Entry(subject).State = EntityState.Detached;
+        }
 
         // add one more subject relation
         var updatedI2 = await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo,
@@ -148,28 +153,7 @@ public class InteractionRepoUpdateTests : TestBase
                 Description = "Test_Description_Old",
                 SubjectDtos = new List<CreateOrUpdateRelationDto>
                 {
-                    new CreateOrUpdateRelationDto
-                    {
-                        Uuid = firstSubjectUuid,
-                        HostInteractionId = createdI.Id,
-                        RelationType = RelationTypes.SubjectRelation,
-                        Label = "First_Subject_Old_Label",
-                        Description = null,
-                        Content = null,
-                        Weight = RelationWeight.Must,
-                        LinkedInteractionId = 1
-                    },
-                    new CreateOrUpdateRelationDto
-                    {
-                        Uuid = secondSubjectUuid,
-                        HostInteractionId = createdI.Id,
-                        RelationType = RelationTypes.SubjectRelation,
-                        Label = null,
-                        Description = null,
-                        Content = null,
-                        Weight = RelationWeight.Must,
-                        LinkedInteractionId = 2
-                    },
+
                     new CreateOrUpdateRelationDto
                     {
                         Uuid = null,
@@ -186,19 +170,16 @@ public class InteractionRepoUpdateTests : TestBase
             });
 
         Assert.AreEqual(updatedI2.FirstActs.Count, 1);
-        Assert.AreEqual(3, updatedI2.Subjects.Count);
-        // check uuid
-        var thirdSubjectUuid = updatedI2.Subjects.Last().Uuid.Value;
+        Assert.AreEqual(1, updatedI2.Subjects.Count);
+        // make sure the other two subjects are dropped from the db
+        var firstSubject = await _relationRepo.GetRelation<SubjectRelation>(firstSubjectUuid.Value, RelationTypes.SubjectRelation);
+        Assert.IsNull(firstSubject);
+        var secondSubject = await _relationRepo.GetRelation<SubjectRelation>(secondSubjectUuid.Value, RelationTypes.SubjectRelation);
+        Assert.IsNull(secondSubject);
+        var thirdSubject = await _relationRepo.GetRelation<SubjectRelation>(updatedI2.Subjects.First().Uuid.Value, RelationTypes.SubjectRelation);
+        Assert.IsNotNull(thirdSubject);
 
-
-        foreach (var subject in updatedI2.Subjects)
-        {
-            // detach to avoid tracking
-            _dbContext.Entry<SubjectRelation>(subject).State = EntityState.Detached;
-        }
-
-        // detach to avoid tracking
-        _dbContext.Entry(updatedI2).State = EntityState.Detached;
+        
     }
 
     [TestMethod]
@@ -301,17 +282,112 @@ public class InteractionRepoUpdateTests : TestBase
         //
         Assert.AreEqual(updatedI2.FirstActs.Count, 1);
         Assert.AreEqual(0, updatedI2.Subjects.Count);
-        // Assert.AreEqual(1, updatedI2.Subjects.Count);
-        // // make sure the left out relation has been deleted from the database
-        // var deletedSubject =
-        //     await _relationRepo.GetRelation<SubjectRelation>(updatedI.Subjects.Last().Uuid.Value,
-        //         RelationTypes.SubjectRelation);
-        // Assert.IsNull(deletedSubject);
+        
+
     }
 
     // get new instance of mutation service
     private IGraphQLMutation GetMutationService()
     {
         return _serviceProvider.GetService<IGraphQLMutation>();
+    }
+
+    [TestMethod]
+    public async Task Interaction_Update_Should_Work_With_Any_Type()
+    {
+        var emptyDto = new CreateOrUpdateInteractionRequestDto
+        {
+            Label = "Test_Label_Old",
+            Description = "Test_Description_Old",
+            Identity = InteractionIdentity.ACT
+        };
+
+        var createdI =
+            await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo, emptyDto);
+        Assert.AreEqual(createdI.FirstActs.Count, 1);
+        // detach to avoid tracking
+        _dbContext.Entry(createdI).State = EntityState.Detached;
+
+        // add two subject relations
+        var updatedI = await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo,
+            new CreateOrUpdateInteractionRequestDto
+            {
+                Id = createdI.Id,
+                Uuid = createdI.Uuid,
+                Label = "Test_Label_Old",
+                Description = "Test_Description_Old",
+                ParallelDtos = new List<CreateOrUpdateRelationDto>
+                {
+                    new CreateOrUpdateRelationDto
+                    {
+                        Uuid = null,
+                        HostInteractionId = createdI.Id,
+                        RelationType = RelationTypes.ParallelRelation,
+                        Label = "First_Subject_Old_Label",
+                        Description = null,
+                        Content = null,
+                        Weight = RelationWeight.Must,
+                        LinkedInteractionId = 1
+                    },
+                    new CreateOrUpdateRelationDto
+                    {
+                        Uuid = null,
+                        HostInteractionId = createdI.Id,
+                        RelationType = RelationTypes.ParallelRelation,
+                        Label = null,
+                        Description = null,
+                        Content = null,
+                        Weight = RelationWeight.Must,
+                        LinkedInteractionId = 2
+                    }
+                },
+                Identity = InteractionIdentity.ACT
+            });
+
+        Assert.AreEqual(updatedI.FirstActs.Count, 1);
+        Assert.AreEqual(2, updatedI.Parallels.Count);
+        Assert.AreEqual(updatedI.Parallels.First().Label, "First_Subject_Old_Label");
+        var firstSubjectUuid = updatedI.Parallels.First().Uuid;
+        var secondSubjectUuid = updatedI.Parallels.Last().Uuid;
+
+        // detach to avoid tracking
+        _dbContext.Entry(updatedI).State = EntityState.Detached;
+
+        // add one more subject relation
+        var updatedI2 = await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo,
+            new CreateOrUpdateInteractionRequestDto
+            {
+                Id = createdI.Id,
+                Uuid = createdI.Uuid,
+                Label = "Test_Label_Old",
+                Description = "Test_Description_Old",
+                ParallelDtos = new List<CreateOrUpdateRelationDto>
+                {
+
+                    new CreateOrUpdateRelationDto
+                    {
+                        Uuid = null,
+                        HostInteractionId = createdI.Id,
+                        RelationType = RelationTypes.ParallelRelation,
+                        Label = "Third_Subject_Old_Label",
+                        Description = null,
+                        Content = null,
+                        Weight = RelationWeight.Must,
+                        LinkedInteractionId = 3
+                    }
+                },
+                Identity = InteractionIdentity.ACT
+            });
+
+        Assert.AreEqual(updatedI2.FirstActs.Count, 1);
+        Assert.AreEqual(1, updatedI2.Parallels.Count);
+        // make sure the other two subjects are dropped from the db
+        var firstSubject = await _relationRepo.GetRelation<ParallelRelation>(firstSubjectUuid.Value, RelationTypes.ParallelRelation);
+        Assert.IsNull(firstSubject);
+        var secondSubject = await _relationRepo.GetRelation<ParallelRelation>(secondSubjectUuid.Value, RelationTypes.ParallelRelation);
+        Assert.IsNull(secondSubject);
+        var thirdSubject = await _relationRepo.GetRelation<ParallelRelation>(updatedI2.Parallels.First().Uuid.Value, RelationTypes.ParallelRelation);
+        Assert.IsNotNull(thirdSubject);
+
     }
 }

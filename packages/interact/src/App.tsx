@@ -13,7 +13,7 @@ import {SelectedPassageViewer} from "./Views/InteractViews/SelectedPassageViewer
 import {SelectedTextViewer} from "./Views/ViewComponents/InteractViewComponent/SelectedTextViewer";
 import {CreateOrUpdateInteractionForm} from "./Views/InteractViews/CreateorUpdateInteractionForm";
 import {SelectedInteractionDataViewer} from "./Views/InteractViews/SelectedInteractionDataViewer";
-import {GridViewTypes, GridView} from "./Views/GridView";
+import {GridView, GridViewTypes} from "./Views/GridView";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -21,8 +21,8 @@ const defaultLayout: Layout[] = [
     {i: "input_panel", x: 0, y: 0, w: 6, h: 8, static: false},
     {i: "left_panel", x: 6, y: 0, w: 6, h: 4, static: false},
     {i: "mid_panel", x: 12, y: 0, w: 6, h: 4, static: false},
-    {i: "right_panel", x: 18, y: 0, w: 6, h: 4, static: false},
-    {i: "below_panel", x: 6, y: 4, w: 18, h: 4, static: false},
+    {i: "right_panel", x: 18, y: 0, w: 6, h: 8, static: false},
+    {i: "below_panel", x: 6, y: 4, w: 12, h: 4, static: false},
 ]
 
 const defaultLayoutGrid = {
@@ -64,7 +64,7 @@ function App() {
 
             </div>
             <ResponsiveGridLayout
-                className="layout bg-gray-300"
+                className="layout bg-gray-50"
                 data-grid={{layout: layout}}
                 layouts={
                     layout
@@ -74,31 +74,30 @@ function App() {
                 breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
                 cols={{lg: 24, md: 24, sm: 24, xs: 24, xxs: 24}}
                 maxRows={8}
-                rowHeight={120}
+                rowHeight={150}
                 autoSize={true}
                 onLayoutChange={onResponsiveGridLayoutLayoutChange}>
 
 
                 <div key="input_panel" className="bg-gray-200 overflow-y-scroll">
                     {/*<DistantDocumentList/>*/}
-                    <CreateOrUpdateInteractionForm/>
+                    <GridView selectedView={GridViewTypes.CREATE_INTERACTION_FORM}/>
                 </div>
 
                 <div key="left_panel" className='bg-red-500'>
-                    <SelectedPassageViewer></SelectedPassageViewer>
                 </div>
 
                 <div key="mid_panel" className='bg-red-300'>
                     <SelectedInteractionDataViewer></SelectedInteractionDataViewer>
                 </div>
 
-                <div key="right_panel" className='bg-blue-200 overflow-y-scroll'>
+                <div key="right_panel" className='overflow-y-scroll'>
 
-                    <GridView selectedView={GridViewTypes.FILTERED_INTERACTION_LIST}></GridView>
+                    <GridView selectedView={GridViewTypes.INTERACTION_CARD_VIEW}></GridView>
                 </div>
 
                 <div key="below_panel" className='bg-amber-200'>
-                    <InteractionGraphView/>
+                    <GridView selectedView={GridViewTypes.INTERACTION_GRAPH_VIEW}></GridView>
                 </div>
             </ResponsiveGridLayout>
         </div>

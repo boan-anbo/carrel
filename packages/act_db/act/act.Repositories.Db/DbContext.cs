@@ -94,7 +94,7 @@ public class ActDbContext : DbContext
             .HasOne(x => x.HostInteraction)
             .WithMany(x => x.FirstActs)
             .HasForeignKey(x => x.HostInteractionId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         // reverse relation
         modelBuilder.Entity<FirstActRelation>()

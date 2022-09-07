@@ -26,14 +26,35 @@ directive @stream(
 type ContextRelation {
     content: String
     description: String
+    hits: Long!
     hostInteraction: Interaction
     hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
     linkedInteractionId: Long!
+    order: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
+}
+
+"A connection to a list of items."
+type ContextRelationsConnection {
+    "A list of edges."
+    edges: [ContextRelationsEdge!]
+    "A flattened list of the nodes."
+    nodes: [ContextRelation!]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+"An edge in a connection."
+type ContextRelationsEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: ContextRelation!
 }
 
 type EdgeOfRelation {
@@ -52,14 +73,35 @@ type EdgeOfRelation {
 type FirstActRelation {
     content: String
     description: String
+    hits: Long!
     hostInteraction: Interaction
     hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
     linkedInteractionId: Long!
+    order: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
+}
+
+"A connection to a list of items."
+type FirstActRelationsConnection {
+    "A list of edges."
+    edges: [FirstActRelationsEdge!]
+    "A flattened list of the nodes."
+    nodes: [FirstActRelation!]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+"An edge in a connection."
+type FirstActRelationsEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: FirstActRelation!
 }
 
 type GraphOfRelationAndInteraction {
@@ -69,15 +111,51 @@ type GraphOfRelationAndInteraction {
 }
 
 type GraphQLMutation {
-    addNewEntityInteraction(label: String!): Interaction
+    addNewEntityInteraction(identity: InteractionIdentity!, label: String!): Interaction
     createOrUpdateInteraction(requestDto: CreateOrUpdateInteractionRequestDtoInput!): Interaction
     createOrUpdateRelation(requestDto: CreateOrUpdateRelationDtoInput!): Relation!
     deleteInteraction(id: Long!): Long!
-    deleteRelation(hostInteractionId: Long!, linkedInteractionId: Long!, relationId: UUID!, type: RelationTypes!): Long!
+    deleteRelation(relationUuid: UUID!, type: RelationTypes!): Long!
 }
 
 type GraphQLQuery {
+    contextRelations(
+        "Returns the elements in the list that come after the specified cursor."
+        after: String,
+        "Returns the elements in the list that come before the specified cursor."
+        before: String,
+        "Returns the first _n_ elements from the list."
+        first: Int,
+        "Returns the last _n_ elements from the list."
+        last: Int,
+        order: [ContextRelationSortInput!],
+        where: ContextRelationFilterInput
+    ): ContextRelationsConnection
+    firstActRelations(
+        "Returns the elements in the list that come after the specified cursor."
+        after: String,
+        "Returns the elements in the list that come before the specified cursor."
+        before: String,
+        "Returns the first _n_ elements from the list."
+        first: Int,
+        "Returns the last _n_ elements from the list."
+        last: Int,
+        order: [FirstActRelationSortInput!],
+        where: FirstActRelationFilterInput
+    ): FirstActRelationsConnection
     fullInteractionWithAllRelations(id: Long!): InteractionResult!
+    indirectObjectRelations(
+        "Returns the elements in the list that come after the specified cursor."
+        after: String,
+        "Returns the elements in the list that come before the specified cursor."
+        before: String,
+        "Returns the first _n_ elements from the list."
+        first: Int,
+        "Returns the last _n_ elements from the list."
+        last: Int,
+        order: [IndirectObjectRelationSortInput!],
+        where: IndirectObjectRelationFilterInput
+    ): IndirectObjectRelationsConnection
     interactionFull(id: Long!): InteractionResult!
     interactions(
         "Returns the elements in the list that come after the specified cursor."
@@ -91,19 +169,136 @@ type GraphQLQuery {
         order: [InteractionSortInput!],
         where: InteractionFilterInput
     ): InteractionsConnection
+    interactionsByIdAndRelation(
+        "Returns the elements in the list that come after the specified cursor."
+        after: String,
+        "Returns the elements in the list that come before the specified cursor."
+        before: String,
+        "Returns the first _n_ elements from the list."
+        first: Int,
+        "Returns the last _n_ elements from the list."
+        last: Int,
+        order: [InteractionSortInput!],
+        where: InteractionFilterInput
+    ): InteractionsByIdAndRelationConnection
+    objectRelations(
+        "Returns the elements in the list that come after the specified cursor."
+        after: String,
+        "Returns the elements in the list that come before the specified cursor."
+        before: String,
+        "Returns the first _n_ elements from the list."
+        first: Int,
+        "Returns the last _n_ elements from the list."
+        last: Int,
+        order: [ObjectRelationSortInput!],
+        where: ObjectRelationFilterInput
+    ): ObjectRelationsConnection
+    parallelRelations(
+        "Returns the elements in the list that come after the specified cursor."
+        after: String,
+        "Returns the elements in the list that come before the specified cursor."
+        before: String,
+        "Returns the first _n_ elements from the list."
+        first: Int,
+        "Returns the last _n_ elements from the list."
+        last: Int,
+        order: [ParallelRelationSortInput!],
+        where: ParallelRelationFilterInput
+    ): ParallelRelationsConnection
+    purposeRelations(
+        "Returns the elements in the list that come after the specified cursor."
+        after: String,
+        "Returns the elements in the list that come before the specified cursor."
+        before: String,
+        "Returns the first _n_ elements from the list."
+        first: Int,
+        "Returns the last _n_ elements from the list."
+        last: Int,
+        order: [PurposeRelationSortInput!],
+        where: PurposeRelationFilterInput
+    ): PurposeRelationsConnection
+    referenceRelations(
+        "Returns the elements in the list that come after the specified cursor."
+        after: String,
+        "Returns the elements in the list that come before the specified cursor."
+        before: String,
+        "Returns the first _n_ elements from the list."
+        first: Int,
+        "Returns the last _n_ elements from the list."
+        last: Int,
+        order: [ReferenceRelationSortInput!],
+        where: ReferenceRelationFilterInput
+    ): ReferenceRelationsConnection
+    secondActRelations(
+        "Returns the elements in the list that come after the specified cursor."
+        after: String,
+        "Returns the elements in the list that come before the specified cursor."
+        before: String,
+        "Returns the first _n_ elements from the list."
+        first: Int,
+        "Returns the last _n_ elements from the list."
+        last: Int,
+        order: [SecondActRelationSortInput!],
+        where: SecondActRelationFilterInput
+    ): SecondActRelationsConnection
+    settingsRelations(
+        "Returns the elements in the list that come after the specified cursor."
+        after: String,
+        "Returns the elements in the list that come before the specified cursor."
+        before: String,
+        "Returns the first _n_ elements from the list."
+        first: Int,
+        "Returns the last _n_ elements from the list."
+        last: Int,
+        order: [SettingRelationSortInput!],
+        where: SettingRelationFilterInput
+    ): SettingsRelationsConnection
+    subjectRelations(
+        "Returns the elements in the list that come after the specified cursor."
+        after: String,
+        "Returns the elements in the list that come before the specified cursor."
+        before: String,
+        "Returns the first _n_ elements from the list."
+        first: Int,
+        "Returns the last _n_ elements from the list."
+        last: Int,
+        order: [SubjectRelationSortInput!],
+        where: SubjectRelationFilterInput
+    ): SubjectRelationsConnection
 }
 
 type IndirectObjectRelation {
     content: String
     description: String
+    hits: Long!
     hostInteraction: Interaction
     hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
     linkedInteractionId: Long!
+    order: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
+}
+
+"A connection to a list of items."
+type IndirectObjectRelationsConnection {
+    "A list of edges."
+    edges: [IndirectObjectRelationsEdge!]
+    "A flattened list of the nodes."
+    nodes: [IndirectObjectRelation!]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+"An edge in a connection."
+type IndirectObjectRelationsEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: IndirectObjectRelation!
 }
 
 type Interaction {
@@ -131,6 +326,7 @@ type Interaction {
     contexts: [ContextRelation]
     contextsCount: Long!
     created: DateTime!
+    data: String
     description: String
     end: DateTime
     firstActs: [FirstActRelation]
@@ -169,6 +365,25 @@ type InteractionResult {
 }
 
 "A connection to a list of items."
+type InteractionsByIdAndRelationConnection {
+    "A list of edges."
+    edges: [InteractionsByIdAndRelationEdge!]
+    "A flattened list of the nodes."
+    nodes: [Interaction!]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+"An edge in a connection."
+type InteractionsByIdAndRelationEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: Interaction!
+}
+
+"A connection to a list of items."
 type InteractionsConnection {
     "A list of edges."
     edges: [InteractionsEdge!]
@@ -199,14 +414,35 @@ type NodeOfInteraction {
 type ObjectRelation {
     content: String
     description: String
+    hits: Long!
     hostInteraction: Interaction
     hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
     linkedInteractionId: Long!
+    order: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
+}
+
+"A connection to a list of items."
+type ObjectRelationsConnection {
+    "A list of edges."
+    edges: [ObjectRelationsEdge!]
+    "A flattened list of the nodes."
+    nodes: [ObjectRelation!]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+"An edge in a connection."
+type ObjectRelationsEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: ObjectRelation!
 }
 
 "Information about pagination in a connection."
@@ -224,14 +460,35 @@ type PageInfo {
 type ParallelRelation {
     content: String
     description: String
+    hits: Long!
     hostInteraction: Interaction
     hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
     linkedInteractionId: Long!
+    order: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
+}
+
+"A connection to a list of items."
+type ParallelRelationsConnection {
+    "A list of edges."
+    edges: [ParallelRelationsEdge!]
+    "A flattened list of the nodes."
+    nodes: [ParallelRelation!]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+"An edge in a connection."
+type ParallelRelationsEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: ParallelRelation!
 }
 
 type Property {
@@ -247,37 +504,81 @@ type Property {
 type PurposeRelation {
     content: String
     description: String
+    hits: Long!
     hostInteraction: Interaction
     hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
     linkedInteractionId: Long!
+    order: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
+}
+
+"A connection to a list of items."
+type PurposeRelationsConnection {
+    "A list of edges."
+    edges: [PurposeRelationsEdge!]
+    "A flattened list of the nodes."
+    nodes: [PurposeRelation!]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+"An edge in a connection."
+type PurposeRelationsEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: PurposeRelation!
 }
 
 type ReferenceRelation {
     content: String
     description: String
+    hits: Long!
     hostInteraction: Interaction
     hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
     linkedInteractionId: Long!
+    order: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
 }
 
+"A connection to a list of items."
+type ReferenceRelationsConnection {
+    "A list of edges."
+    edges: [ReferenceRelationsEdge!]
+    "A flattened list of the nodes."
+    nodes: [ReferenceRelation!]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+"An edge in a connection."
+type ReferenceRelationsEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: ReferenceRelation!
+}
+
 type Relation {
     content: String
     description: String
+    hits: Long!
     hostInteraction: Interaction
     hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
     linkedInteractionId: Long!
+    order: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
@@ -286,40 +587,103 @@ type Relation {
 type SecondActRelation {
     content: String
     description: String
+    hits: Long!
     hostInteraction: Interaction
     hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
     linkedInteractionId: Long!
+    order: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
+}
+
+"A connection to a list of items."
+type SecondActRelationsConnection {
+    "A list of edges."
+    edges: [SecondActRelationsEdge!]
+    "A flattened list of the nodes."
+    nodes: [SecondActRelation!]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+"An edge in a connection."
+type SecondActRelationsEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: SecondActRelation!
 }
 
 type SettingRelation {
     content: String
     description: String
+    hits: Long!
     hostInteraction: Interaction
     hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
     linkedInteractionId: Long!
+    order: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
 }
 
+"A connection to a list of items."
+type SettingsRelationsConnection {
+    "A list of edges."
+    edges: [SettingsRelationsEdge!]
+    "A flattened list of the nodes."
+    nodes: [SettingRelation!]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+"An edge in a connection."
+type SettingsRelationsEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: SettingRelation!
+}
+
 type SubjectRelation {
     content: String
     description: String
+    hits: Long!
     hostInteraction: Interaction
     hostInteractionId: Long!
     label: String
     linkedInteraction: Interaction
     linkedInteractionId: Long!
+    order: Long!
     type: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
+}
+
+"A connection to a list of items."
+type SubjectRelationsConnection {
+    "A list of edges."
+    edges: [SubjectRelationsEdge!]
+    "A flattened list of the nodes."
+    nodes: [SubjectRelation!]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+"An edge in a connection."
+type SubjectRelationsEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: SubjectRelation!
 }
 
 enum InteractionIdentity {
@@ -453,20 +817,38 @@ input ContextRelationFilterInput {
     and: [ContextRelationFilterInput!]
     content: StringOperationFilterInput
     description: StringOperationFilterInput
+    hits: ComparableInt64OperationFilterInput
     hostInteraction: InteractionFilterInput
     hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
     linkedInteractionId: ComparableInt64OperationFilterInput
     or: [ContextRelationFilterInput!]
+    order: ComparableInt64OperationFilterInput
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
 }
 
+input ContextRelationSortInput {
+    content: SortEnumType
+    description: SortEnumType
+    hits: SortEnumType
+    hostInteraction: InteractionSortInput
+    hostInteractionId: SortEnumType
+    label: SortEnumType
+    linkedInteraction: InteractionSortInput
+    linkedInteractionId: SortEnumType
+    order: SortEnumType
+    type: SortEnumType
+    uuid: SortEnumType
+    weight: SortEnumType
+}
+
 input CreateOrUpdateInteractionRequestDtoInput {
     content: String!
     contextDtos: [CreateOrUpdateRelationDtoInput!]
+    data: String
     description: String!
     end: DateTime
     firstActDtos: [CreateOrUpdateRelationDtoInput!]!
@@ -489,10 +871,11 @@ input CreateOrUpdateInteractionRequestDtoInput {
 input CreateOrUpdateRelationDtoInput {
     content: String
     description: String
+    hits: Long
     hostInteractionId: Long!
-    id: Long
     label: String
     linkedInteractionId: Long!
+    order: Long
     relationType: RelationTypes!
     uuid: UUID
     weight: RelationWeight!
@@ -502,30 +885,64 @@ input FirstActRelationFilterInput {
     and: [FirstActRelationFilterInput!]
     content: StringOperationFilterInput
     description: StringOperationFilterInput
+    hits: ComparableInt64OperationFilterInput
     hostInteraction: InteractionFilterInput
     hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
     linkedInteractionId: ComparableInt64OperationFilterInput
     or: [FirstActRelationFilterInput!]
+    order: ComparableInt64OperationFilterInput
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
+}
+
+input FirstActRelationSortInput {
+    content: SortEnumType
+    description: SortEnumType
+    hits: SortEnumType
+    hostInteraction: InteractionSortInput
+    hostInteractionId: SortEnumType
+    label: SortEnumType
+    linkedInteraction: InteractionSortInput
+    linkedInteractionId: SortEnumType
+    order: SortEnumType
+    type: SortEnumType
+    uuid: SortEnumType
+    weight: SortEnumType
 }
 
 input IndirectObjectRelationFilterInput {
     and: [IndirectObjectRelationFilterInput!]
     content: StringOperationFilterInput
     description: StringOperationFilterInput
+    hits: ComparableInt64OperationFilterInput
     hostInteraction: InteractionFilterInput
     hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
     linkedInteractionId: ComparableInt64OperationFilterInput
     or: [IndirectObjectRelationFilterInput!]
+    order: ComparableInt64OperationFilterInput
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
+}
+
+input IndirectObjectRelationSortInput {
+    content: SortEnumType
+    description: SortEnumType
+    hits: SortEnumType
+    hostInteraction: InteractionSortInput
+    hostInteractionId: SortEnumType
+    label: SortEnumType
+    linkedInteraction: InteractionSortInput
+    linkedInteractionId: SortEnumType
+    order: SortEnumType
+    type: SortEnumType
+    uuid: SortEnumType
+    weight: SortEnumType
 }
 
 input InteractionFilterInput {
@@ -554,6 +971,7 @@ input InteractionFilterInput {
     contexts: ListFilterInputTypeOfContextRelationFilterInput
     contextsCount: ComparableInt64OperationFilterInput
     created: ComparableDateTimeOperationFilterInput
+    data: StringOperationFilterInput
     description: StringOperationFilterInput
     end: ComparableNullableOfDateTimeOperationFilterInput
     firstActs: ListFilterInputTypeOfFirstActRelationFilterInput
@@ -607,6 +1025,7 @@ input InteractionSortInput {
     content: SortEnumType
     contextsCount: SortEnumType
     created: SortEnumType
+    data: SortEnumType
     description: SortEnumType
     end: SortEnumType
     firstActsCount: SortEnumType
@@ -709,30 +1128,64 @@ input ObjectRelationFilterInput {
     and: [ObjectRelationFilterInput!]
     content: StringOperationFilterInput
     description: StringOperationFilterInput
+    hits: ComparableInt64OperationFilterInput
     hostInteraction: InteractionFilterInput
     hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
     linkedInteractionId: ComparableInt64OperationFilterInput
     or: [ObjectRelationFilterInput!]
+    order: ComparableInt64OperationFilterInput
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
+}
+
+input ObjectRelationSortInput {
+    content: SortEnumType
+    description: SortEnumType
+    hits: SortEnumType
+    hostInteraction: InteractionSortInput
+    hostInteractionId: SortEnumType
+    label: SortEnumType
+    linkedInteraction: InteractionSortInput
+    linkedInteractionId: SortEnumType
+    order: SortEnumType
+    type: SortEnumType
+    uuid: SortEnumType
+    weight: SortEnumType
 }
 
 input ParallelRelationFilterInput {
     and: [ParallelRelationFilterInput!]
     content: StringOperationFilterInput
     description: StringOperationFilterInput
+    hits: ComparableInt64OperationFilterInput
     hostInteraction: InteractionFilterInput
     hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
     linkedInteractionId: ComparableInt64OperationFilterInput
     or: [ParallelRelationFilterInput!]
+    order: ComparableInt64OperationFilterInput
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
+}
+
+input ParallelRelationSortInput {
+    content: SortEnumType
+    description: SortEnumType
+    hits: SortEnumType
+    hostInteraction: InteractionSortInput
+    hostInteractionId: SortEnumType
+    label: SortEnumType
+    linkedInteraction: InteractionSortInput
+    linkedInteractionId: SortEnumType
+    order: SortEnumType
+    type: SortEnumType
+    uuid: SortEnumType
+    weight: SortEnumType
 }
 
 input PropertyFilterInput {
@@ -751,30 +1204,64 @@ input PurposeRelationFilterInput {
     and: [PurposeRelationFilterInput!]
     content: StringOperationFilterInput
     description: StringOperationFilterInput
+    hits: ComparableInt64OperationFilterInput
     hostInteraction: InteractionFilterInput
     hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
     linkedInteractionId: ComparableInt64OperationFilterInput
     or: [PurposeRelationFilterInput!]
+    order: ComparableInt64OperationFilterInput
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
+}
+
+input PurposeRelationSortInput {
+    content: SortEnumType
+    description: SortEnumType
+    hits: SortEnumType
+    hostInteraction: InteractionSortInput
+    hostInteractionId: SortEnumType
+    label: SortEnumType
+    linkedInteraction: InteractionSortInput
+    linkedInteractionId: SortEnumType
+    order: SortEnumType
+    type: SortEnumType
+    uuid: SortEnumType
+    weight: SortEnumType
 }
 
 input ReferenceRelationFilterInput {
     and: [ReferenceRelationFilterInput!]
     content: StringOperationFilterInput
     description: StringOperationFilterInput
+    hits: ComparableInt64OperationFilterInput
     hostInteraction: InteractionFilterInput
     hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
     linkedInteractionId: ComparableInt64OperationFilterInput
     or: [ReferenceRelationFilterInput!]
+    order: ComparableInt64OperationFilterInput
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
+}
+
+input ReferenceRelationSortInput {
+    content: SortEnumType
+    description: SortEnumType
+    hits: SortEnumType
+    hostInteraction: InteractionSortInput
+    hostInteractionId: SortEnumType
+    label: SortEnumType
+    linkedInteraction: InteractionSortInput
+    linkedInteractionId: SortEnumType
+    order: SortEnumType
+    type: SortEnumType
+    uuid: SortEnumType
+    weight: SortEnumType
 }
 
 input RelationTypesOperationFilterInput {
@@ -795,30 +1282,64 @@ input SecondActRelationFilterInput {
     and: [SecondActRelationFilterInput!]
     content: StringOperationFilterInput
     description: StringOperationFilterInput
+    hits: ComparableInt64OperationFilterInput
     hostInteraction: InteractionFilterInput
     hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
     linkedInteractionId: ComparableInt64OperationFilterInput
     or: [SecondActRelationFilterInput!]
+    order: ComparableInt64OperationFilterInput
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
+}
+
+input SecondActRelationSortInput {
+    content: SortEnumType
+    description: SortEnumType
+    hits: SortEnumType
+    hostInteraction: InteractionSortInput
+    hostInteractionId: SortEnumType
+    label: SortEnumType
+    linkedInteraction: InteractionSortInput
+    linkedInteractionId: SortEnumType
+    order: SortEnumType
+    type: SortEnumType
+    uuid: SortEnumType
+    weight: SortEnumType
 }
 
 input SettingRelationFilterInput {
     and: [SettingRelationFilterInput!]
     content: StringOperationFilterInput
     description: StringOperationFilterInput
+    hits: ComparableInt64OperationFilterInput
     hostInteraction: InteractionFilterInput
     hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
     linkedInteractionId: ComparableInt64OperationFilterInput
     or: [SettingRelationFilterInput!]
+    order: ComparableInt64OperationFilterInput
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
+}
+
+input SettingRelationSortInput {
+    content: SortEnumType
+    description: SortEnumType
+    hits: SortEnumType
+    hostInteraction: InteractionSortInput
+    hostInteractionId: SortEnumType
+    label: SortEnumType
+    linkedInteraction: InteractionSortInput
+    linkedInteractionId: SortEnumType
+    order: SortEnumType
+    type: SortEnumType
+    uuid: SortEnumType
+    weight: SortEnumType
 }
 
 input StringOperationFilterInput {
@@ -840,13 +1361,30 @@ input SubjectRelationFilterInput {
     and: [SubjectRelationFilterInput!]
     content: StringOperationFilterInput
     description: StringOperationFilterInput
+    hits: ComparableInt64OperationFilterInput
     hostInteraction: InteractionFilterInput
     hostInteractionId: ComparableInt64OperationFilterInput
     label: StringOperationFilterInput
     linkedInteraction: InteractionFilterInput
     linkedInteractionId: ComparableInt64OperationFilterInput
     or: [SubjectRelationFilterInput!]
+    order: ComparableInt64OperationFilterInput
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
+}
+
+input SubjectRelationSortInput {
+    content: SortEnumType
+    description: SortEnumType
+    hits: SortEnumType
+    hostInteraction: InteractionSortInput
+    hostInteractionId: SortEnumType
+    label: SortEnumType
+    linkedInteraction: InteractionSortInput
+    linkedInteractionId: SortEnumType
+    order: SortEnumType
+    type: SortEnumType
+    uuid: SortEnumType
+    weight: SortEnumType
 }

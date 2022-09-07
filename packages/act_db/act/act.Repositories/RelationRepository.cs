@@ -47,38 +47,49 @@ public class RelationRepository : IRelationRepository
                 return await _dbContext.ParallelRelations.FindAsync(relationId) as T;
             case RelationTypes.ReferenceRelation:
                 return await _dbContext.ReferenceRelations.FindAsync(relationId) as T;
+            case RelationTypes.FirstActRelation:
+                return await _dbContext.FirstActRelations.FindAsync(relationId) as T;
+            case RelationTypes.SecondActRelation:
+                return await _dbContext.SecondActRelations.FindAsync(relationId) as T;
             default:
                 throw new ArgumentOutOfRangeException(nameof(relationType), relationType, null);
         }
     }
 
-    public async Task DeleteRelation(long id, RelationTypes type)
+    public async Task DeleteRelation(Guid id, RelationTypes type)
     {
+        var relation = await GetRelation<Relation>(id, type);
         switch (type)
         {
             case RelationTypes.ContextRelation:
-                _dbContext.ContextRelations.Remove(await _dbContext.ContextRelations.FindAsync(id));
+                _dbContext.ContextRelations.Remove(relation as ContextRelation);
                 break;
             case RelationTypes.SubjectRelation:
-                _dbContext.SubjectRelations.Remove(await _dbContext.SubjectRelations.FindAsync(id));
+                _dbContext.SubjectRelations.Remove(relation as SubjectRelation);
                 break;
             case RelationTypes.ObjectRelation:
-                _dbContext.ObjectRelations.Remove(await _dbContext.ObjectRelations.FindAsync(id));
+                _dbContext.ObjectRelations.Remove(relation as ObjectRelation);
                 break;
             case RelationTypes.IndirectObjectRelation:
-                _dbContext.IndirectObjectRelations.Remove(await _dbContext.IndirectObjectRelations.FindAsync(id));
+                _dbContext.IndirectObjectRelations.Remove(relation as IndirectObjectRelation);
                 break;
             case RelationTypes.SettingRelation:
-                _dbContext.SettingRelations.Remove(await _dbContext.SettingRelations.FindAsync(id));
+                _dbContext.SettingRelations.Remove(relation as SettingRelation);
                 break;
             case RelationTypes.PurposeRelation:
-                _dbContext.PurposeRelations.Remove(await _dbContext.PurposeRelations.FindAsync(id));
+                _dbContext.PurposeRelations.Remove(relation as PurposeRelation);
                 break;
             case RelationTypes.ParallelRelation:
-                _dbContext.ParallelRelations.Remove(await _dbContext.ParallelRelations.FindAsync(id));
+                _dbContext.ParallelRelations.Remove(relation as ParallelRelation);
                 break;
             case RelationTypes.ReferenceRelation:
-                _dbContext.ReferenceRelations.Remove(await _dbContext.ReferenceRelations.FindAsync(id));
+                _dbContext.ReferenceRelations.Remove(relation as ReferenceRelation);
+                break;
+            case RelationTypes.FirstActRelation:
+                _dbContext.FirstActRelations.Remove(relation as FirstActRelation);
+                break;
+            case RelationTypes.SecondActRelation:
+                _dbContext.SecondActRelations.Remove(relation as SecondActRelation);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
@@ -108,7 +119,7 @@ public class RelationRepository : IRelationRepository
         };
     }
 
-    public T? CreateOrUpdateRelation<T>(CreateOrUpdateRelationDto request, Interaction? hostInteraction) where T : Relation
+    public T? CreateOrUpdateRelation<T>(CreateOrUpdateRelationDto request) where T : Relation
     {
         // check if linked interaction exists
         if (!(request.LinkedInteractionId > 0))
@@ -172,16 +183,17 @@ public class RelationRepository : IRelationRepository
     }
 
 
-    public T? CreateRelationWithHostInteractionId<T>(CreateOrUpdateRelationDto request) where T : Relation
+    public async Task<T?> CreateOrUpdateRelationWithHostInteractionId<T>(CreateOrUpdateRelationDto request)
+        where T : Relation
     {
         // load host interaction
-        var hostInteraction = _dbContext.Interactions.Find(request.HostInteractionId);
+        var hostInteraction = await _dbContext.Interactions.FindAsync(request.HostInteractionId);
         if (hostInteraction == null)
             // throw proper asp.net core exception
             throw new InvalidOperationException(
                 $"Host interaction id {request.HostInteractionId} does not exist for creating relation with");
         // create relation
-        return CreateOrUpdateRelation<T>(request, hostInteraction);
+        return CreateOrUpdateRelation<T>(request);
     }
 
     public async Task DeleteRelation(Guid relationId, long hostInteractionId, long linkedInteractionId,
@@ -235,5 +247,85 @@ public class RelationRepository : IRelationRepository
 
         /// persist
         await _dbContext.SaveChangesAsync();
+    }
+
+    public IQueryable<SubjectRelation> GetSubjectRelationsFull()
+    {
+        return _dbContext.SubjectRelations
+            .Include(x => x.HostInteraction)
+            .Include(x => x.LinkedInteraction)
+            .AsQueryable();
+    }
+
+    public IQueryable<ObjectRelation> GetObjectRelationsFull()
+    {
+        return _dbContext.ObjectRelations
+            .Include(x => x.HostInteraction)
+            .Include(x => x.LinkedInteraction)
+            .AsQueryable();
+    }
+
+    public IQueryable<ContextRelation> GetContextRelationsFull()
+    {
+        return _dbContext.ContextRelations
+            .Include(x => x.HostInteraction)
+            .Include(x => x.LinkedInteraction)
+            .AsQueryable();
+    }
+
+    public IQueryable<FirstActRelation> GetFirstActRelationsFull()
+    {
+        return _dbContext.FirstActRelations
+            .Include(x => x.HostInteraction)
+            .Include(x => x.LinkedInteraction)
+            .AsQueryable();
+    }
+
+    public IQueryable<IndirectObjectRelation> GetIndirectObjectRelationsFull()
+    {
+        return _dbContext.IndirectObjectRelations
+            .Include(x => x.HostInteraction)
+            .Include(x => x.LinkedInteraction)
+            .AsQueryable();
+    }
+
+    public IQueryable<SettingRelation> GetSettingsRelationsFull()
+    {
+        return _dbContext.SettingRelations
+            .Include(x => x.HostInteraction)
+            .Include(x => x.LinkedInteraction)
+            .AsQueryable();
+    }
+
+    public IQueryable<ReferenceRelation> GetReferenceRelationsFull()
+    {
+        return _dbContext.ReferenceRelations
+            .Include(x => x.HostInteraction)
+            .Include(x => x.LinkedInteraction)
+            .AsQueryable();
+    }
+
+    public IQueryable<ParallelRelation> GetParallelRelationsFull()
+    {
+        return _dbContext.ParallelRelations
+            .Include(x => x.HostInteraction)
+            .Include(x => x.LinkedInteraction)
+            .AsQueryable();
+    }
+
+    public IQueryable<PurposeRelation> GetPurposeRelationsFull()
+    {
+        return _dbContext.PurposeRelations
+            .Include(x => x.HostInteraction)
+            .Include(x => x.LinkedInteraction)
+            .AsQueryable();
+    }
+
+    public IQueryable<SecondActRelation> GetSecondActRelationsFull()
+    {
+        return _dbContext.SecondActRelations
+            .Include(x => x.HostInteraction)
+            .Include(x => x.LinkedInteraction)
+            .AsQueryable();
     }
 }

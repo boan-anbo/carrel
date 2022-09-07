@@ -25,10 +25,11 @@ public class GraphQLMutation : IGraphQLMutation
     public async Task<Interaction?> AddNewEntityInteraction(
         [Service(ServiceKind.Synchronized)] IInteractionRepository _repo,
         [Service(ServiceKind.Synchronized)] IRelationRepository _relation,
-        string label
+        string label,
+        InteractionIdentity identity
     )
     {
-        var interaction = Interaction.FromLabel(label);
+        var interaction = Interaction.FromLabelAndIdentity(label, identity);
         var createdInteraction = await _repo.AddOrCreateInteraction(interaction);
 
         if (createdInteraction == null)
@@ -43,6 +44,11 @@ public class GraphQLMutation : IGraphQLMutation
 
 
         return await _repo.GetInteractionScalar(interaction.Id);
+    }
+
+    public async Task<Interaction?> AddNewEntityInteraction(IInteractionRepository _repo, IRelationRepository _relation, string label)
+    {
+        return await this.AddNewEntityInteraction(_repo, _relation, label, InteractionIdentity.ENTITY);
     }
 
 
@@ -98,13 +104,18 @@ public class GraphQLMutation : IGraphQLMutation
         await _interactionRepo.CreateOrUpdateInteractionWithoutSaving(interaction);
         // log ready to persis
         _logger.LogInformation($"Interaction Scalar Added Without Saving: {interaction.ToJson()}");
-
+        
+        // if the interaction does not have ID, persist it to get the ID first
+        if (!(interaction.Id > 0))
+        {
+            await _interactionRepo.SaveChanges();
+            _logger.LogInformation($"Interaction Scalar Added: {interaction.ToJson()}");
+        }
+        
         // saving relations
         try
         {
-            updateInteractionRelations(requestDto, interaction, _relationRepo, _interactionRepo);
-            // check if interaction has at least first acts
-
+            await updateInteractionRelations(requestDto, interaction, _relationRepo, _interactionRepo);
 
             // persist
             await _interactionRepo.SaveChanges();
@@ -137,11 +148,11 @@ public class GraphQLMutation : IGraphQLMutation
         }
     }
 
-    public async Task<long> deleteRelation([Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,
-        Guid relationId, long hostInteractionId, long linkedInteractionId, RelationTypes type)
+    public async Task<long> DeleteRelation([Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,
+        Guid relationUuid, RelationTypes type)
     {
-        await _relationRepo.DeleteRelation(relationId, hostInteractionId, linkedInteractionId, type);
-        return Task.FromResult(relationId.GetHashCode()).Result;
+        await _relationRepo.DeleteRelation(relationUuid, type);
+        return Task.FromResult(relationUuid.GetHashCode()).Result;
     }
 
     public async Task<Relation> CreateOrUpdateRelation(
@@ -149,7 +160,7 @@ public class GraphQLMutation : IGraphQLMutation
     {
         requestDto.ValidateNewRelationOrThrow();
 
-        var relation = _relationRepo.CreateRelationWithHostInteractionId<Relation>(requestDto);
+        var relation = await _relationRepo.CreateOrUpdateRelationWithHostInteractionId<Relation>(requestDto);
 
         try
         {
@@ -172,19 +183,22 @@ public class GraphQLMutation : IGraphQLMutation
         [Service(ServiceKind.Synchronized)] IInteractionRepository _interactionRepo
     )
     {
+        
+        _interactionRepo.LoadAllRelationsOfInteraction(interaction.Id);
+        
+        // for subjects
         // if no subjects are provided, remove all subjects
-        await _interactionRepo.LoadAllRelationsOfInteraction(interaction);
-
         if (requestDto.SubjectDtos is null)
         {
             interaction.Subjects.Clear();
         }
 
+        
         foreach (var interactionSubject in interaction.Subjects)
         {
             // if the subject is not in the requestDto.subjectDtos, remove it
             if (!requestDto.SubjectDtos.Any(s => s.Uuid == interactionSubject.Uuid))
-            {   
+            {
                 _logger.LogInformation($"Removing subject {interactionSubject.Uuid}");
                 _dbContext.SubjectRelations.Remove(interactionSubject);
             }
@@ -194,10 +208,11 @@ public class GraphQLMutation : IGraphQLMutation
         {
             requestDto.SubjectDtos?.ForEach(createSubjectDto =>
             {
+                ValidateOrCorrectDtoHostInteractionId(interaction, createSubjectDto);
                 try
                 {
-                    // remove subjects that are not present in the request from the ICollection
-                    _relationRepo.CreateOrUpdateRelation<SubjectRelation>(createSubjectDto, interaction);
+                    _relationRepo.CreateOrUpdateRelation<SubjectRelation>(createSubjectDto);
+                    
                 }
                 catch (Exception e)
                 {
@@ -206,102 +221,352 @@ public class GraphQLMutation : IGraphQLMutation
                 }
             });
         }
-
-        // // filter out subject relations that are not in the request
-        // interaction.Subjects = interaction?.Subjects?.Where(subjectRelation =>
-        //     requestDto.SubjectDtos?.Any(createSubjectDto =>
-        //         createSubjectDto.Uuid == subjectRelation.Uuid) ?? false).ToList();
-
-        requestDto.ObjectDtos?.ForEach(objectId =>
+        
+        // for parallels
+        // if no parallels are provided, remove all parallels
+        if (requestDto.ParallelDtos is null)
         {
-            try
-            {
-                var relation = _relationRepo.CreateOrUpdateRelation<ObjectRelation>(objectId, interaction);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error creating object relation");
-                throw;
-            }
-        });
-
-
-        requestDto.ParallelDtos?.ForEach(relatedId =>
+            interaction.Parallels.Clear();
+        }
+        
+        
+        foreach (var interactionParallel in interaction.Parallels)
         {
-            try
+            // if the parallel is not in the requestDto.parallelDtos, remove it
+            if (!requestDto.ParallelDtos.Any(s => s.Uuid == interactionParallel.Uuid))
             {
-                var relation = _relationRepo.CreateOrUpdateRelation<ParallelRelation>(relatedId, interaction);
+                _logger.LogInformation($"Removing parallel {interactionParallel.Uuid}");
+                _dbContext.ParallelRelations.Remove(interactionParallel);
             }
-            catch (Exception e)
+        }
+        
+        if (requestDto.ParallelDtos is not null)
+        {
+            requestDto.ParallelDtos?.ForEach(createParallelDto =>
             {
-                _logger.LogError(e, "Error creating parallel relation");
-                throw;
+                ValidateOrCorrectDtoHostInteractionId(interaction, createParallelDto);
+                try
+                {
+                    _relationRepo.CreateOrUpdateRelation<ParallelRelation>(createParallelDto);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error creating parallel relation");
+                    throw;
+                }
+            });
+        }
+        
+        // for first acts
+        
+        // if no first acts are provided, remove all first acts
+        if (requestDto.FirstActDtos is null)
+        {
+            interaction.FirstActs.Clear();
+        }
+        
+        foreach (var interactionFirstAct in interaction.FirstActs)
+        {
+            // if the first act is not in the requestDto.firstActDtos, remove it
+            if (!requestDto.FirstActDtos.Any(s => s.Uuid == interactionFirstAct.Uuid))
+            {
+                _logger.LogInformation($"Removing first act {interactionFirstAct.Uuid}");
+                _dbContext.FirstActRelations.Remove(interactionFirstAct);
             }
-        });
+        }
+        
+        if (requestDto.FirstActDtos is not null)
+        {
+            requestDto.FirstActDtos?.ForEach(createFirstActDto =>
+            {
+                ValidateOrCorrectDtoHostInteractionId(interaction, createFirstActDto);
+                try
+                {
+                    _relationRepo.CreateOrUpdateRelation<FirstActRelation>(createFirstActDto);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error creating first act relation");
+                    throw;
+                }
+            });
+        }
+        
+        // for second acts
+        
+        // if no second acts are provided, remove all second acts
+        
+        if (requestDto.SecondActDtos is null)
+        {
+            interaction.SecondActs.Clear();
+        }
+        
+        foreach (var interactionSecondAct in interaction.SecondActs)
+        {
+            // if the second act is not in the requestDto.secondActDtos, remove it
+            if (!requestDto.SecondActDtos.Any(s => s.Uuid == interactionSecondAct.Uuid))
+            {
+                _logger.LogInformation($"Removing second act {interactionSecondAct.Uuid}");
+                _dbContext.SecondActRelations.Remove(interactionSecondAct);
+            }
+        }
+        
+        if (requestDto.SecondActDtos is not null)
+        {
+            requestDto.SecondActDtos?.ForEach(createSecondActDto =>
+            {
+                ValidateOrCorrectDtoHostInteractionId(interaction, createSecondActDto);
+                try
+                {
+                    _relationRepo.CreateOrUpdateRelation<SecondActRelation>(createSecondActDto);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error creating second act relation");
+                    throw;
+                }
+            });
+        }
+        
+        // for objects
+        
+        // if no objects are provided, remove all objects
+        
+        if (requestDto.ObjectDtos is null)
+        {
+            interaction.Objects.Clear();
+        }
+        
+        foreach (var interactionObject in interaction.Objects)
+        {
+            // if the object is not in the requestDto.objectDtos, remove it
+            if (!requestDto.ObjectDtos.Any(s => s.Uuid == interactionObject.Uuid))
+            {
+                _logger.LogInformation($"Removing object {interactionObject.Uuid}");
+                _dbContext.ObjectRelations.Remove(interactionObject);
+            }
+        }
+        
+        if (requestDto.ObjectDtos is not null)
+        {
+            requestDto.ObjectDtos?.ForEach(createObjectDto =>
+            {
+                ValidateOrCorrectDtoHostInteractionId(interaction, createObjectDto);
+                try
+                {
+                    _relationRepo.CreateOrUpdateRelation<ObjectRelation>(createObjectDto);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error creating object relation");
+                    throw;
+                }
+            });
+        }
+        
+        // for indirect objects
+        
+        // if no indirect objects are provided, remove all indirect objects
+        
+        if (requestDto.IndirectObjectDtos is null)
+        {
+            interaction.IndirectObjects.Clear();
+        }
+        
+        foreach (var interactionIndirectObject in interaction.IndirectObjects)
+        {
+            // if the indirect object is not in the requestDto.indirectObjectDtos, remove it
+            if (!requestDto.IndirectObjectDtos.Any(s => s.Uuid == interactionIndirectObject.Uuid))
+            {
+                _logger.LogInformation($"Removing indirect object {interactionIndirectObject.Uuid}");
+                _dbContext.IndirectObjectRelations.Remove(interactionIndirectObject);
+            }
+        }
+        
+        if (requestDto.IndirectObjectDtos is not null)
+        {
+            requestDto.IndirectObjectDtos?.ForEach(createIndirectObjectDto =>
+            {
+                ValidateOrCorrectDtoHostInteractionId(interaction, createIndirectObjectDto);
+                try
+                {
+                    _relationRepo.CreateOrUpdateRelation<IndirectObjectRelation>(createIndirectObjectDto);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error creating indirect object relation");
+                    throw;
+                }
+            });
+        }
+        
+        // for settings
+        
+        // if no settings are provided, remove all settings
+        
+        if (requestDto.SettingDtos is null)
+        {
+            interaction.Settings.Clear();
+        }
+        
+        foreach (var interactionSetting in interaction.Settings)
+        {
+            // if the setting is not in the requestDto.settingDtos, remove it
+            if (!requestDto.SettingDtos.Any(s => s.Uuid == interactionSetting.Uuid))
+            {
+                _logger.LogInformation($"Removing setting {interactionSetting.Uuid}");
+                _dbContext.SettingRelations.Remove(interactionSetting);
+            }
+        }
+        
+        if (requestDto.SettingDtos is not null)
+        {
+            requestDto.SettingDtos?.ForEach(createSettingDto =>
+            {
+                ValidateOrCorrectDtoHostInteractionId(interaction, createSettingDto);
+                try
+                {
+                    _relationRepo.CreateOrUpdateRelation<SettingRelation>(createSettingDto);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error creating setting relation");
+                    throw;
+                }
+            });
+        }
+        
+        // for contexts 
+        
+        // if no contexts are provided, remove all contexts
+        
+        if (requestDto.ContextDtos is null)
+        {
+            interaction.Contexts.Clear();
+        }
+        
+        foreach (var interactionContext in interaction.Contexts)
+        {
+            // if the context is not in the requestDto.contextDtos, remove it
+            if (!requestDto.ContextDtos.Any(s => s.Uuid == interactionContext.Uuid))
+            {
+                _logger.LogInformation($"Removing context {interactionContext.Uuid}");
+                _dbContext.ContextRelations.Remove(interactionContext);
+            }
+        }
+        
+        if (requestDto.ContextDtos is not null)
+        {
+            requestDto.ContextDtos?.ForEach(createContextDto =>
+            {
+                ValidateOrCorrectDtoHostInteractionId(interaction, createContextDto);
+                try
+                {
+                    _relationRepo.CreateOrUpdateRelation<ContextRelation>(createContextDto);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error creating context relation");
+                    throw;
+                }
+            });
+        }
+        
+        // for purposes
+        
+        // if no purposes are provided, remove all purposes
+        
+        
+        
+        if (requestDto.PurposeDtos is null)
+        {
+            interaction.Purposes.Clear();
+        }
+        
+        foreach (var interactionPurpose in interaction.Purposes)
+        {
+                
+            // if the purpose is not in the requestDto.purposeDtos, remove it
+            if (!requestDto.PurposeDtos.Any(s => s.Uuid == interactionPurpose.Uuid))
+            {
+                _logger.LogInformation($"Removing purpose {interactionPurpose.Uuid}");
+                _dbContext.PurposeRelations.Remove(interactionPurpose);
+            }
+        }
+        
+        if (requestDto.PurposeDtos is not null)
+        {
+            requestDto.PurposeDtos?.ForEach(createPurposeDto =>
+            {
+                ValidateOrCorrectDtoHostInteractionId(interaction, createPurposeDto);
+                try
+                {
+                    _relationRepo.CreateOrUpdateRelation<PurposeRelation>(createPurposeDto);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error creating purpose relation");
+                    throw;
+                }
+            });
+        }
+        
+        // for references
+        
+        // if no references are provided, remove all references
+         
+        if (requestDto.ReferenceDtos is null)
+        {
+            interaction.References.Clear();
+        }
+        
+        foreach (var interactionReference in interaction.References)
+        {
+            // if the reference is not in the requestDto.referenceDtos, remove it
+            if (!requestDto.ReferenceDtos.Any(s => s.Uuid == interactionReference.Uuid))
+            {
+                _logger.LogInformation($"Removing reference {interactionReference.Uuid}");
+                _dbContext.ReferenceRelations.Remove(interactionReference);
+            }
+        }
+        
+        if (requestDto.ReferenceDtos is not null)
+        {
+            requestDto.ReferenceDtos?.ForEach(createReferenceDto =>
+            {
+                ValidateOrCorrectDtoHostInteractionId(interaction, createReferenceDto);
+                try
+                {
+                    _relationRepo.CreateOrUpdateRelation<ReferenceRelation>(createReferenceDto);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error creating reference relation");
+                    throw;
+                }
+            });
+        }
+        
+        
+        
+        
+        
+        
+    }
 
-        requestDto.SettingDtos?.ForEach(settingId =>
+    private static void ValidateOrCorrectDtoHostInteractionId(Interaction? interaction,
+        CreateOrUpdateRelationDto createPurposeDto)
+    {
+        if (createPurposeDto.HostInteractionId == 0)
         {
-            try
-            {
-                var relation = _relationRepo.CreateOrUpdateRelation<SettingRelation>(settingId, interaction);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error creating setting relation");
-                throw;
-            }
-        });
+            createPurposeDto.HostInteractionId = interaction.Id;
+        }
 
-        requestDto.ContextDtos?.ForEach(causeId =>
+        // check if dto's host interaction id is the same as the interaction id
+        if (createPurposeDto.HostInteractionId != interaction.Id)
         {
-            try
-            {
-                var relation = _relationRepo.CreateOrUpdateRelation<ContextRelation>(causeId, interaction);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error creating context relation");
-                throw;
-            }
-        });
-
-        requestDto.ReferenceDtos?.ForEach(relatedId =>
-        {
-            try
-            {
-                var relation = _relationRepo.CreateOrUpdateRelation<ReferenceRelation>(relatedId, interaction);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error creating reference relation");
-                throw;
-            }
-        });
-
-        requestDto.PurposeDtos?.ForEach(purposeId =>
-        {
-            try
-            {
-                var relation = _relationRepo.CreateOrUpdateRelation<PurposeRelation>(purposeId, interaction);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error creating purpose relation");
-                throw;
-            }
-        });
-        requestDto.IndirectObjectDtos?.ForEach(indirectObjectId =>
-        {
-            try
-            {
-                var relation =
-                    _relationRepo.CreateOrUpdateRelation<IndirectObjectRelation>(indirectObjectId, interaction);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error creating indirect object relation");
-                throw;
-            }
-        });
+            throw new Exception(
+                $"PurposeDto's host interaction id ({createPurposeDto.HostInteractionId}) does not match the interaction id ({interaction.Id})");
+        }
     }
 }

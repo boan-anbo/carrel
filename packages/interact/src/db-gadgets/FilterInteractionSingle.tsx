@@ -1,6 +1,6 @@
 import {Select} from 'antd';
-import React, {useState} from 'react';
-import {filterInteractions} from "../clients/interact-db-client/filter-operations";
+import React, {useEffect, useState} from 'react';
+import {filterInteractions, getRecentInteractions} from "../clients/interact-db-client/filter-operations";
 import {Interaction} from "../clients/grl-client/interact_db_client";
 
 const {Option} = Select;
@@ -40,7 +40,30 @@ const FilterInteractionSingle: React.FC<FilterInteractionSingleProps<Interaction
     const [data, setData] = useState<any[]>([]);
     const [value, setValue] = useState<string>();
 
+    // on mount
+    useEffect(() => {
+
+        loadRecentInteractions();
+    }, []);
+
+    const loadRecentInteractions = async () => {
+
+        console.log('attempting to fetch recent interactions');
+        const recentInteractions = await getRecentInteractions();
+        console.log('recent interactions', recentInteractions);
+        setData(recentInteractions.map((interaction: Interaction) => {
+            return {
+                label: interaction.label,
+                value: interaction.id.toString(),
+                data: interaction
+            } as SelectValue<Interaction>;
+        }));
+    }
+
     const handleSearch = (newValue: string) => {
+        if (newValue.length === 0) {
+            loadRecentInteractions()
+        }
         if (newValue) {
             fetch(newValue, setData);
         } else {

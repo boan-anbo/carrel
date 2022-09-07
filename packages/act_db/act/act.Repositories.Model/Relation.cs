@@ -177,12 +177,12 @@ public abstract class Relation
     /// <summary>
     /// Hits. A generic holder for values that are cumulative, such as number of visits etc.
     /// </summary>
-    public int Hits { get; set; } = 0;
+    public long Hits { get; set; } = 0;
 
     /// <summary>
     /// Order of the relation. This is used to determine the order of the relation when it is displayed. Default to -1, which means no order.
     ///  </summary>
-    public int Order { get; set; } = -1;
+    public long Order { get; set; } = -1;
 
     /// <summary>
     ///     The A of the A-B relation
@@ -199,14 +199,16 @@ public abstract class Relation
     public long LinkedInteractionId { get; set; }
 
     public static T Create<T>(
-        long Id, Guid uuid,
+        Guid? uuid,
         long hostInteractionId,
         long linkedInteractionId,
         RelationTypes type,
         string label,
         string description,
         string content,
-        RelationWeight weight
+        RelationWeight weight,
+        long hits,
+        long order
     ) where T : Relation, new()
     {
         var relation = new T
@@ -218,10 +220,13 @@ public abstract class Relation
             Label = label,
             Description = description,
             Content = content,
-            Weight = weight
+            Weight = weight,
+            Hits = hits,
+            Order = order
         };
         return relation;
     }
+    
 }
 
 /// <summary>

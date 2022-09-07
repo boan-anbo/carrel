@@ -1,6 +1,6 @@
 import {useSelector} from "react-redux";
 import {RootState} from "../../../store";
-import {BsChatText, BsInputCursorText} from "react-icons/all";
+import {BsInputCursorText} from "react-icons/all";
 
 export const SelectedTextViewer = () => {
     const selectedText = useSelector((state: RootState) => state.appstate.selectedInputText);

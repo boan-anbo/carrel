@@ -1,4 +1,4 @@
-import {ApolloClient, ApolloProvider, InMemoryCache, NormalizedCacheObject} from "@apollo/client";
+import {ApolloClient, InMemoryCache, NormalizedCacheObject} from "@apollo/client";
 
 export const getApolloClient: () => ApolloClient<NormalizedCacheObject> = () => {
 

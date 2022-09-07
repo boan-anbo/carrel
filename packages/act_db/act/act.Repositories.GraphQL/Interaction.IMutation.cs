@@ -8,8 +8,16 @@ public interface IGraphQLMutation
     Task<Interaction?> AddNewEntityInteraction(
         [Service(ServiceKind.Synchronized)] IInteractionRepository _repo,
         [Service(ServiceKind.Synchronized)] IRelationRepository _relation,
+        string label,
+        InteractionIdentity identity
+    );
+    
+    Task<Interaction?> AddNewEntityInteraction(
+        [Service(ServiceKind.Synchronized)] IInteractionRepository _repo,
+        [Service(ServiceKind.Synchronized)] IRelationRepository _relation,
         string label
     );
+
 
     Task<long> DeleteInteraction(
         long id,
@@ -30,11 +38,9 @@ public interface IGraphQLMutation
         CreateOrUpdateInteractionRequestDto requestDto
     );
 
-    Task<long> deleteRelation(
+    Task<long> DeleteRelation(
         [Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,
-        Guid relationId,
-        long hostInteractionId,
-        long linkedInteractionId,
+        Guid relationUuid,
         RelationTypes relationType
     );
 

@@ -1,4 +1,5 @@
-﻿using act.Repositories.Contracts;
+﻿using System.Diagnostics;
+using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Services.Model;
 using Microsoft.EntityFrameworkCore;
@@ -28,38 +29,29 @@ public class InteractionRepository : IInteractionRepository
             .FirstOrDefaultAsync(i => i.Id == id) ?? throw new InvalidOperationException("Interaction not found");
     }
 
-    public async Task<Interaction?> GetInteractionFull(long id)
+    public async Task<Interaction> GetInteractionFull(long id)
     {
         return await _dbContext.Interactions
             .Include(x => x.Contexts)
             .ThenInclude(x => x.LinkedInteraction)
-            
             .Include(x => x.Subjects)
             .ThenInclude(x => x.LinkedInteraction)
-            
             .Include(x => x.FirstActs)
             .ThenInclude(x => x.LinkedInteraction)
-            
             .Include(x => x.Objects)
             .ThenInclude(x => x.LinkedInteraction)
-            
             .Include(x => x.SecondActs)
             .ThenInclude(x => x.LinkedInteraction)
-            
             .Include(x => x.IndirectObjects)
             .ThenInclude(x => x.LinkedInteraction)
-            
             .Include(x => x.Parallels)
             .ThenInclude(x => x.LinkedInteraction)
-            
             .Include(x => x.Settings)
             .ThenInclude(x => x.LinkedInteraction)
-            
             .Include(x => x.Purposes)
             .ThenInclude(x => x.LinkedInteraction)
             .Include(x => x.References)
             .ThenInclude(x => x.LinkedInteraction)
-            
             .FirstOrDefaultAsync(i => i.Id == id);
     }
 
@@ -125,10 +117,10 @@ public class InteractionRepository : IInteractionRepository
         return interaction;
     }
 
-    public void AddToBeFirstActToInteractionWithoutSaving(IRelationRepository _relation, 
+    public void AddToBeFirstActToInteractionWithoutSaving(IRelationRepository _relation,
         Interaction hostInteraction)
     {
-        var result = _relation.CreateRelationWithHostInteractionId<FirstActRelation>(
+        var result = _relation.CreateOrUpdateRelationWithHostInteractionId<FirstActRelation>(
             new CreateOrUpdateRelationDto
             {
                 Uuid = null,
@@ -201,10 +193,50 @@ public class InteractionRepository : IInteractionRepository
             .AsQueryable();
     }
 
-    public async Task LoadAllRelationsOfInteraction(Interaction interaction)
+
+    public async Task<IQueryable<Interaction>> GetInteractionFullListByIdAndRelation()
     {
-        
-        _dbContext.Interactions.Where(x => x.Id == interaction.Id)
+        // include
+        var query = _dbContext.Interactions
+            .Include(x => x.Subjects)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsSubjects)
+            .ThenInclude(x => x.HostInteraction)
+            .Include(x => x.Objects)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsObjects)
+            .ThenInclude(x => x.HostInteraction)
+            .Include(x => x.Parallels)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsParallels)
+            .ThenInclude(x => x.HostInteraction)
+            .Include(x => x.Settings)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsSettings)
+            .ThenInclude(x => x.HostInteraction)
+            .Include(x => x.Contexts)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsContexts)
+            .ThenInclude(x => x.HostInteraction)
+            .Include(x => x.IndirectObjects)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsIndirectObjects)
+            .ThenInclude(x => x.HostInteraction)
+            .Include(x => x.Purposes)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsPurposes)
+            .ThenInclude(x => x.HostInteraction)
+            .Include(x => x.References)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsReferences)
+            .ThenInclude(x => x.HostInteraction).AsQueryable();
+         
+        return query;
+    }
+
+    public void LoadAllRelationsOfInteraction(long id)
+    {
+        _dbContext.Interactions.Where(x => x.Id == id)
             .Include(x => x.Subjects)
             .Include(x => x.Objects)
             .Include(x => x.Parallels)
@@ -215,6 +247,5 @@ public class InteractionRepository : IInteractionRepository
             .Include(x => x.References)
             .Include(x => x.FirstActs)
             .Include(x => x.SecondActs).Load();
-
     }
 }

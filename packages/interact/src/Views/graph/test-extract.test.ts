@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import {expect, it} from 'vitest'
 import {disambiguateGraph, InteractGraphEdge, InteractGraphNode} from "./extract-graph-data";
 
 it('renders correctly', () => {

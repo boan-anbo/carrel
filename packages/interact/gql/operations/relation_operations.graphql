@@ -1,28 +1,738 @@
+# Query
 
+query GetSubjectRelationByHostId($hostId: Long!) {
+    subjectRelations(where: {hostInteractionId: {eq: $hostId}}) {
+        ...subjectRelationConnectionFragment
+    }
+}
+
+# Repeat for other types: Object Relation, Context Relation, Parallel Relation, Indirect Object Relation, Purpose Relation, First Act relation, second act relation, setting object, reference object
+
+query GetSubjectRelationByHostId($hostId: Long!) {
+    subjectRelations(where: {hostInteractionId: {eq: $hostId}}) {
+        ...subjectRelationConnectionFragment
+    }
+}
+
+query GetObjectRelationByHostId($hostId: Long!) {
+    objectRelations(where: {hostInteractionId: {eq: $hostId}}) {
+        ...objectRelationConnectionFragment
+    }
+}
+
+query GetContextRelationByHostId($hostId: Long!) {
+    contextRelations(where: {hostInteractionId: {eq: $hostId}}) {
+        ...contextRelationConnectionFragment
+    }
+}
+
+query GetParallelRelationByHostId($hostId: Long!) {
+    parallelRelations(where: {hostInteractionId: {eq: $hostId}}) {
+        ...parallelRelationConnectionFragment
+    }
+}
+
+query GetIndirectObjectRelationByHostId($hostId: Long!) {
+    indirectObjectRelations(where: {hostInteractionId: {eq: $hostId}}) {
+        ...indirectObjectRelationConnectionFragment
+    }
+}
+
+query GetPurposeRelationByHostId($hostId: Long!) {
+    purposeRelations(where: {hostInteractionId: {eq: $hostId}}) {
+        ...purposeRelationConnectionFragment
+    }
+}
+
+query GetFirstActRelationByHostId($hostId: Long!) {
+    firstActRelations(where: {hostInteractionId: {eq: $hostId}}) {
+        ...firstActRelationConnectionFragment
+    }
+}
+
+query GetSecondActRelationByHostId($hostId: Long!) {
+    secondActRelations(where: {hostInteractionId: {eq: $hostId}}) {
+        ...secondActRelationConnectionFragment
+    }
+}
+
+query GetSettingRelationByHostId($hostId: Long!) {
+    settingsRelations(where: {hostInteractionId: {eq: $hostId}}) {
+        ...settingRelationConnectionFragment
+    }
+}
+
+query GetReferenceRelationByHostId($hostId: Long!) {
+    referenceRelations(where: {hostInteractionId: {eq: $hostId}}) {
+        ...referenceRelationConnectionFragment
+    }
+}
+
+# Filter by search
+query FilterSubjectRelationByHostId($hostId: Long!, $query: String!) {
+    subjectRelations(
+        where: {
+            hostInteractionId: {eq: $hostId}
+            and:
+            {
+                linkedInteraction: {
+                    label: {contains: $query}
+                }
+            }
+        }
+        order: {
+            order: ASC
+        }
+
+    ) {
+        ...subjectRelationConnectionFragment
+    }
+}
+
+query FilterObjectRelationByHostId($hostId: Long!, $query: String!) {
+    objectRelations(
+        where: {
+            hostInteractionId: {eq: $hostId}
+            and:
+            {
+                linkedInteraction: {
+                    label: {contains: $query}
+                }
+            }
+        }
+        order: {
+            order: ASC
+        }
+
+    ) {
+        ...objectRelationConnectionFragment
+    }
+}
+
+query FilterContextRelationByHostId($hostId: Long!, $query: String!) {
+    contextRelations(
+        where: {
+            hostInteractionId: {eq: $hostId}
+            and:
+            {
+                linkedInteraction: {
+                    label: {contains: $query}
+                }
+            }
+        }
+        order: {
+            order: ASC
+        }
+
+    ) {
+        ...contextRelationConnectionFragment
+    }
+}
+
+query FilterParallelRelationByHostId($hostId: Long!, $query: String!) {
+    parallelRelations(
+        where: {
+            hostInteractionId: {eq: $hostId}
+            and:
+            {
+                linkedInteraction: {
+                    label: {contains: $query}
+                }
+            }
+        }
+        order: {
+            order: ASC
+        }
+
+    ) {
+        ...parallelRelationConnectionFragment
+    }
+}
+
+query FilterIndirectObjectRelationByHostId($hostId: Long!, $query: String!) {
+    indirectObjectRelations(
+        where: {
+            hostInteractionId: {eq: $hostId}
+            and:
+            {
+                linkedInteraction: {
+                    label: {contains: $query}
+                }
+            }
+        }
+        order: {
+            order: ASC
+        }
+
+    ) {
+        ...indirectObjectRelationConnectionFragment
+    }
+}
+
+query FilterPurposeRelationByHostId($hostId: Long!, $query: String!) {
+    purposeRelations(
+        where: {
+            hostInteractionId: {eq: $hostId}
+            and:
+            {
+                linkedInteraction: {
+                    label: {contains: $query}
+                }
+            }
+        }
+        order: {
+            order: ASC
+        }
+
+    ) {
+        ...purposeRelationConnectionFragment
+    }
+}
+
+query FilterFirstActRelationByHostId($hostId: Long!, $query: String!) {
+    firstActRelations(
+        where: {
+            hostInteractionId: {eq: $hostId}
+            and:
+            {
+                linkedInteraction: {
+                    label: {contains: $query}
+                }
+            }
+        }
+        order: {
+            order: ASC
+        }
+
+    ) {
+        ...firstActRelationConnectionFragment
+    }
+}
+
+query FilterSecondActRelationByHostId($hostId: Long!, $query: String!) {
+    secondActRelations(
+        where: {
+            hostInteractionId: {eq: $hostId}
+            and:
+            {
+                linkedInteraction: {
+                    label: {contains: $query}
+                }
+            }
+        }
+        order: {
+            order: ASC
+        }
+
+    ) {
+        ...secondActRelationConnectionFragment
+    }
+}
+
+query FilterSettingRelationByHostId($hostId: Long!, $query: String!) {
+    settingsRelations(
+        where: {
+            hostInteractionId: {eq: $hostId}
+            and:
+            {
+                linkedInteraction: {
+                    label: {contains: $query}
+                }
+            }
+        }
+        order: {
+            order: ASC
+        }
+
+    ) {
+        ...settingRelationConnectionFragment
+    }
+}
+
+query FilterReferenceRelationByHostId($hostId: Long!, $query: String!) {
+    referenceRelations(
+        where: {
+            hostInteractionId: {eq: $hostId}
+            and:
+            {
+                linkedInteraction: {
+                    label: {contains: $query}
+                }
+            }
+        }
+        order: {
+            order: ASC
+        }
+
+    ) {
+        ...referenceRelationConnectionFragment
+    }
+}
+
+
+
+
+
+# Mutation
 mutation CreateOrUpdateRelation($input: CreateOrUpdateRelationDtoInput!) {
-  createOrUpdateRelation(requestDto: $input) {
-    ...relationFragment
-  }
+    createOrUpdateRelation(requestDto: $input) {
+        ...relationFragment
+    }
 }
 
-mutation DeleteRelation($relationId: UUID!, $hostInteractionId: Long!, $linkedInteractionId: Long!, $relationTypes: RelationTypes!) {
-  deleteRelation(
-    relationId: $relationId,
-    hostInteractionId: $hostInteractionId,
-    linkedInteractionId: $linkedInteractionId,
-    type: $relationTypes
-  )
+mutation DeleteRelation($relationId: UUID!, $relationTypes: RelationTypes!) {
+    deleteRelation(
+        relationUuid: $relationId,
+        type: $relationTypes
+    )
 }
-
 
 fragment relationFragment on Relation {
-  label
-  description
-  content
-
-  linkedInteractionId
-  uuid
-  type
-  weight
-  hostInteractionId
+    label
+    description
+    content
+    linkedInteractionId
+    uuid
+    type
+    weight
+    hostInteractionId
 }
+fragment subjectRelationConnectionFragment on SubjectRelationsConnection {
+    nodes {
+        ...subjectRelationFragment
+    }
+    edges {
+        ...subjectRelationEdge
+    }
+    pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+    }
+    totalCount
+}
+
+fragment subjectRelationEdge on SubjectRelationsEdge {
+    cursor
+    node {
+        ...subjectRelationFragment
+    }
+
+}
+
+fragment subjectRelationFragment on SubjectRelation {
+    label
+    description
+    content
+    linkedInteractionId
+    uuid
+    type
+    weight
+    hostInteractionId
+
+    linkedInteraction {
+        ...interactionFragment
+    }
+    hostInteraction {
+        ...interactionFragment
+    }
+}
+
+
+# object fragments
+fragment objectRelationConnectionFragment on ObjectRelationsConnection {
+    nodes {
+        ...objectRelationFragment
+    }
+    edges {
+        ...objectRelationEdge
+    }
+    pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+    }
+    totalCount
+}
+
+fragment objectRelationEdge on ObjectRelationsEdge {
+    cursor
+    node {
+        ...objectRelationFragment
+    }
+
+}
+
+fragment objectRelationFragment on ObjectRelation {
+    label
+    description
+    content
+    linkedInteractionId
+    uuid
+    type
+    weight
+    hostInteractionId
+
+    linkedInteraction {
+        ...interactionFragment
+    }
+    hostInteraction {
+        ...interactionFragment
+    }
+}
+
+# context fragments
+fragment contextRelationConnectionFragment on ContextRelationsConnection {
+    nodes {
+        ...contextRelationFragment
+    }
+    edges {
+        ...contextRelationEdge
+    }
+    pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+    }
+    totalCount
+}
+
+fragment contextRelationEdge on ContextRelationsEdge {
+    cursor
+    node {
+        ...contextRelationFragment
+    }
+
+}
+
+fragment contextRelationFragment on ContextRelation {
+    label
+    description
+    content
+    linkedInteractionId
+    uuid
+    type
+    weight
+    hostInteractionId
+
+    linkedInteraction {
+        ...interactionFragment
+    }
+    hostInteraction {
+        ...interactionFragment
+    }
+}
+
+# parallel fragments
+fragment parallelRelationConnectionFragment on ParallelRelationsConnection {
+    nodes {
+        ...parallelRelationFragment
+    }
+    edges {
+        ...parallelRelationEdge
+    }
+    pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+    }
+    totalCount
+}
+
+fragment parallelRelationEdge on ParallelRelationsEdge {
+    cursor
+    node {
+        ...parallelRelationFragment
+    }
+
+}
+
+fragment parallelRelationFragment on ParallelRelation {
+    label
+    description
+    content
+    linkedInteractionId
+    uuid
+    type
+    weight
+    hostInteractionId
+
+    linkedInteraction {
+        ...interactionFragment
+    }
+    hostInteraction {
+        ...interactionFragment
+    }
+}
+
+# indirect object fragments
+
+fragment indirectObjectRelationConnectionFragment on IndirectObjectRelationsConnection {
+    nodes {
+        ...indirectObjectRelationFragment
+    }
+    edges {
+        ...indirectObjectRelationEdge
+    }
+    pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+    }
+    totalCount
+}
+
+fragment indirectObjectRelationEdge on IndirectObjectRelationsEdge {
+    cursor
+    node {
+        ...indirectObjectRelationFragment
+    }
+
+}
+
+fragment indirectObjectRelationFragment on IndirectObjectRelation {
+    label
+    description
+    content
+    linkedInteractionId
+    uuid
+    type
+    weight
+    hostInteractionId
+
+    linkedInteraction {
+        ...interactionFragment
+    }
+    hostInteraction {
+        ...interactionFragment
+    }
+}
+
+# purpose fragments
+
+
+fragment purposeRelationConnectionFragment on PurposeRelationsConnection {
+    nodes {
+        ...purposeRelationFragment
+    }
+    edges {
+        ...purposeRelationEdge
+    }
+    pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+    }
+    totalCount
+}
+
+fragment purposeRelationEdge on PurposeRelationsEdge {
+    cursor
+    node {
+        ...purposeRelationFragment
+    }
+
+}
+
+fragment purposeRelationFragment on PurposeRelation {
+    label
+    description
+    content
+    linkedInteractionId
+    uuid
+    type
+    weight
+    hostInteractionId
+
+    linkedInteraction {
+        ...interactionFragment
+    }
+    hostInteraction {
+        ...interactionFragment
+    }
+}
+
+# first act fragments
+
+fragment firstActRelationConnectionFragment on FirstActRelationsConnection {
+    nodes {
+        ...firstActRelationFragment
+    }
+    edges {
+        ...firstActRelationEdge
+    }
+    pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+    }
+    totalCount
+}
+
+fragment firstActRelationEdge on FirstActRelationsEdge {
+    cursor
+    node {
+        ...firstActRelationFragment
+    }
+
+}
+
+fragment firstActRelationFragment on FirstActRelation {
+    label
+    description
+    content
+    linkedInteractionId
+    uuid
+    type
+    weight
+    hostInteractionId
+
+    linkedInteraction {
+        ...interactionFragment
+    }
+    hostInteraction {
+        ...interactionFragment
+    }
+}
+
+# second act fragments
+
+fragment secondActRelationConnectionFragment on SecondActRelationsConnection {
+    nodes {
+        ...secondActRelationFragment
+    }
+    edges {
+        ...secondActRelationEdge
+    }
+    pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+    }
+    totalCount
+}
+
+fragment secondActRelationEdge on SecondActRelationsEdge {
+    cursor
+    node {
+        ...secondActRelationFragment
+    }
+
+}
+
+fragment secondActRelationFragment on SecondActRelation {
+    label
+    description
+    content
+    linkedInteractionId
+    uuid
+    type
+    weight
+    hostInteractionId
+
+    linkedInteraction {
+        ...interactionFragment
+    }
+    hostInteraction {
+        ...interactionFragment
+    }
+}
+
+# settings object fragments
+
+fragment settingRelationConnectionFragment on SettingsRelationsConnection {
+    nodes {
+        ...settingsObjectRelationFragment
+    }
+    edges {
+        ...settingsObjectRelationEdge
+    }
+    pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+    }
+    totalCount
+}
+
+fragment settingsObjectRelationEdge on SettingsRelationsEdge {
+    cursor
+    node {
+        ...settingsObjectRelationFragment
+    }
+
+}
+
+fragment settingsObjectRelationFragment on SettingRelation {
+    label
+    description
+    content
+    linkedInteractionId
+    uuid
+    type
+    weight
+    hostInteractionId
+
+    linkedInteraction {
+        ...interactionFragment
+    }
+    hostInteraction {
+        ...interactionFragment
+    }
+}
+
+# reference fragments
+
+fragment referenceRelationConnectionFragment on ReferenceRelationsConnection {
+    nodes {
+        ...referenceRelationFragment
+    }
+    edges {
+        ...referenceRelationEdge
+    }
+    pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+    }
+    totalCount
+}
+
+fragment referenceRelationEdge on ReferenceRelationsEdge {
+    cursor
+    node {
+        ...referenceRelationFragment
+    }
+
+}
+
+fragment referenceRelationFragment on ReferenceRelation {
+    label
+    description
+    content
+    linkedInteractionId
+    uuid
+    type
+    weight
+    hostInteractionId
+
+    linkedInteraction {
+        ...interactionFragment
+    }
+    hostInteraction {
+        ...interactionFragment
+    }
+}
+
+
+

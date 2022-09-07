@@ -1,23 +1,22 @@
 import './NestedPopover.css'
-import React, {cloneElement, useMemo, useState} from "react";
+import React, {cloneElement, useMemo} from "react";
 import {
-    Placement,
-    offset,
-    flip,
-    shift,
     autoUpdate,
-    useFloating,
-    useInteractions,
-    useRole,
-    useDismiss,
-    useId,
-    useClick,
+    flip,
     FloatingFocusManager,
-    FloatingPortal,
-    useFloatingNodeId,
     FloatingNode,
+    FloatingPortal,
     FloatingTree,
-    useFloatingParentNodeId
+    offset,
+    Placement,
+    shift,
+    useDismiss,
+    useFloating,
+    useFloatingNodeId,
+    useFloatingParentNodeId,
+    useId,
+    useInteractions,
+    useRole
 } from "@floating-ui/react-dom-interactions";
 import {mergeRefs} from "react-merge-refs";
 

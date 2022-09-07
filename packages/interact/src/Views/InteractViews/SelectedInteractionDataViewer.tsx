@@ -1,9 +1,7 @@
 import {useSelector} from "react-redux";
 import {RootState} from "../../store";
-import {InteractionGraphView} from "./InteractionGraphView";
 import {Interaction} from "../../clients/grl-client/interact_db_client";
-import {useEffect, useState} from "react";
-import {getFullInteractionById} from "../../clients/interact-db-client/filter-operations";
+import {useState} from "react";
 
 export const SelectedInteractionDataViewer = () => {
     const [fullInteraction, setFullInteraction] = useState<Interaction | null>(null);

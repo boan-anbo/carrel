@@ -9,6 +9,8 @@ namespace act.Repositories.GraphQL;
 
 public class GraphQLQuery
 {
+    
+
     public GraphQLQuery()
     {
     }
@@ -32,8 +34,26 @@ public class GraphQLQuery
     {
         return _repo.GetInteractionScalarList();
     }
-    
-    
+
+    /// <summary>
+    ///     Filter interactions by interaction and relation types.
+    /// </summary>
+    /// <param name="dbContext"></param>
+    /// <returns></returns>
+    [UsePaging(
+        IncludeTotalCount = true,
+        MaxPageSize = 100,
+        DefaultPageSize = 50
+    )]
+    [UseFiltering]
+    [UseSorting]
+    public Task<IQueryable<Interaction>> GetInteractionsByIdAndRelation(
+        [Service(ServiceKind.Synchronized)] IInteractionRepository _repo
+    )
+    {
+        return _repo.GetInteractionFullListByIdAndRelation();
+    }
+
 
     /// <summary>
     /// Get full interaction
@@ -56,10 +76,11 @@ public class GraphQLQuery
                     .Build()
             );
         }
-        var result = new InteractionResult(interaction,  InteractionResultType.FullInteraction);
+
+        var result = new InteractionResult(interaction, InteractionResultType.FullInteraction);
         return result;
     }
-    
+
     /// <summary>
     /// Get full interactions with all relations
     /// </summary>
@@ -80,8 +101,187 @@ public class GraphQLQuery
                     .Build()
             );
         }
+
         var result = new InteractionResult(interaction, InteractionResultType.FullInteractionWithAllRelations);
         return result;
     }
+
+
+    // Get all relations
+
+
+    /// <summary>
+    /// Filter subject relations
+    /// </summary>
+    /// <returns></returns>
+    [UsePaging(
+        IncludeTotalCount = true,
+        MaxPageSize = 10000,
+        DefaultPageSize = 100
+    )]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<SubjectRelation> GetSubjectRelations(
+        [Service(ServiceKind.Synchronized)] IRelationRepository _repo
+    )
+    {
+        return _repo.GetSubjectRelationsFull();
+    }
+    
+    // same function for all nine types of relations in RelationType.cs
+    
+    /// <summary>
+    /// Filter object relations
+    /// </summary>
+    [UsePaging(
+        IncludeTotalCount = true,
+        MaxPageSize = 10000,
+        DefaultPageSize = 100
+    )]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<ObjectRelation> GetObjectRelations(
+        [Service(ServiceKind.Synchronized)] IRelationRepository _repo
+    )
+    {
+        return _repo.GetObjectRelationsFull();
+    }
+    
+    /// <summary>
+    /// Filter context relations
+    /// </summary>
+    [UsePaging(
+        IncludeTotalCount = true,
+        MaxPageSize = 10000,
+        DefaultPageSize = 100
+    )]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<ContextRelation> GetContextRelations(
+        [Service(ServiceKind.Synchronized)] IRelationRepository _repo
+    )
+    {
+        return _repo.GetContextRelationsFull();
+    }
+    
+    /// <summary>
+    /// Filter first acts relations
+    /// </summary>
+    [UsePaging(
+        IncludeTotalCount = true,
+        MaxPageSize = 10000,
+        DefaultPageSize = 100
+    )]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<FirstActRelation> GetFirstActRelations(
+        [Service(ServiceKind.Synchronized)] IRelationRepository _repo
+    )
+    {
+        return _repo.GetFirstActRelationsFull();
+    }
+    
+    /// <summary>
+    /// Filter second acts relations
+    /// </summary>
+    [UsePaging(
+        IncludeTotalCount = true,
+        MaxPageSize = 10000,
+        DefaultPageSize = 100
+    )]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<SecondActRelation> GetSecondActRelations(
+        [Service(ServiceKind.Synchronized)] IRelationRepository _repo
+    )
+    {
+        return _repo.GetSecondActRelationsFull();
+    }
+    
+    /// <summary>
+    /// Filter indirect object relations
+    /// </summary>
+    [UsePaging(
+        IncludeTotalCount = true,
+        MaxPageSize = 10000,
+        DefaultPageSize = 100
+    )]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<IndirectObjectRelation> GetIndirectObjectRelations(
+        [Service(ServiceKind.Synchronized)] IRelationRepository _repo
+    )
+    {
+        return _repo.GetIndirectObjectRelationsFull();
+    }
+    
+    /// <summary>
+    /// Filter settings relations
+    /// </summary>
+    [UsePaging(
+        IncludeTotalCount = true,
+        MaxPageSize = 10000,
+        DefaultPageSize = 100
+    )]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<SettingRelation> GetSettingsRelations(
+        [Service(ServiceKind.Synchronized)] IRelationRepository _repo
+    )
+    {
+        return _repo.GetSettingsRelationsFull();
+    }
+    
+    /// <summary>
+    /// Filter reference relations
+    /// </summary>
+    [UsePaging(
+        IncludeTotalCount = true,
+        MaxPageSize = 10000,
+        DefaultPageSize = 100
+    )]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<ReferenceRelation> GetReferenceRelations(
+        [Service(ServiceKind.Synchronized)] IRelationRepository _repo
+    )
+    {
+        return _repo.GetReferenceRelationsFull();
+    }
+    
+    /// <summary>
+    /// Filter paralell relations
+    /// </summary>
+    [UsePaging(
+        IncludeTotalCount = true,
+        MaxPageSize = 10000,
+        DefaultPageSize = 100
+    )]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<ParallelRelation> GetParallelRelations(
+        [Service(ServiceKind.Synchronized)] IRelationRepository _repo
+    )
+    {
+        return _repo.GetParallelRelationsFull();
+    }
+    
+    /// <summary>
+    /// Filter purpose relations
+    /// </summary>
+    [UsePaging(
+        IncludeTotalCount = true,
+        MaxPageSize = 10000,
+        DefaultPageSize = 100
+    )]
+    [UseFiltering]
+    [UseSorting]
+    public IQueryable<PurposeRelation> GetPurposeRelations(
+        [Service(ServiceKind.Synchronized)] IRelationRepository _repo
+    )
+    {
+        return _repo.GetPurposeRelationsFull();
+    }
+    
 
 }

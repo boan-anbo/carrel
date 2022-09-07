@@ -1,17 +1,28 @@
-import {Button, Form, Popconfirm, Select} from 'antd';
-import React, {KeyboardEvent, useState} from 'react';
-import {filterInteractions} from "../clients/interact-db-client/filter-operations";
-import {Interaction} from "../clients/grl-client/interact_db_client";
-import filterInteractionSingle, {SelectValue} from './FilterInteractionSingle';
+import {Form, Popconfirm, Select} from 'antd';
+import React, {KeyboardEvent, useEffect, useState} from 'react';
+import {filterInteractionRelation, filterInteractions} from "../clients/interact-db-client/filter-operations";
+import {Interaction, InteractionIdentity, RelationTypes} from "../clients/grl-client/interact_db_client";
+import {SelectValue} from './FilterInteractionSingle';
 import {createInteractionEntity} from "../clients/interact-db-client/create-interaction-entity";
+import {FilterByEntityRelation} from "./FilterByEntityRelation";
+import {SizeType} from "antd/lib/config-provider/SizeContext";
 
 const {Option} = Select;
 
 
-const fetch = async (value: string, callback: (data: SelectValue<Interaction>[]) => void) => {
+const fetch = async (value: string, callback: (data: SelectValue<Interaction>[]) => void, filterByEntityRelation?: { hostId: number; relation: RelationTypes } | undefined) => {
 
+    const shouldFilterByEntityRelation = filterByEntityRelation !== undefined;
     // Get filtered interactions from backend
-    let filteredData = await filterInteractions(value);
+    let filteredData: Interaction[];
+    if (shouldFilterByEntityRelation) {
+        console.log('filter by entity relation', filterByEntityRelation);
+       const connection = await filterInteractionRelation(value, filterByEntityRelation);
+        filteredData = connection.nodes?.map(n => n.linkedInteraction as Interaction) ?? [];
+    } else {
+        filteredData = await filterInteractions(value);
+        console.log('filter by interaction label');
+    }
     let data = filteredData.map((interaction: Interaction) => {
         return {
             label: interaction.label,
@@ -35,6 +46,11 @@ export interface FilterInteractionMultipleProps<T> {
     onEntityCreated?: (interaction: Interaction) => void;
     allowCreateNewEntity?: boolean;
     onListFetched?: (interactions: Interaction[]) => void;
+    createInteractionIdentity?: InteractionIdentity;
+    // If this is provided, the filter will only query those interaction relations with the hostInteractionId and relationType
+    filterByEntityRelation?: FilterByEntityRelation
+    showLabel?: boolean;
+    size?: SizeType | undefined;
 }
 
 const FilterInteractionMultiple = (props: FilterInteractionMultipleProps<Interaction>) => {
@@ -43,10 +59,21 @@ const FilterInteractionMultiple = (props: FilterInteractionMultipleProps<Interac
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
     const [currentSearchInput, setCurrentSearchInput] = useState<string>('');
 
+    // const isFilterByHostRelation = props.filterByEntityRelation !== undefined;
+
+
+
+    // on mount
+    useEffect(() => {
+            fetch('', setData, props.filterByEntityRelation);
+    }, []);
+
+
+
     const handleSearch = (newValue: string) => {
         setCurrentSearchInput(newValue)
         if (newValue) {
-            fetch(newValue, setData);
+            fetch(newValue, setData, props.filterByEntityRelation);
             props.onListFetched && props.onListFetched(data.map((d) => d.data));
         } else {
             setData([]);
@@ -74,7 +101,7 @@ const FilterInteractionMultiple = (props: FilterInteractionMultipleProps<Interac
                 // clear the search input
                 setCurrentSearchInput('');
                 setShowConfirm(false);
-                let interaction = await createInteractionEntity(currentSearchInput, '', '');
+                let interaction = await createInteractionEntity(currentSearchInput, props.createInteractionIdentity ?? InteractionIdentity.Entity);
                 addInteraction(interaction);
                 console.log("Created interaction in filter control", interaction);
             }
@@ -121,25 +148,29 @@ const FilterInteractionMultiple = (props: FilterInteractionMultipleProps<Interac
                         onOpenChange={() => console.log('open change')}>
 
             </Popconfirm>
-            <Form.Item label={props.label}>
-                <Select
-                    mode="multiple"
-                    showSearch
-                    value={value}
-                    placeholder={props.placeholder}
-                    style={props.style}
-                    defaultActiveFirstOption={false}
-                    showArrow={true}
-                    filterOption={false}
-                    onInputKeyDown={onSelectInputKeyDown}
-                    allowClear={true}
-                    searchValue={currentSearchInput}
-                    onSearch={handleSearch}
-                    onChange={handleChange}
-                >
-                    {options}
-                </Select>
-            </Form.Item>
+            <div className={''}>
+                {props.showLabel && <div>{props.label}</div>}
+                <Form.Item>
+                    <Select
+                        mode="multiple"
+                        showSearch
+                        size={props.size}
+                        value={value}
+                        placeholder={props.placeholder}
+                        style={props.style}
+                        defaultActiveFirstOption={false}
+                        showArrow={true}
+                        filterOption={false}
+                        onInputKeyDown={onSelectInputKeyDown}
+                        allowClear={true}
+                        searchValue={currentSearchInput}
+                        onSearch={handleSearch}
+                        onChange={handleChange}
+                    >
+                        {options}
+                    </Select>
+                </Form.Item>
+            </div>
         </div>
     );
 };
@@ -156,6 +187,8 @@ FilterInteractionMultiple.defaultProps = {
         console.log('onEntityCreated', interaction);
     },
     allowCreateNewEntity: true,
+    createInteractionIdentity: InteractionIdentity.Entity,
+    showLabel: true
 } as FilterInteractionMultipleProps<Interaction>
 
 
