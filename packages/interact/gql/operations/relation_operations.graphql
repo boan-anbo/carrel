@@ -296,6 +296,8 @@ fragment relationFragment on Relation {
     type
     weight
     hostInteractionId
+    hits
+    order
 }
 fragment subjectRelationConnectionFragment on SubjectRelationsConnection {
     nodes {

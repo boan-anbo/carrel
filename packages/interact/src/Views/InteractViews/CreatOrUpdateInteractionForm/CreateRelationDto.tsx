@@ -1,7 +1,7 @@
 import {
     ContextRelation,
     FirstActRelation,
-    IndirectObjectRelation,
+    IndirectObjectRelation, Interaction,
     ObjectRelation,
     ParallelRelation,
     PurposeRelation,
@@ -41,7 +41,7 @@ export class CreateRelationDto {
             uuid: relation.uuid,
             weight: relation.weight,
             hits: relation.hits,
-            order: relation.order
+            order: relation.order,
         }
     }
 }

@@ -1,12 +1,17 @@
 import {Form, Popconfirm, Select} from 'antd';
 import React, {KeyboardEvent, useEffect, useState} from 'react';
-import {filterInteractionRelation, filterInteractions} from "../clients/interact-db-client/filter-operations";
+import {
+    filterInteractionRelation,
+    filterInteractions,
+    getFullInteractionById
+} from "../clients/interact-db-client/filter-operations";
 import {Interaction, InteractionIdentity, Relation, RelationTypes} from "../clients/grl-client/interact_db_client";
 import {SelectValue} from './FilterInteractionSingle';
 import {createInteractionEntity} from "../clients/interact-db-client/create-interaction-entity";
 import {FilterByEntityRelation} from "./FilterByEntityRelation";
 import {SizeType} from "antd/lib/config-provider/SizeContext";
 import {CreateRelationDto} from "../Views/InteractViews/CreatOrUpdateInteractionForm/CreateRelationDto";
+import {LabeledValue} from "antd/lib/select";
 
 const {Option} = Select;
 
@@ -18,8 +23,8 @@ const fetch = async (value: string, callback: (data: SelectValue<Interaction>[])
     let filteredData: Interaction[];
     if (shouldFilterByEntityRelation) {
         console.log('filter by entity relation', filterByEntityRelation);
-       const connection = await filterInteractionRelation(value, filterByEntityRelation);
-        filteredData = connection.nodes?.map((relation: Relation) => relation.linkedInteraction as Interaction) ?? [];
+        const connection = await filterInteractionRelation(value, filterByEntityRelation);
+        filteredData = connection.nodes?.map(relation => relation.linkedInteraction as Interaction) ?? [];
     } else {
         filteredData = await filterInteractions(value);
         console.log('filter by interaction label');
@@ -57,31 +62,68 @@ export interface FilterInteractionMultipleProps<T> {
 
 const FilterInteractionMultiple = (props: FilterInteractionMultipleProps<Interaction>) => {
     const [data, setData] = useState<SelectValue<Interaction>[]>([]);
-    const [value, setValue] = useState<string[]>();
+    const [value, setValue] = useState<LabeledValue []>([]);
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
     const [currentSearchInput, setCurrentSearchInput] = useState<string>('');
 
     // const isFilterByHostRelation = props.filterByEntityRelation !== undefined;
 
 
-
     // on mount
     useEffect(() => {
 
         // load initial values
-            fetch('', setData, props.filterByEntityRelation);
+        fetch('', setData, props.filterByEntityRelation);
 
-                // load initial values
-        setValue(props.currentValueDtos?.map(dto => dto.linkedInteractionId.toString()) ?? []);
+        if (props.currentValueDtos) {
+            loadInitialData();
+        }
+
+
     }, [props.currentValueDtos]);
 
 
+    const loadInitialData = async () => {
+
+        const currentValueDtos: CreateRelationDto[] = props.currentValueDtos as CreateRelationDto[];
+
+        const values: SelectValue<Interaction>[] = [];
+        // await loop
+        for await (const currentValueDto of currentValueDtos) {
+
+            if (currentValueDto.linkedInteractionId) {
+
+                const interaction = await getFullInteractionById(currentValueDto.linkedInteractionId);
+                if (interaction) {
+                    const interactionValue = {
+                        key: interaction.id.toString(),
+                        label: interaction.id + ': ' + interaction.label,
+                        value: interaction.id.toString(),
+                        data: interaction
+                    } as SelectValue<Interaction>;
+                    values.push(interactionValue);
+                }
+            }
+        }
+
+        setValue(values.map(value => {
+            return {
+                key: value.key,
+                label: value.label,
+                value: value.value
+            }
+        }));
+        setData(values);
+
+    }
 
     const handleSearch = (newValue: string) => {
         setCurrentSearchInput(newValue)
         if (newValue) {
             fetch(newValue, setData, props.filterByEntityRelation);
-            props.onListFetched && props.onListFetched(data.map((d) => d.data));
+            const fetchedList = data.filter(d => d.data !== undefined).map((d) => d.data as Interaction);
+            if (fetchedList)
+                props.onListFetched && props.onListFetched(fetchedList);
         } else {
             setData([]);
         }
@@ -93,7 +135,7 @@ const FilterInteractionMultiple = (props: FilterInteractionMultipleProps<Interac
     };
 
     const options = data.map((selectValue, index) => <Option
-        key={selectValue.value}>{selectValue.value + ': ' + selectValue.label} </Option>);
+        key={index} value={selectValue.data?.id}>{selectValue.value + ': ' + selectValue.label} </Option>);
 
 
     // This is an important function that handles the creation of a new interaction entity

@@ -246,6 +246,6 @@ public class InteractionRepository : IInteractionRepository
             .Include(x => x.Purposes)
             .Include(x => x.References)
             .Include(x => x.FirstActs)
-            .Include(x => x.SecondActs).Load();
+            .Include(x => x.SecondActs).AsNoTracking().Load();
     }
 }

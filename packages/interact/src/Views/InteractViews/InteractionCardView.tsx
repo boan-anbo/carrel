@@ -1,5 +1,5 @@
 import FilterInteractionSingle from "../../db-gadgets/FilterInteractionSingle";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {
     ContextRelation,
     FirstActRelation,
@@ -20,41 +20,70 @@ import {InteractionCardFieldItem} from "./InteractCardFields/InteractionCardFiel
 import {BiData, BiLabel, MdDescription, MdPermIdentity, SiContentful, SiReason} from "react-icons/all";
 import {InteractionCardRelationFieldItem} from "./InteractCardFields/InteractionCardRelationFieldItem";
 
-export function InteractionCardView() {
+interface InteractionCardViewProps {
+    interaction?: Interaction
+}
+
+export function InteractionCardView(props: InteractionCardViewProps) {
 
     const [interaction, setInteraction] = useState<Interaction | null>(null);
 
+    useEffect(() => {
+
+        if (props.interaction) {
+            setInteraction(props.interaction);
+        }
+    }, [props.interaction?.id]);
+
+
     return <div className={'px-4'} onMouseDown={e => e.stopPropagation()}>
 
-        <FilterInteractionSingle placeholder={'Search interaction'} style={{width: '100%'}}
-                                 onSelect={async (e) => {
-                                     const result = await getFullInteractionById(parseInt(e.value));
-                                     setInteraction(result);
-                                 }}/>
+        <FilterInteractionSingle
+
+            placeholder={'Search interaction'}
+            style={{width: '100%'}}
+            onSelect={async (e) => {
+                const result = await getFullInteractionById(parseInt(e.value));
+                setInteraction(result);
+            }}
+        />
         {interaction &&
             <div>
-
-
                 <div className={"space-x-0"}>
                     <div>
-                        <InteractionCardFieldItem label={'Label'} icon={<BiLabel/>} interaction={interaction}
-                                                  fieldValue={interaction.label}/>
+                        <InteractionCardFieldItem
+                            label={'Label'}
+                            icon={<BiLabel/>}
+                            interaction={interaction}
+                            fieldValue={interaction.label}/>
                     </div>
                     <div>
-                        <InteractionCardFieldItem label={'Description'} icon={<MdDescription/>}
-                                                  interaction={interaction} fieldValue={interaction.description}/>
+                        <InteractionCardFieldItem
+                            label={'Description'}
+                            icon={<MdDescription/>}
+                            interaction={interaction}
+                            fieldValue={interaction.description}/>
                     </div>
                     <div>
-                        <InteractionCardFieldItem label={'Content'} icon={<SiContentful/>} interaction={interaction}
-                                                  fieldValue={interaction.content}/>
+                        <InteractionCardFieldItem
+                            label={'Content'}
+                            icon={<SiContentful/>}
+                            interaction={interaction}
+                            fieldValue={interaction.content}/>
                     </div>
                     <div>
-                        <InteractionCardFieldItem label={'Identity'} icon={<MdPermIdentity/>} interaction={interaction}
-                                                  fieldValue={interaction.identity}/>
+                        <InteractionCardFieldItem
+                            label={'Identity'}
+                            icon={<MdPermIdentity/>}
+                            interaction={interaction}
+                            fieldValue={interaction.identity}/>
                     </div>
                     <div>
-                        <InteractionCardFieldItem label={'Data'} icon={<BiData/>} interaction={interaction}
-                                                  fieldValue={interaction.data}/>
+                        <InteractionCardFieldItem
+                            label={'Data'}
+                            icon={<BiData/>}
+                            interaction={interaction}
+                            fieldValue={interaction.data}/>
                     </div>
 
                     <div className={''}>
@@ -160,7 +189,7 @@ export function InteractionCardView() {
                         />
                     </div>
                     <div>
-                    {/*    Setting relation */}
+                        {/*    Setting relation */}
                         <InteractionCardRelationFieldItem<SettingRelation>
                             relationCount={interaction.settingsCount}
                             showLabel={false}

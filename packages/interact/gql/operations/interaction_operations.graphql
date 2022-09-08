@@ -4,16 +4,15 @@ query GetInteractions {
         edges {
             cursor
             node {
-                id
-                label
-                uuid
+                ...interactionFragment
+
             }
         }
         nodes {
             ...interactionFragment
         }
         totalCount
-        ...pageInforFragment
+        ...pageInfoFragment
     }
 }
 
@@ -45,6 +44,13 @@ query FilterInteractionsByLabel($labelFilter: String!) {
     ) {
         nodes {
             ...interactionFragment
+        }
+        edges {
+            cursor
+            node {
+                ...interactionFragment
+            }
+
         }
     }
 }
@@ -79,8 +85,11 @@ mutation AddInteraction($request: CreateOrUpdateInteractionRequestDtoInput!) {
 fragment interactionFragment on Interaction {
     id,
     uuid
+    description
+    content
     label,
     identity,
+
     subjects {
         ...subjectFragment
     }
@@ -294,7 +303,7 @@ fragment MinimalInteractionFragment on Interaction {
 
 
 
-fragment pageInforFragment on InteractionsConnection {
+fragment pageInfoFragment on InteractionsConnection {
     pageInfo {
         hasNextPage
 

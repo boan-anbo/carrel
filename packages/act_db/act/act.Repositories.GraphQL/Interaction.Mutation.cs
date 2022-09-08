@@ -212,7 +212,7 @@ public class GraphQLMutation : IGraphQLMutation
                 try
                 {
                     _relationRepo.CreateOrUpdateRelation<SubjectRelation>(createSubjectDto);
-                    
+
                 }
                 catch (Exception e)
                 {

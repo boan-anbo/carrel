@@ -10,6 +10,9 @@ import {CreateOrUpdateInteractionFormRelationInputs} from "./CreateOrUpdateInter
 import {CreateOrUpdateInteractionFormValueInputs} from "./CreateOrUpdateInteractionFormValueInputs";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
 import {onFormRelationSelectedHandler} from "./OnFormRelationSelectedHandler";
+import FilterInteractionMultiple from "../../../db-gadgets/FilterInteractionMultiple";
+import FilterInteractionSingle, {SelectValue} from "../../../db-gadgets/FilterInteractionSingle";
+import {getFullInteractionById} from "../../../clients/interact-db-client/filter-operations";
 
 interface CreateOrUpdateInteractionFormViewProp {
     size: SizeType | undefined;
@@ -36,12 +39,13 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
 
     useEffect(() => {
         if (props.existingFormData) {
-            setFormData(CreateInteractionFormData.fromInteraction(props.existingFormData));
+            loadFormDataFromExistingInteraction(props.existingFormData);
         }
     }, [props.existingFormData])
 
     const clearFormData = () => {
         setFormData(new CreateInteractionFormData());
+
     }
 
     async function onFormFinish(values: any) {
@@ -68,14 +72,40 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         setFormData(values)
     }
 
+    function loadFormDataFromExistingInteraction(interaction: Interaction) {
+        setFormData(CreateInteractionFormData.fromInteraction(interaction));
+    }
+
+    async function handleInteractionSelectionToEdit(i: SelectValue<Interaction>) {
+
+        console.log('load interaction to edit', i);
+        const interactionFull = await getFullInteractionById(parseInt(i.value));
+        console.log('interaction full', interactionFull);
+        if (interactionFull) {
+            loadFormDataFromExistingInteraction(interactionFull);
+        } else {
+            notify('Error', 'Could not load interaction', 'error');
+        }
+    }
+
     return (
         <div
             onMouseDown={e => e.stopPropagation()}>
             {showRawJson && <pre>{JSON.stringify(formData, null, 2)}</pre>}
             <div className={'flex space-x-2 space-x-2'}>
-                <button onClick={() => setMode()}>Edit</button>
-                <button>New</button>
+                <button onClick={() => setMode(FormMode.UPDATE)}>Edit</button>
+                <button onClick={() => setMode(FormMode.CREATE)}>New</button>
             </div>
+            {mode === FormMode.UPDATE &&
+                <FilterInteractionSingle
+                    placeholder={'Select interaction to update'}
+                    onSelect={(interactionId) => {
+                        console.log('received id from', interactionId);
+                        handleInteractionSelectionToEdit(interactionId)
+                    }}
+                    style={{width: '100%'}}
+
+                />}
             <Form
                 className={'px-4'}
                 size={props.size}
@@ -107,18 +137,19 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
                     </div>
                 </div>
 
-                <CreateOrUpdateInteractionFormValueInputs formData={formData} size={props.size}
-                                                          onLabelChange={(e) => {
-                                                              setFormData({...formData, label: e.target.value})
-                                                          }}
-                                                          onDescriptionChange={(e) => setFormData({
-                                                              ...formData,
-                                                              description: e.target.value
-                                                          })}
-                                                          onContentChange={(e) => setFormData({
-                                                              ...formData,
-                                                              content: e.target.value
-                                                          })}/>
+                <CreateOrUpdateInteractionFormValueInputs
+                    formData={formData} size={props.size}
+                    onLabelChange={(e) => {
+                        setFormData({...formData, label: e.target.value})
+                    }}
+                    onDescriptionChange={(e) => setFormData({
+                        ...formData,
+                        description: e.target.value
+                    })}
+                    onContentChange={(e) => setFormData({
+                        ...formData,
+                        content: e.target.value
+                    })}/>
 
                 <CreateOrUpdateInteractionFormRelationInputs
                     formData={formData} size={props.size}

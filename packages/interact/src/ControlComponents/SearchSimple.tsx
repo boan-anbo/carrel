@@ -4,18 +4,24 @@ import {CSSProperties} from "react";
 export interface SearchSimpleProps {
     style?: CSSProperties;
     onSearch: (value: string) => void
+    onChange: (value: string) => void
     placeholder?: string
 }
 
 export const SearchSimple = (props: SearchSimpleProps) => {
 
-    function onSearchSearch(value: string, event?: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLInputElement>) {
 
+    function onSearchChange(e: any) {
+        props.onChange(e.target.value);
     }
 
-    return (<Search placeholder={props.placeholder}
+    return (<Search
+        allowClear
+        placeholder={props.placeholder}
                     onSearch={props.onSearch}
+
+                    onChange={onSearchChange}
                     style={props.style}
-                    
+
     ></Search>)
 }

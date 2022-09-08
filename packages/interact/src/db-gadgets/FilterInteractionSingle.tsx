@@ -2,27 +2,37 @@ import {Select} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {filterInteractions, getRecentInteractions} from "../clients/interact-db-client/filter-operations";
 import {Interaction} from "../clients/grl-client/interact_db_client";
+import {ValueType} from "tailwindcss/types/config";
+import {LabeledValue} from "antd/lib/select";
 
 const {Option} = Select;
 
 
-export interface SelectValue<T> {
-    key: string;
-    label: string;
-    value: string;
-    data: T;
+export class SelectValue<T> {
+    key?: string;
+    label: string = '';
+    value: string = '';
+    data?: T;
+
+    toLabelValue<T>(selectValue: SelectValue<Interaction>): LabeledValue {
+        return {
+            key: selectValue.key,
+            label: <div className={'ring-emerald-200'}>{selectValue.label}</div>,
+            value: this.value
+        }
+    }
 }
 
-const fetch = async (value: string, callback: (data: { value: string; label: string }[]) => void) => {
+async function fetch<T>(value: string, callback: (data: SelectValue<T>[]) => void) {
 
     // Get filtered interactions from backend
     let filteredData = await filterInteractions(value);
-    let data = filteredData.map((interaction: Interaction) => {
+    let data = filteredData.map((interaction: Interaction, index) => {
         return {
             label: interaction.label,
             value: interaction.id.toString(),
             data: interaction
-        } as SelectValue<Interaction>;
+        } as SelectValue<T>;
     });
     // provide data to the callback
     console.log('providing data', data);
@@ -32,13 +42,13 @@ const fetch = async (value: string, callback: (data: { value: string; label: str
 
 export interface FilterInteractionSingleProps<T> {
     placeholder: string;
-    style: React.CSSProperties,
+    style?: React.CSSProperties,
     onSelect: (value: SelectValue<T>) => void;
 }
 
 const FilterInteractionSingle: React.FC<FilterInteractionSingleProps<Interaction>> = (props) => {
-    const [data, setData] = useState<any[]>([]);
-    const [value, setValue] = useState<string>();
+    const [data, setData] = useState<SelectValue<Interaction>[]>([]);
+    const [value, setValue] = useState<LabeledValue>();
 
     // on mount
     useEffect(() => {
@@ -51,37 +61,44 @@ const FilterInteractionSingle: React.FC<FilterInteractionSingleProps<Interaction
         console.log('attempting to fetch recent interactions');
         const recentInteractions = await getRecentInteractions();
         console.log('recent interactions', recentInteractions);
-        setData(recentInteractions.map((interaction: Interaction) => {
+        setData(recentInteractions.map((interaction: Interaction, index) => {
             return {
                 label: interaction.label,
                 value: interaction.id.toString(),
+                key: index.toString(),
                 data: interaction
             } as SelectValue<Interaction>;
         }));
     }
 
     const handleSearch = (newValue: string) => {
-        if (newValue.length === 0) {
-            loadRecentInteractions()
-        }
         if (newValue) {
-            fetch(newValue, setData);
+            fetch<Interaction>(newValue, setData);
         } else {
             setData([]);
         }
     };
 
-    const handleChange = (newValue: string) => {
-        setValue(newValue);
-        props.onSelect(data.find((d) => d.value === newValue));
+    const handleChange = (newValue: number) => {
+        console.log('Value changed in Filter Interaction', newValue);
+        setValue({
+            key: newValue.toString(),
+            label: <div className={'ring-emerald-200'}>{newValue}</div>,
+            value: newValue.toString()
+        });
+        const selectedInteraction = data.find((interaction: SelectValue<Interaction>) => interaction.value === newValue.toString());
+        console.log('found selected interaction', data);
+        if (selectedInteraction) {
+            props.onSelect(selectedInteraction);
+        }
     };
 
-    const options = data.map((d, index) => <Option key={d.value}>{d.value + ': ' + d.label}</Option>);
+    const options = data.map((d, index) => <Option key={index} value={d.data?.id}>{d.value + ': ' + d.label}</Option>);
 
     return (
         <Select
             showSearch
-            value={value}
+            value={value ?? null}
             placeholder={props.placeholder}
             style={props.style}
             defaultActiveFirstOption={false}
