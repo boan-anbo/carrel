@@ -1,12 +1,13 @@
 import {FilterInteractionsByLabelDocument, Interaction} from "../../clients/grl-client/interact_db_client";
-import FilterInteractionMultiple from "../../db-gadgets/FilterInteractionMultiple";
+import FilterInteractionMultiple from "../ViewComponents/FilterControls/FilterInteractionMultiple";
 import {useState} from "react";
 import {InteractionList} from "../ViewComponents/InteractViewComponent/InteractionList";
 import {useDispatch} from "react-redux";
 import {selectInteraction} from "../../features/app-state/appStateSlice";
-import FilterInteractionSingle, {SelectValue} from "../../db-gadgets/FilterInteractionSingle";
+import FilterInteractionSingle from "../ViewComponents/FilterControls/FilterInteractionSingle";
 import {SearchSimple} from "../../ControlComponents/SearchSimple";
 import {filterInteractions} from "../../clients/interact-db-client/filter-operations";
+import {SelectValue} from "../ViewComponents/FilterControls/SelectValue";
 
 export const FilteredInteractionList = () => {
 

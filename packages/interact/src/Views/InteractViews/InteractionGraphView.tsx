@@ -1,7 +1,8 @@
 import {GraphView} from "../graph/GraphView";
 import {useState} from "react";
-import FilterInteractionSingle, {SelectValue} from "../../db-gadgets/FilterInteractionSingle";
+import FilterInteractionSingle from "../ViewComponents/FilterControls/FilterInteractionSingle";
 import {Interaction} from "../../clients/grl-client/interact_db_client";
+import {SelectValue} from "../ViewComponents/FilterControls/SelectValue";
 
 export interface InteractionGraphViewProps {
     id?: number;

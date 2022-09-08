@@ -2,15 +2,17 @@ import {RelationTypes, RelationWeight} from "../../../clients/grl-client/interac
 import {CreateRelationDto} from "./CreateRelationDto";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
 import {Dispatch, SetStateAction} from "react";
+import {LabeledValue} from "antd/lib/select";
 
 // this updates the form data with the selected interactions (in relation to the host interaction)
-export const onFormRelationSelectedHandler = (e: string[],
-                                              SubjectRelation: RelationTypes,
+export const onFormRelationSelectedHandler = (e: LabeledValue[],
+                                              relations: RelationTypes,
                                               formData: CreateInteractionFormData,
                                               setFormData: Dispatch<SetStateAction<CreateInteractionFormData>>) => {
-    console.log("Ready to load payload", e, SubjectRelation)
-    const createDtos = SelectedInteractionToRelationDto(e, SubjectRelation)
-    switch (SubjectRelation) {
+    console.log("Ready to load payload", e, relations)
+    const createDtos = SelectedInteractionToRelationDto(e, relations)
+    console.log("Payload", createDtos)
+    switch (relations) {
         case RelationTypes.ContextRelation:
             setFormData({...formData, contextDtos: createDtos})
             break;
@@ -44,12 +46,12 @@ export const onFormRelationSelectedHandler = (e: string[],
     }
 }
 
-const SelectedInteractionToRelationDto = (selectedInteractionIds: string[], relationType: RelationTypes): CreateRelationDto[] => {
-    return selectedInteractionIds.map((id) => {
-        return {
-            linkedInteractionId: parseInt(id, 10),
-            relationType: relationType,
-            weight: RelationWeight.NotImportant,
-        }
+const SelectedInteractionToRelationDto = (labaledValues: LabeledValue[], relationType: RelationTypes): CreateRelationDto[] => {
+    return labaledValues.map((labeledValue) => {
+        const createRelationDto = new CreateRelationDto();
+        createRelationDto.linkedInteractionId = parseInt(labeledValue.value as string);
+        createRelationDto.relationType = relationType;
+        createRelationDto.weight = RelationWeight.NotImportant;
+        return createRelationDto;
     })
 }

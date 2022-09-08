@@ -10,9 +10,10 @@ import {CreateOrUpdateInteractionFormRelationInputs} from "./CreateOrUpdateInter
 import {CreateOrUpdateInteractionFormValueInputs} from "./CreateOrUpdateInteractionFormValueInputs";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
 import {onFormRelationSelectedHandler} from "./OnFormRelationSelectedHandler";
-import FilterInteractionMultiple from "../../../db-gadgets/FilterInteractionMultiple";
-import FilterInteractionSingle, {SelectValue} from "../../../db-gadgets/FilterInteractionSingle";
+import FilterInteractionMultiple from "../../ViewComponents/FilterControls/FilterInteractionMultiple";
+import FilterInteractionSingle from "../../ViewComponents/FilterControls/FilterInteractionSingle";
 import {getFullInteractionById} from "../../../clients/interact-db-client/filter-operations";
+import {SelectValue} from "../../ViewComponents/FilterControls/SelectValue";
 
 interface CreateOrUpdateInteractionFormViewProp {
     size: SizeType | undefined;
@@ -41,11 +42,10 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         if (props.existingFormData) {
             loadFormDataFromExistingInteraction(props.existingFormData);
         }
-    }, [props.existingFormData])
+    }, [])
 
     const clearFormData = () => {
         setFormData(new CreateInteractionFormData());
-
     }
 
     async function onFormFinish(values: any) {
@@ -73,14 +73,15 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
     }
 
     function loadFormDataFromExistingInteraction(interaction: Interaction) {
-        setFormData(CreateInteractionFormData.fromInteraction(interaction));
+        console.log("Loading form data from existing interaction", interaction)
+        const formDataFromInteraction = CreateInteractionFormData.fromInteraction(interaction);
+        console.log("Form data from interaction", formDataFromInteraction)
+        setFormData(formDataFromInteraction);
     }
 
     async function handleInteractionSelectionToEdit(i: SelectValue<Interaction>) {
 
-        console.log('load interaction to edit', i);
         const interactionFull = await getFullInteractionById(parseInt(i.value));
-        console.log('interaction full', interactionFull);
         if (interactionFull) {
             loadFormDataFromExistingInteraction(interactionFull);
         } else {
@@ -92,22 +93,22 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         <div
             onMouseDown={e => e.stopPropagation()}>
             {showRawJson && <pre>{JSON.stringify(formData, null, 2)}</pre>}
-            <div className={'flex space-x-2 space-x-2'}>
+            <div className={'flex space-x-2'}>
                 <button onClick={() => setMode(FormMode.UPDATE)}>Edit</button>
                 <button onClick={() => setMode(FormMode.CREATE)}>New</button>
             </div>
             {mode === FormMode.UPDATE &&
                 <FilterInteractionSingle
                     placeholder={'Select interaction to update'}
-                    onSelect={(interactionId) => {
-                        console.log('received id from', interactionId);
-                        handleInteractionSelectionToEdit(interactionId)
+                    onSelect={(selectValue) => {
+                        console.log('received id from', selectValue);
+                        handleInteractionSelectionToEdit(selectValue)
                     }}
                     style={{width: '100%'}}
 
                 />}
             <Form
-                className={'px-4'}
+                className={'px-2'}
                 size={props.size}
                 form={form}
                 title={'Create Interaction'}

@@ -1,5 +1,5 @@
 import {SizeType} from "antd/lib/config-provider/SizeContext";
-import FilterInteractionMultiple from "../../../db-gadgets/FilterInteractionMultiple";
+import FilterInteractionMultiple from "../../ViewComponents/FilterControls/FilterInteractionMultiple";
 import {InteractionIdentity} from "../../../clients/grl-client/interact_db_client";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
 

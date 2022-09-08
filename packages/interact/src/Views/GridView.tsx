@@ -35,7 +35,7 @@ export const GridView = (props: {
         return () => {
             setSelectedView(props.selectedView)
         };
-    }, [props.selectedView]);
+    }, []);
 
     return (
         <div>

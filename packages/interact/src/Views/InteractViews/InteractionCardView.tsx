@@ -1,4 +1,4 @@
-import FilterInteractionSingle from "../../db-gadgets/FilterInteractionSingle";
+import FilterInteractionSingle from "../ViewComponents/FilterControls/FilterInteractionSingle";
 import {useEffect, useState} from "react";
 import {
     ContextRelation,

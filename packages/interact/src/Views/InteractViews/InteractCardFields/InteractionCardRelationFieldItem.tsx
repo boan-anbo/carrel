@@ -1,6 +1,6 @@
 import {Interaction, RelationTypes} from "../../../clients/grl-client/interact_db_client";
-import FilterInteractionMultiple from "../../../db-gadgets/FilterInteractionMultiple";
-import {FilterByEntityRelation} from "../../../db-gadgets/FilterByEntityRelation";
+import FilterInteractionMultiple from "../../ViewComponents/FilterControls/FilterInteractionMultiple";
+import {FilterByEntityRelation} from "../../ViewComponents/FilterControls/FilterByEntityRelation";
 import {SizeType} from "antd/lib/config-provider/SizeContext";
 
 export function InteractionCardRelationFieldItem<T>(props: {

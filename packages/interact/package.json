@@ -8,7 +8,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "test": "vitest",
+    "test:vitest": "vitest",
+    "test": "jest",
     "codegen:interact_client": "cd gql && graphql-codegen",
     "codegen:distant_core": "openapi-generator-cli generate -i http://127.0.0.1:3000/api-doc/openapi.json -g typescript-axios -o  src/clients/distant_api"
   },
@@ -24,9 +25,9 @@
     "@react-buddy/ide-toolbox": "^2.2.1",
     "@react-buddy/palette-antd": "^4.1.2",
     "@reduxjs/toolkit": "^1.8.5",
-    "@sentry/react": "^7.12.1",
-    "@sentry/tracing": "^7.12.1",
     "@tauri-apps/api": "^1.0.2",
+    "@types/react-test-renderer": "^18.0.0",
+    "@types/uuid": "^8.3.4",
     "antd": "^4.23.0",
     "craco-antd": "^2.0.0",
     "craco-less": "^2.0.0",
@@ -37,7 +38,8 @@
     "react-hook-form": "^7.34.2",
     "react-icons": "^4.4.0",
     "react-merge-refs": "^2.0.1",
-    "react-redux": "^8.0.2"
+    "react-redux": "^8.0.2",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.12.0",
@@ -51,10 +53,13 @@
     "@vitejs/plugin-react": "^2.0.0",
     "autoprefixer": "^10.4.8",
     "graphql": "^16.6.0",
+    "happy-dom": "^6.0.4",
+    "jsdom": "^20.0.0",
     "postcss": "^8.4.16",
+    "react-test-renderer": "^18.2.0",
     "tailwindcss": "^3.1.8",
     "typescript": "^4.6.4",
-    "vite": "^3.0.2",
+    "vite": "^3.0.00",
     "vite-plugin-imp": "^2.3.0",
     "vitest": "^0.23.1"
   }

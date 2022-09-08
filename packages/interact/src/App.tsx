@@ -18,11 +18,11 @@ import {GridView, GridViewTypes} from "./Views/GridView";
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 const defaultLayout: Layout[] = [
-    {i: "input_panel", x: 0, y: 0, w: 6, h: 8, static: false},
-    {i: "left_panel", x: 6, y: 0, w: 6, h: 4, static: false},
-    {i: "mid_panel", x: 12, y: 0, w: 6, h: 4, static: false},
-    {i: "right_panel", x: 18, y: 0, w: 6, h: 8, static: false},
-    {i: "below_panel", x: 6, y: 4, w: 12, h: 4, static: false},
+    {i: "left_panel", x: 0, y: 0, w: 8, h: 8, static: false},
+    {i: "mid_top", x: 8, y: 4, w: 8, h: 4, static: false},
+    {i: "mid_center", x: 8, y: 0, w: 8, h: 4, static: false},
+    {i: "mid_below", x:0, y: 8, w: 24, h: 6, static: false},
+    {i: "right_panel", x: 18, y: 0, w: 8, h: 8, static: false},
 ]
 
 const defaultLayoutGrid = {
@@ -79,25 +79,26 @@ function App() {
                 onLayoutChange={onResponsiveGridLayoutLayoutChange}>
 
 
-                <div key="input_panel" className="bg-gray-200 overflow-y-scroll">
+                <div key="left_panel" className="bg-gray-200 overflow-y-scroll">
                     {/*<DistantDocumentList/>*/}
                     <GridView selectedView={GridViewTypes.CREATE_INTERACTION_FORM}/>
                 </div>
 
-                <div key="left_panel" className='bg-red-500'>
+                <div key="mid_top" className='bg-red-500'>
+                    <GridView selectedView={GridViewTypes.SELECTED_INTERACTION_CARD}/>
                 </div>
 
-                <div key="mid_panel" className='bg-red-300'>
+                <div key="mid_center" className='bg-red-300'>
                     <SelectedInteractionDataViewer></SelectedInteractionDataViewer>
                 </div>
 
-                <div key="right_panel" className='overflow-y-scroll'>
+                <div key="mid_below" className='overflow-y-scroll'>
 
-                    <GridView selectedView={GridViewTypes.INTERACTION_CARD_VIEW}></GridView>
+                    <GridView selectedView={GridViewTypes.INTERACTION_GRAPH_VIEW}></GridView>
                 </div>
 
-                <div key="below_panel" className='bg-amber-200'>
-                    <GridView selectedView={GridViewTypes.INTERACTION_GRAPH_VIEW}></GridView>
+                <div key="right_panel" className='bg-amber-200'>
+                    <GridView selectedView={GridViewTypes.INTERACTION_CARD_VIEW}></GridView>
                 </div>
             </ResponsiveGridLayout>
         </div>
