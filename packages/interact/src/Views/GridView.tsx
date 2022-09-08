@@ -3,16 +3,16 @@ import {FilteredInteractionList} from "./InteractViews/FilteredInteractionList";
 import {InteractionCardView} from "./InteractViews/InteractionCardView";
 import {InteractionGraphView} from "./InteractViews/InteractionGraphView";
 import {SelectedPassageViewer} from "./InteractViews/SelectedPassageViewer";
-import {CreateOrUpdateInteractionForm} from "./InteractViews/CreateorUpdateInteractionForm";
+import {CreateOrUpdateInteractionFormView} from "./InteractViews/CreatOrUpdateInteractionForm/CreateOrUpdateInteractionFormView";
 
 export enum GridViewTypes {
     NONE,
-    FILTERED_INTERACTION_LIST = 'Interaction List',
-    SELECTED_INTERACTION_GRAPH_VIEWER = 'Selected Interaction Graph Viewer',
-    SELECTED_PASSAGE_VIEWER = 'Selected Passage Viewer',
-    INTERACTION_GRAPH_VIEW = 'Interaction Graph View',
-    INTERACTION_CARD_VIEW = 'Interaction Card View',
-    CREATE_INTERACTION_FORM = 'Create Interaction Form',
+    FILTERED_INTERACTION_LIST = 'List',
+    SELECTED_INTERACTION_GRAPH_VIEWER = 'Selected',
+    SELECTED_PASSAGE_VIEWER = 'Passage',
+    INTERACTION_GRAPH_VIEW = 'Graph',
+    INTERACTION_CARD_VIEW = 'Card',
+    CREATE_INTERACTION_FORM = 'New',
 
 }
 
@@ -36,28 +36,33 @@ export const GridView = (props: {
 
     return (
         <div>
-            <div className={'flex space-x-4 justify-center text-xs'}>
+            <div className={'flex space-x-4 justify-center text-xs pt-4'}>
                 {/*    Iterate over views */}
                 {allViews.map((view) => {
                     return <button
                         key={view}
-                        className={selectedView === view ? 'bg-blue-500' : 'bg-gray-500'}
+                        className={selectedView === view ? 'bg-red-500 rounded px-2 text-white' : ''}
                         onClick={() => setSelectedView(view)}
                     >{view}</button>
                 })}
             </div>
 
-            {selectedView === GridViewTypes.FILTERED_INTERACTION_LIST && <FilteredInteractionList/>}
+            {/*View Container*/}
+            <div className={'p-4'}>
+                {selectedView === GridViewTypes.FILTERED_INTERACTION_LIST && <FilteredInteractionList/>}
 
-            {selectedView === GridViewTypes.SELECTED_INTERACTION_GRAPH_VIEWER && <div>SelectedInteractionGraphViewer</div>}
+                {selectedView === GridViewTypes.SELECTED_INTERACTION_GRAPH_VIEWER &&
+                    <div>SelectedInteractionGraphViewer</div>}
 
-            {selectedView === GridViewTypes.SELECTED_PASSAGE_VIEWER && <div> <SelectedPassageViewer></SelectedPassageViewer> </div>}
+                {selectedView === GridViewTypes.SELECTED_PASSAGE_VIEWER &&
+                    <div><SelectedPassageViewer></SelectedPassageViewer></div>}
 
-            {selectedView === GridViewTypes.INTERACTION_GRAPH_VIEW && <div><InteractionGraphView/></div>}
+                {selectedView === GridViewTypes.INTERACTION_GRAPH_VIEW && <div><InteractionGraphView/></div>}
 
-            {selectedView === GridViewTypes.INTERACTION_CARD_VIEW && <div> <InteractionCardView/> </div>}
+                {selectedView === GridViewTypes.INTERACTION_CARD_VIEW && <div><InteractionCardView/></div>}
 
-            {selectedView === GridViewTypes.CREATE_INTERACTION_FORM && <div><CreateOrUpdateInteractionForm/></div>}
+                {selectedView === GridViewTypes.CREATE_INTERACTION_FORM && <div><CreateOrUpdateInteractionFormView/></div>}
+            </div>
         </div>
     )
 }

@@ -1,11 +1,12 @@
 import {Form, Popconfirm, Select} from 'antd';
 import React, {KeyboardEvent, useEffect, useState} from 'react';
 import {filterInteractionRelation, filterInteractions} from "../clients/interact-db-client/filter-operations";
-import {Interaction, InteractionIdentity, RelationTypes} from "../clients/grl-client/interact_db_client";
+import {Interaction, InteractionIdentity, Relation, RelationTypes} from "../clients/grl-client/interact_db_client";
 import {SelectValue} from './FilterInteractionSingle';
 import {createInteractionEntity} from "../clients/interact-db-client/create-interaction-entity";
 import {FilterByEntityRelation} from "./FilterByEntityRelation";
 import {SizeType} from "antd/lib/config-provider/SizeContext";
+import {CreateRelationDto} from "../Views/InteractViews/CreatOrUpdateInteractionForm/CreateRelationDto";
 
 const {Option} = Select;
 
@@ -18,7 +19,7 @@ const fetch = async (value: string, callback: (data: SelectValue<Interaction>[])
     if (shouldFilterByEntityRelation) {
         console.log('filter by entity relation', filterByEntityRelation);
        const connection = await filterInteractionRelation(value, filterByEntityRelation);
-        filteredData = connection.nodes?.map(n => n.linkedInteraction as Interaction) ?? [];
+        filteredData = connection.nodes?.map((relation: Relation) => relation.linkedInteraction as Interaction) ?? [];
     } else {
         filteredData = await filterInteractions(value);
         console.log('filter by interaction label');
@@ -51,6 +52,7 @@ export interface FilterInteractionMultipleProps<T> {
     filterByEntityRelation?: FilterByEntityRelation
     showLabel?: boolean;
     size?: SizeType | undefined;
+    currentValueDtos?: CreateRelationDto[];
 }
 
 const FilterInteractionMultiple = (props: FilterInteractionMultipleProps<Interaction>) => {
@@ -65,8 +67,13 @@ const FilterInteractionMultiple = (props: FilterInteractionMultipleProps<Interac
 
     // on mount
     useEffect(() => {
+
+        // load initial values
             fetch('', setData, props.filterByEntityRelation);
-    }, []);
+
+                // load initial values
+        setValue(props.currentValueDtos?.map(dto => dto.linkedInteractionId.toString()) ?? []);
+    }, [props.currentValueDtos]);
 
 
 

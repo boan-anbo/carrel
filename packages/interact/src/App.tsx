@@ -11,7 +11,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "./store";
 import {SelectedPassageViewer} from "./Views/InteractViews/SelectedPassageViewer";
 import {SelectedTextViewer} from "./Views/ViewComponents/InteractViewComponent/SelectedTextViewer";
-import {CreateOrUpdateInteractionForm} from "./Views/InteractViews/CreateorUpdateInteractionForm";
+import {CreateOrUpdateInteractionFormView} from "./Views/InteractViews/CreatOrUpdateInteractionForm/CreateOrUpdateInteractionFormView";
 import {SelectedInteractionDataViewer} from "./Views/InteractViews/SelectedInteractionDataViewer";
 import {GridView, GridViewTypes} from "./Views/GridView";
 

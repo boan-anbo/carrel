@@ -10,7 +10,10 @@ import {
 } from "../grl-client/interact_db_client";
 import {getApolloClient} from "../../utils/get-apollo-client";
 import {FetchResult} from "@apollo/client";
-import {CreateInteractionFormData, CreateRelationDto} from "../../Views/InteractViews/CreateorUpdateInteractionForm";
+import {
+    CreateInteractionFormData
+} from "../../Views/InteractViews/CreatOrUpdateInteractionForm/CreateInteractionFormData";
+import {CreateRelationDto} from "../../Views/InteractViews/CreatOrUpdateInteractionForm/CreateRelationDto";
 
 export async function createInteractionEntity(label: string, identity: InteractionIdentity, description?: string, content?: string): Promise<Interaction> {
     try {
