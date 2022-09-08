@@ -1,17 +1,25 @@
-import {RelationTypes, RelationWeight} from "../../../clients/grl-client/interact_db_client";
+import {Interaction, RelationTypes, RelationWeight} from "../../../clients/grl-client/interact_db_client";
 import {CreateRelationDto} from "./CreateRelationDto";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
 import {Dispatch, SetStateAction} from "react";
 import {LabeledValue} from "antd/lib/select";
+import {Logger, LogSource} from "../../../utils/logger";
+import {SelectValue} from "../../ViewComponents/FilterControls/SelectValue";
 
+const log = new Logger(LogSource.OnFormRelationSelectedHandler)
 // this updates the form data with the selected interactions (in relation to the host interaction)
-export const onFormRelationSelectedHandler = (e: LabeledValue[],
+export const onFormRelationSelectedHandler = (selectValues: SelectValue<Interaction>[],
                                               relations: RelationTypes,
                                               formData: CreateInteractionFormData,
                                               setFormData: Dispatch<SetStateAction<CreateInteractionFormData>>) => {
-    console.log("Ready to load payload", e, relations)
-    const createDtos = SelectedInteractionToRelationDto(e, relations)
-    console.log("Payload", createDtos)
+    log.info("onFormRelationSelectedHandler", 'Provided selection data', {
+        selectValues,
+        relations,
+        formData,
+        setFormData
+    });
+    const createDtos = SelectedInteractionToRelationDto(selectValues, relations)
+
     switch (relations) {
         case RelationTypes.ContextRelation:
             setFormData({...formData, contextDtos: createDtos})
@@ -46,8 +54,8 @@ export const onFormRelationSelectedHandler = (e: LabeledValue[],
     }
 }
 
-const SelectedInteractionToRelationDto = (labaledValues: LabeledValue[], relationType: RelationTypes): CreateRelationDto[] => {
-    return labaledValues.map((labeledValue) => {
+const SelectedInteractionToRelationDto = (selectValues: SelectValue<Interaction>[], relationType: RelationTypes): CreateRelationDto[] => {
+    return selectValues.map((labeledValue) => {
         const createRelationDto = new CreateRelationDto();
         createRelationDto.linkedInteractionId = parseInt(labeledValue.value as string);
         createRelationDto.relationType = relationType;

@@ -10,10 +10,12 @@ import {IFilterInteractionMultipleProps} from "./IFilterInteractionMultipleProps
 import {SelectValue} from "./SelectValue";
 import {getInteractionSelectionLabel} from "./filter-utils/getInteractionLabel";
 import {EmittedLabledValue} from "./EmittedLabledValue";
+import {Logger, LogSource} from "../../../utils/logger";
 
 const {Option} = Select;
 
 const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Interaction>) => {
+    const log = new Logger(LogSource.FilterInteractionMultiple);
     /**
      * Data for displayed options. Fetched from the backend as {@see Interaction}[], and converted to {@see SelectValue<Interaction>[]} for the Select component.
      */
@@ -32,36 +34,37 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
             loadInitialData();
         }
 
-    }, []);
+    }, [props.currentValueDtos]);
 
 
     const loadInitialData = async () => {
-        console.log(' Multiple selected is loading initial data', props.currentValueDtos);
         const currentValueDtos: CreateRelationDto[] = props.currentValueDtos as CreateRelationDto[];
         const values: SelectValue<Interaction>[] = [];
         // await loop
+        let index = 0;
         for await (const currentValueDto of currentValueDtos) {
             if (currentValueDto.linkedInteractionId) {
                 const interaction = await getFullInteractionById(currentValueDto.linkedInteractionId);
+                log.info(' Single interaction loaded to feed into form data', 'interaction', interaction);
                 if (interaction) {
-                    const interactionValue = new SelectValue(
-                        interaction.id.toString(),
+                    const interactionValue = new SelectValue<Interaction>(
+                        index,
                         getInteractionSelectionLabel(interaction),
                         interaction.id,
                         interaction
                     );
+                    values.push(interactionValue);
                 }
             }
+            index++;
         }
         setData(values);
-        setValue(values.map(value => {
-                return {
-                    key: value.key,
-                    label: value.label,
-                    value: value.value
-                }
-            }
-        ));
+        setValue(values.map((v, index) => new SelectValue(
+            index,
+            v.key ?? '',
+            v.label ?? '',
+            v.data ?? undefined,
+        ).toLabelValue()));
     }
 
     const handleSearch = (newValue: string) => {
@@ -99,11 +102,7 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
                 addInteraction(interaction);
                 console.log("Created interaction in filter control", interaction);
             }
-            // console.log('onInputKeyDown', e.key);
-            // const firstOption = data[1];
-            // if (firstOption) {
-            // }
-            // setValue()
+
         }
         if (event.key === 'Escape') {
             setShowConfirm(false);

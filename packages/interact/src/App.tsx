@@ -4,14 +4,11 @@ import "/node_modules/react-resizable/css/styles.css";
 import "./App.css";
 
 import {Layout, Responsive, WidthProvider} from "react-grid-layout";
-import {InteractionGraphView} from "./Views/InteractViews/InteractionGraphView";
 import {Button} from "antd";
 import {useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "./store";
-import {SelectedPassageViewer} from "./Views/InteractViews/SelectedPassageViewer";
 import {SelectedTextViewer} from "./Views/ViewComponents/InteractViewComponent/SelectedTextViewer";
-import {CreateOrUpdateInteractionFormView} from "./Views/InteractViews/CreatOrUpdateInteractionForm/CreateOrUpdateInteractionFormView";
 import {SelectedInteractionDataViewer} from "./Views/InteractViews/SelectedInteractionDataViewer";
 import {GridView, GridViewTypes} from "./Views/GridView";
 
@@ -19,8 +16,8 @@ const ResponsiveGridLayout = WidthProvider(Responsive);
 
 const defaultLayout: Layout[] = [
     {i: "left_panel", x: 0, y: 0, w: 8, h: 8, static: false},
-    {i: "mid_top", x: 8, y: 4, w: 8, h: 4, static: false},
-    {i: "mid_center", x: 8, y: 0, w: 8, h: 4, static: false},
+    {i: "mid_top", x: 8, y: 0, w: 8, h: 4, static: false},
+    {i: "mid_center", x: 8, y: 4, w: 8, h: 4, static: false},
     {i: "mid_below", x:0, y: 8, w: 24, h: 6, static: false},
     {i: "right_panel", x: 18, y: 0, w: 8, h: 8, static: false},
 ]
@@ -79,20 +76,20 @@ function App() {
                 onLayoutChange={onResponsiveGridLayoutLayoutChange}>
 
 
-                <div key="left_panel" className="bg-gray-200 overflow-y-scroll">
+                <div key="left_panel" className="bg-gray-200">
                     {/*<DistantDocumentList/>*/}
                     <GridView selectedView={GridViewTypes.CREATE_INTERACTION_FORM}/>
                 </div>
 
                 <div key="mid_top" className='bg-red-500'>
-                    <GridView selectedView={GridViewTypes.SELECTED_INTERACTION_CARD}/>
+                    <GridView selectedView={GridViewTypes.RECENT_INTERACTIONS}/>
                 </div>
 
                 <div key="mid_center" className='bg-red-300'>
-                    <SelectedInteractionDataViewer></SelectedInteractionDataViewer>
+                    <GridView selectedView={GridViewTypes.SELECTED_INTERACTION_CARD}/>
                 </div>
 
-                <div key="mid_below" className='overflow-y-scroll'>
+                <div key="mid_below" className=''>
 
                     <GridView selectedView={GridViewTypes.INTERACTION_GRAPH_VIEW}></GridView>
                 </div>

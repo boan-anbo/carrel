@@ -49,7 +49,6 @@ public class ActDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
         // context relations
         modelBuilder.Entity<ContextRelation>()
             .HasKey(x => x.Uuid);
@@ -58,9 +57,8 @@ public class ActDbContext : DbContext
             .HasOne(x => x.HostInteraction)
             .WithMany(x => x.Contexts)
             .HasForeignKey(x => x.HostInteractionId)
-
             .OnDelete(DeleteBehavior.Restrict);
-        
+
 
         // reverse navigation
         modelBuilder.Entity<ContextRelation>()
@@ -229,23 +227,22 @@ public class ActDbContext : DbContext
             .WithMany(x => x.Properties)
             .HasForeignKey(x => x.InteractionId)
             .OnDelete(DeleteBehavior.Restrict);
-        
-            
+
 
         // configure eager loading for first and second act
-        
+
         // first acts alway include the linked act interaction
         modelBuilder.Entity<FirstActRelation>()
             .Navigation(x => x.LinkedInteraction)
             .AutoInclude();
 
-        
+
         // second acts alway include the linked act interaction
         modelBuilder.Entity<SecondActRelation>()
             .Navigation(x => x.LinkedInteraction)
             .AutoInclude();
 
-        
+
         // Create a sample sentence representation.
 
         // Context: Air pollution
@@ -365,7 +362,8 @@ public class ActDbContext : DbContext
             {
                 Uuid = Guid.NewGuid(),
                 HostInteractionId = 14,
-                LinkedInteractionId = 5
+                LinkedInteractionId = 5,
+                Type = RelationTypes.ContextRelation,
             }
         );
 
@@ -375,23 +373,26 @@ public class ActDbContext : DbContext
             {
                 Uuid = Guid.NewGuid(),
                 HostInteractionId = 14,
-                LinkedInteractionId = 6
+                LinkedInteractionId = 6,
+                Type = RelationTypes.SubjectRelation,
             },
             new SubjectRelation
             {
                 Uuid = Guid.NewGuid(),
                 HostInteractionId = 14,
-                LinkedInteractionId = 7
+                LinkedInteractionId = 7,
+                Type = RelationTypes.SubjectRelation,
             }
         );
-        
+
         // add first act relations
         modelBuilder.Entity<FirstActRelation>().HasData(
             new FirstActRelation
             {
                 Uuid = Guid.NewGuid(),
                 HostInteractionId = 14,
-                LinkedInteractionId = 3
+                LinkedInteractionId = 3,
+                Type = RelationTypes.FirstActRelation,
             }
         );
 
@@ -401,20 +402,22 @@ public class ActDbContext : DbContext
             {
                 Uuid = Guid.NewGuid(),
                 HostInteractionId = 14,
-                LinkedInteractionId = 8
+                LinkedInteractionId = 8,
+                Type = RelationTypes.ObjectRelation,
             }
         );
-        
+
         // add second act relations
         modelBuilder.Entity<SecondActRelation>().HasData(
             new SecondActRelation
             {
                 Uuid = Guid.NewGuid(),
                 HostInteractionId = 14,
-                LinkedInteractionId = 4
+                LinkedInteractionId = 4,
+                Type = RelationTypes.SecondActRelation,
             }
         );
-        
+
 
         // add indirect object relations
 
@@ -423,7 +426,8 @@ public class ActDbContext : DbContext
             {
                 Uuid = Guid.NewGuid(),
                 HostInteractionId = 14,
-                LinkedInteractionId = 9
+                LinkedInteractionId = 9,
+                Type = RelationTypes.IndirectObjectRelation,
             }
         );
 
@@ -434,7 +438,8 @@ public class ActDbContext : DbContext
             {
                 Uuid = Guid.NewGuid(),
                 HostInteractionId = 14,
-                LinkedInteractionId = 10
+                LinkedInteractionId = 10,
+                Type = RelationTypes.PurposeRelation,
             }
         );
 
@@ -445,7 +450,8 @@ public class ActDbContext : DbContext
             {
                 Uuid = Guid.NewGuid(),
                 HostInteractionId = 14,
-                LinkedInteractionId = 11
+                LinkedInteractionId = 11,
+                Type = RelationTypes.SettingRelation,
             }
         );
 
@@ -456,7 +462,8 @@ public class ActDbContext : DbContext
             {
                 Uuid = Guid.NewGuid(),
                 HostInteractionId = 14,
-                LinkedInteractionId = 12
+                LinkedInteractionId = 12,
+                Type = RelationTypes.ReferenceRelation,
             }
         );
 
@@ -467,7 +474,8 @@ public class ActDbContext : DbContext
             {
                 Uuid = Guid.NewGuid(),
                 HostInteractionId = 14,
-                LinkedInteractionId = 13
+                LinkedInteractionId = 13,
+                Type = RelationTypes.ParallelRelation,
             }
         );
 

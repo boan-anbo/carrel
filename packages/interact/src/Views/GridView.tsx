@@ -7,6 +7,7 @@ import {
     CreateOrUpdateInteractionFormView
 } from "./InteractViews/CreatOrUpdateInteractionForm/CreateOrUpdateInteractionFormView";
 import {SelectedInteractionDataViewer} from "./InteractViews/SelectedInteractionDataViewer";
+import {RecentInteractionsList} from "./InteractViews/RecentInteractions/RecentInteractionsList";
 
 export enum GridViewTypes {
     NONE,
@@ -16,6 +17,7 @@ export enum GridViewTypes {
     INTERACTION_CARD_VIEW = 'Card',
     CREATE_INTERACTION_FORM = 'New',
     SELECTED_INTERACTION_CARD = 'Selected Card',
+    RECENT_INTERACTIONS = 'Recent',
 
 }
 
@@ -24,6 +26,7 @@ export const GridView = (props: {
 }) => {
     const [selectedView, setSelectedView] = useState<GridViewTypes>(GridViewTypes.FILTERED_INTERACTION_LIST);
     const allViews = [
+        GridViewTypes.RECENT_INTERACTIONS,
         GridViewTypes.FILTERED_INTERACTION_LIST,
         GridViewTypes.SELECTED_PASSAGE_VIEWER,
         GridViewTypes.INTERACTION_GRAPH_VIEW,
@@ -32,14 +35,12 @@ export const GridView = (props: {
         GridViewTypes.SELECTED_INTERACTION_CARD
     ]
     useEffect(() => {
-        return () => {
             setSelectedView(props.selectedView)
-        };
-    }, []);
+    }, [props.selectedView]);
 
     return (
-        <div>
-            <div className={'flex space-x-2 px-2 justify-center text-xs pt-4'}>
+        <div style={{height: '100%'}}  onMouseDown={e => e.stopPropagation()} >
+            <div style={{maxHeight: '10%'}} className={'flex space-x-2 px-2 justify-center text-xs pt-4'}>
                 {/*    Iterate over views */}
                 {allViews.map((view) => {
                     return <button
@@ -51,7 +52,8 @@ export const GridView = (props: {
             </div>
 
             {/*View Container*/}
-            <div className={'p-4'}>
+            <div style={{height: '90%'}} className={'p-4  overflow-y-scroll'}>
+                {selectedView === GridViewTypes.RECENT_INTERACTIONS && <RecentInteractionsList/>}
                 {selectedView === GridViewTypes.FILTERED_INTERACTION_LIST && <FilteredInteractionList/>}
 
                 {selectedView === GridViewTypes.SELECTED_INTERACTION_CARD && <SelectedInteractionDataViewer/>}

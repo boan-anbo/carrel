@@ -3,17 +3,16 @@ import {useEffect, useState} from "react";
 import {
     ContextRelation,
     FirstActRelation,
-    Interaction,
-    RelationTypes,
-    SubjectRelation,
-    ObjectRelation,
-    SecondActRelation,
     IndirectObjectRelation,
-    PurposeRelation,
-    SettingRelation,
+    Interaction,
+    ObjectRelation,
     ParallelRelation,
+    PurposeRelation,
     ReferenceRelation,
-
+    RelationTypes,
+    SecondActRelation,
+    SettingRelation,
+    SubjectRelation,
 } from "../../clients/grl-client/interact_db_client";
 import {getFullInteractionById} from "../../clients/interact-db-client/filter-operations";
 import {InteractionCardFieldItem} from "./InteractCardFields/InteractionCardFieldItem";

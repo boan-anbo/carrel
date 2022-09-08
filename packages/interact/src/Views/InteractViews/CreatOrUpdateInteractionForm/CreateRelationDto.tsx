@@ -1,12 +1,11 @@
 import {
     ContextRelation,
     FirstActRelation,
-    IndirectObjectRelation, Interaction,
+    IndirectObjectRelation,
     ObjectRelation,
     ParallelRelation,
     PurposeRelation,
     ReferenceRelation,
-    Relation,
     RelationTypes,
     RelationWeight,
     SecondActRelation,

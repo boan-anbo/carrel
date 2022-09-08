@@ -153,7 +153,6 @@ public class InteractionRepoUpdateTests : TestBase
                 Description = "Test_Description_Old",
                 SubjectDtos = new List<CreateOrUpdateRelationDto>
                 {
-
                     new CreateOrUpdateRelationDto
                     {
                         Uuid = null,
@@ -172,14 +171,15 @@ public class InteractionRepoUpdateTests : TestBase
         Assert.AreEqual(updatedI2.FirstActs.Count, 1);
         Assert.AreEqual(1, updatedI2.Subjects.Count);
         // make sure the other two subjects are dropped from the db
-        var firstSubject = await _relationRepo.GetRelation<SubjectRelation>(firstSubjectUuid.Value, RelationTypes.SubjectRelation);
+        var firstSubject =
+            await _relationRepo.GetRelation<SubjectRelation>(firstSubjectUuid.Value, RelationTypes.SubjectRelation);
         Assert.IsNull(firstSubject);
-        var secondSubject = await _relationRepo.GetRelation<SubjectRelation>(secondSubjectUuid.Value, RelationTypes.SubjectRelation);
+        var secondSubject =
+            await _relationRepo.GetRelation<SubjectRelation>(secondSubjectUuid.Value, RelationTypes.SubjectRelation);
         Assert.IsNull(secondSubject);
-        var thirdSubject = await _relationRepo.GetRelation<SubjectRelation>(updatedI2.Subjects.First().Uuid.Value, RelationTypes.SubjectRelation);
+        var thirdSubject = await _relationRepo.GetRelation<SubjectRelation>(updatedI2.Subjects.First().Uuid.Value,
+            RelationTypes.SubjectRelation);
         Assert.IsNotNull(thirdSubject);
-
-        
     }
 
     [TestMethod]
@@ -242,7 +242,7 @@ public class InteractionRepoUpdateTests : TestBase
                 ParallelDtos = null,
                 IndirectObjectDtos = null,
             });
-        Assert.AreEqual(updatedI.FirstActs.Count, 1);
+        Assert.AreEqual(1, updatedI.FirstActs.Count);
         Assert.AreEqual(2, updatedI.Subjects.Count);
         // first subject id
         var firstSubjectId = updatedI.Subjects.First().Uuid.Value;
@@ -268,7 +268,6 @@ public class InteractionRepoUpdateTests : TestBase
                 ContextDtos = null,
                 SubjectDtos = new List<CreateOrUpdateRelationDto>
                 {
-                    
                 },
                 FirstActDtos = null,
                 ObjectDtos = null,
@@ -276,14 +275,12 @@ public class InteractionRepoUpdateTests : TestBase
                 ParallelDtos = null,
                 IndirectObjectDtos = null,
             };
-        
-        var updatedI2 = await GetMutationService()
-        .CreateOrUpdateInteraction(_interactionRepo, _relationRepo, updatedI2Dto);
-        //
-        Assert.AreEqual(updatedI2.FirstActs.Count, 1);
-        Assert.AreEqual(0, updatedI2.Subjects.Count);
-        
 
+        var updatedI2 = await GetMutationService()
+            .CreateOrUpdateInteraction(_interactionRepo, _relationRepo, updatedI2Dto);
+        //
+        Assert.AreEqual(0, updatedI2.Subjects.Count);
+        Assert.AreEqual(1, updatedI2.FirstActs.Count);
     }
 
     // get new instance of mutation service
@@ -363,7 +360,6 @@ public class InteractionRepoUpdateTests : TestBase
                 Description = "Test_Description_Old",
                 ParallelDtos = new List<CreateOrUpdateRelationDto>
                 {
-
                     new CreateOrUpdateRelationDto
                     {
                         Uuid = null,
@@ -382,12 +378,14 @@ public class InteractionRepoUpdateTests : TestBase
         Assert.AreEqual(updatedI2.FirstActs.Count, 1);
         Assert.AreEqual(1, updatedI2.Parallels.Count);
         // make sure the other two subjects are dropped from the db
-        var firstSubject = await _relationRepo.GetRelation<ParallelRelation>(firstSubjectUuid.Value, RelationTypes.ParallelRelation);
+        var firstSubject =
+            await _relationRepo.GetRelation<ParallelRelation>(firstSubjectUuid.Value, RelationTypes.ParallelRelation);
         Assert.IsNull(firstSubject);
-        var secondSubject = await _relationRepo.GetRelation<ParallelRelation>(secondSubjectUuid.Value, RelationTypes.ParallelRelation);
+        var secondSubject =
+            await _relationRepo.GetRelation<ParallelRelation>(secondSubjectUuid.Value, RelationTypes.ParallelRelation);
         Assert.IsNull(secondSubject);
-        var thirdSubject = await _relationRepo.GetRelation<ParallelRelation>(updatedI2.Parallels.First().Uuid.Value, RelationTypes.ParallelRelation);
+        var thirdSubject = await _relationRepo.GetRelation<ParallelRelation>(updatedI2.Parallels.First().Uuid.Value,
+            RelationTypes.ParallelRelation);
         Assert.IsNotNull(thirdSubject);
-
     }
 }

@@ -24,19 +24,7 @@ public interface IGraphQLMutation
         [Service(ServiceKind.Synchronized)] IInteractionRepository _repo
     );
 
-    /// <summary>
-    ///     Core opetions to add or update interaction
-    /// </summary>
-    /// <remarks>
-    ///     If ID and UUID are not provided, a new interaction is created.
-    ///     If both are provided, the interaction is updated.
-    ///     Validation is performed on the interaction before it is saved.
-    /// </remarks>
-    Task<Interaction?> CreateOrUpdateInteraction(
-        [Service(ServiceKind.Synchronized)] IInteractionRepository _interactionRepo,
-        [Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,
-        CreateOrUpdateInteractionRequestDto requestDto
-    );
+    
 
     Task<long> DeleteRelation(
         [Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,

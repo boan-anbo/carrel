@@ -9,8 +9,6 @@ import {fetchFilteredInteractionData} from "./FetchFilteredInteractionData";
 const {Option} = Select;
 
 
-;
-
 export interface FilterInteractionSingleProps<T> {
     placeholder: string;
     style?: React.CSSProperties,
@@ -60,7 +58,8 @@ const FilterInteractionSingle: React.FC<FilterInteractionSingleProps<Interaction
                     console.error('full selected interaction not found on sever');
                     return;
                 }
-                setValue(SelectValue.fromInteraction(selecteInteractionFull));
+                const result = SelectValue.fromInteraction(selecteInteractionFull).toLabelValue();
+                setValue(result);
                 console.log('found selected interaction', data);
                 if (selectedInteraction) {
                     props.onSelect(selectedInteraction);
@@ -73,11 +72,9 @@ const FilterInteractionSingle: React.FC<FilterInteractionSingleProps<Interaction
 
     };
 
-    const options = data.map((d, index) => <Option key={index} value={d.data?.id}>{d.value + ': ' + d.label}</Option>);
 
     return (
         <div>
-            {JSON.stringify(value)}
             <Select
                 allowClear
                 showSearch
@@ -92,7 +89,9 @@ const FilterInteractionSingle: React.FC<FilterInteractionSingleProps<Interaction
                 onChange={handleChange}
                 notFoundContent={null}
             >
-                {options}
+                {data && data.map((selectValue, index) => (
+                        <Option key={index} value={selectValue.data?.id}>{selectValue.value + ': ' + selectValue.label}</Option>
+                ))}
             </Select>
         </div>
     );

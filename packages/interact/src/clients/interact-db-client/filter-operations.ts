@@ -4,19 +4,24 @@ import {
     FilterContextRelationByHostIdDocument,
     FilterContextRelationByHostIdQuery,
     FilterFirstActRelationByHostIdDocument,
-    FilterFirstActRelationByHostIdQuery, FilterIndirectObjectRelationByHostIdDocument,
+    FilterFirstActRelationByHostIdQuery,
+    FilterIndirectObjectRelationByHostIdDocument,
     FilterIndirectObjectRelationByHostIdQuery,
-    FilterInteractionsByLabelDocument, FilterObjectRelationByHostIdDocument,
-    FilterObjectRelationByHostIdQuery, FilterParallelRelationByHostIdDocument,
-    FilterParallelRelationByHostIdQuery, FilterPurposeRelationByHostIdDocument,
-    FilterPurposeRelationByHostIdQuery, FilterReferenceRelationByHostIdDocument,
+    FilterInteractionsByLabelDocument,
+    FilterObjectRelationByHostIdDocument,
+    FilterObjectRelationByHostIdQuery,
+    FilterParallelRelationByHostIdDocument,
+    FilterParallelRelationByHostIdQuery,
+    FilterPurposeRelationByHostIdDocument,
+    FilterPurposeRelationByHostIdQuery,
+    FilterReferenceRelationByHostIdDocument,
     FilterReferenceRelationByHostIdQuery,
-    FilterReferenceRelationByHostIdQueryVariables, FilterSecondActRelationByHostIdDocument,
-    FilterSecondActRelationByHostIdQuery, FilterSettingRelationByHostIdDocument,
+    FilterSecondActRelationByHostIdDocument,
+    FilterSecondActRelationByHostIdQuery,
+    FilterSettingRelationByHostIdDocument,
     FilterSettingRelationByHostIdQuery,
     FilterSubjectRelationByHostIdDocument,
     FilterSubjectRelationByHostIdQuery,
-    FilterSubjectRelationByHostIdQueryVariables,
     FirstActRelationsConnection,
     GetInteractionFullDocument,
     GetInteractionFullQuery,
@@ -37,7 +42,6 @@ export async function filterInteractions(label: string): Promise<Interaction[]> 
         },
     });
 
-    console.log('data', data);
     return data.interactions?.nodes as Interaction[] ?? [];
 }
 
@@ -49,8 +53,6 @@ export async function getFullInteractionById(id: number): Promise<Interaction | 
             id: id
         },
     });
-
-    console.log('data', data);
     return data.interactionFull.interaction as Interaction ?? null;
 }
 
@@ -58,8 +60,6 @@ export async function getRecentInteractions(): Promise<Interaction[]> {
     const {data}: { data: GetInteractionsQuery } = await getApolloClient().query({
         query: GetRecentInteractionsDocument,
     });
-
-    console.log('data', data);
     return data.interactions?.nodes as Interaction[] ?? [];
 }
 

@@ -1,6 +1,6 @@
 import {SizeType} from "antd/lib/config-provider/SizeContext";
 import {Form, Input} from "antd";
-import {ChangeEvent, ChangeEventHandler} from "react";
+import {ChangeEvent} from "react";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
 
 interface CreateOrUpdateInteractionFormValueInputProps {

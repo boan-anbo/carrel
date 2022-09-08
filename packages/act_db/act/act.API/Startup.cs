@@ -99,6 +99,7 @@ public class Startup
             .AddDiagnosticEventListener(sp =>
                 new ConsoleQueryLogger(
                     sp.GetApplicationService<ILogger<ConsoleQueryLogger>>()
+                    
                 ));
         ;
 

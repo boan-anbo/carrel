@@ -8,10 +8,15 @@ import {
     ParallelRelation,
     PurposeRelation,
     ReferenceRelation,
+    RelationTypes,
     SecondActRelation,
-    SettingRelation, SubjectRelation
+    SettingRelation,
+    SubjectRelation
 } from "../../../clients/grl-client/interact_db_client";
 import {CreateRelationDto} from "./CreateRelationDto";
+import {Logger, LogSource} from "../../../utils/logger";
+
+const log = new Logger(LogSource.CreateFormData)
 
 export class CreateInteractionFormData {
     id?: number = 0;
@@ -34,6 +39,27 @@ export class CreateInteractionFormData {
     subjectDtos: CreateRelationDto[] = [];
     allInteractions: Interaction[] = [];
 
+
+
+
+    validateOrThrow() {
+        // check if all dtos has the corresponding relation type
+        const errors: Error[] = [];
+        this.contextDtos.some(dto => dto.relationType !== RelationTypes.ContextRelation) && errors.push(new Error('contextDtos has wrong relation type'));
+        this.firstActDtos.some(dto => dto.relationType !== RelationTypes.FirstActRelation) && errors.push(new Error('firstActDtos has wrong relation type'));
+        this.secondActDtos.some(dto => dto.relationType !== RelationTypes.SecondActRelation) && errors.push(new Error('secondActDtos has wrong relation type'));
+        this.indirectObjectDtos.some(dto => dto.relationType !== RelationTypes.IndirectObjectRelation) && errors.push(new Error('indirectObjectDtos has wrong relation type'));
+        this.objectDtos.some(dto => dto.relationType !== RelationTypes.ObjectRelation) && errors.push(new Error('objectDtos has wrong relation type'));
+        this.parallelDtos.some(dto => dto.relationType !== RelationTypes.ParallelRelation) && errors.push(new Error('parallelDtos has wrong relation type'));
+        this.purposeDtos.some(dto => dto.relationType !== RelationTypes.PurposeRelation) && errors.push(new Error('purposeDtos has wrong relation type'));
+        this.referenceDtos.some(dto => dto.relationType !== RelationTypes.ReferenceRelation) && errors.push(new Error('referenceDtos has wrong relation type'));
+        this.settingDtos.some(dto => dto.relationType !== RelationTypes.SettingRelation) && errors.push(new Error('settingDtos has wrong relation type'));
+        this.subjectDtos.some(dto => dto.relationType !== RelationTypes.SubjectRelation) && errors.push(new Error('subjectDtos has wrong relation type'));
+        if (errors.length > 0) {
+            errors.forEach(e => log.error(e.message, 'corrupted interaction data', this));
+        }
+    }
+
     // convert interaction to form data ready to be edited
     public static fromInteraction(interaction: Interaction): CreateInteractionFormData {
         const allInteractions: Interaction[] = [];
@@ -47,7 +73,8 @@ export class CreateInteractionFormData {
         interaction.references?.forEach((referenceRelation) => referenceRelation?.linkedInteraction && allInteractions.push(referenceRelation.linkedInteraction));
         interaction.settings?.forEach((settingRelation) => settingRelation?.linkedInteraction && allInteractions.push(settingRelation.linkedInteraction));
         interaction.subjects?.forEach((subjectRelation) => subjectRelation?.linkedInteraction && allInteractions.push(subjectRelation.linkedInteraction));
-        return {
+
+        const newEntity = Object.assign(new CreateInteractionFormData(), {
             id: interaction.id,
             uuid: interaction.uuid,
             label: interaction.label ?? '',
@@ -67,7 +94,13 @@ export class CreateInteractionFormData {
             start: interaction.start,
             subjectDtos: interaction.subjects?.map(r => CreateRelationDto.fromRelation(r as SubjectRelation)) ?? [],
             allInteractions: allInteractions
-        }
+        });
+        newEntity.validateOrThrow();
+        return newEntity;
+    }
 
+    static validateOrThrow(createDto: Partial<CreateInteractionFormData>) {
+        const newCreateDto = Object.assign(new CreateInteractionFormData(), createDto);
+        newCreateDto.validateOrThrow();
     }
 }

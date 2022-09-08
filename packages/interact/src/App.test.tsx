@@ -1,23 +1,24 @@
+import {describe, expect, it} from 'vitest'
+import App from './App'
+import {render, screen, userEvent} from './utils/test-utils'
+import FilterInteractionSingle from "./Views/ViewComponents/FilterControls/FilterInteractionSingle";
 
+describe('Simple working test', () => {
+    it('the title is visible', () => {
+        render(<FilterInteractionSingle placeholder={''} onSelect={()=> {} } style={{width: '100%'}}/>)
+        expect(screen.getByText(/Hello Vite \+ React!/i)).toBeInTheDocument()
+    })
 
+    it('should increment count on click', async () => {
+        render(<App />)
+        userEvent.click(screen.getByRole('button'))
+        expect(await screen.findByText(/count is: 1/i)).toBeInTheDocument()
+    })
 
-import React from 'react'
-import renderer from 'react-test-renderer'
-import Link from 'antd/lib/typography/Link';
-import { expect,test } from 'vitest';
-import FilterInteractionMultiple from "./Views/ViewComponents/FilterControls/FilterInteractionMultiple";
-import {GridView} from "./Views/GridView";
-
-function toJson(component: renderer.ReactTestRenderer) {
-    const result = component.toJSON()
-    expect(result).toBeDefined()
-    expect(result).not.toBeInstanceOf(Array)
-    return result as renderer.ReactTestRendererJSON
-}
-
-test('Link changes the class when hovered', () => {
-    const component = renderer.create(
-        <GridView selectedView={1} />
-    )
-    
+    it('uses flexbox in app header', async () => {
+        render(<App />)
+        const element = screen.getByRole('banner')
+        expect(element.className).toEqual('App-header')
+        expect(getComputedStyle(element).display).toEqual('flex')
+    })
 })

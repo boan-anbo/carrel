@@ -10,10 +10,10 @@ import {CreateOrUpdateInteractionFormRelationInputs} from "./CreateOrUpdateInter
 import {CreateOrUpdateInteractionFormValueInputs} from "./CreateOrUpdateInteractionFormValueInputs";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
 import {onFormRelationSelectedHandler} from "./OnFormRelationSelectedHandler";
-import FilterInteractionMultiple from "../../ViewComponents/FilterControls/FilterInteractionMultiple";
 import FilterInteractionSingle from "../../ViewComponents/FilterControls/FilterInteractionSingle";
 import {getFullInteractionById} from "../../../clients/interact-db-client/filter-operations";
 import {SelectValue} from "../../ViewComponents/FilterControls/SelectValue";
+import {Logger, LogSource} from "../../../utils/logger";
 
 interface CreateOrUpdateInteractionFormViewProp {
     size: SizeType | undefined;
@@ -27,6 +27,8 @@ enum FormMode {
 
 export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteractionFormViewProp) => {
 
+    const log = new Logger(LogSource.CreateInteractionForm)
+
     const dispatch = useDispatch();
     const [form] = Form.useForm();
 
@@ -34,7 +36,10 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
 
     const [mode, setMode] = useState<FormMode>(FormMode.CREATE);
 
-    const [formData, setFormData] = useState<CreateInteractionFormData>(
+    const [
+        formData, // single source of truth for form data
+        setFormData
+    ] = useState<CreateInteractionFormData>(
         new CreateInteractionFormData()
     )
 
@@ -42,14 +47,15 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         if (props.existingFormData) {
             loadFormDataFromExistingInteraction(props.existingFormData);
         }
-    }, [])
+    }, [props.existingFormData])
 
     const clearFormData = () => {
         setFormData(new CreateInteractionFormData());
     }
 
-    async function onFormFinish(values: any) {
-        console.log(values)
+    async function onFormFinish(_: any) {
+        log.info("onFormFinish", 'form Data when completed', formData);
+
         const result = await createOrUpdateInteraction(formData);
 
         console.log("Form receiveed", result)
@@ -67,21 +73,23 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         clearFormData();
     }
 
-    function onFormValuesChange(changedValues: any, values: any) {
-        console.log(changedValues)
-        setFormData(values)
-    }
+
 
     function loadFormDataFromExistingInteraction(interaction: Interaction) {
-        console.log("Loading form data from existing interaction", interaction)
+        log.info("loadFormDataFromExistingInteraction", 'interaction', interaction);
         const formDataFromInteraction = CreateInteractionFormData.fromInteraction(interaction);
-        console.log("Form data from interaction", formDataFromInteraction)
+        log.info("Parsing form data from interaction", 'form data from interaction',formDataFromInteraction);
         setFormData(formDataFromInteraction);
     }
 
-    async function handleInteractionSelectionToEdit(i: SelectValue<Interaction>) {
+    async function loadInteractionToEdit(i: SelectValue<Interaction>) {
 
-        const interactionFull = await getFullInteractionById(parseInt(i.value));
+        log.info("loadInteractionToEdit", 'interaction to load', i);
+        if (!i.value) {
+            log.error("loadInteractionToEdit - no interaction to load");
+        }
+        const interactionFull = await getFullInteractionById(parseInt(i.value!,10));
+        log.info("loadInteractionToEdit received interaction", 'full interaction', interactionFull);
         if (interactionFull) {
             loadFormDataFromExistingInteraction(interactionFull);
         } else {
@@ -101,8 +109,7 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
                 <FilterInteractionSingle
                     placeholder={'Select interaction to update'}
                     onSelect={(selectValue) => {
-                        console.log('received id from', selectValue);
-                        handleInteractionSelectionToEdit(selectValue)
+                        loadInteractionToEdit(selectValue)
                     }}
                     style={{width: '100%'}}
 
@@ -115,7 +122,7 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
                 layout="vertical"
                 initialValues={formData}
                 onFinish={onFormFinish}
-                onValuesChange={onFormValuesChange}>
+            >
 
 
                 <div className={'flex justify-center space-x-4'}>

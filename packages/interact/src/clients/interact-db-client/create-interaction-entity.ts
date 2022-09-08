@@ -14,7 +14,9 @@ import {
     CreateInteractionFormData
 } from "../../Views/InteractViews/CreatOrUpdateInteractionForm/CreateInteractionFormData";
 import {CreateRelationDto} from "../../Views/InteractViews/CreatOrUpdateInteractionForm/CreateRelationDto";
+import {Logger, LogSource} from "../../utils/logger";
 
+const log = new Logger(LogSource.CreateInteractionEntity);
 export async function createInteractionEntity(label: string, identity: InteractionIdentity, description?: string, content?: string): Promise<Interaction> {
     try {
 
@@ -37,7 +39,12 @@ export async function createInteractionEntity(label: string, identity: Interacti
 }
 
 export async function createOrUpdateInteraction(createDto: CreateInteractionFormData): Promise<Interaction> {
+    // validate form data
+    CreateInteractionFormData.validateOrThrow(createDto);
+    log.info('createOrUpdateInteraction', 'Create Dto to convert', createDto);
+
     const request: CreateOrUpdateInteractionRequestDtoInput = CreateDtoToCreateOrUpdateInteractionRequestDtoInput(createDto);
+    log.info('createOrUpdateInteraction', 'Request form date converted from Create Dto', request);
     const data: FetchResult<AddInteractionMutation> = await getApolloClient().mutate({
         mutation: AddInteractionDocument,
         variables: {

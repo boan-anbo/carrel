@@ -1,21 +1,22 @@
 import {SizeType} from "antd/lib/config-provider/SizeContext";
 import FilterInteractionMultiple from "../../ViewComponents/FilterControls/FilterInteractionMultiple";
-import {InteractionIdentity} from "../../../clients/grl-client/interact_db_client";
+import {Interaction, InteractionIdentity} from "../../../clients/grl-client/interact_db_client";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
+import {SelectValue} from "../../ViewComponents/FilterControls/SelectValue";
 
 interface CreateOrUpdateInteractionFormRelationInputProps {
     formData: CreateInteractionFormData;
     size: SizeType | undefined;
-    onContextsSelected: ((value: string[]) => void) | undefined
-    onSubjectsSelected: ((value: string[]) => void) | undefined
-    onFirstActsSelected: ((value: string[]) => void) | undefined
-    onObjectsSelected: ((value: string[]) => void) | undefined
-    onSecondActsSelected: ((value: string[]) => void) | undefined
-    onIndirectObjectsSelected: ((value: string[]) => void) | undefined
-    onSettingsSelected: ((value: string[]) => void) | undefined
-    onPurpoesSelected: ((value: string[]) => void) | undefined
-    onParallelSelected: ((value: string[]) => void) | undefined
-    onReferencesSelected: ((value: string[]) => void) | undefined
+    onContextsSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
+    onSubjectsSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
+    onFirstActsSelected: ((value:SelectValue<Interaction> []) => void) | undefined
+    onObjectsSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
+    onSecondActsSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
+    onIndirectObjectsSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
+    onSettingsSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
+    onPurpoesSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
+    onParallelSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
+    onReferencesSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
 }
 
 export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdateInteractionFormRelationInputProps) {

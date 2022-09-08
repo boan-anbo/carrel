@@ -1,7 +1,6 @@
 import {LabeledValue} from "antd/lib/select";
 import {Interaction} from "../../../clients/grl-client/interact_db_client";
 import React from "react";
-import {isEventTargetWithin} from "@floating-ui/react-dom-interactions/src/utils/isEventTargetWithin";
 import {getInteractionSelectionLabel} from "./filter-utils/getInteractionLabel";
 import {EmittedLabledValue} from "./EmittedLabledValue";
 import {v4} from "uuid";
@@ -29,8 +28,8 @@ export class SelectValue<T> {
     data?: T | null;
 
 
-    constructor(key: string, label: string, value: string | null, data?: T) {
-        this.key = key;
+    constructor(key: string | number, label: string, value: string | null, data?: T) {
+        this.key = typeof key === 'number' ? key.toString() : key;
         this.label = label;
         this.value = value;
         this.data = data;
@@ -39,8 +38,9 @@ export class SelectValue<T> {
     toLabelValue<T>(): LabeledValue {
         return {
             key: this.key,
-            label: getInteractionSelectionLabel(this.data as Interaction),
-            value: this.value
+            // @ts-ignore
+            label: this.data ? getInteractionSelectionLabel(this.data) : 'key',
+            value: this.value ?? ''
         }
     }
 

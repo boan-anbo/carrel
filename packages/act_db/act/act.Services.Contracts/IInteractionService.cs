@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using act.Repositories.Contracts;
 using act.Services.Model;
 
 namespace act.Services.Contracts;
@@ -26,4 +27,9 @@ public interface IInteractionService
     Task<bool> Test();
 
     IQueryable<Interaction> GetAllInteractions();
+
+    public Task UpdateInteractionRelations(
+        CreateOrUpdateInteractionRequestDto requestDto,
+        Interaction? interaction
+    );
 }

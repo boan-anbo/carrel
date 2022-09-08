@@ -4,12 +4,13 @@ import {FilterByEntityRelation} from "./FilterByEntityRelation";
 import {SizeType} from "antd/lib/config-provider/SizeContext";
 import {CreateRelationDto} from "../../InteractViews/CreatOrUpdateInteractionForm/CreateRelationDto";
 import {LabeledValue} from "antd/lib/select";
+import {SelectValue} from "./SelectValue";
 
 export interface IFilterInteractionMultipleProps<T> {
     placeholder: string;
     style?: React.CSSProperties,
     /// Array of number ids of selected interactions
-    onSelect: (value: LabeledValue[]) => void;
+    onSelect: (value: SelectValue<Interaction>[]) => void;
     label?: string;
     showConfirm?: boolean;
     onEntityCreated?: (interaction: Interaction) => void;
