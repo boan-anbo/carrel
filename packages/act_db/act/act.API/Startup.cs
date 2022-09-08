@@ -9,6 +9,8 @@ using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Repositories.GraphQL;
 using act.Repositories.GraphQL.GraphQLConfiguration;
+using act.Services;
+using act.Services.Contracts;
 using Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -17,6 +19,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -87,6 +90,7 @@ public class Startup
 
         services.AddScoped<IInteractionRepository, InteractionRepository>();
         services.AddScoped<IRelationRepository, RelationRepository>();
+        services.AddScoped<IInteractionService, InteractionService>();
 
         services
             .AddGraphQLServer()

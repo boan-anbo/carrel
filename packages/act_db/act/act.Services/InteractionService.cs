@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using act.API.Common.Settings;
 using act.Repositories.Contracts;
@@ -9,6 +10,7 @@ using act.Services.Contracts;
 using act.Services.Model;
 using AutoMapper;
 using HotChocolate;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -39,8 +41,7 @@ public class InteractionService : IInteractionService
         IRelationRepository relationRepo,
         ActDbContext dbContextContext,
         ILogger<InteractionService> logger
-        
-        )
+    )
     {
         _settings = settings?.Value;
         _mapper = mapper;
@@ -65,7 +66,6 @@ public class InteractionService : IInteractionService
     }
 
 
-    
     /// <summary>
     ///     Get all interactions
     /// </summary>
@@ -133,12 +133,13 @@ public class InteractionService : IInteractionService
     {
         return _dbContext.Interactions;
     }
-    
-       public async Task UpdateInteractionRelations(
+
+    public async Task UpdateInteractionRelations(
         CreateOrUpdateInteractionRequestDto requestDto,
         Interaction? interaction
     )
     {
+        _interactionRepo.LoadAllRelationsOfInteraction(interaction.Id);
         // for subjects
         // if no subjects are provided, remove all subjects
         if (requestDto.SubjectDtos is null)
@@ -147,8 +148,9 @@ public class InteractionService : IInteractionService
         }
         else
         {
-            foreach (var interactionSubject in _dbContext.SubjectRelations.Where(x =>
-                         x.HostInteractionId == interaction.Id))
+            foreach (var interactionSubject in
+                     GetHostRelationsWOTracing<SubjectRelation>(interaction, RelationTypes.SubjectRelation)
+                    )
             {
                 // if the subject is not in the requestDto.subjectDtos, remove it
                 if (!requestDto.SubjectDtos.Any(s => s.Uuid == interactionSubject.Uuid))
@@ -185,8 +187,8 @@ public class InteractionService : IInteractionService
         }
         else
         {
-            foreach (var interactionParallel in _dbContext.ParallelRelations.Where(x =>
-                         x.HostInteractionId == interaction.Id))
+            foreach (var interactionParallel in GetHostRelationsWOTracing<ParallelRelation>(interaction,
+                         RelationTypes.ParallelRelation))
             {
                 // if the parallel is not in the requestDto.parallelDtos, remove it
                 if (!requestDto.ParallelDtos.Any(s => s.Uuid == interactionParallel.Uuid))
@@ -224,8 +226,8 @@ public class InteractionService : IInteractionService
         }
         else
         {
-            foreach (var interactionFirstAct in _dbContext.FirstActRelations.Where(x =>
-                         x.HostInteractionId == interaction.Id))
+            foreach (var interactionFirstAct in GetHostRelationsWOTracing<FirstActRelation>(interaction,
+                         RelationTypes.FirstActRelation))
             {
                 // if the first act is not in the requestDto.firstActDtos, remove it
                 if (!requestDto.FirstActDtos.Any(s => s.Uuid == interactionFirstAct.Uuid))
@@ -264,8 +266,8 @@ public class InteractionService : IInteractionService
         }
         else
         {
-            foreach (var interactionSecondAct in _dbContext.SecondActRelations.Where(x =>
-                         x.HostInteractionId == interaction.Id))
+            foreach (var interactionSecondAct in GetHostRelationsWOTracing<SecondActRelation>(interaction,
+                         RelationTypes.SecondActRelation))
             {
                 // if the second act is not in the requestDto.secondActDtos, remove it
                 if (!requestDto.SecondActDtos.Any(s => s.Uuid == interactionSecondAct.Uuid))
@@ -303,8 +305,8 @@ public class InteractionService : IInteractionService
         }
         else
         {
-            foreach (var interactionObject in _dbContext.ObjectRelations.Where(x =>
-                         x.HostInteractionId == interaction.Id))
+            foreach (var interactionObject in GetHostRelationsWOTracing<ObjectRelation>(interaction,
+                         RelationTypes.ObjectRelation))
             {
                 // if the object is not in the requestDto.objectDtos, remove it
                 if (!requestDto.ObjectDtos.Any(s => s.Uuid == interactionObject.Uuid))
@@ -343,8 +345,8 @@ public class InteractionService : IInteractionService
         }
         else
         {
-            foreach (var interactionIndirectObject in _dbContext.IndirectObjectRelations.Where(x =>
-                         x.HostInteractionId == interaction.Id))
+            foreach (var interactionIndirectObject in GetHostRelationsWOTracing<IndirectObjectRelation>(interaction,
+                         RelationTypes.IndirectObjectRelation))
             {
                 // if the indirect object is not in the requestDto.indirectObjectDtos, remove it
                 if (!requestDto.IndirectObjectDtos.Any(s => s.Uuid == interactionIndirectObject.Uuid))
@@ -382,8 +384,8 @@ public class InteractionService : IInteractionService
         }
         else
         {
-            foreach (var interactionSetting in
-                     _dbContext.SettingRelations.Where(x => x.HostInteractionId == interaction.Id))
+            foreach (var interactionSetting in GetHostRelationsWOTracing<SettingRelation>(interaction,
+                         RelationTypes.SettingRelation))
             {
                 // if the setting is not in the requestDto.settingDtos, remove it
                 if (!requestDto.SettingDtos.Any(s => s.Uuid == interactionSetting.Uuid))
@@ -423,7 +425,7 @@ public class InteractionService : IInteractionService
         else
         {
             foreach (var interactionContext in
-                     _dbContext.ContextRelations.Where(x => x.HostInteractionId == interaction.Id))
+                     GetHostRelationsWOTracing<ContextRelation>(interaction, RelationTypes.ContextRelation))
             {
                 // if the context is not in the requestDto.contextDtos, remove it
                 if (!requestDto.ContextDtos.Any(s => s.Uuid == interactionContext.Uuid))
@@ -463,8 +465,8 @@ public class InteractionService : IInteractionService
         }
         else
         {
-            foreach (var interactionPurpose in
-                     _dbContext.PurposeRelations.Where(x => x.HostInteractionId == interaction.Id))
+            foreach (var interactionPurpose in GetHostRelationsWOTracing<PurposeRelation>(interaction,
+                         RelationTypes.PurposeRelation))
 
             {
                 // if the purpose is not in the requestDto.purposeDtos, remove it
@@ -504,8 +506,8 @@ public class InteractionService : IInteractionService
         }
         else
         {
-            foreach (var interactionReference in _dbContext.ReferenceRelations.Where(x =>
-                         x.HostInteractionId == interaction.Id))
+            foreach (var interactionReference in GetHostRelationsWOTracing<ReferenceRelation>(interaction,
+                         RelationTypes.ReferenceRelation))
             {
                 // if the reference is not in the requestDto.referenceDtos, remove it
                 if (!requestDto.ReferenceDtos.Any(s => s.Uuid == interactionReference.Uuid))
@@ -533,6 +535,37 @@ public class InteractionService : IInteractionService
                 }
             });
         }
+    }
+
+    private IQueryable<T> GetHostRelationsWOTracing<T>(Interaction interaction,
+        RelationTypes relationType)
+        where T : Relation
+    {
+        return relationType switch
+        {
+            RelationTypes.SubjectRelation => _dbContext.SubjectRelations.Where(x =>
+                x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
+            RelationTypes.ContextRelation =>  _dbContext.ContextRelations.Where(x =>
+                x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
+            RelationTypes.FirstActRelation => _dbContext.FirstActRelations.Where(x =>
+                x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
+            RelationTypes.ObjectRelation => _dbContext.ObjectRelations.Where(x =>
+                x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
+            RelationTypes.SecondActRelation => _dbContext.SecondActRelations.Where(x =>
+                x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
+            RelationTypes.IndirectObjectRelation => _dbContext.IndirectObjectRelations.Where(x =>
+                x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
+            RelationTypes.SettingRelation => _dbContext.SettingRelations.Where(x =>
+                x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
+            RelationTypes.PurposeRelation => _dbContext.PurposeRelations.Where(x =>
+                x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
+            RelationTypes.ParallelRelation => _dbContext.ParallelRelations.Where(x =>
+                x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
+            RelationTypes.ReferenceRelation => _dbContext.ReferenceRelations.Where(x =>
+                x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
+            _ => throw new ArgumentOutOfRangeException(nameof(relationType), relationType, null)
+        };
+
     }
 
     private static void ValidateOrCorrectDtoHostInteractionId(Interaction? interaction,

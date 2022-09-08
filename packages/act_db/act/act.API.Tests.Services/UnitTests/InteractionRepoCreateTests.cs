@@ -2,6 +2,7 @@ using act.API.Tests.Controllers;
 using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Repositories.GraphQL;
+using act.Services.Contracts;
 using act.Services.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ public class InteractionRepoTests : TestBase
     private readonly IInteractionRepository _interactionRepo;
     private readonly IRelationRepository _relationRepo;
     private readonly ActDbContext _dbContext;
+    private readonly IInteractionService _interactionService;
 
     public InteractionRepoTests()
     {
@@ -27,6 +29,7 @@ public class InteractionRepoTests : TestBase
         _queryService = _serviceProvider.GetRequiredService<GraphQLQuery>();
         _interactionRepo = _serviceProvider.GetRequiredService<IInteractionRepository>();
         _relationRepo = _serviceProvider.GetRequiredService<IRelationRepository>();
+        _interactionService = _serviceProvider.GetRequiredService<IInteractionService>();
         _dbContext = _serviceProvider.GetRequiredService<ActDbContext>();
     }
 
@@ -75,7 +78,11 @@ public class InteractionRepoTests : TestBase
         };
 
         var createTionResult =
-            await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo, createOrUpdateDto);
+            await _mutationService.CreateOrUpdateInteraction(
+                _interactionRepo,
+                _relationRepo, 
+                _interactionService,
+                createOrUpdateDto);
 
         Assert.IsNotNull(createTionResult);
         Assert.IsTrue(createTionResult.Id > 0);
@@ -184,7 +191,11 @@ public class InteractionRepoTests : TestBase
         };
 
         var iWithMultipleRelations =
-            await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo, createOrUpdateDto);
+            await _mutationService.CreateOrUpdateInteraction(
+                _interactionRepo, 
+                _relationRepo, 
+                _interactionService,
+                createOrUpdateDto);
 
         Assert.IsNotNull(iWithMultipleRelations);
         // check if all relations are created

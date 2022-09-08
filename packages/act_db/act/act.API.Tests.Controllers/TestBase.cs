@@ -5,6 +5,8 @@ using act.Repositories;
 using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Repositories.GraphQL;
+using act.Services;
+using act.Services.Contracts;
 using act.Tools.Configurations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +38,7 @@ public class TestBase
         };
 
         _services.AddDbContext<ActDbContext>();
+        _services.AddScoped<IInteractionService, InteractionService>();
         _services.AddScoped<IInteractionRepository, InteractionRepository>();
         _services.AddScoped<IRelationRepository, RelationRepository>();
         _services.AddScoped<IGraphQLMutation, GraphQLMutation>();

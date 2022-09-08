@@ -2,6 +2,7 @@ using act.API.Tests.Controllers;
 using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Repositories.GraphQL;
+using act.Services.Contracts;
 using act.Services.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ public class InteractionRepoUpdateTests : TestBase
     private readonly IInteractionRepository _interactionRepo;
     private readonly IRelationRepository _relationRepo;
     private readonly ActDbContext _dbContext;
+    private readonly IInteractionService _interactionService;
 
     public InteractionRepoUpdateTests()
     {
@@ -28,6 +30,7 @@ public class InteractionRepoUpdateTests : TestBase
         _interactionRepo = _serviceProvider.GetRequiredService<IInteractionRepository>();
         _relationRepo = _serviceProvider.GetRequiredService<IRelationRepository>();
 
+        _interactionService = _serviceProvider.GetRequiredService<IInteractionService>();
         _dbContext = _serviceProvider.GetRequiredService<ActDbContext>();
     }
 
@@ -42,7 +45,11 @@ public class InteractionRepoUpdateTests : TestBase
         };
 
         var createdI =
-            await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo, createOrUpdateDto);
+            await _mutationService.CreateOrUpdateInteraction(
+                _interactionRepo,
+                _relationRepo,
+                _interactionService,
+                createOrUpdateDto);
 
         Assert.IsNotNull(createdI);
         Assert.IsTrue(createdI.Id > 0);
@@ -55,6 +62,7 @@ public class InteractionRepoUpdateTests : TestBase
         _dbContext.Entry(createdI).State = EntityState.Detached;
 
         var updatedI = await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo,
+                _interactionService,
             new CreateOrUpdateInteractionRequestDto
             {
                 Id = createdI.Id,
@@ -83,13 +91,20 @@ public class InteractionRepoUpdateTests : TestBase
         };
 
         var createdI =
-            await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo, emptyDto);
+            await _mutationService.CreateOrUpdateInteraction(
+                _interactionRepo,
+                _relationRepo,
+                _interactionService,
+                emptyDto);
         Assert.AreEqual(createdI.FirstActs.Count, 1);
         // detach to avoid tracking
         _dbContext.Entry(createdI).State = EntityState.Detached;
 
         // add two subject relations
-        var updatedI = await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo,
+        var updatedI = await _mutationService.CreateOrUpdateInteraction(_interactionRepo,
+            
+            _relationRepo,
+            _interactionService,
             new CreateOrUpdateInteractionRequestDto
             {
                 Id = createdI.Id,
@@ -145,6 +160,7 @@ public class InteractionRepoUpdateTests : TestBase
 
         // add one more subject relation
         var updatedI2 = await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo,
+            _interactionService,
             new CreateOrUpdateInteractionRequestDto
             {
                 Id = createdI.Id,
@@ -193,13 +209,17 @@ public class InteractionRepoUpdateTests : TestBase
         };
 
         var createdI =
-            await GetMutationService().CreateOrUpdateInteraction(_interactionRepo, _relationRepo, emptyDto);
+            await GetMutationService().CreateOrUpdateInteraction(_interactionRepo, _relationRepo, 
+                _interactionService,
+                emptyDto);
+        
         Assert.AreEqual(createdI.FirstActs.Count, 1);
         // detach to avoid tracking
         _dbContext.Entry(createdI).State = EntityState.Detached;
 
         // add two subject relations
         var updatedI = await GetMutationService().CreateOrUpdateInteraction(_interactionRepo, _relationRepo,
+            _interactionService,
             new CreateOrUpdateInteractionRequestDto
             {
                 Id = createdI.Id,
@@ -277,7 +297,9 @@ public class InteractionRepoUpdateTests : TestBase
             };
 
         var updatedI2 = await GetMutationService()
-            .CreateOrUpdateInteraction(_interactionRepo, _relationRepo, updatedI2Dto);
+            .CreateOrUpdateInteraction(_interactionRepo, _relationRepo,
+                _interactionService,
+                updatedI2Dto);
         //
         Assert.AreEqual(0, updatedI2.Subjects.Count);
         Assert.AreEqual(1, updatedI2.FirstActs.Count);
@@ -300,13 +322,17 @@ public class InteractionRepoUpdateTests : TestBase
         };
 
         var createdI =
-            await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo, emptyDto);
+            await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo, 
+                _interactionService,
+                emptyDto);
+        
         Assert.AreEqual(createdI.FirstActs.Count, 1);
         // detach to avoid tracking
         _dbContext.Entry(createdI).State = EntityState.Detached;
 
         // add two subject relations
         var updatedI = await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo,
+            _interactionService,
             new CreateOrUpdateInteractionRequestDto
             {
                 Id = createdI.Id,
@@ -352,6 +378,7 @@ public class InteractionRepoUpdateTests : TestBase
 
         // add one more subject relation
         var updatedI2 = await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo,
+            _interactionService,
             new CreateOrUpdateInteractionRequestDto
             {
                 Id = createdI.Id,

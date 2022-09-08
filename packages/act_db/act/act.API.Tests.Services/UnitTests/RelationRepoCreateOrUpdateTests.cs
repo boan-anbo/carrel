@@ -2,6 +2,7 @@ using act.API.Tests.Controllers;
 using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Repositories.GraphQL;
+using act.Services.Contracts;
 using act.Services.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ public class RelationRepoUpdateTests : TestBase
     private readonly IInteractionRepository _interactionRepo;
     private readonly IRelationRepository _relationRepo;
     private readonly ActDbContext _dbContext;
+    private readonly IInteractionService _interactionService;
 
     public RelationRepoUpdateTests()
     {
@@ -27,6 +29,7 @@ public class RelationRepoUpdateTests : TestBase
         _queryService = _serviceProvider.GetRequiredService<GraphQLQuery>();
         _interactionRepo = _serviceProvider.GetRequiredService<IInteractionRepository>();
         _relationRepo = _serviceProvider.GetRequiredService<IRelationRepository>();
+        _interactionService = _serviceProvider.GetRequiredService<IInteractionService>();
         _dbContext = _serviceProvider.GetRequiredService<ActDbContext>();
     }
 
@@ -41,6 +44,8 @@ public class RelationRepoUpdateTests : TestBase
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
             _relationRepo,
+            _interactionService,
+            
             emptyInteractionDto);
 
         var relationDto = new CreateOrUpdateRelationDto
@@ -100,6 +105,7 @@ public class RelationRepoUpdateTests : TestBase
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
             _relationRepo,
+            _interactionService,
             emptyInteractionDto);
         
         // detach all entities from context
@@ -196,6 +202,7 @@ public class RelationRepoUpdateTests : TestBase
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
             _relationRepo,
+            _interactionService,
             emptyInteractionDto);
 
         // detach all entities from context
@@ -273,6 +280,7 @@ public class RelationRepoUpdateTests : TestBase
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
             _relationRepo,
+            _interactionService,
             emptyInteractionDto);
 
         var relationDto = new CreateOrUpdateRelationDto
@@ -321,6 +329,7 @@ public class RelationRepoUpdateTests : TestBase
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
             _relationRepo,
+            _interactionService,
             emptyInteractionDto);
 
         var relationDto = new CreateOrUpdateRelationDto
