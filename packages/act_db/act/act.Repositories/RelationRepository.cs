@@ -8,11 +8,11 @@ namespace act.Repositories;
 
 public class RelationRepository : IRelationRepository
 {
-    private readonly ActDbContext _dbContext;
+    private readonly InteractDbContext _dbContext;
     private readonly ILogger<RelationRepository> _logger;
 
     public RelationRepository(
-        ActDbContext dbContext,
+        InteractDbContext dbContext,
         ILogger<RelationRepository> logger
     )
     {

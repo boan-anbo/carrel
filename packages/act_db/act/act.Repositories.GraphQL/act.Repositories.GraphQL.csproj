@@ -19,6 +19,8 @@
         <ProjectReference Include="..\act.Repositories.Db\act.Repositories.Db.csproj" />
         <ProjectReference Include="..\act.Repositories\act.Repositories.csproj" />
         <ProjectReference Include="..\act.Services.Contracts\act.Services.Contracts.csproj" />
+        <ProjectReference Include="..\Interact.Graph.Lib\Interact.Graph.Lib.csproj" />
+        <ProjectReference Include="..\Interact.Graph.Service\Interact.Graph.Service.csproj" />
     </ItemGroup>
 
 </Project>

@@ -20,7 +20,7 @@ public class RelationRepoDeleteTests : TestBase
     private readonly GraphQLQuery _queryService;
     private readonly IInteractionRepository _interactionRepo;
     private readonly IRelationRepository _relationRepo;
-    private readonly ActDbContext _dbContext;
+    private readonly InteractDbContext _dbContext;
     private readonly IInteractionService _interactionService;
 
     public RelationRepoDeleteTests()
@@ -29,7 +29,7 @@ public class RelationRepoDeleteTests : TestBase
         _queryService = _serviceProvider.GetRequiredService<GraphQLQuery>();
         _interactionRepo = _serviceProvider.GetRequiredService<IInteractionRepository>();
         _relationRepo = _serviceProvider.GetRequiredService<IRelationRepository>();
-        _dbContext = _serviceProvider.GetRequiredService<ActDbContext>();
+        _dbContext = _serviceProvider.GetRequiredService<InteractDbContext>();
         _interactionService = _serviceProvider.GetRequiredService<IInteractionService>();
     }
 

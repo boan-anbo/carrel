@@ -6,6 +6,7 @@ public interface IInteractionRepository
 {
     Task<Interaction?> GetInteractionScalar(long id);
     Task<Interaction> GetInteractionFull(long id);
+    Task<ICollection<Interaction>> GetInteractionsFullByIds(long[] ids);
     Task<Interaction?> GetInteractionFullWithAllRelations(long id);
     Task<IEnumerable<Interaction>> GetAllInteractions();
     Task<Interaction?> AddOrCreateInteraction(Interaction? interaction);
@@ -13,6 +14,7 @@ public interface IInteractionRepository
     // This does not persist
     public void AddToBeFirstActToInteractionWithoutSaving(IRelationRepository _relation,
         Interaction interaction);
+
     Task<Interaction?> CreateOrUpdateInteractionWithoutSaving(Interaction? interaction);
 
     Task SaveChanges();

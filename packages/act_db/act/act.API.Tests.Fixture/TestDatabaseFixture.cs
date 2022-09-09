@@ -31,8 +31,8 @@ public class TestDatabaseFixture
         }
     }
 
-    public ActDbContext CreateContext()
+    public InteractDbContext CreateContext()
     {
-        return new ActDbContext();
+        return new InteractDbContext();
     }
 }

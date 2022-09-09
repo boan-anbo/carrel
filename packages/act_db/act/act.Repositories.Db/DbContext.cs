@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace act.Repositories.Db;
 
-public class ActDbContext : DbContext
+public class InteractDbContext : DbContext
 {
-    public ActDbContext()
+    public InteractDbContext()
     {
         // const Environment.SpecialFolder folder = Environment.SpecialFolder.LocalApplicationData;
         // use project folder for now

@@ -31,10 +31,7 @@ public class InteractTreeGrower : IInteractTreeGrower
     /// </summary>
     private int Counter
     {
-        get
-        {
-            return _counter;
-        }
+        get { return _counter; }
         set
         {
             CheckMaxAndThrow(_maxNodes);
@@ -42,18 +39,17 @@ public class InteractTreeGrower : IInteractTreeGrower
         }
     }
 
-    private readonly ActDbContext _dbContext;
+    private readonly InteractDbContext _dbContext;
     private int _counter = 0;
     private List<InteractTreeData> _allOffshoots;
 
     public InteractTreeGrower(
-        ActDbContext dbContext,
+        InteractDbContext dbContext,
         InteractTreeSeed seed
     )
     {
         _dbContext = dbContext;
         _seed = seed;
-        _maxNodes = seed.MaxBranches ?? 2046;
     }
 
 
@@ -71,8 +67,19 @@ public class InteractTreeGrower : IInteractTreeGrower
             // Create a list of all the nodes that are in the tree
             Reset();
             // start with the roots.
-            var roots = _seed.Roots;
-            _allOffshoots = roots.Select(x => InteractTreeData.FromRootInteraction(Counter++, x)).ToList();
+            var rootIds = _seed.Branches.Roots;
+            
+            // Grow the tree
+            foreach (var rootId in rootIds)
+            {
+                Interaction root = _dbContext.Interactions.Find(rootId);
+                if (root == null)
+                {
+                    throw new Exception($"Root with id {rootId} not found");
+                }
+                InteractTreeData rootData = InteractTreeData.FromRootInteraction(Counter++, root);
+            }
+            
             // loop over roots
             GrowAllChildren(_allOffshoots);
         }
@@ -93,7 +100,10 @@ public class InteractTreeGrower : IInteractTreeGrower
     {
         foreach (var root in rootTreeData)
         {
-            void AddToRootChildren(InteractTreeData rootTreeData, InteractTreeData treeData)
+            void AddToRootChildren(
+                InteractTreeData rootTreeData,
+                InteractTreeData treeData
+            )
             {
                 // check if the treeData has already been traversed before
                 if (_alreadyVisitedIds.Contains(treeData.InteractionId))
@@ -111,14 +121,14 @@ public class InteractTreeGrower : IInteractTreeGrower
             }
 
             // loop over branches 
-            var branchResults = GrowBranches(root.InteractionId, _seed.HasBranches);
+            var branchResults = GrowBranches(root.InteractionId, _seed.Branches.HasBranches);
             // add branches to root children
             foreach (var branch in branchResults)
             {
                 AddToRootChildren(root, branch);
             }
 
-            var asBranchResults = GrowAsBranches(root.InteractionId, _seed.AsBranches);
+            var asBranchResults = GrowAsBranches(root.InteractionId, _seed.Branches.AsBranches);
             // add aSbranches to root children
             foreach (var asBranch in asBranchResults)
             {

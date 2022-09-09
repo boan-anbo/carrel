@@ -18,7 +18,7 @@ namespace act.Services;
 
 public class InteractionService : IInteractionService
 {
-    private readonly ActDbContext _dbContext;
+    private readonly InteractDbContext _dbContext;
     private readonly IMapper _mapper;
 
     private readonly IInteractionRepository _interactionRepo;
@@ -39,7 +39,7 @@ public class InteractionService : IInteractionService
         IMapper mapper,
         IInteractionRepository interactionRepo,
         IRelationRepository relationRepo,
-        ActDbContext dbContextContext,
+        InteractDbContext dbContextContext,
         ILogger<InteractionService> logger
     )
     {

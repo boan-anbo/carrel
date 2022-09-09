@@ -74,7 +74,7 @@ public class GraphQLMutation : IGraphQLMutation
         [Service(ServiceKind.Synchronized)] IInteractionRepository _interactionRepo,
         [Service] IInteractionService _interactionService,
         [Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,
-        [Service(ServiceKind.Synchronized)] ActDbContext _dbContext,
+        [Service(ServiceKind.Synchronized)] InteractDbContext _dbContext,
         CreateOrUpdateInteractionRequestDto requestDto)
     {
         _logger.LogInformation($"CreateOrUpdateInteraction: {requestDto.ToJson()}");

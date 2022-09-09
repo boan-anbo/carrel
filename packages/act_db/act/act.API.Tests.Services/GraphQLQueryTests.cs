@@ -20,7 +20,7 @@ public class GraphQLQueryTests : TestBase
     private readonly GraphQLQuery _queryService;
     private readonly IInteractionRepository _interactionRepository;
     private readonly IRelationRepository _relationRepository;
-    private readonly ActDbContext _dbContext;
+    private readonly InteractDbContext _dbContext;
     private readonly IInteractionService _interactionService;
 
     public GraphQLQueryTests()
@@ -29,7 +29,7 @@ public class GraphQLQueryTests : TestBase
         _queryService = _serviceProvider.GetRequiredService<GraphQLQuery>();
         _interactionRepository = _serviceProvider.GetRequiredService<IInteractionRepository>();
         _relationRepository = _serviceProvider.GetRequiredService<IRelationRepository>();
-        _dbContext = _serviceProvider.GetRequiredService<ActDbContext>();
+        _dbContext = _serviceProvider.GetRequiredService<InteractDbContext>();
         _interactionService = _serviceProvider.GetRequiredService<IInteractionService>();
         //Newtonsoft.Json serializer (should be replaced once the known issue in System.Text.Json will be solved)
     }

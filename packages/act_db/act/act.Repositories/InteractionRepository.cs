@@ -9,11 +9,11 @@ namespace act.Repositories;
 
 public class InteractionRepository : IInteractionRepository
 {
-    private readonly ActDbContext _dbContext;
+    private readonly InteractDbContext _dbContext;
     private readonly ILogger<InteractionRepository> _logger;
 
     public InteractionRepository(
-        ActDbContext dbContext,
+        InteractDbContext dbContext,
         ILogger<InteractionRepository> logger
     )
     {
@@ -54,6 +54,34 @@ public class InteractionRepository : IInteractionRepository
             .ThenInclude(x => x.LinkedInteraction)
             .AsNoTracking()
             .FirstOrDefaultAsync(i => i.Id == id);
+    }
+
+    public async Task<ICollection<Interaction>> GetInteractionsFullByIds(long[] ids)
+    {
+        return await _dbContext.Interactions
+            .Include(x => x.Contexts)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.Subjects)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.FirstActs)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.Objects)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.SecondActs)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.IndirectObjects)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.Parallels)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.Settings)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.Purposes)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.References)
+            .ThenInclude(x => x.LinkedInteraction)
+            .AsNoTracking()
+            .Where(i => ids.Contains(i.Id))
+            .ToListAsync();
     }
 
     public async Task<Interaction?> GetInteractionFullWithAllRelations(long id)
@@ -231,7 +259,7 @@ public class InteractionRepository : IInteractionRepository
             .ThenInclude(x => x.LinkedInteraction)
             .Include(x => x.AsReferences)
             .ThenInclude(x => x.HostInteraction).AsQueryable();
-         
+
         return query;
     }
 

@@ -11,6 +11,7 @@ using act.Repositories.GraphQL;
 using act.Repositories.GraphQL.GraphQLConfiguration;
 using act.Services;
 using act.Services.Contracts;
+using Interact.Graph.Service;
 using Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -83,12 +84,13 @@ public class Startup
         services.AddCors();
 
         // add db context
-        services.AddDbContext<ActDbContext>();
+        services.AddDbContext<InteractDbContext>();
         services.AddDatabaseDeveloperPageExceptionFilter();
 
         // add repository
 
         services.AddScoped<IInteractionRepository, InteractionRepository>();
+        services.AddScoped<IInteractGraphService, InteractGraphService>();
         services.AddScoped<IRelationRepository, RelationRepository>();
         services.AddScoped<IInteractionService, InteractionService>();
 

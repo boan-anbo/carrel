@@ -1,16 +1,17 @@
 ﻿using act.API.DataContracts;
 using act.Repositories.Contracts;
 using act.Repositories.Db;
+using act.Services.Contracts;
 using act.Services.Model;
 using HotChocolate.Execution;
+using Interact.Graph.Service;
+using InteractGraphLib;
 using Microsoft.EntityFrameworkCore;
 
 namespace act.Repositories.GraphQL;
 
 public class GraphQLQuery
 {
-    
-
     public GraphQLQuery()
     {
     }
@@ -127,9 +128,9 @@ public class GraphQLQuery
     {
         return _repo.GetSubjectRelationsFull();
     }
-    
+
     // same function for all nine types of relations in RelationType.cs
-    
+
     /// <summary>
     /// Filter object relations
     /// </summary>
@@ -146,7 +147,7 @@ public class GraphQLQuery
     {
         return _repo.GetObjectRelationsFull();
     }
-    
+
     /// <summary>
     /// Filter context relations
     /// </summary>
@@ -163,7 +164,7 @@ public class GraphQLQuery
     {
         return _repo.GetContextRelationsFull();
     }
-    
+
     /// <summary>
     /// Filter first acts relations
     /// </summary>
@@ -180,7 +181,7 @@ public class GraphQLQuery
     {
         return _repo.GetFirstActRelationsFull();
     }
-    
+
     /// <summary>
     /// Filter second acts relations
     /// </summary>
@@ -197,7 +198,7 @@ public class GraphQLQuery
     {
         return _repo.GetSecondActRelationsFull();
     }
-    
+
     /// <summary>
     /// Filter indirect object relations
     /// </summary>
@@ -214,7 +215,7 @@ public class GraphQLQuery
     {
         return _repo.GetIndirectObjectRelationsFull();
     }
-    
+
     /// <summary>
     /// Filter settings relations
     /// </summary>
@@ -231,7 +232,7 @@ public class GraphQLQuery
     {
         return _repo.GetSettingsRelationsFull();
     }
-    
+
     /// <summary>
     /// Filter reference relations
     /// </summary>
@@ -248,7 +249,7 @@ public class GraphQLQuery
     {
         return _repo.GetReferenceRelationsFull();
     }
-    
+
     /// <summary>
     /// Filter paralell relations
     /// </summary>
@@ -265,7 +266,7 @@ public class GraphQLQuery
     {
         return _repo.GetParallelRelationsFull();
     }
-    
+
     /// <summary>
     /// Filter purpose relations
     /// </summary>
@@ -282,6 +283,46 @@ public class GraphQLQuery
     {
         return _repo.GetPurposeRelationsFull();
     }
-    
 
+    /// <summary>
+    /// Get Tree Graph from relations
+    /// </summary>
+    public async Task<ICollection<InteractTreeData>> GetTreeGraph(
+        [Service] InteractGraphService treeService,
+        [Service(ServiceKind.Synchronized)] IInteractionRepository _repo,
+        InteractTreeSeed seed
+    )
+    {
+        // check if rootIds is null, if so throw an error
+        if (seed.Branches.Roots == null)
+        {
+            throw new QueryException(
+                ErrorBuilder.New()
+                    .SetMessage("RootIds not found")
+                    .SetCode("NOT_FOUND")
+                    .SetExtension("rootIds", seed.Branches.Roots)
+                    .Build()
+            );
+        }
+
+        var interactions = await _repo.GetInteractionsFullByIds(seed.Branches.Roots);
+
+        if (interactions == null)
+        {
+            throw new QueryException(
+                ErrorBuilder.New()
+                    .SetMessage("Interactions not found")
+                    .SetCode("NOT_FOUND")
+                    .SetExtension("interactions", interactions)
+                    .Build()
+            );
+        }
+
+        var tree = await treeService.GrowTree(
+            seed
+        );
+
+        return tree;
+    }
 }
+

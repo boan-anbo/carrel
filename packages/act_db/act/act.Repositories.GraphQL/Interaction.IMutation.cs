@@ -38,7 +38,7 @@ public interface IGraphQLMutation
         [Service(ServiceKind.Synchronized)] IInteractionRepository _interactionRepo,
         [Service(ServiceKind.Synchronized)] IInteractionService _interactionService,
         [Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,
-        ActDbContext _dbContext,
+        InteractDbContext _dbContext,
         CreateOrUpdateInteractionRequestDto requestDto);
 
     Task<long> DeleteRelation(

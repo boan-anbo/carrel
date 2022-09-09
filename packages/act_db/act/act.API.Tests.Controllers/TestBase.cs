@@ -37,7 +37,7 @@ public class TestBase
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         };
 
-        _services.AddDbContext<ActDbContext>();
+        _services.AddDbContext<InteractDbContext>();
         _services.AddScoped<IInteractionService, InteractionService>();
         _services.AddScoped<IInteractionRepository, InteractionRepository>();
         _services.AddScoped<IRelationRepository, RelationRepository>();
