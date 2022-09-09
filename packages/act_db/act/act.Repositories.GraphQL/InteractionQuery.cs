@@ -321,6 +321,8 @@ public class GraphQLQuery
         var tree = await treeService.GrowTree(
             seed
         );
+        
+        
 
         
         return InteractTreeDataFlat.FromInteractTreeDataRecursive(tree);

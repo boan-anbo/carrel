@@ -321,27 +321,6 @@ public class TreeDataGenerationTest : TestBase
         var genZhu = await CreateByName("Genzhu");
         var genZhuHasChildren = await AddMultipleChildrenToFather(genZhu, hasChildren, liz, yangYang);
 
-        // var seed = new InteractTreeSeed(
-        //     new List<Interaction>()
-        //     {
-        //         genZhu
-        //     },
-        //     new List<RelationTypes>()
-        //     {
-        //         RelationTypes.SubjectRelation,
-        //         RelationTypes.ObjectRelation
-        //     },
-        //     new List<AsRelationTypes>()
-        //     {
-        //         AsRelationTypes.AsSubjectRelation
-        //     },
-        //     new InteractionTreeOpt()
-        //     {
-        //         MaxBranches = 1
-        //     }
-        // );
-
-        // refactor like above
 
         Branches branches = new Branches()
         {
