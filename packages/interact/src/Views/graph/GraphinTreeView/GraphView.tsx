@@ -1,8 +1,8 @@
 import {IUserEdge, IUserNode} from "@antv/graphin";
 import {useState} from "react";
-import {Graph} from "./Graph";
-import {extractGraphData} from "./extract-graph-data";
-import {useGetInteractionFullQuery} from "../../clients/grl-client/interact_db_client";
+import {Graph} from "../Graph";
+import {extractGraphData} from "../extract-graph-data";
+import {useGetInteractionFullQuery} from "../../../clients/grl-client/interact_db_client";
 
 export function GraphView(props: { id: number }) {
 

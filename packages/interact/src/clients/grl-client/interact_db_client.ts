@@ -19,6 +19,32 @@ export type Scalars = {
   UUID: any;
 };
 
+export enum AsRelationTypes {
+  AsContextRelation = 'AS_CONTEXT_RELATION',
+  AsFirstActRelation = 'AS_FIRST_ACT_RELATION',
+  AsIndirectObjectRelation = 'AS_INDIRECT_OBJECT_RELATION',
+  AsObjectRelation = 'AS_OBJECT_RELATION',
+  AsParallelRelation = 'AS_PARALLEL_RELATION',
+  AsPurposeRelation = 'AS_PURPOSE_RELATION',
+  AsReferenceRelation = 'AS_REFERENCE_RELATION',
+  AsSecondActRelation = 'AS_SECOND_ACT_RELATION',
+  AsSettingRelation = 'AS_SETTING_RELATION',
+  AsSubjectRelation = 'AS_SUBJECT_RELATION'
+}
+
+export enum BranchDirection {
+  FromParent = 'FROM_PARENT',
+  None = 'NONE',
+  ToParent = 'TO_PARENT'
+}
+
+export type BranchesInput = {
+  asBranches?: InputMaybe<Array<AsRelationTypes>>;
+  branchFilterNodes?: InputMaybe<Array<InteractionInput>>;
+  hasBranches?: InputMaybe<Array<RelationTypes>>;
+  roots: Array<Scalars['Long']>;
+};
+
 export type ComparableDateTimeOperationFilterInput = {
   eq?: InputMaybe<Scalars['DateTime']>;
   gt?: InputMaybe<Scalars['DateTime']>;
@@ -127,6 +153,21 @@ export type ContextRelationFilterInput = {
   weight?: InputMaybe<RelationWeightOperationFilterInput>;
 };
 
+export type ContextRelationInput = {
+  content?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  hits: Scalars['Long'];
+  hostInteraction?: InputMaybe<InteractionInput>;
+  hostInteractionId: Scalars['Long'];
+  label?: InputMaybe<Scalars['String']>;
+  linkedInteraction?: InputMaybe<InteractionInput>;
+  linkedInteractionId: Scalars['Long'];
+  order: Scalars['Long'];
+  type: RelationTypes;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  weight: RelationWeight;
+};
+
 export type ContextRelationSortInput = {
   content?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
@@ -213,6 +254,15 @@ export type EdgeOfRelation = {
   weight: Scalars['Long'];
 };
 
+export type ElementStatus = {
+  __typename?: 'ElementStatus';
+  active?: Maybe<Scalars['Boolean']>;
+  customStatus: Array<KeyValuePairOfStringAndBoolean>;
+  disabled?: Maybe<Scalars['Boolean']>;
+  hover?: Maybe<Scalars['Boolean']>;
+  selected?: Maybe<Scalars['Boolean']>;
+};
+
 export type FirstActRelation = {
   __typename?: 'FirstActRelation';
   content?: Maybe<Scalars['String']>;
@@ -244,6 +294,21 @@ export type FirstActRelationFilterInput = {
   type?: InputMaybe<RelationTypesOperationFilterInput>;
   uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
   weight?: InputMaybe<RelationWeightOperationFilterInput>;
+};
+
+export type FirstActRelationInput = {
+  content?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  hits: Scalars['Long'];
+  hostInteraction?: InputMaybe<InteractionInput>;
+  hostInteractionId: Scalars['Long'];
+  label?: InputMaybe<Scalars['String']>;
+  linkedInteraction?: InputMaybe<InteractionInput>;
+  linkedInteractionId: Scalars['Long'];
+  order: Scalars['Long'];
+  type: RelationTypes;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  weight: RelationWeight;
 };
 
 export type FirstActRelationSortInput = {
@@ -341,6 +406,7 @@ export type GraphQlQuery = {
   secondActRelations?: Maybe<SecondActRelationsConnection>;
   settingsRelations?: Maybe<SettingsRelationsConnection>;
   subjectRelations?: Maybe<SubjectRelationsConnection>;
+  treeGraph: Array<InteractTreeDataFlat>;
 };
 
 
@@ -473,6 +539,11 @@ export type GraphQlQuerySubjectRelationsArgs = {
   where?: InputMaybe<SubjectRelationFilterInput>;
 };
 
+
+export type GraphQlQueryTreeGraphArgs = {
+  seed: InteractTreeSeedInput;
+};
+
 export type IndirectObjectRelation = {
   __typename?: 'IndirectObjectRelation';
   content?: Maybe<Scalars['String']>;
@@ -504,6 +575,21 @@ export type IndirectObjectRelationFilterInput = {
   type?: InputMaybe<RelationTypesOperationFilterInput>;
   uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
   weight?: InputMaybe<RelationWeightOperationFilterInput>;
+};
+
+export type IndirectObjectRelationInput = {
+  content?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  hits: Scalars['Long'];
+  hostInteraction?: InputMaybe<InteractionInput>;
+  hostInteractionId: Scalars['Long'];
+  label?: InputMaybe<Scalars['String']>;
+  linkedInteraction?: InputMaybe<InteractionInput>;
+  linkedInteractionId: Scalars['Long'];
+  order: Scalars['Long'];
+  type: RelationTypes;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  weight: RelationWeight;
 };
 
 export type IndirectObjectRelationSortInput = {
@@ -540,6 +626,46 @@ export type IndirectObjectRelationsEdge = {
   cursor: Scalars['String'];
   /** The item at the end of the edge. */
   node: IndirectObjectRelation;
+};
+
+export type InteractTreeDataFlat = {
+  __typename?: 'InteractTreeDataFlat';
+  asRelationType?: Maybe<AsRelationTypes>;
+  children: Array<InteractTreeDataFlatChild>;
+  childrenCount: Scalars['Int'];
+  content?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  direction: BranchDirection;
+  id: Scalars['String'];
+  interactionId: Scalars['Long'];
+  isRoot: Scalars['Boolean'];
+  label: Scalars['String'];
+  relationType?: Maybe<RelationTypes>;
+  status?: Maybe<ElementStatus>;
+  x?: Maybe<Scalars['Int']>;
+  y?: Maybe<Scalars['Int']>;
+};
+
+export type InteractTreeDataFlatChild = {
+  __typename?: 'InteractTreeDataFlatChild';
+  asRelationType?: Maybe<AsRelationTypes>;
+  content?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  direction: BranchDirection;
+  id: Scalars['String'];
+  interactionId: Scalars['Long'];
+  isRoot: Scalars['Boolean'];
+  label: Scalars['String'];
+  parentId?: Maybe<Scalars['String']>;
+  relationType?: Maybe<RelationTypes>;
+  status?: Maybe<ElementStatus>;
+  x?: Maybe<Scalars['Int']>;
+  y?: Maybe<Scalars['Int']>;
+};
+
+export type InteractTreeSeedInput = {
+  branches: BranchesInput;
+  option: InteractionTreeOptInput;
 };
 
 export type Interaction = {
@@ -673,6 +799,63 @@ export type InteractionIdentityOperationFilterInput = {
   nin?: InputMaybe<Array<InteractionIdentity>>;
 };
 
+export type InteractionInput = {
+  asContexts?: InputMaybe<Array<InputMaybe<ContextRelationInput>>>;
+  asContextsCount: Scalars['Long'];
+  asFirstActs?: InputMaybe<Array<InputMaybe<FirstActRelationInput>>>;
+  asFirstActsCount: Scalars['Long'];
+  asIndirectObjects?: InputMaybe<Array<InputMaybe<IndirectObjectRelationInput>>>;
+  asIndirectObjectsCount: Scalars['Long'];
+  asObjects?: InputMaybe<Array<InputMaybe<ObjectRelationInput>>>;
+  asObjectsCount: Scalars['Long'];
+  asParallels?: InputMaybe<Array<InputMaybe<ParallelRelationInput>>>;
+  asParallelsCount: Scalars['Long'];
+  asPurposes?: InputMaybe<Array<InputMaybe<PurposeRelationInput>>>;
+  asPurposesCount: Scalars['Long'];
+  asReferences?: InputMaybe<Array<InputMaybe<ReferenceRelationInput>>>;
+  asReferencesCount: Scalars['Long'];
+  asSecondActs?: InputMaybe<Array<InputMaybe<SecondActRelationInput>>>;
+  asSecondActsCount: Scalars['Long'];
+  asSettings?: InputMaybe<Array<InputMaybe<SettingRelationInput>>>;
+  asSettingsCount: Scalars['Long'];
+  asSubjects?: InputMaybe<Array<InputMaybe<SubjectRelationInput>>>;
+  asSubjectsCount: Scalars['Long'];
+  content?: InputMaybe<Scalars['String']>;
+  contexts?: InputMaybe<Array<InputMaybe<ContextRelationInput>>>;
+  contextsCount: Scalars['Long'];
+  created: Scalars['DateTime'];
+  data?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  end?: InputMaybe<Scalars['DateTime']>;
+  firstActs?: InputMaybe<Array<InputMaybe<FirstActRelationInput>>>;
+  firstActsCount: Scalars['Long'];
+  id: Scalars['Long'];
+  identity: InteractionIdentity;
+  indirectObjects?: InputMaybe<Array<InputMaybe<IndirectObjectRelationInput>>>;
+  indirectObjectsCount: Scalars['Long'];
+  label: Scalars['String'];
+  modified: Scalars['DateTime'];
+  objects?: InputMaybe<Array<InputMaybe<ObjectRelationInput>>>;
+  objectsCount: Scalars['Long'];
+  parallels?: InputMaybe<Array<InputMaybe<ParallelRelationInput>>>;
+  parallelsCount: Scalars['Long'];
+  properties?: InputMaybe<Array<InputMaybe<PropertyInput>>>;
+  propertiesCount: Scalars['Long'];
+  purposes?: InputMaybe<Array<InputMaybe<PurposeRelationInput>>>;
+  purposesCount: Scalars['Long'];
+  references?: InputMaybe<Array<InputMaybe<ReferenceRelationInput>>>;
+  referencesCount: Scalars['Long'];
+  secondActs?: InputMaybe<Array<InputMaybe<SecondActRelationInput>>>;
+  secondActsCount: Scalars['Long'];
+  sentence?: InputMaybe<Scalars['String']>;
+  settings?: InputMaybe<Array<InputMaybe<SettingRelationInput>>>;
+  settingsCount: Scalars['Long'];
+  start?: InputMaybe<Scalars['DateTime']>;
+  subjects?: InputMaybe<Array<InputMaybe<SubjectRelationInput>>>;
+  subjectsCount: Scalars['Long'];
+  uuid: Scalars['UUID'];
+};
+
 export type InteractionResult = {
   __typename?: 'InteractionResult';
   graph?: Maybe<GraphOfRelationAndInteraction>;
@@ -725,6 +908,11 @@ export type InteractionSortInput = {
   uuid?: InputMaybe<SortEnumType>;
 };
 
+export type InteractionTreeOptInput = {
+  maxBranches?: InputMaybe<Scalars['Int']>;
+  maxDepth?: InputMaybe<Scalars['Int']>;
+};
+
 /** A connection to a list of items. */
 export type InteractionsByIdAndRelationConnection = {
   __typename?: 'InteractionsByIdAndRelationConnection';
@@ -765,6 +953,12 @@ export type InteractionsEdge = {
   cursor: Scalars['String'];
   /** The item at the end of the edge. */
   node?: Maybe<Interaction>;
+};
+
+export type KeyValuePairOfStringAndBoolean = {
+  __typename?: 'KeyValuePairOfStringAndBoolean';
+  key: Scalars['String'];
+  value: Scalars['Boolean'];
 };
 
 export type ListFilterInputTypeOfContextRelationFilterInput = {
@@ -887,6 +1081,21 @@ export type ObjectRelationFilterInput = {
   weight?: InputMaybe<RelationWeightOperationFilterInput>;
 };
 
+export type ObjectRelationInput = {
+  content?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  hits: Scalars['Long'];
+  hostInteraction?: InputMaybe<InteractionInput>;
+  hostInteractionId: Scalars['Long'];
+  label?: InputMaybe<Scalars['String']>;
+  linkedInteraction?: InputMaybe<InteractionInput>;
+  linkedInteractionId: Scalars['Long'];
+  order: Scalars['Long'];
+  type: RelationTypes;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  weight: RelationWeight;
+};
+
 export type ObjectRelationSortInput = {
   content?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
@@ -969,6 +1178,21 @@ export type ParallelRelationFilterInput = {
   weight?: InputMaybe<RelationWeightOperationFilterInput>;
 };
 
+export type ParallelRelationInput = {
+  content?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  hits: Scalars['Long'];
+  hostInteraction?: InputMaybe<InteractionInput>;
+  hostInteractionId: Scalars['Long'];
+  label?: InputMaybe<Scalars['String']>;
+  linkedInteraction?: InputMaybe<InteractionInput>;
+  linkedInteractionId: Scalars['Long'];
+  order: Scalars['Long'];
+  type: RelationTypes;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  weight: RelationWeight;
+};
+
 export type ParallelRelationSortInput = {
   content?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
@@ -1028,6 +1252,16 @@ export type PropertyFilterInput = {
   value?: InputMaybe<StringOperationFilterInput>;
 };
 
+export type PropertyInput = {
+  description?: InputMaybe<Scalars['String']>;
+  guid: Scalars['UUID'];
+  id: Scalars['Long'];
+  interaction?: InputMaybe<InteractionInput>;
+  interactionId: Scalars['Long'];
+  key?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['String']>;
+};
+
 export type PurposeRelation = {
   __typename?: 'PurposeRelation';
   content?: Maybe<Scalars['String']>;
@@ -1059,6 +1293,21 @@ export type PurposeRelationFilterInput = {
   type?: InputMaybe<RelationTypesOperationFilterInput>;
   uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
   weight?: InputMaybe<RelationWeightOperationFilterInput>;
+};
+
+export type PurposeRelationInput = {
+  content?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  hits: Scalars['Long'];
+  hostInteraction?: InputMaybe<InteractionInput>;
+  hostInteractionId: Scalars['Long'];
+  label?: InputMaybe<Scalars['String']>;
+  linkedInteraction?: InputMaybe<InteractionInput>;
+  linkedInteractionId: Scalars['Long'];
+  order: Scalars['Long'];
+  type: RelationTypes;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  weight: RelationWeight;
 };
 
 export type PurposeRelationSortInput = {
@@ -1128,6 +1377,21 @@ export type ReferenceRelationFilterInput = {
   type?: InputMaybe<RelationTypesOperationFilterInput>;
   uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
   weight?: InputMaybe<RelationWeightOperationFilterInput>;
+};
+
+export type ReferenceRelationInput = {
+  content?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  hits: Scalars['Long'];
+  hostInteraction?: InputMaybe<InteractionInput>;
+  hostInteractionId: Scalars['Long'];
+  label?: InputMaybe<Scalars['String']>;
+  linkedInteraction?: InputMaybe<InteractionInput>;
+  linkedInteractionId: Scalars['Long'];
+  order: Scalars['Long'];
+  type: RelationTypes;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  weight: RelationWeight;
 };
 
 export type ReferenceRelationSortInput = {
@@ -1252,6 +1516,21 @@ export type SecondActRelationFilterInput = {
   weight?: InputMaybe<RelationWeightOperationFilterInput>;
 };
 
+export type SecondActRelationInput = {
+  content?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  hits: Scalars['Long'];
+  hostInteraction?: InputMaybe<InteractionInput>;
+  hostInteractionId: Scalars['Long'];
+  label?: InputMaybe<Scalars['String']>;
+  linkedInteraction?: InputMaybe<InteractionInput>;
+  linkedInteractionId: Scalars['Long'];
+  order: Scalars['Long'];
+  type: RelationTypes;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  weight: RelationWeight;
+};
+
 export type SecondActRelationSortInput = {
   content?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
@@ -1319,6 +1598,21 @@ export type SettingRelationFilterInput = {
   type?: InputMaybe<RelationTypesOperationFilterInput>;
   uuid?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
   weight?: InputMaybe<RelationWeightOperationFilterInput>;
+};
+
+export type SettingRelationInput = {
+  content?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  hits: Scalars['Long'];
+  hostInteraction?: InputMaybe<InteractionInput>;
+  hostInteractionId: Scalars['Long'];
+  label?: InputMaybe<Scalars['String']>;
+  linkedInteraction?: InputMaybe<InteractionInput>;
+  linkedInteractionId: Scalars['Long'];
+  order: Scalars['Long'];
+  type: RelationTypes;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  weight: RelationWeight;
 };
 
 export type SettingRelationSortInput = {
@@ -1410,6 +1704,21 @@ export type SubjectRelationFilterInput = {
   weight?: InputMaybe<RelationWeightOperationFilterInput>;
 };
 
+export type SubjectRelationInput = {
+  content?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  hits: Scalars['Long'];
+  hostInteraction?: InputMaybe<InteractionInput>;
+  hostInteractionId: Scalars['Long'];
+  label?: InputMaybe<Scalars['String']>;
+  linkedInteraction?: InputMaybe<InteractionInput>;
+  linkedInteractionId: Scalars['Long'];
+  order: Scalars['Long'];
+  type: RelationTypes;
+  uuid?: InputMaybe<Scalars['UUID']>;
+  weight: RelationWeight;
+};
+
 export type SubjectRelationSortInput = {
   content?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
@@ -1445,6 +1754,19 @@ export type SubjectRelationsEdge = {
   /** The item at the end of the edge. */
   node: SubjectRelation;
 };
+
+export type GrowGraphTreeQueryVariables = Exact<{
+  seed: InteractTreeSeedInput;
+}>;
+
+
+export type GrowGraphTreeQuery = { __typename?: 'GraphQLQuery', treeGraph: Array<{ __typename?: 'InteractTreeDataFlat', asRelationType?: AsRelationTypes | null, content?: string | null, description?: string | null, direction: BranchDirection, id: string, interactionId: any, isRoot: boolean, label: string, relationType?: RelationTypes | null, x?: number | null, y?: number | null, children: Array<{ __typename?: 'InteractTreeDataFlatChild', parentId?: string | null, asRelationType?: AsRelationTypes | null, content?: string | null, description?: string | null, direction: BranchDirection, id: string, interactionId: any, isRoot: boolean, label: string, relationType?: RelationTypes | null, x?: number | null, y?: number | null, status?: { __typename?: 'ElementStatus', active?: boolean | null, disabled?: boolean | null, hover?: boolean | null, selected?: boolean | null, customStatus: Array<{ __typename?: 'KeyValuePairOfStringAndBoolean', key: string, value: boolean }> } | null }>, status?: { __typename?: 'ElementStatus', active?: boolean | null, disabled?: boolean | null, hover?: boolean | null, selected?: boolean | null, customStatus: Array<{ __typename?: 'KeyValuePairOfStringAndBoolean', key: string, value: boolean }> } | null }> };
+
+export type InteractGraphTreeDataFragment = { __typename?: 'InteractTreeDataFlat', asRelationType?: AsRelationTypes | null, content?: string | null, description?: string | null, direction: BranchDirection, id: string, interactionId: any, isRoot: boolean, label: string, relationType?: RelationTypes | null, x?: number | null, y?: number | null, children: Array<{ __typename?: 'InteractTreeDataFlatChild', parentId?: string | null, asRelationType?: AsRelationTypes | null, content?: string | null, description?: string | null, direction: BranchDirection, id: string, interactionId: any, isRoot: boolean, label: string, relationType?: RelationTypes | null, x?: number | null, y?: number | null, status?: { __typename?: 'ElementStatus', active?: boolean | null, disabled?: boolean | null, hover?: boolean | null, selected?: boolean | null, customStatus: Array<{ __typename?: 'KeyValuePairOfStringAndBoolean', key: string, value: boolean }> } | null }>, status?: { __typename?: 'ElementStatus', active?: boolean | null, disabled?: boolean | null, hover?: boolean | null, selected?: boolean | null, customStatus: Array<{ __typename?: 'KeyValuePairOfStringAndBoolean', key: string, value: boolean }> } | null };
+
+export type InteractGraphTreeDataFlatChildrenFragment = { __typename?: 'InteractTreeDataFlatChild', parentId?: string | null, asRelationType?: AsRelationTypes | null, content?: string | null, description?: string | null, direction: BranchDirection, id: string, interactionId: any, isRoot: boolean, label: string, relationType?: RelationTypes | null, x?: number | null, y?: number | null, status?: { __typename?: 'ElementStatus', active?: boolean | null, disabled?: boolean | null, hover?: boolean | null, selected?: boolean | null, customStatus: Array<{ __typename?: 'KeyValuePairOfStringAndBoolean', key: string, value: boolean }> } | null };
+
+export type ElementStatusFragment = { __typename?: 'ElementStatus', active?: boolean | null, disabled?: boolean | null, hover?: boolean | null, selected?: boolean | null, customStatus: Array<{ __typename?: 'KeyValuePairOfStringAndBoolean', key: string, value: boolean }> };
 
 export type GetInteractionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1760,6 +2082,59 @@ export type ReferenceRelationEdgeFragment = { __typename?: 'ReferenceRelationsEd
 
 export type ReferenceRelationFragmentFragment = { __typename?: 'ReferenceRelation', label?: string | null, description?: string | null, content?: string | null, linkedInteractionId: any, uuid?: any | null, type: RelationTypes, weight: RelationWeight, hostInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, description?: string | null, content?: string | null, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null, hostInteraction?: { __typename?: 'Interaction', id: any, uuid: any, description?: string | null, content?: string | null, label: string, identity: InteractionIdentity, subjectsCount: any, asSubjectsCount: any, firstActsCount: any, asFirstActsCount: any, objectsCount: any, asObjectsCount: any, parallelsCount: any, asParallelsCount: any, settingsCount: any, asSettingsCount: any, secondActsCount: any, indirectObjectsCount: any, asIndirectObjectsCount: any, referencesCount: any, asReferencesCount: any, contextsCount: any, asContextsCount: any, purposesCount: any, asPurposesCount: any, start?: any | null, end?: any | null, created: any, modified: any, subjects?: Array<{ __typename?: 'SubjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, firstActs?: Array<{ __typename?: 'FirstActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, objects?: Array<{ __typename?: 'ObjectRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, parallels?: Array<{ __typename?: 'ParallelRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, settings?: Array<{ __typename?: 'SettingRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, secondActs?: Array<{ __typename?: 'SecondActRelation', description?: string | null, content?: string | null, label?: string | null, hostInteractionId: any, type: RelationTypes, uuid?: any | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, indirectObjects?: Array<{ __typename?: 'IndirectObjectRelation', type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, hostInteractionId: any, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, references?: Array<{ __typename?: 'ReferenceRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, contexts?: Array<{ __typename?: 'ContextRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null, purposes?: Array<{ __typename?: 'PurposeRelation', hostInteractionId: any, type: RelationTypes, uuid?: any | null, description?: string | null, label?: string | null, weight: RelationWeight, linkedInteractionId: any, linkedInteraction?: { __typename?: 'Interaction', id: any, uuid: any, label: string } | null } | null> | null } | null };
 
+export const ElementStatusFragmentDoc = gql`
+    fragment elementStatus on ElementStatus {
+  active
+  customStatus {
+    key
+    value
+  }
+  disabled
+  hover
+  selected
+}
+    `;
+export const InteractGraphTreeDataFlatChildrenFragmentDoc = gql`
+    fragment interactGraphTreeDataFlatChildren on InteractTreeDataFlatChild {
+  parentId
+  asRelationType
+  content
+  description
+  direction
+  id
+  interactionId
+  isRoot
+  label
+  relationType
+  status {
+    ...elementStatus
+  }
+  x
+  y
+}
+    ${ElementStatusFragmentDoc}`;
+export const InteractGraphTreeDataFragmentDoc = gql`
+    fragment interactGraphTreeData on InteractTreeDataFlat {
+  children {
+    ...interactGraphTreeDataFlatChildren
+  }
+  asRelationType
+  content
+  description
+  direction
+  id
+  interactionId
+  isRoot
+  label
+  relationType
+  status {
+    ...elementStatus
+  }
+  x
+  y
+}
+    ${InteractGraphTreeDataFlatChildrenFragmentDoc}
+${ElementStatusFragmentDoc}`;
 export const PageInfoFragmentFragmentDoc = gql`
     fragment pageInfoFragment on InteractionsConnection {
   pageInfo {
@@ -2496,6 +2871,44 @@ export const ReferenceRelationConnectionFragmentFragmentDoc = gql`
 }
     ${ReferenceRelationFragmentFragmentDoc}
 ${ReferenceRelationEdgeFragmentDoc}`;
+export const GrowGraphTreeDocument = gql`
+    query GrowGraphTree($seed: InteractTreeSeedInput!) {
+  treeGraph(seed: $seed) {
+    ...interactGraphTreeData
+  }
+}
+    ${InteractGraphTreeDataFragmentDoc}`;
+
+/**
+ * __useGrowGraphTreeQuery__
+ *
+ * To run a query within a React component, call `useGrowGraphTreeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGrowGraphTreeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGrowGraphTreeQuery({
+ *   variables: {
+ *      seed: // value for 'seed'
+ *   },
+ * });
+ */
+export function useGrowGraphTreeQuery(baseOptions: Apollo.QueryHookOptions<GrowGraphTreeQuery, GrowGraphTreeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GrowGraphTreeQuery, GrowGraphTreeQueryVariables>(GrowGraphTreeDocument, options);
+      }
+export function useGrowGraphTreeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GrowGraphTreeQuery, GrowGraphTreeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GrowGraphTreeQuery, GrowGraphTreeQueryVariables>(GrowGraphTreeDocument, options);
+        }
+export type GrowGraphTreeQueryHookResult = ReturnType<typeof useGrowGraphTreeQuery>;
+export type GrowGraphTreeLazyQueryHookResult = ReturnType<typeof useGrowGraphTreeLazyQuery>;
+export type GrowGraphTreeQueryResult = Apollo.QueryResult<GrowGraphTreeQuery, GrowGraphTreeQueryVariables>;
+export function refetchGrowGraphTreeQuery(variables: GrowGraphTreeQueryVariables) {
+      return { query: GrowGraphTreeDocument, variables: variables }
+    }
 export const GetInteractionsDocument = gql`
     query GetInteractions {
   interactions {

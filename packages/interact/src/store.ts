@@ -1,11 +1,13 @@
 // redux store
 import {configureStore} from '@reduxjs/toolkit'
 import {appstateSlice} from "./features/app-state/appStateSlice";
+import {graphStateSlice} from "./features/graph-state/graphStateSlice";
 
 
 export const store = configureStore({
     reducer: {
         appstate: appstateSlice.reducer,
+        graphstate: graphStateSlice.reducer,
     },
 })
 

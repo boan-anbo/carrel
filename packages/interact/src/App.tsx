@@ -17,7 +17,7 @@ const defaultLayout: Layout[] = [
     {i: "left_panel", x: 0, y: 0, w: 8, h: 8, static: false},
     {i: "mid_top", x: 8, y: 0, w: 8, h: 4, static: false},
     {i: "mid_center", x: 8, y: 4, w: 8, h: 4, static: false},
-    {i: "mid_below", x:0, y: 8, w: 24, h: 6, static: false},
+    {i: "mid_below", x:0, y: 8, w: 24, h: 12, static: false},
     {i: "right_panel", x: 18, y: 0, w: 8, h: 8, static: false},
 ]
 
@@ -69,8 +69,8 @@ function App() {
                 onDrop={onResponsiveGridLayoutDrop}
                 breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
                 cols={{lg: 24, md: 24, sm: 24, xs: 24, xxs: 24}}
-                maxRows={8}
-                rowHeight={150}
+                maxRows={12}
+                rowHeight={200}
                 autoSize={true}
                 onLayoutChange={onResponsiveGridLayoutLayoutChange}>
 

@@ -1,7 +1,8 @@
 schema: http://localhost:5000/graphql
 documents: [
-             "operations/interaction_operations.graphql",
-             "operations/relation_operations.graphql"
+  "operations/interaction_operations.graphql",
+  "operations/relation_operations.graphql",
+  "operations/graph_operations.graphql"
 ]
 generates:
   ../src/clients/grl-client/interact_db_client.ts:

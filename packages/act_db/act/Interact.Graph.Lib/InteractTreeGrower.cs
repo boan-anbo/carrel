@@ -16,7 +16,11 @@ public class InteractTreeGrower : IInteractTreeGrower
     private readonly InteractTreeSeed _seed;
 
 
-
+     /// <summary>
+     /// A list of nodes that are always hidden, such as 'to be'.
+     /// </summary>
+     private long[] ignoreInteractions = new long[] { 1, 2 };
+     
     /// <summary>
     /// A collection of all the nodes in the tree that has been traversed and should not be traversed again to prevent infinite loops.
     /// </summary>
@@ -49,6 +53,10 @@ public class InteractTreeGrower : IInteractTreeGrower
     }
 
 
+    public bool shouldIgnore(long id)
+    {
+        return ignoreInteractions.Contains(id);
+    }
     public void SetMaxBranches(int maxBranches)
     {
         _seed.Option.MaxBranches = maxBranches;
@@ -70,7 +78,7 @@ public class InteractTreeGrower : IInteractTreeGrower
         
         // check if branches are provided, if not, populate with all branches
         _seed.PopulateBranches();
-        
+
         try
         {
             // Create a list of all the nodes that are in the tree
@@ -134,6 +142,10 @@ public class InteractTreeGrower : IInteractTreeGrower
                 }
             }
 
+            if (shouldIgnore(root.InteractionId))
+            {
+                continue;
+            }
             // loop over branches 
             var branchResults = GrowBranches(root.InteractionId, _seed.Branches.HasBranches);
             // add branches to root children

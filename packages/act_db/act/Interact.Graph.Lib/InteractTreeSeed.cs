@@ -3,6 +3,14 @@ using Microsoft.Extensions.Options;
 
 namespace InteractGraphLib;
 
+public struct DefaultGraphOptions
+{
+    // default static max depth
+    public const int DefaultMaxDepth = 3;
+
+    // default static max branches
+    public const int DefaultMaxBranches = 1000;
+}
 public class InteractTreeSeed
 {
     public bool Validate()
@@ -26,14 +34,29 @@ public class InteractTreeSeed
         {
             throw new InteractTreeSeedInvalidException("Branches.HasBranches is null");
         }
-        
+
         if (Branches.AsBranches == null)
         {
             throw new InteractTreeSeedInvalidException("Branches.AsBranches is null");
         }
-        
+
 
         return true;
+    }
+
+    // constructor for seed user provided
+    public InteractTreeSeed(InteractTreeSeed seed)
+    {
+        Branches = seed.Branches;
+
+        Option = new InteractionTreeOpt
+        {
+            MaxDepth = seed.Option.MaxBranches > 0 ? seed.Option.MaxBranches : DefaultGraphOptions.DefaultMaxDepth,
+            MaxBranches =
+                seed.Option.MaxBranches > 0 ? seed.Option.MaxBranches : DefaultGraphOptions.DefaultMaxBranches,
+        };
+
+        Validate();
     }
 
     public InteractTreeSeed(Branches branches)

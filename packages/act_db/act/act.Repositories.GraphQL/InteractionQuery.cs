@@ -293,19 +293,21 @@ public class GraphQLQuery
         InteractTreeSeed seed
     )
     {
+        var checkedSeed = new InteractTreeSeed(seed);
+       
         // check if rootIds is null, if so throw an error
-        if (seed.Branches.Roots == null)
+        if (checkedSeed.Branches.Roots == null)
         {
             throw new QueryException(
                 ErrorBuilder.New()
                     .SetMessage("RootIds not found")
                     .SetCode("NOT_FOUND")
-                    .SetExtension("rootIds", seed.Branches.Roots)
+                    .SetExtension("rootIds", checkedSeed.Branches.Roots)
                     .Build()
             );
         }
 
-        var interactions = await _repo.GetInteractionsFullByIds(seed.Branches.Roots);
+        var interactions = await _repo.GetInteractionsFullByIds(checkedSeed.Branches.Roots);
 
         if (interactions == null)
         {
@@ -319,7 +321,7 @@ public class GraphQLQuery
         }
 
         var tree = await treeService.GrowTree(
-            seed
+            checkedSeed
         );
         
         

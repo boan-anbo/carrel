@@ -39,24 +39,30 @@
 }
 
 .b-pad {
- @apply py-0.5 px-1 m-1
+    @apply py-0.5 px-1 m-1
 }
 
+.b-cursor {
+    @apply cursor-pointer
+}
+.b-core {
+    @apply b-cursor b-pad
+}
 .b1 {
-    @apply rounded b-pad
+    @apply rounded b-core
 }
 
 /*create b1 active and resue b1*/
 .b1-active {
-    @apply b1 bg-red-500 text-white
+    @apply b1 bg-red-500 text-white b-core
 }
 
 .b2 {
-    @apply b-pad hover:text-red-500
+    @apply b-pad hover:text-red-500 b-core
 }
 
 /*create b1 active and resue b1*/
 .b2-active {
-    @apply b2 border-b border-red-500
+    @apply b2 border-b border-red-500 b-core
 }
 

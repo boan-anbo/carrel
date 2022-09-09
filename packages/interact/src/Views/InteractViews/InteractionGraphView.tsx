@@ -1,4 +1,4 @@
-import {GraphView} from "../graph/GraphView";
+import {GraphView} from "../graph/GraphinTreeView/GraphView";
 import {useState} from "react";
 import FilterInteractionSingle from "../ViewComponents/FilterControls/FilterInteractionSingle";
 import {Interaction} from "../../clients/grl-client/interact_db_client";
