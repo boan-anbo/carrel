@@ -4,9 +4,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InteractGraphLib;
 
-public class InteractTreeGrower
+public interface IInteractTreeGrower
+{
+    ICollection<InteractTreeData> Grow();
+
+    // constructor
+}
+
+public class InteractTreeGrower : IInteractTreeGrower
 {
     private readonly InteractTreeSeed _seed;
+
+    /// <summary>
+    /// Max number of nodes to generate
+    /// </summary>
+    public int _maxNodes = 2046;
+
 
     /// <summary>
     /// A collection of all the nodes in the tree that has been traversed and should not be traversed again to prevent infinite loops.
@@ -16,9 +29,22 @@ public class InteractTreeGrower
     /// <summary>
     /// Counter
     /// </summary>
-    public int _Counter = 0;
+    private int Counter
+    {
+        get
+        {
+            return _counter;
+        }
+        set
+        {
+            CheckMaxAndThrow(_maxNodes);
+            _counter = value;
+        }
+    }
 
     private readonly ActDbContext _dbContext;
+    private int _counter = 0;
+    private List<InteractTreeData> _allOffshoots;
 
     public InteractTreeGrower(
         ActDbContext dbContext,
@@ -27,33 +53,47 @@ public class InteractTreeGrower
     {
         _dbContext = dbContext;
         _seed = seed;
+        _maxNodes = seed.MaxBranches ?? 2046;
     }
 
 
-    private void ClearAlreadyVisitedIds()
+    public void Reset()
     {
         _alreadyVisitedIds = new List<long>();
+        Counter = 0;
+        _allOffshoots = new List<InteractTreeData>();
     }
 
     public ICollection<InteractTreeData> Grow()
     {
-        // Create a list of all the nodes that are in the tree
-        ClearAlreadyVisitedIds();
-        // start with the roots.
-        var roots = _seed.Roots;
-        List<InteractTreeData> allOffshoots =
-            roots.Select(x => InteractTreeData.FromRootInteraction(_Counter++, x)).ToList();
-        // loop over roots
-        GrowAllChildren(allOffshoots);
+        try
+        {
+            // Create a list of all the nodes that are in the tree
+            Reset();
+            // start with the roots.
+            var roots = _seed.Roots;
+            _allOffshoots = roots.Select(x => InteractTreeData.FromRootInteraction(Counter++, x)).ToList();
+            // loop over roots
+            GrowAllChildren(_allOffshoots);
+        }
+        catch (ReachMaxNodeException e)
+        {
+            Console.WriteLine(e);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
 
-        return allOffshoots;
+        return _allOffshoots;
     }
 
-    public void GrowAllChildren(ICollection<InteractTreeData> rootTreeData)
+    private void GrowAllChildren(ICollection<InteractTreeData> rootTreeData)
     {
         foreach (var root in rootTreeData)
         {
-            void addToRootChildren(InteractTreeData root, InteractTreeData treeData)
+            void AddToRootChildren(InteractTreeData rootTreeData, InteractTreeData treeData)
             {
                 // check if the treeData has already been traversed before
                 if (_alreadyVisitedIds.Contains(treeData.InteractionId))
@@ -65,7 +105,7 @@ public class InteractTreeGrower
                 else
                 {
                     // if it has not been traversed before, then we can just add it to the root.
-                    root.Children.Add(treeData);
+                    rootTreeData.Children.Add(treeData);
                     _alreadyVisitedIds.Add(treeData.InteractionId);
                 }
             }
@@ -75,14 +115,14 @@ public class InteractTreeGrower
             // add branches to root children
             foreach (var branch in branchResults)
             {
-                addToRootChildren(root, branch);
+                AddToRootChildren(root, branch);
             }
 
             var asBranchResults = GrowAsBranches(root.InteractionId, _seed.AsBranches);
             // add aSbranches to root children
             foreach (var asBranch in asBranchResults)
             {
-                addToRootChildren(root, asBranch);
+                AddToRootChildren(root, asBranch);
             }
 
             GrowAllChildren(root.Children);
@@ -90,7 +130,7 @@ public class InteractTreeGrower
     }
 
 
-    public ICollection<InteractTreeData> GrowBranches(long rootInteractionId, ICollection<RelationTypes> branches)
+    private ICollection<InteractTreeData> GrowBranches(long rootInteractionId, ICollection<RelationTypes> branches)
     {
         List<InteractTreeData> allResults = new List<InteractTreeData>();
         foreach (var branch in branches)
@@ -115,23 +155,11 @@ public class InteractTreeGrower
         return allResults;
     }
 
+
     private ICollection<InteractTreeData> GrowBranch(long rootInteractionId, RelationTypes branchType)
     {
         List<InteractTreeData> result = new List<InteractTreeData>();
 
-        void Grow(RelationTypes relationTypes, IQueryable<Relation?> relations,
-            List<InteractTreeData> interactTreeDatas)
-        {
-            if (relations.Any())
-            {
-                foreach (var relation in relations)
-                {
-                    var child = InteractTreeData.FromInteractionRelation(_Counter++, relation.LinkedInteraction,
-                        relationTypes);
-                    interactTreeDatas.Add(child);
-                }
-            }
-        }
 
         switch (branchType)
         {
@@ -139,62 +167,62 @@ public class InteractTreeGrower
                 var interactions = _dbContext.ContextRelations
                     .Include(x => x.LinkedInteraction)
                     .Where(x => x.HostInteractionId == rootInteractionId);
-                Grow(branchType, interactions, result);
+                GrowRelation(branchType, interactions, result);
                 break;
             case RelationTypes.SubjectRelation:
                 var subjectRelations = _dbContext.SubjectRelations
                     .Include(x => x.LinkedInteraction)
                     .Where(x => x.HostInteractionId == rootInteractionId);
-                Grow(branchType, subjectRelations, result);
+                GrowRelation(branchType, subjectRelations, result);
                 break;
             case RelationTypes.FirstActRelation:
                 var firstActRelations = _dbContext.FirstActRelations
                     .Include(x => x.LinkedInteraction)
                     .Where(x => x.HostInteractionId == rootInteractionId);
-                Grow(branchType, firstActRelations, result);
+                GrowRelation(branchType, firstActRelations, result);
                 break;
             case RelationTypes.ObjectRelation:
                 var objectRelations = _dbContext.ObjectRelations
                     .Include(x => x.LinkedInteraction)
                     .Where(x => x.HostInteractionId == rootInteractionId);
-                Grow(branchType, objectRelations, result);
+                GrowRelation(branchType, objectRelations, result);
 
                 break;
             case RelationTypes.SecondActRelation:
                 var secondActRelations = _dbContext.SecondActRelations
                     .Include(x => x.LinkedInteraction)
                     .Where(x => x.HostInteractionId == rootInteractionId);
-                Grow(branchType, secondActRelations, result);
+                GrowRelation(branchType, secondActRelations, result);
                 break;
             case RelationTypes.IndirectObjectRelation:
                 var indirectObjectRelations = _dbContext.IndirectObjectRelations
                     .Include(x => x.LinkedInteraction)
                     .Where(x => x.HostInteractionId == rootInteractionId);
-                Grow(branchType, indirectObjectRelations, result);
+                GrowRelation(branchType, indirectObjectRelations, result);
                 break;
             case RelationTypes.SettingRelation:
                 var settingRelations = _dbContext.SettingRelations
                     .Include(x => x.LinkedInteraction)
                     .Where(x => x.HostInteractionId == rootInteractionId);
-                Grow(branchType, settingRelations, result);
+                GrowRelation(branchType, settingRelations, result);
                 break;
             case RelationTypes.PurposeRelation:
                 var purposeRelations = _dbContext.PurposeRelations
                     .Include(x => x.LinkedInteraction)
                     .Where(x => x.HostInteractionId == rootInteractionId);
-                Grow(branchType, purposeRelations, result);
+                GrowRelation(branchType, purposeRelations, result);
                 break;
             case RelationTypes.ParallelRelation:
                 var parallelRelations = _dbContext.ParallelRelations
                     .Include(x => x.LinkedInteraction)
                     .Where(x => x.HostInteractionId == rootInteractionId);
-                Grow(branchType, parallelRelations, result);
+                GrowRelation(branchType, parallelRelations, result);
                 break;
             case RelationTypes.ReferenceRelation:
                 var referenceRelations = _dbContext.ReferenceRelations
                     .Include(x => x.LinkedInteraction)
                     .Where(x => x.HostInteractionId == rootInteractionId);
-                Grow(branchType, referenceRelations, result);
+                GrowRelation(branchType, referenceRelations, result);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(branchType), branchType, null);
@@ -207,16 +235,6 @@ public class InteractTreeGrower
     {
         List<InteractTreeData> result = new List<InteractTreeData>();
 
-        void Grow(AsRelationTypes relationTypes, IQueryable<Interaction?> interactions,
-            List<InteractTreeData> interactTreeDatas)
-        {
-            foreach (var interaction in interactions)
-            {
-                var child = InteractTreeData.FromInteractionAsRelation(_Counter++, interaction, relationTypes);
-                interactTreeDatas.Add(child);
-            }
-        }
-
         switch (branchType)
         {
             case AsRelationTypes.AsSubjectRelation:
@@ -224,16 +242,108 @@ public class InteractTreeGrower
                     .Include(x => x.Subjects)
                     .AsNoTracking()
                     .Where(x => x.Subjects.Any(s => s.LinkedInteractionId == genzhuId));
-                Grow(branchType, genzhuHasChildren, result);
+                GrowAsRelation(branchType, genzhuHasChildren, result);
+                break;
+            case AsRelationTypes.AsFirstActRelation:
+                var genzhuHasFirstAct = _dbContext.Interactions
+                    .Include(x => x.FirstActs)
+                    .AsNoTracking()
+                    .Where(x => x.FirstActs.Any(s => s.LinkedInteractionId == genzhuId));
+                GrowAsRelation(branchType, genzhuHasFirstAct, result);
+                break;
+            case AsRelationTypes.AsObjectRelation:
+                var genzhuHasObject = _dbContext.Interactions
+                    .Include(x => x.Objects)
+                    .AsNoTracking()
+                    .Where(x => x.Objects.Any(s => s.LinkedInteractionId == genzhuId));
+                GrowAsRelation(branchType, genzhuHasObject, result);
+                break;
+            case AsRelationTypes.AsSecondActRelation:
+                var genzhuHasSecondAct = _dbContext.Interactions
+                    .Include(x => x.SecondActs)
+                    .AsNoTracking()
+                    .Where(x => x.SecondActs.Any(s => s.LinkedInteractionId == genzhuId));
+                GrowAsRelation(branchType, genzhuHasSecondAct, result);
+                break;
+            case AsRelationTypes.AsIndirectObjectRelation:
+                var genzhuHasIndirectObject = _dbContext.Interactions
+                    .Include(x => x.IndirectObjects)
+                    .AsNoTracking()
+                    .Where(x => x.IndirectObjects.Any(s => s.LinkedInteractionId == genzhuId));
+                GrowAsRelation(branchType, genzhuHasIndirectObject, result);
+                break;
+            case AsRelationTypes.AsSettingRelation:
+                var genzhuHasSetting = _dbContext.Interactions
+                    .Include(x => x.Settings)
+                    .AsNoTracking()
+                    .Where(x => x.Settings.Any(s => s.LinkedInteractionId == genzhuId));
+                GrowAsRelation(branchType, genzhuHasSetting, result);
+                break;
+            case AsRelationTypes.AsPurposeRelation:
+                var genzhuHasPurpose = _dbContext.Interactions
+                    .Include(x => x.Purposes)
+                    .AsNoTracking()
+                    .Where(x => x.Purposes.Any(s => s.LinkedInteractionId == genzhuId));
+                GrowAsRelation(branchType, genzhuHasPurpose, result);
+                break;
+            case AsRelationTypes.AsParallelRelation:
+                var genzhuHasParallel = _dbContext.Interactions
+                    .Include(x => x.Parallels)
+                    .AsNoTracking()
+                    .Where(x => x.Parallels.Any(s => s.LinkedInteractionId == genzhuId));
+                GrowAsRelation(branchType, genzhuHasParallel, result);
+                break;
+            case AsRelationTypes.AsReferenceRelation:
+                var genzhuHasReference = _dbContext.Interactions
+                    .Include(x => x.References)
+                    .AsNoTracking()
+                    .Where(x => x.References.Any(s => s.LinkedInteractionId == genzhuId));
+                GrowAsRelation(branchType, genzhuHasReference, result);
                 break;
             default:
-                // unimplemented
                 throw new ArgumentOutOfRangeException(nameof(branchType), branchType, null);
-                break;
         }
 
-        ;
 
         return result;
+    }
+
+    private void GrowAsRelation(AsRelationTypes branchType, IQueryable<Interaction?> genzhuHasChildren,
+        List<InteractTreeData> result)
+    {
+        foreach (var interaction in genzhuHasChildren)
+        {
+            var child = InteractTreeData.FromInteractionAsRelation(Counter++, interaction, branchType);
+            result.Add(child);
+        }
+    }
+
+    private void GrowRelation(RelationTypes relationTypes, IQueryable<Relation?> relations,
+        List<InteractTreeData> interactTreeDatas)
+    {
+        if (relations.Any())
+        {
+            foreach (var relation in relations)
+            {
+                var child = InteractTreeData.FromInteractionRelation(Counter++, relation.LinkedInteraction,
+                    relationTypes);
+                interactTreeDatas.Add(child);
+            }
+        }
+    }
+
+    private void CheckMaxAndThrow(int maxNodes)
+    {
+        if (Counter > maxNodes + 1)
+        {
+            throw new ReachMaxNodeException($"Reach max nodes of {Counter}");
+        }
+    }
+}
+
+public class ReachMaxNodeException : Exception
+{
+    public ReachMaxNodeException(string message) : base(message)
+    {
     }
 }

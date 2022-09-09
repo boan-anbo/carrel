@@ -300,4 +300,55 @@ public class TreeDataGenerationTest : TestBase
         var yangyangChildren = yangyangChildrenRelation.FirstOrDefault().Children;
         Assert.AreEqual(2, yangyangChildren.Count);
     }
+
+    // max nodes limit should work
+    [TestMethod]
+    public async Task MaxNodesLimitShouldWork()
+    {
+        var hasChildren = await CreateByName("Has children of");
+        var liz = await CreateByName("Liz");
+        var yangYang = await CreateByName("Yangyang");
+        var genZhu = await CreateByName("Genzhu");
+        var genZhuHasChildren = await AddMultipleChildrenToFather(genZhu, hasChildren, liz, yangYang);
+
+        var seed = new InteractTreeSeed(
+            new List<Interaction>()
+            {
+                genZhu
+            },
+            new List<RelationTypes>()
+            {
+                RelationTypes.SubjectRelation,
+                RelationTypes.ObjectRelation
+            },
+            new List<AsRelationTypes>()
+            {
+                AsRelationTypes.AsSubjectRelation
+            },
+            new InteractionTreeOpt()
+            {
+                MaxBranches = 1
+            }
+        );
+
+        var treeGrower = new InteractTreeGrower(_dbContext, seed);
+
+        var tree = treeGrower.Grow();
+        Assert.IsNotNull(tree);
+        Assert.AreEqual(tree.Count, 1);
+        var genzhuHasChildRoot1 = tree.FirstOrDefault().Children;
+        Assert.AreEqual(1, genzhuHasChildRoot1.Count);
+        
+        treeGrower._maxNodes = 3;
+        
+        var tree2 = treeGrower.Grow();
+        Assert.IsNotNull(tree2);
+        Assert.AreEqual(tree2.Count, 1);
+        var genzhuHasChildRoot2 = tree2.FirstOrDefault().Children;
+        Assert.AreEqual(1, genzhuHasChildRoot2.Count);
+        var genzhuChildren = genzhuHasChildRoot2.FirstOrDefault().Children;
+        Assert.AreEqual(3, genzhuChildren.Count);
+        
+        
+    }
 }
