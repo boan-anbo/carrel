@@ -70,6 +70,14 @@ type EdgeOfRelation {
     weight: Long!
 }
 
+type ElementStatus {
+    active: Boolean
+    customStatus: [KeyValuePairOfStringAndBoolean!]!
+    disabled: Boolean
+    hover: Boolean
+    selected: Boolean
+}
+
 type FirstActRelation {
     content: String
     description: String
@@ -265,6 +273,7 @@ type GraphQLQuery {
         order: [SubjectRelationSortInput!],
         where: SubjectRelationFilterInput
     ): SubjectRelationsConnection
+    treeGraph(seed: InteractTreeSeedInput!): [InteractTreeDataFlat!]!
 }
 
 type IndirectObjectRelation {
@@ -299,6 +308,39 @@ type IndirectObjectRelationsEdge {
     cursor: String!
     "The item at the end of the edge."
     node: IndirectObjectRelation!
+}
+
+type InteractTreeDataFlat {
+    asRelationType: AsRelationTypes
+    children: [InteractTreeDataFlatChild!]!
+    childrenCount: Int!
+    content: String
+    description: String
+    direction: BranchDirection!
+    id: String!
+    interactionId: Long!
+    isRoot: Boolean!
+    label: String!
+    relationType: RelationTypes
+    status: ElementStatus
+    x: Int
+    y: Int
+}
+
+type InteractTreeDataFlatChild {
+    asRelationType: AsRelationTypes
+    content: String
+    description: String
+    direction: BranchDirection!
+    id: String!
+    interactionId: Long!
+    isRoot: Boolean!
+    label: String!
+    parentId: String
+    relationType: RelationTypes
+    status: ElementStatus
+    x: Int
+    y: Int
 }
 
 type Interaction {
@@ -400,6 +442,11 @@ type InteractionsEdge {
     cursor: String!
     "The item at the end of the edge."
     node: Interaction
+}
+
+type KeyValuePairOfStringAndBoolean {
+    key: String!
+    value: Boolean!
 }
 
 type NodeOfInteraction {
@@ -686,6 +733,25 @@ type SubjectRelationsEdge {
     node: SubjectRelation!
 }
 
+enum AsRelationTypes {
+    AS_CONTEXT_RELATION
+    AS_FIRST_ACT_RELATION
+    AS_INDIRECT_OBJECT_RELATION
+    AS_OBJECT_RELATION
+    AS_PARALLEL_RELATION
+    AS_PURPOSE_RELATION
+    AS_REFERENCE_RELATION
+    AS_SECOND_ACT_RELATION
+    AS_SETTING_RELATION
+    AS_SUBJECT_RELATION
+}
+
+enum BranchDirection {
+    FROM_PARENT
+    NONE
+    TO_PARENT
+}
+
 enum InteractionIdentity {
     ACT
     ENTITY
@@ -737,6 +803,13 @@ scalar DateTime
 scalar Long
 
 scalar UUID
+
+input BranchesInput {
+    asBranches: [AsRelationTypes!]
+    branchFilterNodes: [InteractionInput!]
+    hasBranches: [RelationTypes!]
+    roots: [Long!]!
+}
 
 input ComparableDateTimeOperationFilterInput {
     eq: DateTime
@@ -830,6 +903,21 @@ input ContextRelationFilterInput {
     weight: RelationWeightOperationFilterInput
 }
 
+input ContextRelationInput {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: InteractionInput
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: InteractionInput
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
+}
+
 input ContextRelationSortInput {
     content: SortEnumType
     description: SortEnumType
@@ -898,6 +986,21 @@ input FirstActRelationFilterInput {
     weight: RelationWeightOperationFilterInput
 }
 
+input FirstActRelationInput {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: InteractionInput
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: InteractionInput
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
+}
+
 input FirstActRelationSortInput {
     content: SortEnumType
     description: SortEnumType
@@ -930,6 +1033,21 @@ input IndirectObjectRelationFilterInput {
     weight: RelationWeightOperationFilterInput
 }
 
+input IndirectObjectRelationInput {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: InteractionInput
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: InteractionInput
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
+}
+
 input IndirectObjectRelationSortInput {
     content: SortEnumType
     description: SortEnumType
@@ -943,6 +1061,11 @@ input IndirectObjectRelationSortInput {
     type: SortEnumType
     uuid: SortEnumType
     weight: SortEnumType
+}
+
+input InteractTreeSeedInput {
+    branches: BranchesInput!
+    option: InteractionTreeOptInput!
 }
 
 input InteractionFilterInput {
@@ -1011,6 +1134,63 @@ input InteractionIdentityOperationFilterInput {
     nin: [InteractionIdentity!]
 }
 
+input InteractionInput {
+    asContexts: [ContextRelationInput]
+    asContextsCount: Long!
+    asFirstActs: [FirstActRelationInput]
+    asFirstActsCount: Long!
+    asIndirectObjects: [IndirectObjectRelationInput]
+    asIndirectObjectsCount: Long!
+    asObjects: [ObjectRelationInput]
+    asObjectsCount: Long!
+    asParallels: [ParallelRelationInput]
+    asParallelsCount: Long!
+    asPurposes: [PurposeRelationInput]
+    asPurposesCount: Long!
+    asReferences: [ReferenceRelationInput]
+    asReferencesCount: Long!
+    asSecondActs: [SecondActRelationInput]
+    asSecondActsCount: Long!
+    asSettings: [SettingRelationInput]
+    asSettingsCount: Long!
+    asSubjects: [SubjectRelationInput]
+    asSubjectsCount: Long!
+    content: String
+    contexts: [ContextRelationInput]
+    contextsCount: Long!
+    created: DateTime!
+    data: String
+    description: String
+    end: DateTime
+    firstActs: [FirstActRelationInput]
+    firstActsCount: Long!
+    id: Long!
+    identity: InteractionIdentity!
+    indirectObjects: [IndirectObjectRelationInput]
+    indirectObjectsCount: Long!
+    label: String!
+    modified: DateTime!
+    objects: [ObjectRelationInput]
+    objectsCount: Long!
+    parallels: [ParallelRelationInput]
+    parallelsCount: Long!
+    properties: [PropertyInput]
+    propertiesCount: Long!
+    purposes: [PurposeRelationInput]
+    purposesCount: Long!
+    references: [ReferenceRelationInput]
+    referencesCount: Long!
+    secondActs: [SecondActRelationInput]
+    secondActsCount: Long!
+    sentence: String
+    settings: [SettingRelationInput]
+    settingsCount: Long!
+    start: DateTime
+    subjects: [SubjectRelationInput]
+    subjectsCount: Long!
+    uuid: UUID!
+}
+
 input InteractionSortInput {
     asContextsCount: SortEnumType
     asFirstActsCount: SortEnumType
@@ -1045,6 +1225,11 @@ input InteractionSortInput {
     start: SortEnumType
     subjectsCount: SortEnumType
     uuid: SortEnumType
+}
+
+input InteractionTreeOptInput {
+    maxBranches: Int
+    maxDepth: Int
 }
 
 input ListFilterInputTypeOfContextRelationFilterInput {
@@ -1141,6 +1326,21 @@ input ObjectRelationFilterInput {
     weight: RelationWeightOperationFilterInput
 }
 
+input ObjectRelationInput {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: InteractionInput
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: InteractionInput
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
+}
+
 input ObjectRelationSortInput {
     content: SortEnumType
     description: SortEnumType
@@ -1173,6 +1373,21 @@ input ParallelRelationFilterInput {
     weight: RelationWeightOperationFilterInput
 }
 
+input ParallelRelationInput {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: InteractionInput
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: InteractionInput
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
+}
+
 input ParallelRelationSortInput {
     content: SortEnumType
     description: SortEnumType
@@ -1200,6 +1415,16 @@ input PropertyFilterInput {
     value: StringOperationFilterInput
 }
 
+input PropertyInput {
+    description: String
+    guid: UUID!
+    id: Long!
+    interaction: InteractionInput
+    interactionId: Long!
+    key: String
+    value: String
+}
+
 input PurposeRelationFilterInput {
     and: [PurposeRelationFilterInput!]
     content: StringOperationFilterInput
@@ -1215,6 +1440,21 @@ input PurposeRelationFilterInput {
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
+}
+
+input PurposeRelationInput {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: InteractionInput
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: InteractionInput
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
 }
 
 input PurposeRelationSortInput {
@@ -1247,6 +1487,21 @@ input ReferenceRelationFilterInput {
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
+}
+
+input ReferenceRelationInput {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: InteractionInput
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: InteractionInput
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
 }
 
 input ReferenceRelationSortInput {
@@ -1295,6 +1550,21 @@ input SecondActRelationFilterInput {
     weight: RelationWeightOperationFilterInput
 }
 
+input SecondActRelationInput {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: InteractionInput
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: InteractionInput
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
+}
+
 input SecondActRelationSortInput {
     content: SortEnumType
     description: SortEnumType
@@ -1325,6 +1595,21 @@ input SettingRelationFilterInput {
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
+}
+
+input SettingRelationInput {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: InteractionInput
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: InteractionInput
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
 }
 
 input SettingRelationSortInput {
@@ -1372,6 +1657,21 @@ input SubjectRelationFilterInput {
     type: RelationTypesOperationFilterInput
     uuid: ComparableNullableOfGuidOperationFilterInput
     weight: RelationWeightOperationFilterInput
+}
+
+input SubjectRelationInput {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: InteractionInput
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: InteractionInput
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
 }
 
 input SubjectRelationSortInput {

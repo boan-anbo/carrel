@@ -7,7 +7,7 @@ namespace Interact.Graph.Service;
 public interface IInteractGraphService
 {
     
-    Task<ICollection<InteractTreeData>> GrowTree(InteractTreeSeed seed);
+    Task<ICollection<InteractTreeDataRecursive>> GrowTree(InteractTreeSeed seed);
 }
 
 public class InteractGraphService : IInteractGraphService
@@ -24,13 +24,12 @@ public class InteractGraphService : IInteractGraphService
         
     }
     
-    public Task<ICollection<InteractTreeData>> GrowTree(InteractTreeSeed seed)
+    public Task<ICollection<InteractTreeDataRecursive>> GrowTree(InteractTreeSeed seed)
     {
+        
         var grower = new InteractTreeGrower(_dbContext, seed);
         
         var tree = grower.Grow();
-        
-        
         
         return Task.FromResult(tree);
     }

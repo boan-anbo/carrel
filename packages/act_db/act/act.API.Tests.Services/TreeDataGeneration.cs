@@ -163,19 +163,19 @@ public class TreeDataGenerationTest : TestBase
         Assert.AreEqual(yangYang.Label, genZhuHasYangYang.Objects.FirstOrDefault().LinkedInteraction.Label);
         Assert.AreEqual(genZhu.Label, genZhuHasYangYang.Subjects.FirstOrDefault().LinkedInteraction.Label);
 
-        var seeds = new InteractTreeSeed(
-            new List<Interaction>()
+        Branches branches = new Branches()
+        {
+            Roots = new[]
             {
-                genZhuHasLiz
+                genZhuHasLiz.Id
             },
-            new List<RelationTypes>()
+            HasBranches = new List<RelationTypes>()
             {
                 RelationTypes.ObjectRelation
-            },
-            new List<AsRelationTypes>()
-            {
             }
-        );
+        };
+        var seeds = new InteractTreeSeed(branches);
+
         var treeGen = new InteractTreeGrower(_dbContext, seeds);
 
         var tree = treeGen.Grow();
@@ -184,21 +184,19 @@ public class TreeDataGenerationTest : TestBase
         Assert.AreEqual(1, tree.FirstOrDefault().Children.Count);
         Assert.AreEqual(liz.Id, tree.FirstOrDefault().Children.FirstOrDefault().InteractionId);
 
-        var seedFromGenzhu = new InteractTreeSeed(
-            new List<Interaction>()
+        var branchesFromGenzhu = new Branches()
+        {
+            Roots = new[]
             {
-                genZhuHasLiz,
-                genZhuHasYangYang
+                genZhuHasLiz.Id,
+                genZhuHasYangYang.Id
             },
-            new List<RelationTypes>()
+            HasBranches = new List<RelationTypes>()
             {
                 RelationTypes.ObjectRelation
-            },
-            new List<AsRelationTypes>()
-            {
             }
-        );
-
+        };
+        var seedFromGenzhu = new InteractTreeSeed(branchesFromGenzhu);
         var treeGenFromGenzhu = new InteractTreeGrower(_dbContext, seedFromGenzhu);
 
         var treeFromGenzhu = treeGenFromGenzhu.Grow();
@@ -230,27 +228,36 @@ public class TreeDataGenerationTest : TestBase
         Assert.IsTrue(genZhuHasChildren.Objects.Any(i => i.LinkedInteraction.Label == yangYang.Label));
 
 
-        var seeds = new InteractTreeSeed(
-            new List<Interaction>()
+        Branches branches = new Branches()
+        {
+            Roots = new[]
             {
-                genZhuHasChildren
+                genZhuHasChildren.Id
             },
-            new List<RelationTypes>()
+            HasBranches = new List<RelationTypes>()
             {
                 RelationTypes.ObjectRelation
-            },
-            new List<AsRelationTypes>()
-            {
             }
-        );
+        };
+
+        var seeds = new InteractTreeSeed(branches);
+
         var treeGen = new InteractTreeGrower(_dbContext, seeds);
 
         var tree = treeGen.Grow();
         Assert.IsNotNull(tree);
-        Assert.AreEqual(tree.Count, 1);
+        Assert.AreEqual(1, tree.Count);
         Assert.AreEqual(2, tree.FirstOrDefault().Children.Count);
         Assert.IsTrue(tree.FirstOrDefault().Children.Any(i => i.InteractionId == liz.Id));
         Assert.IsTrue(tree.FirstOrDefault().Children.Any(i => i.InteractionId == yangYang.Id));
+        
+        var treeFlat = InteractTreeDataFlat.FromInteractTreeDataRecursive(tree);
+        var firstTreeFlat = treeFlat.FirstOrDefault();
+        Assert.IsNotNull(firstTreeFlat);
+        Assert.AreEqual(2, firstTreeFlat.Children.Count);
+        Assert.IsTrue(firstTreeFlat.Children.Any(i => i.InteractionId == liz.Id));
+        Assert.IsTrue(firstTreeFlat.Children.Any(i => i.InteractionId == yangYang.Id));
+        
     }
 
 
@@ -268,23 +275,24 @@ public class TreeDataGenerationTest : TestBase
         var langfeng = await CreateByName("Langfeng");
         var yangyangHasChildren = await AddMultipleChildrenToFather(yangYang, hasChildren, yuxi, langfeng);
 
-
-        var seed = new InteractTreeSeed(
-            new List<Interaction>()
+ 
+        Branches branches = new Branches()
+        {
+            Roots = new[]
             {
-                genZhu
+                genZhu.Id
             },
-            new List<RelationTypes>()
+            HasBranches = new List<RelationTypes>()
             {
-                RelationTypes.SubjectRelation,
-                RelationTypes.ObjectRelation
+                RelationTypes.ObjectRelation,
             },
-            new List<AsRelationTypes>()
+            AsBranches = new List<AsRelationTypes>()
             {
                 AsRelationTypes.AsSubjectRelation
             }
-        );
+        };
 
+        var seed = new InteractTreeSeed(branches);
         var tree = new InteractTreeGrower(_dbContext, seed).Grow();
 
         Assert.IsNotNull(tree);
@@ -292,13 +300,15 @@ public class TreeDataGenerationTest : TestBase
         var genzhuHasChildRoot = tree.FirstOrDefault().Children;
         Assert.AreEqual(1, genzhuHasChildRoot.Count);
         var genzhuChildren = genzhuHasChildRoot.FirstOrDefault().Children;
-        Assert.AreEqual(3, genzhuChildren.Count);
+        Assert.AreEqual(genzhuChildren.Count, 2);
         Assert.IsTrue(genzhuChildren.Any(i => i.InteractionId == liz.Id));
         Assert.IsTrue(genzhuChildren.Any(i => i.InteractionId == yangYang.Id));
         var yangyangChildrenRelation = genzhuChildren.FirstOrDefault(i => i.InteractionId == yangYang.Id).Children;
         Assert.AreEqual(1, yangyangChildrenRelation.Count);
         var yangyangChildren = yangyangChildrenRelation.FirstOrDefault().Children;
         Assert.AreEqual(2, yangyangChildren.Count);
+        
+        
     }
 
     // max nodes limit should work
@@ -311,25 +321,48 @@ public class TreeDataGenerationTest : TestBase
         var genZhu = await CreateByName("Genzhu");
         var genZhuHasChildren = await AddMultipleChildrenToFather(genZhu, hasChildren, liz, yangYang);
 
-        var seed = new InteractTreeSeed(
-            new List<Interaction>()
+        // var seed = new InteractTreeSeed(
+        //     new List<Interaction>()
+        //     {
+        //         genZhu
+        //     },
+        //     new List<RelationTypes>()
+        //     {
+        //         RelationTypes.SubjectRelation,
+        //         RelationTypes.ObjectRelation
+        //     },
+        //     new List<AsRelationTypes>()
+        //     {
+        //         AsRelationTypes.AsSubjectRelation
+        //     },
+        //     new InteractionTreeOpt()
+        //     {
+        //         MaxBranches = 1
+        //     }
+        // );
+
+        // refactor like above
+
+        Branches branches = new Branches()
+        {
+            Roots = new[]
             {
-                genZhu
+                genZhu.Id
             },
-            new List<RelationTypes>()
+            HasBranches = new List<RelationTypes>()
             {
-                RelationTypes.SubjectRelation,
                 RelationTypes.ObjectRelation
             },
-            new List<AsRelationTypes>()
+            AsBranches = new List<AsRelationTypes>()
             {
                 AsRelationTypes.AsSubjectRelation
-            },
-            new InteractionTreeOpt()
-            {
-                MaxBranches = 1
             }
-        );
+        };
+
+        var seed = new InteractTreeSeed(branches, new InteractionTreeOpt()
+        {
+            MaxBranches = 1
+        });
 
         var treeGrower = new InteractTreeGrower(_dbContext, seed);
 
@@ -338,17 +371,15 @@ public class TreeDataGenerationTest : TestBase
         Assert.AreEqual(tree.Count, 1);
         var genzhuHasChildRoot1 = tree.FirstOrDefault().Children;
         Assert.AreEqual(1, genzhuHasChildRoot1.Count);
-        
-        treeGrower._maxNodes = 3;
-        
+
+        treeGrower.SetMaxBranches(3);
+
         var tree2 = treeGrower.Grow();
         Assert.IsNotNull(tree2);
         Assert.AreEqual(tree2.Count, 1);
         var genzhuHasChildRoot2 = tree2.FirstOrDefault().Children;
         Assert.AreEqual(1, genzhuHasChildRoot2.Count);
         var genzhuChildren = genzhuHasChildRoot2.FirstOrDefault().Children;
-        Assert.AreEqual(3, genzhuChildren.Count);
-        
-        
+        Assert.AreEqual(2, genzhuChildren.Count);
     }
 }

@@ -6,7 +6,7 @@ namespace InteractGraphLib;
 
 public interface IInteractTreeGrower
 {
-    ICollection<InteractTreeData> Grow();
+    ICollection<InteractTreeDataRecursive> Grow();
 
     // constructor
 }
@@ -15,10 +15,6 @@ public class InteractTreeGrower : IInteractTreeGrower
 {
     private readonly InteractTreeSeed _seed;
 
-    /// <summary>
-    /// Max number of nodes to generate
-    /// </summary>
-    public int _maxNodes = 2046;
 
 
     /// <summary>
@@ -34,14 +30,14 @@ public class InteractTreeGrower : IInteractTreeGrower
         get { return _counter; }
         set
         {
-            CheckMaxAndThrow(_maxNodes);
+            CheckMaxAndThrow(_seed.Option.MaxBranches);
             _counter = value;
         }
     }
 
     private readonly InteractDbContext _dbContext;
     private int _counter = 0;
-    private List<InteractTreeData> _allOffshoots;
+    private List<InteractTreeDataRecursive> _allOffshoots;
 
     public InteractTreeGrower(
         InteractDbContext dbContext,
@@ -53,22 +49,35 @@ public class InteractTreeGrower : IInteractTreeGrower
     }
 
 
+    public void SetMaxBranches(int maxBranches)
+    {
+        _seed.Option.MaxBranches = maxBranches;
+    }
+
+    public int MaxBranches()
+    {
+        return ((int)_seed.Option.MaxBranches)!;
+    }
     public void Reset()
     {
         _alreadyVisitedIds = new List<long>();
         Counter = 0;
-        _allOffshoots = new List<InteractTreeData>();
+        _allOffshoots = new List<InteractTreeDataRecursive>();
     }
 
-    public ICollection<InteractTreeData> Grow()
+    public ICollection<InteractTreeDataRecursive> Grow()
     {
+        
+        // check if branches are provided, if not, populate with all branches
+        _seed.PopulateBranches();
+        
         try
         {
             // Create a list of all the nodes that are in the tree
             Reset();
             // start with the roots.
             var rootIds = _seed.Branches.Roots;
-            
+
             // Grow the tree
             foreach (var rootId in rootIds)
             {
@@ -77,9 +86,14 @@ public class InteractTreeGrower : IInteractTreeGrower
                 {
                     throw new Exception($"Root with id {rootId} not found");
                 }
-                InteractTreeData rootData = InteractTreeData.FromRootInteraction(Counter++, root);
+
+                InteractTreeDataRecursive rootDataRecursive =
+                    InteractTreeDataRecursive.FromRootInteraction(Counter++, root);
+
+                // Add the root to the list of all offshoots
+                _allOffshoots.Add(rootDataRecursive);
             }
-            
+
             // loop over roots
             GrowAllChildren(_allOffshoots);
         }
@@ -96,13 +110,13 @@ public class InteractTreeGrower : IInteractTreeGrower
         return _allOffshoots;
     }
 
-    private void GrowAllChildren(ICollection<InteractTreeData> rootTreeData)
+    private void GrowAllChildren(ICollection<InteractTreeDataRecursive> rootTreeData)
     {
         foreach (var root in rootTreeData)
         {
             void AddToRootChildren(
-                InteractTreeData rootTreeData,
-                InteractTreeData treeData
+                InteractTreeDataRecursive rootTreeData,
+                InteractTreeDataRecursive treeData
             )
             {
                 // check if the treeData has already been traversed before
@@ -140,9 +154,10 @@ public class InteractTreeGrower : IInteractTreeGrower
     }
 
 
-    private ICollection<InteractTreeData> GrowBranches(long rootInteractionId, ICollection<RelationTypes> branches)
+    private ICollection<InteractTreeDataRecursive> GrowBranches(long rootInteractionId,
+        ICollection<RelationTypes> branches)
     {
-        List<InteractTreeData> allResults = new List<InteractTreeData>();
+        List<InteractTreeDataRecursive> allResults = new List<InteractTreeDataRecursive>();
         foreach (var branch in branches)
         {
             var results = GrowBranch(rootInteractionId, branch);
@@ -152,10 +167,10 @@ public class InteractTreeGrower : IInteractTreeGrower
         return allResults;
     }
 
-    private ICollection<InteractTreeData> GrowAsBranches(long rootInteractionId,
+    private ICollection<InteractTreeDataRecursive> GrowAsBranches(long rootInteractionId,
         ICollection<AsRelationTypes> seedAsBranches)
     {
-        List<InteractTreeData> allResults = new List<InteractTreeData>();
+        List<InteractTreeDataRecursive> allResults = new List<InteractTreeDataRecursive>();
         foreach (var branch in seedAsBranches)
         {
             var results = GrowAsBranch(rootInteractionId, branch);
@@ -166,9 +181,9 @@ public class InteractTreeGrower : IInteractTreeGrower
     }
 
 
-    private ICollection<InteractTreeData> GrowBranch(long rootInteractionId, RelationTypes branchType)
+    private ICollection<InteractTreeDataRecursive> GrowBranch(long rootInteractionId, RelationTypes branchType)
     {
-        List<InteractTreeData> result = new List<InteractTreeData>();
+        List<InteractTreeDataRecursive> result = new List<InteractTreeDataRecursive>();
 
 
         switch (branchType)
@@ -241,9 +256,9 @@ public class InteractTreeGrower : IInteractTreeGrower
         return result;
     }
 
-    private ICollection<InteractTreeData> GrowAsBranch(long genzhuId, AsRelationTypes branchType)
+    private ICollection<InteractTreeDataRecursive> GrowAsBranch(long genzhuId, AsRelationTypes branchType)
     {
-        List<InteractTreeData> result = new List<InteractTreeData>();
+        List<InteractTreeDataRecursive> result = new List<InteractTreeDataRecursive>();
 
         switch (branchType)
         {
@@ -310,6 +325,13 @@ public class InteractTreeGrower : IInteractTreeGrower
                     .Where(x => x.References.Any(s => s.LinkedInteractionId == genzhuId));
                 GrowAsRelation(branchType, genzhuHasReference, result);
                 break;
+            case AsRelationTypes.AsContextRelation:
+                var genzhuHasContext = _dbContext.Interactions
+                    .Include(x => x.Contexts)
+                    .AsNoTracking()
+                    .Where(x => x.Contexts.Any(s => s.LinkedInteractionId == genzhuId));
+                GrowAsRelation(branchType, genzhuHasContext, result);
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(branchType), branchType, null);
         }
@@ -319,31 +341,35 @@ public class InteractTreeGrower : IInteractTreeGrower
     }
 
     private void GrowAsRelation(AsRelationTypes branchType, IQueryable<Interaction?> genzhuHasChildren,
-        List<InteractTreeData> result)
+        List<InteractTreeDataRecursive> result)
     {
         foreach (var interaction in genzhuHasChildren)
         {
-            var child = InteractTreeData.FromInteractionAsRelation(Counter++, interaction, branchType);
+            var child = InteractTreeDataRecursive.FromInteractionAsRelation(Counter++, interaction, branchType);
             result.Add(child);
         }
     }
 
     private void GrowRelation(RelationTypes relationTypes, IQueryable<Relation?> relations,
-        List<InteractTreeData> interactTreeDatas)
+        List<InteractTreeDataRecursive> interactTreeDatas)
     {
         if (relations.Any())
         {
             foreach (var relation in relations)
             {
-                var child = InteractTreeData.FromInteractionRelation(Counter++, relation.LinkedInteraction,
+                var child = InteractTreeDataRecursive.FromInteractionRelation(Counter++, relation.LinkedInteraction,
                     relationTypes);
                 interactTreeDatas.Add(child);
             }
         }
     }
 
-    private void CheckMaxAndThrow(int maxNodes)
+    private void CheckMaxAndThrow(int? maxNodes)
     {
+        if (maxNodes is null)
+        {
+            throw new NoMaxNodesException();
+        }
         if (Counter > maxNodes + 1)
         {
             throw new ReachMaxNodeException($"Reach max nodes of {Counter}");
@@ -354,6 +380,13 @@ public class InteractTreeGrower : IInteractTreeGrower
 public class ReachMaxNodeException : Exception
 {
     public ReachMaxNodeException(string message) : base(message)
+    {
+    }
+}
+
+public class NoMaxNodesException : Exception
+{
+    public NoMaxNodesException() : base("No max nodes")
     {
     }
 }

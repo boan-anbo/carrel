@@ -93,6 +93,7 @@ public class Startup
         services.AddScoped<IInteractGraphService, InteractGraphService>();
         services.AddScoped<IRelationRepository, RelationRepository>();
         services.AddScoped<IInteractionService, InteractionService>();
+        services.AddScoped<IInteractGraphService, InteractGraphService>();
 
         services
             .AddGraphQLServer()

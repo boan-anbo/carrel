@@ -1,24 +1,85 @@
 using act.Services.Model;
+using Microsoft.Extensions.Options;
 
 namespace InteractGraphLib;
 
 public class InteractTreeSeed
 {
+    public bool Validate()
+    {
+        if (Option == null)
+        {
+            throw new InteractTreeSeedInvalidException("Option is null");
+        }
+
+        if (Option.MaxBranches == null)
+        {
+            throw new InteractTreeSeedInvalidException("Option.MaxBranches is null");
+        }
+
+        if (Branches == null)
+        {
+            throw new InteractTreeSeedInvalidException("Branches is null");
+        }
+
+        if (Branches.HasBranches == null)
+        {
+            throw new InteractTreeSeedInvalidException("Branches.HasBranches is null");
+        }
+        
+        if (Branches.AsBranches == null)
+        {
+            throw new InteractTreeSeedInvalidException("Branches.AsBranches is null");
+        }
+        
+
+        return true;
+    }
+
     public InteractTreeSeed(Branches branches)
     {
         Branches = branches;
+        Validate();
     }
 
     public InteractTreeSeed(Branches branches, InteractionTreeOpt option)
     {
         Branches = branches;
-        Option = option;
+        Option = new InteractionTreeOpt
+        {
+            MaxDepth = option.MaxDepth ?? default,
+            MaxBranches = option.MaxDepth ?? default,
+        };
+
+        Validate();
     }
 
     public InteractionTreeOpt Option { get; set; } = new InteractionTreeOpt();
 
 
     public Branches Branches { get; set; } = new Branches();
+
+    /// <summary>
+    /// If there are any has or as branches, then this will be true
+    /// </summary>
+    /// <returns></returns>
+    public bool HasAnyBranches()
+    {
+        return Branches.HasBranches.Any() || Branches.AsBranches.Any();
+    }
+
+    /// <summary>
+    /// Populate branches with all relations
+    /// </summary>
+    public void PopulateBranches()
+    {
+        if (!HasAnyBranches())
+        {
+            // add All RelationTypes to HasBranches
+            Branches.HasBranches = Enum.GetValues(typeof(RelationTypes)).Cast<RelationTypes>().ToList();
+            Branches.AsBranches = Enum.GetValues(typeof(AsRelationTypes)).Cast<AsRelationTypes>().ToList();
+        }
+    }
 }
 
 public class Branches
@@ -75,5 +136,18 @@ public class BranchFilterNode
 public class InteractionTreeOpt
 {
     public int? MaxDepth { get; set; } = null;
-    public int? MaxBranches { get; set; } = null;
+
+    /// <summary>
+    /// Max number of nodes to generate
+    /// </summary>
+    public int? MaxBranches { get; set; } = 2046;
+}
+
+// seed invalid exception
+public class InteractTreeSeedInvalidException : Exception
+{
+    public InteractTreeSeedInvalidException(string message) : base(message)
+    {
+        Console.WriteLine(message);
+    }
 }

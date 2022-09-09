@@ -287,8 +287,8 @@ public class GraphQLQuery
     /// <summary>
     /// Get Tree Graph from relations
     /// </summary>
-    public async Task<ICollection<InteractTreeData>> GetTreeGraph(
-        [Service] InteractGraphService treeService,
+    public async Task<ICollection<InteractTreeDataFlat>> GetTreeGraph(
+        [Service] IInteractGraphService treeService,
         [Service(ServiceKind.Synchronized)] IInteractionRepository _repo,
         InteractTreeSeed seed
     )
@@ -322,7 +322,8 @@ public class GraphQLQuery
             seed
         );
 
-        return tree;
+        
+        return InteractTreeDataFlat.FromInteractTreeDataRecursive(tree);
     }
 }
 

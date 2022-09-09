@@ -1,0 +1,59 @@
+# Query
+
+query GrowGraphTree($seed: InteractTreeSeedInput!) {
+    treeGraph(seed: $seed) {
+        ...interactGraphTreeData
+    }
+}
+
+
+fragment interactGraphTreeData on InteractTreeDataFlat {
+    children {
+        ...interactGraphTreeDataFlatChildren
+    }
+
+    asRelationType
+    content
+    description
+    direction
+    id
+    interactionId
+    isRoot
+    label
+    relationType
+    status {
+        ...elementStatus
+    }
+    x
+    y
+}
+
+fragment interactGraphTreeDataFlatChildren on InteractTreeDataFlatChild {
+    parentId
+    asRelationType
+    content
+    description
+    direction
+    id
+    interactionId
+    isRoot
+    label
+    relationType
+    status {
+        ...elementStatus
+    }
+    x
+    y
+}
+
+
+fragment elementStatus on ElementStatus {
+    active
+    customStatus     {
+        key
+        value
+    }
+    disabled
+    hover
+    selected
+}
