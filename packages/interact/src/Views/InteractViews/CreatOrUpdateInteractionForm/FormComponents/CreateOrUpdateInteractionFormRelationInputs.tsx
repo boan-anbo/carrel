@@ -1,8 +1,8 @@
 import {SizeType} from "antd/lib/config-provider/SizeContext";
-import FilterInteractionMultiple from "../../ViewComponents/FilterControls/FilterInteractionMultiple";
-import {Interaction, InteractionIdentity} from "../../../clients/grl-client/interact_db_client";
+import FilterInteractionMultiple from "../../../ViewComponents/FilterControls/FilterInteractionMultiple";
+import {Interaction, InteractionIdentity} from "../../../../clients/grl-client/interact_db_client";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
-import {SelectValue} from "../../ViewComponents/FilterControls/SelectValue";
+import {SelectValue} from "../../../ViewComponents/FilterControls/SelectValue";
 
 interface CreateOrUpdateInteractionFormRelationInputProps {
     formData: CreateInteractionFormData;

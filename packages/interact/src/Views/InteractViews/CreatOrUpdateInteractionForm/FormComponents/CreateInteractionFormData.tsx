@@ -12,9 +12,9 @@ import {
     SecondActRelation,
     SettingRelation,
     SubjectRelation
-} from "../../../clients/grl-client/interact_db_client";
+} from "../../../../clients/grl-client/interact_db_client";
 import {CreateRelationDto} from "./CreateRelationDto";
-import {Logger, LogSource} from "../../../utils/logger";
+import {Logger, LogSource} from "../../../../utils/logger";
 
 const log = new Logger(LogSource.CreateFormData)
 

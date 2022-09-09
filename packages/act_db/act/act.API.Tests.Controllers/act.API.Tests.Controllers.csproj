@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="appsettings.Development.json"/>
-        <None Remove="appsettings.json"/>
+        <None Remove="appsettings.Development.json" />
+        <None Remove="appsettings.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -23,22 +23,22 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0"/>
-        <PackageReference Include="MSTest.TestAdapter" Version="2.2.7"/>
-        <PackageReference Include="MSTest.TestFramework" Version="2.2.7"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+        <PackageReference Include="MSTest.TestAdapter" Version="2.2.7" />
+        <PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\act.API.DataContracts\act.API.DataContracts.csproj"/>
-        <ProjectReference Include="..\act.API\act.API.csproj"/>
-        <ProjectReference Include="..\act.IoC.Configuration\act.IoC.Configuration.csproj"/>
-        <ProjectReference Include="..\act.Repositories.Contracts\act.Repositories.Contracts.csproj"/>
-        <ProjectReference Include="..\act.Repositories\act.Repositories.csproj"/>
-        <ProjectReference Include="..\act.Tools\act.Tools.csproj"/>
+        <ProjectReference Include="..\act.API.DataContracts\act.API.DataContracts.csproj" />
+        <ProjectReference Include="..\act.API\act.API.csproj" />
+        <ProjectReference Include="..\act.IoC.Configuration\act.IoC.Configuration.csproj" />
+        <ProjectReference Include="..\act.Repositories.Contracts\act.Repositories.Contracts.csproj" />
+        <ProjectReference Include="..\act.Repositories\act.Repositories.csproj" />
+        <ProjectReference Include="..\act.Tools\act.Tools.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Playlists\"/>
+        <Folder Include="Playlists\" />
     </ItemGroup>
 
 </Project>

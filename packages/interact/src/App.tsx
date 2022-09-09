@@ -9,8 +9,7 @@ import {useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "./store";
 import {SelectedTextViewer} from "./Views/ViewComponents/InteractViewComponent/SelectedTextViewer";
-import {SelectedInteractionDataViewer} from "./Views/InteractViews/SelectedInteractionDataViewer";
-import {GridView, GridViewTypes} from "./Views/GridView";
+import {GridView, GridViewTypes} from "./GridView/GridView";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -91,7 +90,7 @@ function App() {
 
                 <div key="mid_below" className=''>
 
-                    <GridView selectedView={GridViewTypes.INTERACTION_GRAPH_VIEW}></GridView>
+                    <GridView selectedView={GridViewTypes.GRAPH_MULTI_VIEW}></GridView>
                 </div>
 
                 <div key="right_panel" className='bg-amber-200'>

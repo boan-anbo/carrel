@@ -11,16 +11,14 @@ namespace act.Repositories.GraphQL;
 public class GraphQLMutation : IGraphQLMutation
 {
     private readonly ILogger _logger;
-    private readonly ActDbContext _dbContext;
 
     // constructor
     // inject db context 
     public GraphQLMutation(
-        ILogger<GraphQLMutation> logger,
-        ActDbContext dbContext)
+        ILogger<GraphQLMutation> logger
+        )
     {
         _logger = logger;
-        _dbContext = dbContext;
     }
 
     public async Task<Interaction?> AddNewEntityInteraction(
@@ -74,10 +72,10 @@ public class GraphQLMutation : IGraphQLMutation
     [UseProjection]
     public async Task<Interaction?> CreateOrUpdateInteraction(
         [Service(ServiceKind.Synchronized)] IInteractionRepository _interactionRepo,
+        [Service] IInteractionService _interactionService,
         [Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,
-        [Service(ServiceKind.Synchronized)] IInteractionService _interactionService,
-        CreateOrUpdateInteractionRequestDto requestDto
-    )
+        [Service(ServiceKind.Synchronized)] ActDbContext _dbContext,
+        CreateOrUpdateInteractionRequestDto requestDto)
     {
         _logger.LogInformation($"CreateOrUpdateInteraction: {requestDto.ToJson()}");
         /// check validity of request
@@ -103,7 +101,8 @@ public class GraphQLMutation : IGraphQLMutation
 
         // check if all subject relations are not tracked by dbcontext's change tracker
 
-
+        // attach the interaction to the dbcontext
+        // this adds to the change tracker
         await _interactionRepo.CreateOrUpdateInteractionWithoutSaving(interaction);
         // log ready to persis
         _logger.LogInformation($"Interaction Scalar Added Without Saving: {interaction.ToJson()}");
@@ -118,10 +117,14 @@ public class GraphQLMutation : IGraphQLMutation
         // saving relations
         try
         {
+            /**
+             * 1. add or update relations
+             * 2. delete relations
+             */
             await _interactionService.UpdateInteractionRelations(requestDto, interaction);
 
             // persist
-            await _interactionRepo.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             // log persisted
             // add first act if not exists, this has to be done after saving changes
@@ -137,7 +140,11 @@ public class GraphQLMutation : IGraphQLMutation
 
             // return a new interaction with all essential relations.
             var result = await _interactionRepo.GetInteractionFull(interaction.Id);
-            // detach all subject relations
+            
+            // remove all relations from the change tracker
+            // detach interaction
+            // _dbContext.Entry(interaction).State = EntityState.Detached;
+            _dbContext.ChangeTracker.Clear();
             return result;
         }
         catch (Exception e)
@@ -173,7 +180,4 @@ public class GraphQLMutation : IGraphQLMutation
 
         return relation;
     }
-
-
- 
 }

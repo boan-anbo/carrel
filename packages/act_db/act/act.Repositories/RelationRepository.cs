@@ -138,7 +138,6 @@ public class RelationRepository : IRelationRepository
         {
             case RelationTypes.SubjectRelation:
                 var subjectRelation = CreateOrUpdateRelationDto.toRelation<SubjectRelation>(request);
-                // detach from change tracker
                 _dbContext.SubjectRelations.Update(subjectRelation);
                 return subjectRelation as T;
             case RelationTypes.FirstActRelation:

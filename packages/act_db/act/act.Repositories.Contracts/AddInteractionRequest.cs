@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using act.Services.Model;
 
 namespace act.Repositories.Contracts;
@@ -22,6 +23,8 @@ public class CreateOrUpdateInteractionRequestDto
 
     // if id is provided, uuid is required for double-checking
     public Guid? Uuid { get; set; }
+    
+    [MaxLength(25)]
     public string Label { get; set; }
     public string Description { get; set; } = string.Empty;
 
@@ -137,6 +140,7 @@ public class CreateOrUpdateInteractionRequestDto
             Label = Label,
             Description = Description,
             Identity = Identity,
+            Content = Content,
             Start = Start,
             End = End,
             Data = Data,

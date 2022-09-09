@@ -52,6 +52,7 @@ public class InteractionRepository : IInteractionRepository
             .ThenInclude(x => x.LinkedInteraction)
             .Include(x => x.References)
             .ThenInclude(x => x.LinkedInteraction)
+            .AsNoTracking()
             .FirstOrDefaultAsync(i => i.Id == id);
     }
 

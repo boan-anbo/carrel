@@ -1,16 +1,12 @@
-import Graphin, {GraphinData, IUserEdge, IUserNode} from '@antv/graphin';
+import Graphin from '@antv/graphin';
 import {MiniMap} from '@antv/graphin-components';
 // Import icon resource files
 import '@antv/graphin-icons/dist/index.css';
+import {IGraphProps} from "./IGraphProps";
 
-
-export interface GraphProps extends GraphinData {
-    nodes: IUserNode[];
-    edges: IUserEdge[];
-}
 
 // include data props of graphic user nodes
-export const Graph = (pros: GraphProps) => {
+export const Graph = (pros: IGraphProps) => {
     return (
         <Graphin
 

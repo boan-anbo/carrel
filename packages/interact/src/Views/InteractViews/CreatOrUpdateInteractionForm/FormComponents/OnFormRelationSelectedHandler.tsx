@@ -1,10 +1,9 @@
-import {Interaction, RelationTypes, RelationWeight} from "../../../clients/grl-client/interact_db_client";
+import {Interaction, RelationTypes, RelationWeight} from "../../../../clients/grl-client/interact_db_client";
 import {CreateRelationDto} from "./CreateRelationDto";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
 import {Dispatch, SetStateAction} from "react";
-import {LabeledValue} from "antd/lib/select";
-import {Logger, LogSource} from "../../../utils/logger";
-import {SelectValue} from "../../ViewComponents/FilterControls/SelectValue";
+import {Logger, LogSource} from "../../../../utils/logger";
+import {SelectValue} from "../../../ViewComponents/FilterControls/SelectValue";
 
 const log = new Logger(LogSource.OnFormRelationSelectedHandler)
 // this updates the form data with the selected interactions (in relation to the host interaction)
@@ -22,34 +21,34 @@ export const onFormRelationSelectedHandler = (selectValues: SelectValue<Interact
 
     switch (relations) {
         case RelationTypes.ContextRelation:
-            setFormData({...formData, contextDtos: createDtos})
+            setFormData({...formData, contextDtos: createDtos} as CreateInteractionFormData);
             break;
         case RelationTypes.SubjectRelation:
-            setFormData({...formData, subjectDtos: createDtos})
+            setFormData({...formData, subjectDtos: createDtos} as CreateInteractionFormData);
             break;
         case RelationTypes.FirstActRelation:
-            setFormData({...formData, firstActDtos: createDtos})
+            setFormData({...formData, firstActDtos: createDtos} as CreateInteractionFormData);
             break;
         case RelationTypes.ObjectRelation:
-            setFormData({...formData, objectDtos: createDtos})
+            setFormData({...formData, objectDtos: createDtos} as CreateInteractionFormData);
             break;
         case RelationTypes.SecondActRelation:
-            setFormData({...formData, secondActDtos: createDtos})
+            setFormData({...formData, secondActDtos: createDtos} as CreateInteractionFormData);
             break;
         case RelationTypes.IndirectObjectRelation:
-            setFormData({...formData, indirectObjectDtos: createDtos})
+            setFormData({...formData, indirectObjectDtos: createDtos} as CreateInteractionFormData);
             break;
         case RelationTypes.ParallelRelation:
-            setFormData({...formData, parallelDtos: createDtos})
+            setFormData({...formData, parallelDtos: createDtos} as CreateInteractionFormData);
             break;
         case RelationTypes.PurposeRelation:
-            setFormData({...formData, purposeDtos: createDtos})
+            setFormData({...formData, purposeDtos: createDtos} as CreateInteractionFormData);
             break;
         case RelationTypes.ReferenceRelation:
-            setFormData({...formData, referenceDtos: createDtos})
+            setFormData({...formData, referenceDtos: createDtos} as CreateInteractionFormData);
             break;
         case RelationTypes.SettingRelation:
-            setFormData({...formData, settingDtos: createDtos})
+            setFormData({...formData, settingDtos: createDtos} as CreateInteractionFormData);
             break;
     }
 }

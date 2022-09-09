@@ -11,7 +11,7 @@ import {
     SecondActRelation,
     SettingRelation,
     SubjectRelation
-} from "../../../clients/grl-client/interact_db_client";
+} from "../../../../clients/grl-client/interact_db_client";
 
 export type AnyRelation = ContextRelation | SubjectRelation | FirstActRelation | ObjectRelation | SecondActRelation | IndirectObjectRelation | SettingRelation | PurposeRelation | ParallelRelation | ReferenceRelation;
 

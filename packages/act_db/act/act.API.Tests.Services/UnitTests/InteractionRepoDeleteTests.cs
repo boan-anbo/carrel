@@ -46,9 +46,8 @@ public class InteractionRepoDeleteTests : TestBase
         var interaction =
             await _mutationService.CreateOrUpdateInteraction(
                 _interactionRepo, 
-                _relationRepo, 
                 _interactionService,
-                interactionDto);
+                _relationRepo, _dbContext, interactionDto);
 
         // retrieved interaction
         var retrievedInteraction = await _interactionRepo.GetInteractionFull(interaction.Id);
@@ -104,9 +103,9 @@ public class InteractionRepoDeleteTests : TestBase
 
         // // create interaction
         // var interaction =
-        await _mutationService.CreateOrUpdateInteraction(_interactionRepo, _relationRepo, 
+        await _mutationService.CreateOrUpdateInteraction(_interactionRepo, 
             _interactionService, 
-            interactionDto);
+            _relationRepo, _dbContext, interactionDto);
         //
         // // retrieved interaction
         // var retrievedInteraction = await _interactionRepo.GetInteractionFull(interaction.Id);

@@ -5,6 +5,7 @@ import {Interaction} from "../../../clients/grl-client/interact_db_client";
 import {LabeledValue} from "antd/lib/select";
 import {SelectValue} from "./SelectValue";
 import {fetchFilteredInteractionData} from "./FetchFilteredInteractionData";
+import {SizeType} from "antd/lib/config-provider/SizeContext";
 
 const {Option} = Select;
 
@@ -13,6 +14,7 @@ export interface FilterInteractionSingleProps<T> {
     placeholder: string;
     style?: React.CSSProperties,
     onSelect: (value: SelectValue<T>) => void;
+    size?: SizeType | undefined;
 }
 
 const FilterInteractionSingle: React.FC<FilterInteractionSingleProps<Interaction>> = (props) => {
@@ -80,6 +82,7 @@ const FilterInteractionSingle: React.FC<FilterInteractionSingleProps<Interaction
                 showSearch
                 labelInValue={true}
                 value={value}
+                size={props.size}
                 placeholder={props.placeholder}
                 style={props.style}
                 defaultActiveFirstOption={false}

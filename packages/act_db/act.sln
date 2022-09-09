@@ -45,6 +45,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "act.API.Tests.Fixture", "ac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "act.Repositories.GraphQL", "act\act.Repositories.GraphQL\act.Repositories.GraphQL.csproj", "{DF0DE70F-30BA-4D94-AC8F-FEBF7B550C9B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.0 InteractGraph", "4.0 InteractGraph", "{01D4F350-0987-45FB-87D4-75F60E1EF9B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interact.Graph.Lib", "act\Interact.Graph.Lib\Interact.Graph.Lib.csproj", "{41294DE0-38B4-44F7-9DC1-27ADA3ADD970}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +119,10 @@ Global
 		{DF0DE70F-30BA-4D94-AC8F-FEBF7B550C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF0DE70F-30BA-4D94-AC8F-FEBF7B550C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF0DE70F-30BA-4D94-AC8F-FEBF7B550C9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41294DE0-38B4-44F7-9DC1-27ADA3ADD970}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41294DE0-38B4-44F7-9DC1-27ADA3ADD970}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41294DE0-38B4-44F7-9DC1-27ADA3ADD970}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41294DE0-38B4-44F7-9DC1-27ADA3ADD970}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -136,6 +144,7 @@ Global
 		{2700BF84-3AE0-46F3-820F-937E84C8A7BF} = {CD09DB9E-8AFF-4D5A-8B17-D5B4920DAAC6}
 		{8C4151F8-9F51-4A23-8BEF-019548FDF1C5} = {E06E00DD-EFBF-45B3-97FC-36550D87208F}
 		{DF0DE70F-30BA-4D94-AC8F-FEBF7B550C9B} = {CD09DB9E-8AFF-4D5A-8B17-D5B4920DAAC6}
+		{41294DE0-38B4-44F7-9DC1-27ADA3ADD970} = {01D4F350-0987-45FB-87D4-75F60E1EF9B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D88CACA8-D1F7-4512-ABB9-F5A9458CBEAE}

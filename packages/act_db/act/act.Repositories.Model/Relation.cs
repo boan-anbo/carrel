@@ -23,6 +23,28 @@ public enum RelationTypes
     // to string method
 }
 
+/// <summary>
+/// Reverse side of <see cref="RelationTypes"/>.
+/// </summary>
+/// <remarks>
+/// E.g. Interaction = Genzhu has children
+/// Genzhu has children (Interaction) => Subject = Genzhu, Object = Liz & Yang
+/// Genzhu (interaction) => AsSubject = Genzhu has Children (Interaction)
+/// </remarks>
+public enum AsRelationTypes
+{
+    AsContextRelation,
+    AsSubjectRelation,
+    AsFirstActRelation,
+    AsObjectRelation,
+    AsSecondActRelation,
+    AsIndirectObjectRelation,
+    AsSettingRelation,
+    AsPurposeRelation,
+    AsParallelRelation,
+    AsReferenceRelation
+}
+
 // static to string for relation types
 public static class RelationTypesExtensions
 {
@@ -226,7 +248,6 @@ public abstract class Relation
         };
         return relation;
     }
-    
 }
 
 /// <summary>

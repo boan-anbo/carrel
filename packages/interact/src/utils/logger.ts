@@ -1,5 +1,3 @@
-import {instanceOf} from "graphql/jsutils/instanceOf";
-
 export enum LogSource {
     App = 'App',
     CreateInteractionForm = 'Create Interaction Form',
@@ -9,6 +7,7 @@ export enum LogSource {
     CreateInteractionEntity = 'Create Interaction Entity Operation',
     OnFormRelationSelectedHandler = 'On Form Relation Selected Handler',
     CreateFormData = 'Create Form Data',
+    INTERACTION_GRAPH_VIEW = 'Interaction Graph View',
 }
 
 export class Logger {

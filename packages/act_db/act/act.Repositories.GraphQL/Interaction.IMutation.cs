@@ -1,4 +1,5 @@
 using act.Repositories.Contracts;
+using act.Repositories.Db;
 using act.Services.Contracts;
 using act.Services.Model;
 
@@ -35,10 +36,10 @@ public interface IGraphQLMutation
     /// </remarks>
     Task<Interaction?> CreateOrUpdateInteraction(
         [Service(ServiceKind.Synchronized)] IInteractionRepository _interactionRepo,
-        [Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,
         [Service(ServiceKind.Synchronized)] IInteractionService _interactionService,
-        CreateOrUpdateInteractionRequestDto requestDto
-    );
+        [Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,
+        ActDbContext _dbContext,
+        CreateOrUpdateInteractionRequestDto requestDto);
 
     Task<long> DeleteRelation(
         [Service(ServiceKind.Synchronized)] IRelationRepository _relationRepo,

@@ -79,10 +79,9 @@ public class InteractionRepoTests : TestBase
 
         var createTionResult =
             await _mutationService.CreateOrUpdateInteraction(
-                _interactionRepo,
-                _relationRepo, 
+                _interactionRepo, 
                 _interactionService,
-                createOrUpdateDto);
+                _relationRepo, _dbContext, createOrUpdateDto);
 
         Assert.IsNotNull(createTionResult);
         Assert.IsTrue(createTionResult.Id > 0);
@@ -193,9 +192,8 @@ public class InteractionRepoTests : TestBase
         var iWithMultipleRelations =
             await _mutationService.CreateOrUpdateInteraction(
                 _interactionRepo, 
-                _relationRepo, 
                 _interactionService,
-                createOrUpdateDto);
+                _relationRepo, _dbContext, createOrUpdateDto);
 
         Assert.IsNotNull(iWithMultipleRelations);
         // check if all relations are created

@@ -18,6 +18,7 @@ import {getFullInteractionById} from "../../clients/interact-db-client/filter-op
 import {InteractionCardFieldItem} from "./InteractCardFields/InteractionCardFieldItem";
 import {BiData, BiLabel, MdDescription, MdPermIdentity, SiContentful, SiReason} from "react-icons/all";
 import {InteractionCardRelationFieldItem} from "./InteractCardFields/InteractionCardRelationFieldItem";
+import {notify} from "../../utils/toast/notify";
 
 interface InteractionCardViewProps {
     interaction?: Interaction
@@ -42,8 +43,13 @@ export function InteractionCardView(props: InteractionCardViewProps) {
             placeholder={'Search interaction'}
             style={{width: '100%'}}
             onSelect={async (e) => {
-                const result = await getFullInteractionById(parseInt(e.value));
-                setInteraction(result);
+                if (e.value) {
+                    const interaction = await getFullInteractionById(parseInt(e.value as string));
+                    setInteraction(interaction);
+                } else {
+                    notify('No interaction found', 'check server', 'error');
+                }
+
             }}
         />
         {interaction &&

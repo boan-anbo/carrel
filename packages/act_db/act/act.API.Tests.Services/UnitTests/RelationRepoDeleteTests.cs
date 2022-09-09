@@ -43,10 +43,9 @@ public class RelationRepoDeleteTests : TestBase
 
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
-            _relationRepo,
             _interactionService,
             
-            emptyInteractionDto);
+            _relationRepo, _dbContext, emptyInteractionDto);
 
         var relationDto = new CreateOrUpdateRelationDto
         {
@@ -98,9 +97,8 @@ public class RelationRepoDeleteTests : TestBase
 
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
-            _relationRepo,
             _interactionService,
-            emptyInteractionDto);
+            _relationRepo, _dbContext, emptyInteractionDto);
 
         var relationDto = new CreateOrUpdateRelationDto
         {
@@ -148,9 +146,8 @@ public class RelationRepoDeleteTests : TestBase
 
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
-            _relationRepo,
             _interactionService,
-            emptyInteractionDto);
+            _relationRepo, _dbContext, emptyInteractionDto);
 
         var relationDto = new CreateOrUpdateRelationDto
         {
@@ -197,9 +194,8 @@ public class RelationRepoDeleteTests : TestBase
 
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
-            _relationRepo,
             _interactionService,
-            emptyInteractionDto);
+            _relationRepo, _dbContext, emptyInteractionDto);
 
         var relationDto = new CreateOrUpdateRelationDto
         {

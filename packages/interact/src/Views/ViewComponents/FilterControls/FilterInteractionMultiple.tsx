@@ -3,13 +3,12 @@ import React, {KeyboardEvent, useEffect, useState} from 'react';
 import {getFullInteractionById} from "../../../clients/interact-db-client/filter-operations";
 import {Interaction, InteractionIdentity} from "../../../clients/grl-client/interact_db_client";
 import {createInteractionEntity} from "../../../clients/interact-db-client/create-interaction-entity";
-import {CreateRelationDto} from "../../InteractViews/CreatOrUpdateInteractionForm/CreateRelationDto";
+import {CreateRelationDto} from "../../InteractViews/CreatOrUpdateInteractionForm/FormComponents/CreateRelationDto";
 import {LabeledValue} from "antd/lib/select";
 import {fetchFilteredInteractionData} from "./FetchFilteredInteractionData";
 import {IFilterInteractionMultipleProps} from "./IFilterInteractionMultipleProps";
 import {SelectValue} from "./SelectValue";
 import {getInteractionSelectionLabel} from "./filter-utils/getInteractionLabel";
-import {EmittedLabledValue} from "./EmittedLabledValue";
 import {Logger, LogSource} from "../../../utils/logger";
 
 const {Option} = Select;
@@ -79,10 +78,11 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
         }
     };
 
-    const handleChange = (labledValues: any) => {
-        console.warn('Value changed in Filter Interaction', labledValues);
+    const handleChange = (labledValues: LabeledValue[]) => {
+        log.info('Value changed in Filter Interaction', 'latest  labled values', labledValues);
         setValue(labledValues);
-        props.onSelect(labledValues);
+        const data = labledValues.map((v, index) => SelectValue.fromLabelValue<Interaction>(v));
+        props.onSelect(data);
     };
 
 
@@ -92,6 +92,7 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
     async function onSelectInputKeyDown(event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
         if (event.key === 'Enter') {
             setCurrentSearchInput(event.currentTarget.value);
+            log.debug('Enter pressed in FilterInteractionMultiple', 'currentSearchInput', currentSearchInput);
             if (!showConfirm) {
                 setShowConfirm(true);
             } else {
@@ -99,10 +100,10 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
                 setCurrentSearchInput('');
                 setShowConfirm(false);
                 let interaction = await createInteractionEntity(currentSearchInput, props.createInteractionIdentity ?? InteractionIdentity.Entity);
+                log.info('Interaction created on-the-go', 'Created interaction', interaction);
                 addInteraction(interaction);
                 console.log("Created interaction in filter control", interaction);
             }
-
         }
         if (event.key === 'Escape') {
             setShowConfirm(false);
@@ -111,21 +112,17 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
     }
 
     function onPopconfirmConfirm(e?: React.MouseEvent) {
+        setShowConfirm(false);
 
-        // if (confirmCreateNewEntry) {
-        //
-        //     console.log('create new entry');
-        //     const createdInteraction = await createInteractionEntity(event.currentTarget.value);
-        // }
     }
 
     function addInteraction(interaction: Interaction) {
 
-        const selectValue = SelectValue.fromInteraction(interaction);
+        const selectValue: SelectValue<Interaction> = SelectValue.fromInteraction(interaction);
 
         setData([...data, selectValue]);
-        const currentValues = value ?? [];
-        const newValues = [...currentValues, interaction.id.toString()];
+        const currentValues: LabeledValue[] = value ?? [];
+        const newValues: LabeledValue[] = [...currentValues, selectValue.toLabelValue()];
         handleChange(newValues);
     }
 
@@ -174,9 +171,7 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
 FilterInteractionMultiple.defaultProps = {
     placeholder: 'Select interactions',
     style: {width: '100%'},
-    onSelect: (value: EmittedLabledValue[]) => {
-        console.log('onSelect', value);
-    },
+    
     label: 'Filter interactions',
     showConfirm: false,
     onEntityCreated: (interaction: Interaction) => {

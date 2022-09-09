@@ -33,6 +33,30 @@
 .pretty-label-font {
     @apply font-bold drop-shadow-lg text-yellow-900
 }
+
 * {
     animation-duration: 0.005s !important;
 }
+
+.b-pad {
+ @apply py-0.5 px-1 m-1
+}
+
+.b1 {
+    @apply rounded b-pad
+}
+
+/*create b1 active and resue b1*/
+.b1-active {
+    @apply b1 bg-red-500 text-white
+}
+
+.b2 {
+    @apply b-pad hover:text-red-500
+}
+
+/*create b1 active and resue b1*/
+.b2-active {
+    @apply b2 border-b border-red-500
+}
+

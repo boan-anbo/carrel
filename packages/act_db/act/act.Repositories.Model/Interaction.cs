@@ -67,6 +67,7 @@ public class Interaction
     ///     for a group: "A tourist group from Japan"
     /// </remarks>
     [Required]
+    [MaxLength(25)]
     public string Label { get; set; }
 
     /// <summary>

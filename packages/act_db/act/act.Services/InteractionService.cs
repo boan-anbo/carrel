@@ -569,18 +569,18 @@ public class InteractionService : IInteractionService
     }
 
     private static void ValidateOrCorrectDtoHostInteractionId(Interaction? interaction,
-        CreateOrUpdateRelationDto createPurposeDto)
+        CreateOrUpdateRelationDto createOrUpdateRelationDto)
     {
-        if (createPurposeDto.HostInteractionId == 0)
+        if (createOrUpdateRelationDto.HostInteractionId == 0)
         {
-            createPurposeDto.HostInteractionId = interaction.Id;
+            createOrUpdateRelationDto.HostInteractionId = interaction.Id;
         }
 
         // check if dto's host interaction id is the same as the interaction id
-        if (createPurposeDto.HostInteractionId != interaction.Id)
+        if (createOrUpdateRelationDto.HostInteractionId != interaction.Id)
         {
             throw new Exception(
-                $"PurposeDto's host interaction id ({createPurposeDto.HostInteractionId}) does not match the interaction id ({interaction.Id})");
+                $"Relation DTO's host interaction id ({createOrUpdateRelationDto.HostInteractionId}) does not match the interaction id ({interaction.Id})");
         }
     }
 }

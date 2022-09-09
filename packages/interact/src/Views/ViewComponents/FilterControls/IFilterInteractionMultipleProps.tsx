@@ -2,8 +2,7 @@ import React from "react";
 import {Interaction, InteractionIdentity} from "../../../clients/grl-client/interact_db_client";
 import {FilterByEntityRelation} from "./FilterByEntityRelation";
 import {SizeType} from "antd/lib/config-provider/SizeContext";
-import {CreateRelationDto} from "../../InteractViews/CreatOrUpdateInteractionForm/CreateRelationDto";
-import {LabeledValue} from "antd/lib/select";
+import {CreateRelationDto} from "../../InteractViews/CreatOrUpdateInteractionForm/FormComponents/CreateRelationDto";
 import {SelectValue} from "./SelectValue";
 
 export interface IFilterInteractionMultipleProps<T> {

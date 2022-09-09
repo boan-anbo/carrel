@@ -6,23 +6,23 @@ import {notify} from "../../../utils/toast/notify";
 import {selectInteraction} from "../../../features/app-state/appStateSlice";
 import {useDispatch} from "react-redux";
 import {SizeType} from "antd/lib/config-provider/SizeContext";
-import {CreateOrUpdateInteractionFormRelationInputs} from "./CreateOrUpdateInteractionFormRelationInputs";
-import {CreateOrUpdateInteractionFormValueInputs} from "./CreateOrUpdateInteractionFormValueInputs";
-import {CreateInteractionFormData} from "./CreateInteractionFormData";
-import {onFormRelationSelectedHandler} from "./OnFormRelationSelectedHandler";
+import {
+    CreateOrUpdateInteractionFormRelationInputs
+} from "./FormComponents/CreateOrUpdateInteractionFormRelationInputs";
+import {CreateOrUpdateInteractionFormValueInputs} from "./FormComponents/CreateOrUpdateInteractionFormValueInputs";
+import {CreateInteractionFormData} from "./FormComponents/CreateInteractionFormData";
+import {onFormRelationSelectedHandler} from "./FormComponents/OnFormRelationSelectedHandler";
 import FilterInteractionSingle from "../../ViewComponents/FilterControls/FilterInteractionSingle";
 import {getFullInteractionById} from "../../../clients/interact-db-client/filter-operations";
 import {SelectValue} from "../../ViewComponents/FilterControls/SelectValue";
 import {Logger, LogSource} from "../../../utils/logger";
+import {FormButtons} from "./FormComponents/FormButtons";
+import {FormMode} from "./FormComponents/EFormMode";
+import {validateInteractionForm} from "./FormValidator";
 
 interface CreateOrUpdateInteractionFormViewProp {
     size: SizeType | undefined;
     existingFormData?: Interaction;
-}
-
-enum FormMode {
-    CREATE = "CREATE",
-    UPDATE = "UPDATE"
 }
 
 export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteractionFormViewProp) => {
@@ -53,32 +53,47 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         setFormData(new CreateInteractionFormData());
     }
 
+    const validate = () => {
+
+        const validationErrors = validateInteractionForm(formData);
+        if (validationErrors.length > 0) {
+            validationErrors.forEach((error) => {
+                notify(error.message, 'error', 'error');
+                log.error(error.message, 'error', error);
+            })
+        }
+        throw new Error('Form Invalid, see error messages');
+    }
+
     async function onFormFinish(_: any) {
         log.info("onFormFinish", 'form Data when completed', formData);
 
-        const result = await createOrUpdateInteraction(formData);
+        validate()
 
-        console.log("Form receiveed", result)
-        if (result.id) {
-            notify('Created interaction entity', `${result.label} (click to select)`, 'success',
+        const updatedEntity = await createOrUpdateInteraction(formData);
+
+        console.log("Form receiveed", updatedEntity)
+        if (updatedEntity.id) {
+            notify('Created interaction entity', `${updatedEntity.label} (click to select)`, 'success',
                 () => {
                     dispatch(selectInteraction(null))
                     dispatch(
-                        selectInteraction(result)
+                        selectInteraction(updatedEntity)
                     )
                 }
             )
         }
         // clear form
         clearFormData();
+        // load again from updated data
+        loadFormDataFromExistingInteraction(updatedEntity);
     }
-
 
 
     function loadFormDataFromExistingInteraction(interaction: Interaction) {
         log.info("loadFormDataFromExistingInteraction", 'interaction', interaction);
         const formDataFromInteraction = CreateInteractionFormData.fromInteraction(interaction);
-        log.info("Parsing form data from interaction", 'form data from interaction',formDataFromInteraction);
+        log.info("Parsing form data from interaction", 'form data from interaction', formDataFromInteraction);
         setFormData(formDataFromInteraction);
     }
 
@@ -88,7 +103,7 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         if (!i.value) {
             log.error("loadInteractionToEdit - no interaction to load");
         }
-        const interactionFull = await getFullInteractionById(parseInt(i.value!,10));
+        const interactionFull = await getFullInteractionById(parseInt(i.value!, 10));
         log.info("loadInteractionToEdit received interaction", 'full interaction', interactionFull);
         if (interactionFull) {
             loadFormDataFromExistingInteraction(interactionFull);
@@ -101,12 +116,12 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         <div
             onMouseDown={e => e.stopPropagation()}>
             {showRawJson && <pre>{JSON.stringify(formData, null, 2)}</pre>}
-            <div className={'flex space-x-2'}>
-                <button onClick={() => setMode(FormMode.UPDATE)}>Edit</button>
-                <button onClick={() => setMode(FormMode.CREATE)}>New</button>
-            </div>
+            <FormButtons mode={mode} onClick={() => setMode(FormMode.UPDATE)}
+                         onClick1={() => setMode(FormMode.CREATE)}/>
+
             {mode === FormMode.UPDATE &&
                 <FilterInteractionSingle
+                    size={'small'}
                     placeholder={'Select interaction to update'}
                     onSelect={(selectValue) => {
                         loadInteractionToEdit(selectValue)
@@ -114,6 +129,7 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
                     style={{width: '100%'}}
 
                 />}
+
             <Form
                 className={'px-2'}
                 size={props.size}
@@ -127,37 +143,41 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
 
                 <div className={'flex justify-center space-x-4'}>
                     <div>{formData.id}</div>
-                    <Form.Item>
-                        <Radio.Group
-                            value={formData.identity}
-                            size={props.size}
-                            onChange={(e) => setFormData({...formData, identity: e.target.value})}
-                        >
-                            <Radio.Button value={InteractionIdentity.Act}>Act</Radio.Button>
-                            <Radio.Button value={InteractionIdentity.Entity}>Entity</Radio.Button>
-                            <Radio.Button value={InteractionIdentity.Interaction}>Interaction</Radio.Button>
-                            <Radio.Button value={InteractionIdentity.Source}>Source</Radio.Button>
-                        </Radio.Group>
-                    </Form.Item>
+                    <Radio.Group
+                        value={formData.identity}
+                        size={props.size}
+                        onChange={(e) => setFormData({
+                            ...formData,
+                            identity: e.target.value
+                        } as CreateInteractionFormData)}
+                    >
+                        <Radio.Button value={InteractionIdentity.Act}>Act</Radio.Button>
+                        <Radio.Button value={InteractionIdentity.Entity}>Entity</Radio.Button>
+                        <Radio.Button value={InteractionIdentity.Interaction}>Interaction</Radio.Button>
+                        <Radio.Button value={InteractionIdentity.Source}>Source</Radio.Button>
+                    </Radio.Group>
                     <div>
                         {/* Primary button */}
-                        <button itemType={'primary'} onClick={() => setShowRawJson(!showRawJson)}>Raw</button>
+                        <button className={showRawJson ? 'b2-active' : 'b2'}
+                                onClick={() => setShowRawJson(!showRawJson)}>Raw
+                        </button>
                     </div>
                 </div>
 
                 <CreateOrUpdateInteractionFormValueInputs
                     formData={formData} size={props.size}
                     onLabelChange={(e) => {
-                        setFormData({...formData, label: e.target.value})
+                        setFormData({...formData, label: e.target.value} as CreateInteractionFormData)
                     }}
                     onDescriptionChange={(e) => setFormData({
                         ...formData,
                         description: e.target.value
-                    })}
+                    } as CreateInteractionFormData)}
                     onContentChange={(e) => setFormData({
-                        ...formData,
-                        content: e.target.value
-                    })}/>
+                            ...formData,
+                            content: e.target.value
+                        } as CreateInteractionFormData
+                    )}/>
 
                 <CreateOrUpdateInteractionFormRelationInputs
                     formData={formData} size={props.size}

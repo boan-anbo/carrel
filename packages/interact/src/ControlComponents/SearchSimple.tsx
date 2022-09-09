@@ -3,8 +3,8 @@ import {CSSProperties} from "react";
 
 export interface SearchSimpleProps {
     style?: CSSProperties;
-    onSearch: (value: string) => void
-    onChange: (value: string) => void
+    onSearch?: (value: string) => void
+    onChange?: (value: string) => void
     placeholder?: string
 }
 
@@ -12,7 +12,9 @@ export const SearchSimple = (props: SearchSimpleProps) => {
 
 
     function onSearchChange(e: any) {
-        props.onChange(e.target.value);
+        if (props.onChange) {
+            props.onChange(e.target.value)
+        }
     }
 
     return (<Search

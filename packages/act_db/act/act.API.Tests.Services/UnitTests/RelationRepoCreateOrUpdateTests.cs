@@ -43,10 +43,9 @@ public class RelationRepoUpdateTests : TestBase
 
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
-            _relationRepo,
             _interactionService,
             
-            emptyInteractionDto);
+            _relationRepo, _dbContext, emptyInteractionDto);
 
         var relationDto = new CreateOrUpdateRelationDto
         {
@@ -104,9 +103,8 @@ public class RelationRepoUpdateTests : TestBase
 
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
-            _relationRepo,
             _interactionService,
-            emptyInteractionDto);
+            _relationRepo, _dbContext, emptyInteractionDto);
         
         // detach all entities from context
         _dbContext.ChangeTracker.Clear();
@@ -201,9 +199,8 @@ public class RelationRepoUpdateTests : TestBase
 
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
-            _relationRepo,
             _interactionService,
-            emptyInteractionDto);
+            _relationRepo, _dbContext, emptyInteractionDto);
 
         // detach all entities from context
         _dbContext.ChangeTracker.Clear();
@@ -279,9 +276,8 @@ public class RelationRepoUpdateTests : TestBase
 
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
-            _relationRepo,
             _interactionService,
-            emptyInteractionDto);
+            _relationRepo, _dbContext, emptyInteractionDto);
 
         var relationDto = new CreateOrUpdateRelationDto
         {
@@ -328,9 +324,8 @@ public class RelationRepoUpdateTests : TestBase
 
         var emptyInteraction = await _mutationService.CreateOrUpdateInteraction(
             _interactionRepo,
-            _relationRepo,
             _interactionService,
-            emptyInteractionDto);
+            _relationRepo, _dbContext, emptyInteractionDto);
 
         var relationDto = new CreateOrUpdateRelationDto
         {

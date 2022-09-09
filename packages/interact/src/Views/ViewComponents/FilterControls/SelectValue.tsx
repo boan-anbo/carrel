@@ -2,7 +2,6 @@ import {LabeledValue} from "antd/lib/select";
 import {Interaction} from "../../../clients/grl-client/interact_db_client";
 import React from "react";
 import {getInteractionSelectionLabel} from "./filter-utils/getInteractionLabel";
-import {EmittedLabledValue} from "./EmittedLabledValue";
 import {v4} from "uuid";
 
 /**
@@ -44,18 +43,7 @@ export class SelectValue<T> {
         }
     }
 
-    /**
-     * Static constructor from {@link EmittedLabledValue}
-     * @param labeledValue
-     */
-    static fromEmittedLabledValue<T>(labeledValue: EmittedLabledValue): SelectValue<T> {
 
-        return new SelectValue(
-            labeledValue.key ?? v4(),
-            labeledValue.label,
-            labeledValue.value ?? null,
-        );
-    }
 
     static fromInteraction(interaction: Interaction): SelectValue<Interaction> {
         return new SelectValue(
@@ -63,6 +51,14 @@ export class SelectValue<T> {
             interaction.label,
             interaction.id.toString(),
             interaction
+        );
+    }
+
+    static fromLabelValue<T>(labeledValue: LabeledValue): SelectValue<T> {
+        return new SelectValue(
+            v4(),
+            labeledValue.label as string,
+            labeledValue.value.toString() ?? null,
         );
     }
 }

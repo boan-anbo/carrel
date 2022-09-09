@@ -68,7 +68,10 @@ export function GraphView(props: { id: number }) {
                     width: "100%",
                     height: "100%",
                 }}>
+
                 <Graph
+
+
 
                     edges={edges} nodes={nodes}/>
 
