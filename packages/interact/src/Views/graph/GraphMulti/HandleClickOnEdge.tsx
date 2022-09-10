@@ -7,9 +7,9 @@ const log = new Logger(LogSource.handleClickOnEdge);
 export function handleSingleClickOnEdge(props: { onLoadInteraction: (interactionId: number) => Promise<void> }, apis: ApisType) {
     const handleDoubleClick = (evt: IG6GraphEvent) => {
         const node = evt.item as INode;
-        log.debug(`Double clicked on node ${node}`, 'double clicked node', node);
+        log.info(`Double clicked on node ${node}`, 'double clicked node', node);
         const model = node.getModel() as NodeConfig;
-        log.debug(`Double clicked on node ${model.id}`, 'double clicked model', model);
+        log.info(`Double clicked on node ${model.id}`, 'double clicked model', model);
 
         const {source, target} = model;
         const edgeId = `${source}-${target}`;

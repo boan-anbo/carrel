@@ -41,7 +41,7 @@ const layouts = [
         type: 'dendrogram' as layoutType,
         options: {
             direction: 'V', // H / V / LR / RL / TB / BT
-            nodeSep: 200,
+            nodeSep: 40,
             rankSep: 100,
         },
         title: '生态树布局',
@@ -122,19 +122,21 @@ export default () => {
 
     return (
         <div>
-            <div className={'w-50'}>
+            <div className={'w-50p m-2'}>
                 <FilterInteractionSingle style={{width: '100%'}} placeholder={'Open interact'}
                                          onSelect={onSelectInteractionToLoad}/>
             </div>
-            {<GraphTreeView
-
-                onLoadInteraction={loadGraphData}
-                key={layout.type}
-                layout={layout}
-                rootInteraction={rootInteraction}
-                data={graphData}
-                type={type} onSelectInteraction={onGraphTreeViewSelectInteraction}/>
-            }
+            <div >
+                {<GraphTreeView
+                    style={{height: '1200px'}}
+                    onLoadInteraction={loadGraphData}
+                    key={layout.type}
+                    layout={layout}
+                    rootInteraction={rootInteraction}
+                    data={graphData}
+                    type={type} onSelectInteraction={onGraphTreeViewSelectInteraction}/>
+                }
+            </div>
             <div>
                 Browse History{graphHistory.map(graph => <span
                 onClick={() => {

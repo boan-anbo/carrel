@@ -9,6 +9,7 @@ import {
 import {SelectedInteractionDataViewer} from "../Views/InteractViews/SelectedInteractionDataViewer";
 import {RecentInteractionsList} from "../Views/InteractViews/RecentInteractions/RecentInteractionsList";
 import GraphMultiView from "../Views/graph/GraphMulti/GraphMultiView";
+import Scrollbar from "react-scrollbars-custom";
 
 export enum GridViewTypes {
     NONE,
@@ -24,7 +25,8 @@ export enum GridViewTypes {
 }
 
 export const GridView = (props: {
-    selectedView: GridViewTypes
+    selectedView: GridViewTypes,
+    bg?: string
 }) => {
     const [selectedView, setSelectedView] = useState<GridViewTypes>(GridViewTypes.FILTERED_INTERACTION_LIST);
     const allViews = [
@@ -42,7 +44,8 @@ export const GridView = (props: {
     }, [props.selectedView]);
 
     return (
-        <div style={{height: '100%'}} onMouseDown={e => e.stopPropagation()}>
+        <div className={'rounded drop-shadow' + ` ${props.bg}`} style={{height: '100%'}}
+             onMouseDown={e => e.stopPropagation()}>
             <div style={{maxHeight: '10%'}} className={'flex space-x-2 px-2 justify-center text-xs pt-4'}>
                 {/*    Iterate over views */}
                 {allViews.map((view) => {
@@ -55,18 +58,18 @@ export const GridView = (props: {
             </div>
 
             {/*View Container*/}
-            <div style={{height: '90%'}} className={'p-4  overflow-y-scroll'}>
-                {selectedView === GridViewTypes.RECENT_INTERACTIONS && <RecentInteractionsList/>}
-                {selectedView === GridViewTypes.FILTERED_INTERACTION_LIST && <FilteredInteractionList/>}
-                {selectedView === GridViewTypes.SELECTED_INTERACTION_CARD && <SelectedInteractionDataViewer/>}
-                {selectedView === GridViewTypes.GRAPH_MULTI_VIEW && <GraphMultiView/>}
-                {selectedView === GridViewTypes.SELECTED_PASSAGE_VIEWER &&
-                    <div><SelectedPassageViewer></SelectedPassageViewer></div>}
-                {selectedView === GridViewTypes.INTERACTION_GRAPH_VIEW && <div><InteractionGraphView/></div>}
-                {selectedView === GridViewTypes.INTERACTION_CARD_VIEW && <div><InteractionCardView/></div>}
-                {selectedView === GridViewTypes.CREATE_INTERACTION_FORM &&
-                    <div><CreateOrUpdateInteractionFormView/></div>}
-            </div>
+                <div style={{height: '90%'}} className={'p-4  overflow-y-scroll'}>
+                    {selectedView === GridViewTypes.RECENT_INTERACTIONS && <RecentInteractionsList/>}
+                    {selectedView === GridViewTypes.FILTERED_INTERACTION_LIST && <FilteredInteractionList/>}
+                    {selectedView === GridViewTypes.SELECTED_INTERACTION_CARD && <SelectedInteractionDataViewer/>}
+                    {selectedView === GridViewTypes.GRAPH_MULTI_VIEW && <GraphMultiView/>}
+                    {selectedView === GridViewTypes.SELECTED_PASSAGE_VIEWER &&
+                        <div><SelectedPassageViewer></SelectedPassageViewer></div>}
+                    {selectedView === GridViewTypes.INTERACTION_GRAPH_VIEW && <div><InteractionGraphView/></div>}
+                    {selectedView === GridViewTypes.INTERACTION_CARD_VIEW && <div><InteractionCardView/></div>}
+                    {selectedView === GridViewTypes.CREATE_INTERACTION_FORM &&
+                        <div><CreateOrUpdateInteractionFormView/></div>}
+                </div>
         </div>
     )
 }

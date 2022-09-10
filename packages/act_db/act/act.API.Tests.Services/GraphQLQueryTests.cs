@@ -170,4 +170,10 @@ public class GraphQLQueryTests : TestBase
             fullInteraction.Sentence.Length > 0
         );
     }
+    
+    // full interaction should return settings data
+    [TestMethod]
+    public async Task Full_Interaction_Should_Return_Settings()
+    {
+    }
 }

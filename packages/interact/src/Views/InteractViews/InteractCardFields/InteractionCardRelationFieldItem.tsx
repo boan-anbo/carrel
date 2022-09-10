@@ -19,7 +19,7 @@ export function InteractionCardRelationFieldItem<T>(props: {
 
     const shouldShow = props.hideWhenNoValue ? props.relationData?.length && props.relationData?.length > 0 : true;
 
-    return <div className={'bg-amber-300'}>
+    return <div className={''}>
         {shouldShow && <div className={'flex space-x-2 justify-items-center content-center'}>
             <div className={'my-auto'}>
                 {props.relationCount}

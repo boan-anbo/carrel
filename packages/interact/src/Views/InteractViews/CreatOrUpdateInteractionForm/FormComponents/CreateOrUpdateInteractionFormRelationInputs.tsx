@@ -77,7 +77,7 @@ export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdat
         }></FilterInteractionMultiple>
 
         <FilterInteractionMultiple
-            currentValueDtos={props.formData.parallelDtos}
+            currentValueDtos={props.formData.settingDtos}
             label="Settings"
             size={props.size}
             placeholder={"Settings interactions"} style={{width: "100%"}} onSelect={

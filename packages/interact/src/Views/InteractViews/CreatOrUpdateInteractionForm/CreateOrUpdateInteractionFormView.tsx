@@ -60,9 +60,9 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
             validationErrors.forEach((error) => {
                 notify(error.message, 'error', 'error');
                 log.error(error.message, 'error', error);
+                throw new Error('Form Invalid, see error messages');
             })
         }
-        throw new Error('Form Invalid, see error messages');
     }
 
     async function onFormFinish(_: any) {
@@ -85,8 +85,11 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         }
         // clear form
         clearFormData();
+        // if it's edit mode then we need to reload the form, otherwise, create a new form for the convenience of inputing new data.
         // load again from updated data
-        loadFormDataFromExistingInteraction(updatedEntity);
+        if (mode === FormMode.UPDATE) {
+            loadFormDataFromExistingInteraction(updatedEntity);
+        }
     }
 
 

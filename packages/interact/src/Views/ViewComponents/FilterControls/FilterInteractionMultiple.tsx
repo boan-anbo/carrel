@@ -19,7 +19,7 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
      * Data for displayed options. Fetched from the backend as {@see Interaction}[], and converted to {@see SelectValue<Interaction>[]} for the Select component.
      */
     const [data, setData] = useState<SelectValue<Interaction>[]>([]);
-    const [value, setValue] = useState<LabeledValue []>([]);
+    const [selectedValues, setSelectedValues] = useState<LabeledValue []>([]);
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
     const [currentSearchInput, setCurrentSearchInput] = useState<string>('');
 
@@ -27,7 +27,7 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
     useEffect(() => {
 
         // load initial values
-        fetchFilteredInteractionData('', setData, props.filterByEntityRelation);
+        fetchFilteredInteractionData('', setData, undefined, props.filterByEntityRelation);
 
         if (props.currentValueDtos) {
             loadInitialData();
@@ -44,32 +44,21 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
         for await (const currentValueDto of currentValueDtos) {
             if (currentValueDto.linkedInteractionId) {
                 const interaction = await getFullInteractionById(currentValueDto.linkedInteractionId);
-                log.info(' Single interaction loaded to feed into form data', 'interaction', interaction);
                 if (interaction) {
-                    const interactionValue = new SelectValue<Interaction>(
-                        index,
-                        getInteractionSelectionLabel(interaction),
-                        interaction.id,
-                        interaction
-                    );
+                    const interactionValue = new SelectValue<Interaction>(index, getInteractionSelectionLabel(interaction), interaction.id, interaction);
                     values.push(interactionValue);
                 }
             }
             index++;
         }
-        setData(values);
-        setValue(values.map((v, index) => new SelectValue(
-            index,
-            v.key ?? '',
-            v.label ?? '',
-            v.data ?? undefined,
-        ).toLabelValue()));
+
+
     }
 
     const handleSearch = (newValue: string) => {
         setCurrentSearchInput(newValue)
         if (newValue) {
-            fetchFilteredInteractionData(newValue, setData, props.filterByEntityRelation);
+            fetchFilteredInteractionData(newValue, setData, undefined, props.filterByEntityRelation);
             const fetchedList = data.filter(d => d.data !== undefined).map((d) => d.data as Interaction);
             if (fetchedList)
                 props.onListFetched && props.onListFetched(fetchedList);
@@ -79,8 +68,11 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
     };
 
     const handleChange = (labledValues: LabeledValue[]) => {
-        log.info('Value changed in Filter Interaction', 'latest  labled values', labledValues);
-        setValue(labledValues);
+
+        clearInputValue();
+        // check duplicates
+
+        setSelectedValues(labledValues);
         const data = labledValues.map((v, index) => SelectValue.fromLabelValue<Interaction>(v));
         props.onSelect(data);
     };
@@ -89,15 +81,19 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
     // This is an important function that handles the creation of a new interaction entity
     // When the user inputs a value, and presses enter, this function is called
     // If enter is pressed again, the value is submitted to the backend, and emit created Interaction to upper component
+    // if the enter is pressed when the value is highlighted, ignore the Enter.
     async function onSelectInputKeyDown(event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
         if (event.key === 'Enter') {
+            if (event.currentTarget.value.trim() === '') {
+                return
+            }
             setCurrentSearchInput(event.currentTarget.value);
-            log.debug('Enter pressed in FilterInteractionMultiple', 'currentSearchInput', currentSearchInput);
+            log.debug('onSelectInputKeyDown', 'event', event.currentTarget.value);
             if (!showConfirm) {
                 setShowConfirm(true);
             } else {
                 // clear the search input
-                setCurrentSearchInput('');
+                clearInputValue();
                 setShowConfirm(false);
                 let interaction = await createInteractionEntity(currentSearchInput, props.createInteractionIdentity ?? InteractionIdentity.Entity);
                 log.info('Interaction created on-the-go', 'Created interaction', interaction);
@@ -111,6 +107,13 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
 
     }
 
+    // clear input value, NOT the selections.
+    function clearInputValue() {
+
+        // clear the search input
+        setCurrentSearchInput('');
+    }
+
     function onPopconfirmConfirm(e?: React.MouseEvent) {
         setShowConfirm(false);
 
@@ -121,13 +124,14 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
         const selectValue: SelectValue<Interaction> = SelectValue.fromInteraction(interaction);
 
         setData([...data, selectValue]);
-        const currentValues: LabeledValue[] = value ?? [];
+        const currentValues: LabeledValue[] = selectedValues ?? [];
         const newValues: LabeledValue[] = [...currentValues, selectValue.toLabelValue()];
         handleChange(newValues);
     }
 
     return (
         <div>
+            {JSON.stringify(selectedValues)}
             <Popconfirm open={showConfirm}
                         onCancel={() => setShowConfirm(false)}
                         afterOpenChange={(e) => console.log('afterOpenChange', e)}
@@ -143,7 +147,7 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
                         showSearch
                         size={props.size}
                         labelInValue={true}
-                        value={value}
+                        value={selectedValues}
                         placeholder={props.placeholder}
                         style={props.style}
                         defaultActiveFirstOption={false}
@@ -157,7 +161,10 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
                     >
 
                         {data.map((option, index) => (
-                            <Option value={option.value} data={option.data} key={index}>
+                            <Option
+                                value={option.value}
+                                data={option.data}
+                                key={index}>
                                 {option.label}
                             </Option>
                         ))}
@@ -171,7 +178,7 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
 FilterInteractionMultiple.defaultProps = {
     placeholder: 'Select interactions',
     style: {width: '100%'},
-    
+
     label: 'Filter interactions',
     showConfirm: false,
     onEntityCreated: (interaction: Interaction) => {

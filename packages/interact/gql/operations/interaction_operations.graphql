@@ -55,6 +55,26 @@ query FilterInteractionsByLabel($labelFilter: String!) {
     }
 }
 
+query FilterInteractionsByLabelAndSortByRelation($labelFilter: String!) {
+    interactions(
+        where: {
+            label: { contains: $labelFilter }
+        }
+        order: { asFirstActsCount: ASC }
+    ) {
+        nodes {
+            ...interactionFragment
+        }
+        edges {
+            cursor
+            node {
+                ...interactionFragment
+            }
+
+        }
+    }
+}
+
 query GetInteractionFull($id: Long!) {
     interactionFull(id: $id) {
         ...interactionResultFragment

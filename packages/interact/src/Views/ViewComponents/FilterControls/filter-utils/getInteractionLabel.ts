@@ -1,4 +1,4 @@
-import {Interaction} from "../../../../clients/grl-client/interact_db_client";
+import {Interaction, InteractionIdentity} from "../../../../clients/grl-client/interact_db_client";
 import {Logger, LogSource} from "../../../../utils/logger";
 
 const log = new Logger(LogSource.GetInteractionSelectionLabel);
@@ -8,5 +8,24 @@ export const getInteractionSelectionLabel = (interaction: Interaction): string =
         return '';
     }
 
-    return `${interaction.id}: ${interaction.label}`
+    return `${getEntityName(interaction?.identity)} ${interaction.id}: ${interaction.label}`
 };
+
+const getEntityName = (identity: InteractionIdentity): string => {
+    try {
+
+        switch (identity) {
+            case InteractionIdentity.Act:
+                return '[A]';
+            case InteractionIdentity.Entity:
+                return '[E]';
+            case InteractionIdentity.Interaction:
+                return '[I]';
+            case InteractionIdentity.Source:
+                return '[S]';
+        }
+    } catch (e) {
+
+    }
+    return '';
+}

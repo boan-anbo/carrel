@@ -26,7 +26,7 @@ export function handleSingleClickOnNode(props: {
             if (isNaN(number)) {
                 log.error(`Clicked on node ${model.id} with interactionId ${model.interactionId} which is not a number`, 'clicked model', model);
             } else {
-                // props.onLoadInteraction(number);
+                props.onLoadInteraction(number);
                 props.onSelectInteraction(number);
             }
         } catch (e) {

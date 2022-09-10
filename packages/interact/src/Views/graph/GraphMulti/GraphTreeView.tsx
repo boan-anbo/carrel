@@ -16,6 +16,7 @@ interface GraphTreeViewProps {
     type: string | undefined;
     onLoadInteraction: (interactionId: number) => Promise<void>;
     onSelectInteraction: (interactionId: number) => void;
+    style?: React.CSSProperties;
 }
 const options = [
     {
@@ -41,11 +42,10 @@ export function GraphTreeView(props: GraphTreeViewProps) {
         props.onLoadInteraction(data.interactionId);
     }
 
-    return <Row gutter={[12, 12]}>
-        <Col span={24}>
-            <Card title={props.layout.title} extra={<code>{props.rootInteraction?.label ?? "Interaction"}</code>}>
+    return <Card
+        title={props.layout.title} extra={<code>{props.rootInteraction?.label ?? "Interaction"}</code>}>
                 <Graphin
-
+                    style={props.style}
                     data={props.data}
                     layout={{type: props.type, ...props.layout.options}} fitView>
                     <GraphTreeViewBehavior
@@ -58,6 +58,4 @@ export function GraphTreeView(props: GraphTreeViewProps) {
                     </ContextMenu>
                 </Graphin>
             </Card>
-        </Col>
-    </Row>;
 }

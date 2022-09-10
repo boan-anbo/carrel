@@ -69,35 +69,36 @@ function App() {
                 onDrop={onResponsiveGridLayoutDrop}
                 breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
                 cols={{lg: 24, md: 24, sm: 24, xs: 24, xxs: 24}}
-                maxRows={12}
+                maxRows={Infinity}
                 rowHeight={200}
                 autoSize={true}
                 onLayoutChange={onResponsiveGridLayoutLayoutChange}>
 
 
-                <div key="left_panel" className="bg-gray-200">
+                <div key="left_panel">
                     {/*<DistantDocumentList/>*/}
-                    <GridView selectedView={GridViewTypes.CREATE_INTERACTION_FORM}/>
+                    <GridView bg={'bg-teal-50'} selectedView={GridViewTypes.CREATE_INTERACTION_FORM}/>
                 </div>
 
-                <div key="mid_top" className='bg-red-500'>
-                    <GridView selectedView={GridViewTypes.RECENT_INTERACTIONS}/>
+                <div key="mid_top" >
+                    <GridView bg={'bg-red-500'} selectedView={GridViewTypes.RECENT_INTERACTIONS}/>
                 </div>
 
-                <div key="mid_center" className='bg-red-300'>
-                    <GridView selectedView={GridViewTypes.SELECTED_INTERACTION_CARD}/>
+                <div key="mid_center" className=''>
+                    <GridView bg={'bg-pink-50'} selectedView={GridViewTypes.SELECTED_INTERACTION_CARD}/>
                 </div>
 
-                <div key="mid_below" className=''>
+                <div key="mid_below" >
 
-                    <GridView selectedView={GridViewTypes.GRAPH_MULTI_VIEW}></GridView>
+                    <GridView bg={'bg-yellow-50'} selectedView={GridViewTypes.GRAPH_MULTI_VIEW}></GridView>
                 </div>
 
-                <div key="right_panel" className='bg-amber-200'>
-                    <GridView selectedView={GridViewTypes.INTERACTION_CARD_VIEW}></GridView>
+                <div key="right_panel">
+                    <GridView bg={'bg-amber-50'} selectedView={GridViewTypes.INTERACTION_CARD_VIEW}></GridView>
                 </div>
             </ResponsiveGridLayout>
         </div>
+
     );
 }
 

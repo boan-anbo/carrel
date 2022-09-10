@@ -7,11 +7,12 @@ import {SelectValue} from "../../../ViewComponents/FilterControls/SelectValue";
 
 const log = new Logger(LogSource.OnFormRelationSelectedHandler)
 // this updates the form data with the selected interactions (in relation to the host interaction)
-export const onFormRelationSelectedHandler = (selectValues: SelectValue<Interaction>[],
-                                              relations: RelationTypes,
-                                              formData: CreateInteractionFormData,
-                                              setFormData: Dispatch<SetStateAction<CreateInteractionFormData>>) => {
-    log.info("onFormRelationSelectedHandler", 'Provided selection data', {
+export const onFormRelationSelectedHandler = (
+    selectValues: SelectValue<Interaction>[],
+    relations: RelationTypes,
+    formData: CreateInteractionFormData,
+    setFormData: Dispatch<SetStateAction<CreateInteractionFormData>>) => {
+    log.debug("onFormRelationSelectedHandler", 'Provided selection data', {
         selectValues,
         relations,
         formData,

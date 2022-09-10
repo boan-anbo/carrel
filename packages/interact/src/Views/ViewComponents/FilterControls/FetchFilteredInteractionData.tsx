@@ -1,8 +1,14 @@
-import {Interaction, RelationTypes} from "../../../clients/grl-client/interact_db_client";
+import {AsRelationTypes, Interaction, RelationTypes} from "../../../clients/grl-client/interact_db_client";
 import {filterInteractionRelation, filterInteractions} from "../../../clients/interact-db-client/filter-operations";
 import {SelectValue} from "./SelectValue";
 
-export const fetchFilteredInteractionData = async (value: string, callback: (data: SelectValue<Interaction>[]) => void, filterByEntityRelation?: { hostId: number; relation: RelationTypes } | undefined) => {
+export const fetchFilteredInteractionData = async (
+    value: string,
+    callback: (data: SelectValue<Interaction>[]) => void,
+    sortByCounts?: RelationTypes | AsRelationTypes,
+    filterByEntityRelation?
+        :
+        { hostId: number; relation: RelationTypes } | undefined) => {
 
     const shouldFilterByEntityRelation = filterByEntityRelation !== undefined;
     // Get filtered interactions from backend
