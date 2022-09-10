@@ -1,4 +1,3 @@
-import {ChangeEvent} from "react";
 import {MantineSize} from "@mantine/core";
 
 export interface TextInputProps {

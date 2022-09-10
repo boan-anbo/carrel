@@ -6,7 +6,7 @@ import {getFullInteractionById} from "../../../BackEnd/clients/interact-db-clien
 import {Interaction} from "../../../BackEnd/clients/grl-client/interact_db_client";
 import {Layout} from "@antv/graphin/lib/typings/type";
 import FilterInteractionSingle from "../../_ViewComponents/Selectors/FilterInteractionSingle";
-import {SelectValue} from "../../_ViewComponents/Selectors/FilterComponents/SelectValue";
+import {SelectValue} from "../../_ViewComponents/_ControlComponents/Select/SelectValue";
 import {GraphTreeView} from "./GraphTreeView";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../store";

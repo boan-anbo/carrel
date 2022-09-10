@@ -2,7 +2,7 @@ import {GraphView} from "../Graph/GraphinTreeView/GraphView";
 import {useState} from "react";
 import FilterInteractionSingle from "../_ViewComponents/Selectors/FilterInteractionSingle";
 import {Interaction} from "../../BackEnd/clients/grl-client/interact_db_client";
-import {SelectValue} from "../_ViewComponents/Selectors/FilterComponents/SelectValue";
+import {SelectValue} from "../_ViewComponents/_ControlComponents/Select/SelectValue";
 import {Logger, LogSource} from "../../Services/logger";
 
 export interface InteractionGraphViewProps {

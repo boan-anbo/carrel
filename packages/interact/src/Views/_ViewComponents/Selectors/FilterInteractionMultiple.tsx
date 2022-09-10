@@ -3,7 +3,7 @@ import {Interaction, InteractionIdentity} from "../../../BackEnd/clients/grl-cli
 import {CreateRelationDto} from "../../CreateOrUpdateInteraction/FormComponents/CreateRelationDto";
 import {fetchFilteredInteractionData} from "./FilterComponents/FetchFilteredInteractionData";
 import {IFilterInteractionMultipleProps} from "./IFilterInteractionMultipleProps";
-import {SelectValue} from "./FilterComponents/SelectValue";
+import {SelectValue} from "../_ControlComponents/Select/SelectValue";
 import {Logger, LogSource} from "../../../Services/logger";
 import {MultiSelectValue} from "../_ControlComponents/Select/MultiSelectValue";
 import {MultiSelectControl} from "../_ControlComponents/Select/MultiSelectControl";

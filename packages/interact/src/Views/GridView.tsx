@@ -3,9 +3,7 @@ import {FilteredInteractionList} from "./InteractViews/FilteredInteractionList";
 import {InteractionCardView} from "./InteractViews/InteractionCardView";
 import {InteractionGraphView} from "./InteractViews/InteractionGraphView";
 import {SelectedPassageViewer} from "./InteractViews/SelectedPassageViewer";
-import {
-    CreateOrUpdateInteractionFormView
-} from "./CreateOrUpdateInteraction/CreateOrUpdateInteractionFormView";
+import {CreateOrUpdateInteractionFormView} from "./CreateOrUpdateInteraction/CreateOrUpdateInteractionFormView";
 import {SelectedInteractionDataViewer} from "./InteractViews/SelectedInteractionDataViewer";
 import {RecentInteractionsList} from "./InteractViews/RecentInteractions/RecentInteractionsList";
 import GraphMultiView from "./Graph/GraphMulti/GraphMultiView";

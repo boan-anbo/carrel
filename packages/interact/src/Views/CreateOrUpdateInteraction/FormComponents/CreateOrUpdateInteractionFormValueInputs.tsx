@@ -1,4 +1,3 @@
-import {ChangeEvent} from "react";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
 import {TextInput} from "../../_ViewComponents/_ControlComponents/Input/TextInput";
 import {MantineSize} from "@mantine/core";

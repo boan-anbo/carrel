@@ -1,18 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {Interaction, InteractionIdentity} from "../../../BackEnd/clients/grl-client/interact_db_client";
-
-import {LabeledValue} from "antd/lib/select";
 import {fetchFilteredInteractionData} from "./FilterComponents/FetchFilteredInteractionData";
 import {IFilterInteractionMultipleProps} from "./IFilterInteractionMultipleProps";
-import {SelectValue} from "./FilterComponents/SelectValue";
-import {getInteractionSelectionLabel} from "./filter-utils/getInteractionLabel";
+import {SelectValue} from "../_ControlComponents/Select/SelectValue";
 import {Logger, LogSource} from "../../../Services/logger";
 import {MultiSelectValue} from "../_ControlComponents/Select/MultiSelectValue";
-import {Select} from '@mantine/core';
 import {IFilterInteractionSingleProps} from "./IFilterInteractionSingleProps";
+import {SingleSelectControl} from "../_ControlComponents/Select/SingleSelectControl";
 
 const FilterInteractionSingle = (props: IFilterInteractionSingleProps<Interaction>) => {
-    const log = new Logger(LogSource.FilterInteractionMultiple);
+    const log = new Logger(LogSource.FilterInteractionSingle);
     /**
      * Data for displayed options. Fetched from the backend as {@see Interaction}[], and converted to {@see SelectValue<Interaction>[]} for the Select component.
      */
@@ -24,7 +21,6 @@ const FilterInteractionSingle = (props: IFilterInteractionSingleProps<Interactio
     useEffect(() => {
 
         fetchOptions();
-
 
     }, []);
 
@@ -68,27 +64,26 @@ const FilterInteractionSingle = (props: IFilterInteractionSingleProps<Interactio
         log.info("SelectValuesToPassUpwards", 'Selections', latestSelections)
         // pass on latest selections to upper component
         props.onSingleSelectionChange(latestSelections);
+
     };
 
 
+    function onSelectDropdownOpen() {
+        fetchOptions();
+    }
 
     return (
         <div>
             {/*{JSON.stringify(selectedValues)}*/}
             <div className={''}>
                 {props.showLabel && <div>{props.label}</div>}
-                <Select
-                    clearable
-                    searchable
+                <SingleSelectControl
+                    onDropdownOpen={onSelectDropdownOpen}
                     value={selectedValues}
                     placeholder={props.placeholder}
                     style={props.style}
-                    creatable
                     onChange={handleChange}
-                    data={multiSelectOptions}>
-
-
-                </Select>
+                    data={multiSelectOptions}/>
             </div>
         </div>
     );

@@ -2,10 +2,7 @@ import React from "react";
 import {Interaction, InteractionIdentity} from "../../../BackEnd/clients/grl-client/interact_db_client";
 import {FilterByEntityRelation} from "./FilterComponents/FilterByEntityRelation";
 import {SizeType} from "antd/lib/config-provider/SizeContext";
-import {
-    CreateRelationDto
-} from "../../CreateOrUpdateInteraction/FormComponents/CreateRelationDto";
-import {SelectValue} from "./FilterComponents/SelectValue";
+import {SelectValue} from "../_ControlComponents/Select/SelectValue";
 
 export interface IFilterInteractionSingleProps<T> {
     placeholder: string;
@@ -22,4 +19,5 @@ export interface IFilterInteractionSingleProps<T> {
     filterByEntityRelation?: FilterByEntityRelation
     showLabel?: boolean;
     size?: SizeType | undefined;
+    value?: string
 }

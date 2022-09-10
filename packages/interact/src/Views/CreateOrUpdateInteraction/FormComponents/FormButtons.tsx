@@ -1,13 +1,17 @@
-import {FormMode} from "./EFormMode";
+import {Button} from "@mantine/core";
+import {IconClearAll, IconCode, IconPlus} from "@tabler/icons";
 
-export function FormButtons(props: { mode: FormMode, onClick: () => void, onClick1: () => void }) {
-    return <div className={"flex space-x-2"}>
-        {/* conditional */}
-        <button className={props.mode === FormMode.UPDATE ? "b2-active" : "b2"}
-                onClick={props.onClick}>Edit
-        </button>
-        <button className={props.mode === FormMode.CREATE ? "b2-active" : "b2"}
-                onClick={props.onClick1}>New
-        </button>
-    </div>;
+export function FormButtons(props: { onClearShowJson: () => void, onClickClear: () => void }) {
+    return <>
+        <Button variant="white" leftIcon={<IconCode/>} onClick={props.onClearShowJson}>
+            JSON
+        </Button>
+        <Button leftIcon={<IconClearAll/>} onClick={props.onClickClear} variant="white" color="pink">
+            Clear
+        </Button>
+
+        <Button type="submit" leftIcon={<IconPlus/>} variant="white" color="cyan">
+            Submit
+        </Button>
+    </>;
 }

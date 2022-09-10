@@ -1,8 +1,7 @@
 import {Interaction, InteractionIdentity} from "../../../../BackEnd/clients/grl-client/interact_db_client";
 import React from "react";
-import {getInteractionSelectionLabel} from "../filter-utils/getInteractionLabel";
 import {v4} from "uuid";
-import {MultiSelectValue} from "../../_ControlComponents/Select/MultiSelectValue";
+import {MultiSelectValue} from "./MultiSelectValue";
 
 interface SelectValueLabelOpt {
     includeEntity?: boolean;

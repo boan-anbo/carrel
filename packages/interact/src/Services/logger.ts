@@ -14,6 +14,7 @@ export enum LogSource {
     handleClickOnEdge = 'handle Click On Edge',
     InteractionCardFieldItem = 'Interaction Card Field Item',
     FetchFilteredInteractionData = 'Fetch Filtered Interaction Data',
+    FilterInteractionSingle = 'Filter Interaction Single',
 }
 
 export class Logger {

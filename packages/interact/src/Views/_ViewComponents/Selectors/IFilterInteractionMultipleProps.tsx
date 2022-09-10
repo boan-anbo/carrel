@@ -2,7 +2,7 @@ import React, {ReactNode} from "react";
 import {Interaction, InteractionIdentity} from "../../../BackEnd/clients/grl-client/interact_db_client";
 import {FilterByEntityRelation} from "./FilterComponents/FilterByEntityRelation";
 import {CreateRelationDto} from "../../CreateOrUpdateInteraction/FormComponents/CreateRelationDto";
-import {SelectValue} from "./FilterComponents/SelectValue";
+import {SelectValue} from "../_ControlComponents/Select/SelectValue";
 import {MantineSize} from "@mantine/core";
 
 export interface IFilterInteractionMultipleProps<T> {

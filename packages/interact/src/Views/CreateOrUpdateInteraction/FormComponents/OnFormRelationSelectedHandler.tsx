@@ -3,7 +3,7 @@ import {CreateRelationDto} from "./CreateRelationDto";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
 import {Dispatch, SetStateAction} from "react";
 import {Logger, LogSource} from "../../../Services/logger";
-import {SelectValue} from "../../_ViewComponents/Selectors/FilterComponents/SelectValue";
+import {SelectValue} from "../../_ViewComponents/_ControlComponents/Select/SelectValue";
 
 const log = new Logger(LogSource.OnFormRelationSelectedHandler)
 // this updates the form data with the selected interactions (in relation to the host interaction)

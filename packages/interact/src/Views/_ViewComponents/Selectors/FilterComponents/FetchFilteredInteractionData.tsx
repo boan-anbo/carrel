@@ -3,7 +3,7 @@ import {
     filterInteractionRelation,
     filterInteractions
 } from "../../../../BackEnd/clients/interact-db-client/filter-operations";
-import {SelectValue} from "./SelectValue";
+import {SelectValue} from "../../_ControlComponents/Select/SelectValue";
 import {Logger, LogSource} from "../../../../Services/logger";
 
 const log = new Logger(LogSource.FetchFilteredInteractionData)

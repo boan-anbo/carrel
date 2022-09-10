@@ -13,9 +13,7 @@ import {FetchResult} from "@apollo/client";
 import {
     CreateInteractionFormData
 } from "../../../Views/CreateOrUpdateInteraction/FormComponents/CreateInteractionFormData";
-import {
-    CreateRelationDto
-} from "../../../Views/CreateOrUpdateInteraction/FormComponents/CreateRelationDto";
+import {CreateRelationDto} from "../../../Views/CreateOrUpdateInteraction/FormComponents/CreateRelationDto";
 import {Logger, LogSource} from "../../../Services/logger";
 
 const log = new Logger(LogSource.CreateInteractionEntity);
