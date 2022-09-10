@@ -11,7 +11,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "codegen:interact_client": "cd gql && graphql-codegen",
-    "codegen:distant_core": "openapi-generator-cli generate -i http://127.0.0.1:3000/api-doc/openapi.json -g typescript-axios -o  src/clients/distant_api",
+    "codegen:distant_core": "openapi-generator-cli generate -i http://127.0.0.1:3000/api-doc/openapi.json -g typescript-axios -o  src/BackEnd/clients/distant_api",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },

@@ -1,7 +1,7 @@
 // redux store
 import {configureStore} from '@reduxjs/toolkit'
-import {appstateSlice} from "./features/app-state/appStateSlice";
-import {graphStateSlice} from "./features/graph-state/graphStateSlice";
+import {appstateSlice} from "./States/features/app-state/appStateSlice";
+import {graphStateSlice} from "./States/features/graph-state/graphStateSlice";
 
 
 export const store = configureStore({

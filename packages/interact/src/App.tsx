@@ -8,8 +8,8 @@ import {Button} from "antd";
 import {useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "./store";
-import {SelectedTextViewer} from "./Views/ViewComponents/InteractViewComponent/SelectedTextViewer";
-import {GridView, GridViewTypes} from "./GridView/GridView";
+import {SelectedTextViewer} from "./ViewComponents/ViewComponents/InteractViewComponent/SelectedTextViewer";
+import {GridView, GridViewTypes} from "./Views/GridView";
 import {MantineProvider} from "@mantine/core";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);

@@ -1,7 +1,7 @@
 import React from 'react';
 import {ComponentPreview, Previews} from '@react-buddy/ide-toolbox';
 import {PaletteTree} from './palette';
-import {SelectedPassageViewer} from "../Views/InteractViews/SelectedPassageViewer";
+import {SelectedPassageViewer} from "../ViewComponents/InteractViews/SelectedPassageViewer";
 
 const ComponentPreviews = () => {
     return (
