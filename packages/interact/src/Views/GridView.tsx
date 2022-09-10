@@ -1,16 +1,14 @@
 import {useEffect, useState} from "react";
-import {FilteredInteractionList} from "../ViewComponents/InteractViews/FilteredInteractionList";
-import {InteractionCardView} from "../ViewComponents/InteractViews/InteractionCardView";
-import {InteractionGraphView} from "../ViewComponents/InteractViews/InteractionGraphView";
-import {SelectedPassageViewer} from "../ViewComponents/InteractViews/SelectedPassageViewer";
+import {FilteredInteractionList} from "./InteractViews/FilteredInteractionList";
+import {InteractionCardView} from "./InteractViews/InteractionCardView";
+import {InteractionGraphView} from "./InteractViews/InteractionGraphView";
+import {SelectedPassageViewer} from "./InteractViews/SelectedPassageViewer";
 import {
     CreateOrUpdateInteractionFormView
-} from "../ViewComponents/InteractViews/CreatOrUpdateInteractionForm/CreateOrUpdateInteractionFormView";
-import {SelectedInteractionDataViewer} from "../ViewComponents/InteractViews/SelectedInteractionDataViewer";
-import {RecentInteractionsList} from "../ViewComponents/InteractViews/RecentInteractions/RecentInteractionsList";
-import GraphMultiView from "../ViewComponents/Graph/GraphMulti/GraphMultiView";
-import Scrollbar from "react-scrollbars-custom";
-import Tiptap from "../ViewComponents/TextEditorView/Tiptap";
+} from "./CreateOrUpdateInteraction/CreateOrUpdateInteractionFormView";
+import {SelectedInteractionDataViewer} from "./InteractViews/SelectedInteractionDataViewer";
+import {RecentInteractionsList} from "./InteractViews/RecentInteractions/RecentInteractionsList";
+import GraphMultiView from "./Graph/GraphMulti/GraphMultiView";
 
 export enum GridViewTypes {
     NONE,
@@ -65,7 +63,6 @@ export const GridView = (props: {
                     {selectedView === GridViewTypes.FILTERED_INTERACTION_LIST && <FilteredInteractionList/>}
                     {selectedView === GridViewTypes.SELECTED_INTERACTION_CARD && <SelectedInteractionDataViewer/>}
                     {selectedView === GridViewTypes.GRAPH_MULTI_VIEW && <GraphMultiView/>}
-                    {selectedView === GridViewTypes.TEXT_EDITOR && <Tiptap />}
                     {selectedView === GridViewTypes.SELECTED_PASSAGE_VIEWER &&
                         <div><SelectedPassageViewer></SelectedPassageViewer></div>}
                     {selectedView === GridViewTypes.INTERACTION_GRAPH_VIEW && <div><InteractionGraphView/></div>}

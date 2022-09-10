@@ -12,10 +12,10 @@ import {getApolloClient} from "../../../Services/get-apollo-client";
 import {FetchResult} from "@apollo/client";
 import {
     CreateInteractionFormData
-} from "../../../ViewComponents/InteractViews/CreatOrUpdateInteractionForm/FormComponents/CreateInteractionFormData";
+} from "../../../Views/CreateOrUpdateInteraction/FormComponents/CreateInteractionFormData";
 import {
     CreateRelationDto
-} from "../../../ViewComponents/InteractViews/CreatOrUpdateInteractionForm/FormComponents/CreateRelationDto";
+} from "../../../Views/CreateOrUpdateInteraction/FormComponents/CreateRelationDto";
 import {Logger, LogSource} from "../../../Services/logger";
 
 const log = new Logger(LogSource.CreateInteractionEntity);

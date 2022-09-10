@@ -8,7 +8,7 @@ import {Button} from "antd";
 import {useState} from "react";
 import {useSelector} from "react-redux";
 import {RootState} from "./store";
-import {SelectedTextViewer} from "./ViewComponents/ViewComponents/InteractViewComponent/SelectedTextViewer";
+import {SelectedTextViewer} from "./Views/_ViewComponents/InteractViewComponent/SelectedTextViewer";
 import {GridView, GridViewTypes} from "./Views/GridView";
 import {MantineProvider} from "@mantine/core";
 
