@@ -10,6 +10,7 @@ import {SelectedInteractionDataViewer} from "../Views/InteractViews/SelectedInte
 import {RecentInteractionsList} from "../Views/InteractViews/RecentInteractions/RecentInteractionsList";
 import GraphMultiView from "../Views/graph/GraphMulti/GraphMultiView";
 import Scrollbar from "react-scrollbars-custom";
+import Tiptap from "../FunctionComponents/Tiptap";
 
 export enum GridViewTypes {
     NONE,
@@ -21,6 +22,7 @@ export enum GridViewTypes {
     SELECTED_INTERACTION_CARD = 'Selected Card',
     RECENT_INTERACTIONS = 'Recent',
     GRAPH_MULTI_VIEW = 'Multi Graph',
+    TEXT_EDITOR = 'Text Editor',
 
 }
 
@@ -63,6 +65,7 @@ export const GridView = (props: {
                     {selectedView === GridViewTypes.FILTERED_INTERACTION_LIST && <FilteredInteractionList/>}
                     {selectedView === GridViewTypes.SELECTED_INTERACTION_CARD && <SelectedInteractionDataViewer/>}
                     {selectedView === GridViewTypes.GRAPH_MULTI_VIEW && <GraphMultiView/>}
+                    {selectedView === GridViewTypes.TEXT_EDITOR && <Tiptap />}
                     {selectedView === GridViewTypes.SELECTED_PASSAGE_VIEWER &&
                         <div><SelectedPassageViewer></SelectedPassageViewer></div>}
                     {selectedView === GridViewTypes.INTERACTION_GRAPH_VIEW && <div><InteractionGraphView/></div>}

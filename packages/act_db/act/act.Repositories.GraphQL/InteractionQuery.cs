@@ -33,7 +33,7 @@ public class GraphQLQuery
         [Service(ServiceKind.Synchronized)] IInteractionRepository _repo
     )
     {
-        return _repo.GetInteractionScalarList();
+        return _repo.GetInteractionFullList();
     }
 
     /// <summary>

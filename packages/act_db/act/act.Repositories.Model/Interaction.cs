@@ -37,7 +37,8 @@ public enum InteractionIdentity
     ACT,
     ENTITY,
     INTERACTION,
-    SOURCE
+    SOURCE,
+    Category
 }
 
 public class Interaction
@@ -140,8 +141,8 @@ public class Interaction
     /// as contexts
     public virtual ICollection<ContextRelation> AsContexts { get; set; } = new List<ContextRelation>();
 
-    /// computed field of number of times the interaction is used AS context in the DB. Should hold large number of contexts.
-    public long AsContextsCount
+    // computed field of number of times the interaction is used AS first act in the DB. Should hold large number of first acts.
+    public long AsContextsCount 
     {
         get => AsContexts.Count;
         set {}
@@ -159,8 +160,10 @@ public class Interaction
     // as first acts
     public virtual ICollection<FirstActRelation> AsFirstActs { get; set; } = new List<FirstActRelation>();
     
+    // computed field of number of times the interaction is used AS first act in the DB. Should hold large number of first acts.
     public long AsFirstActsCount 
     {
+        // get count from db
         get => AsFirstActs.Count;
         set {}
     }

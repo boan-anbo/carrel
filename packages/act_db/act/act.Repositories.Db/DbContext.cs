@@ -242,7 +242,7 @@ public class InteractDbContext : DbContext
             .Navigation(x => x.LinkedInteraction)
             .AutoInclude();
 
-
+            
         // Create a sample sentence representation.
 
         // Context: Air pollution

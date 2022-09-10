@@ -25,6 +25,9 @@ public interface IInteractionRepository
     Task<bool> CheckIfInteractionExists(long requestDtoId, Guid requestDtoUuid);
 
     IQueryable<Interaction?> GetInteractionScalarList();
+    
+    IQueryable<Interaction?> GetInteractionFullList();
+    
 
     /// <summary>
     /// This include all relations from an interaction from DBContext. Used when modifying relations of an interaction. Without loading this, the interaction object might not have all the relations represented in the DBContext.

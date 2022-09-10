@@ -8,6 +8,7 @@ import {DevSupport} from "@react-buddy/ide-toolbox";
 import {ComponentPreviews, useInitial} from "./dev";
 import {Provider} from 'react-redux'
 import {store} from "./store";
+import {MantineProvider} from "@mantine/core";
 
 
 ReactDOM.render(
@@ -16,7 +17,10 @@ ReactDOM.render(
             <DevSupport ComponentPreviews={ComponentPreviews}
                         useInitialHook={useInitial}
             >
+                <MantineProvider withGlobalStyles withNormalizeCSS>
+
                 <App/>
+                </MantineProvider>
 
             </DevSupport>
         </Provider>

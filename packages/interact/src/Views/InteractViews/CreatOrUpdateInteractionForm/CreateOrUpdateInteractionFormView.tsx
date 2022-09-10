@@ -1,4 +1,5 @@
-import {Button, Form, Radio} from "antd";
+import {Form} from "antd";
+import {Button, Radio, Title} from '@mantine/core';
 import {useEffect, useState} from "react";
 import {Interaction, InteractionIdentity, RelationTypes} from "../../../clients/grl-client/interact_db_client";
 import {createOrUpdateInteraction,} from "../../../clients/interact-db-client/create-interaction-entity";
@@ -16,13 +17,36 @@ import FilterInteractionSingle from "../../ViewComponents/FilterControls/FilterI
 import {getFullInteractionById} from "../../../clients/interact-db-client/filter-operations";
 import {SelectValue} from "../../ViewComponents/FilterControls/SelectValue";
 import {Logger, LogSource} from "../../../utils/logger";
-import {FormButtons} from "./FormComponents/FormButtons";
+import {validateInteractionForm} from "./utils/FormValidator";
+import {IconClearAll, IconCross, IconPlus, IconX} from "@tabler/icons";
 import {FormMode} from "./FormComponents/EFormMode";
-import {validateInteractionForm} from "./FormValidator";
+import {FormModeToggle} from "./FormModeToggle";
 
 interface CreateOrUpdateInteractionFormViewProp {
     size: SizeType | undefined;
     existingFormData?: Interaction;
+}
+
+interface InteractionIdentitySelectionProps {
+    onChange: (value: InteractionIdentity) => void;
+}
+
+function InteractionIdentitySelection(props: InteractionIdentitySelectionProps) {
+    return <Radio.Group
+        name={"interactionidentity"}
+        label={"Interaction Identity"}
+        description={"This is not necessarily the final judgment of the nature of the entity, but a convenient helper."}
+        spacing={"xs"}
+        size={"xs"}
+        onChange={props.onChange}
+        defaultValue={InteractionIdentity.Entity}
+    >
+        <Radio value={InteractionIdentity.Entity} label={"Entity"}/>
+        <Radio value={InteractionIdentity.Act} label={"Act"}/>
+        <Radio value={InteractionIdentity.Interaction} label={"Interaction"}/>
+        <Radio value={InteractionIdentity.Category} label={"Category"}/>
+        <Radio value={InteractionIdentity.Source} label={"Source"}/>
+    </Radio.Group>;
 }
 
 export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteractionFormViewProp) => {
@@ -48,6 +72,18 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
             loadFormDataFromExistingInteraction(props.existingFormData);
         }
     }, [props.existingFormData])
+
+    function onSwitchingFormMode(value: FormMode) {
+        switch (value) {
+            case FormMode.CREATE:
+                setMode(FormMode.CREATE);
+                clearFormData();
+                break;
+            case FormMode.UPDATE:
+                setMode(FormMode.UPDATE);
+                break;
+        }
+    }
 
     const clearFormData = () => {
         setFormData(new CreateInteractionFormData());
@@ -115,12 +151,15 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         }
     }
 
+
     return (
         <div
             onMouseDown={e => e.stopPropagation()}>
             {showRawJson && <pre>{JSON.stringify(formData, null, 2)}</pre>}
-            <FormButtons mode={mode} onClick={() => setMode(FormMode.UPDATE)}
-                         onClick1={() => setMode(FormMode.CREATE)}/>
+
+            <div className={'mb-4 text-center'}>
+                <FormModeToggle OnSegmentChange={onSwitchingFormMode}/>
+            </div>
 
             {mode === FormMode.UPDATE &&
                 <FilterInteractionSingle
@@ -141,24 +180,26 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
                 layout="vertical"
                 initialValues={formData}
                 onFinish={onFormFinish}
+
             >
 
+                <div className={'flex space-x-2 my-4'}>
+                    <Title order={3} size="h1">
+                        {formData.id && formData?.id > 0 ? formData.id : ''}
+                    </Title>
+                    <Title order={3} size="h1">
+                        {formData.label}
+                    </Title>
+                </div>
 
                 <div className={'flex justify-center space-x-4'}>
-                    <div>{formData.id}</div>
-                    <Radio.Group
-                        value={formData.identity}
-                        size={props.size}
-                        onChange={(e) => setFormData({
-                            ...formData,
-                            identity: e.target.value
-                        } as CreateInteractionFormData)}
-                    >
-                        <Radio.Button value={InteractionIdentity.Act}>Act</Radio.Button>
-                        <Radio.Button value={InteractionIdentity.Entity}>Entity</Radio.Button>
-                        <Radio.Button value={InteractionIdentity.Interaction}>Interaction</Radio.Button>
-                        <Radio.Button value={InteractionIdentity.Source}>Source</Radio.Button>
-                    </Radio.Group>
+
+                    {/*Identity form*/}
+                    <InteractionIdentitySelection onChange={(value) => setFormData({
+                        ...formData,
+                        identity: value
+                    } as CreateInteractionFormData)}/>
+
                     <div>
                         {/* Primary button */}
                         <button className={showRawJson ? 'b2-active' : 'b2'}
@@ -196,14 +237,15 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
                     onParallelSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.ParallelRelation, formData, setFormData)}
                     onReferencesSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.ReferenceRelation, formData, setFormData)}/>
 
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">Submit</Button>
-                </Form.Item>
-                {/*    Clear button */}
-                <Form.Item>
-                    <Button type="primary" htmlType="reset" onClick={() => clearFormData()}>Clear</Button>
-                </Form.Item>
+                <div className={'flex justify-evenly'}>
+                    <Button leftIcon={<IconClearAll/>} onClick={() => clearFormData()} variant="white" color="pink">
+                        Clear
+                    </Button>
 
+                    <Button type='submit' leftIcon={<IconPlus/>} variant="white" color="cyan">
+                        Submit
+                    </Button>
+                </div>
 
             </Form>
         </div>

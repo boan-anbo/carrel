@@ -3,6 +3,7 @@ import {Interaction} from "../../../clients/grl-client/interact_db_client";
 import React from "react";
 import {getInteractionSelectionLabel} from "./filter-utils/getInteractionLabel";
 import {v4} from "uuid";
+import {MultiSelectValue} from "./FilterInteractionMultiple";
 
 /**
  * Standford format for exchange selected values across components.
@@ -44,7 +45,6 @@ export class SelectValue<T> {
     }
 
 
-
     static fromInteraction(interaction: Interaction): SelectValue<Interaction> {
         return new SelectValue(
             interaction.id.toString(),
@@ -60,5 +60,33 @@ export class SelectValue<T> {
             labeledValue.label as string,
             labeledValue.value.toString() ?? null,
         );
+    }
+
+    toMultiSelectValue<T>(): MultiSelectValue<T> {
+        if (!this.value) {
+            throw new Error('Cannot convert to MultiSelectValue, value is null');
+        }
+        return {
+            label: this.label,
+            value: this.value,
+            data: this.data
+        } as MultiSelectValue<T>;
+    }
+
+    static fromMultiSelectValue<T>(v: MultiSelectValue<T>): SelectValue<T> {
+        return new SelectValue<T>(
+            v4(),
+            v.label,
+            v.value,
+        );
+    }
+
+    /**
+     * Convert from {@link SelectValue<T>} to {@var string }
+     */
+    toValueString(): string {
+
+        return this.value ?? '';
+
     }
 }

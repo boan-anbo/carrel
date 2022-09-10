@@ -12,6 +12,7 @@ export enum LogSource {
     handleDoubleClickOnNode = 'handle Double Click On Node',
     handleSingleClickOnNode = 'handle Single Click On Node',
     handleClickOnEdge = 'handle Click On Edge',
+    InteractionCardFieldItem = 'Interaction Card Field Item',
 }
 
 export class Logger {

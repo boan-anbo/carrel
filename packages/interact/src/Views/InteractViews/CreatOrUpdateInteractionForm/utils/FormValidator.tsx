@@ -1,4 +1,4 @@
-import {CreateInteractionFormData} from "./FormComponents/CreateInteractionFormData";
+import {CreateInteractionFormData} from "../FormComponents/CreateInteractionFormData";
 
 export function validateInteractionForm(formData: CreateInteractionFormData): Error[] {
     const errors: Error[] = [];

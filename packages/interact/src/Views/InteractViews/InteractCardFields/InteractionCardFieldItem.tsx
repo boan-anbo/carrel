@@ -1,4 +1,7 @@
 import {Interaction} from "../../../clients/grl-client/interact_db_client";
+import Tiptap from "../../../FunctionComponents/Tiptap";
+import {Logger, LogSource} from "../../../utils/logger";
+import {ReactNode, useState} from "react";
 
 export function InteractionCardFieldItem(props: {
     fieldValue: string | undefined | null;
@@ -6,28 +9,50 @@ export function InteractionCardFieldItem(props: {
     label: string,
     icon: JSX.Element,
     showLabel?: boolean,
-    hideWhenNoValue?: boolean
+    hideWhenNoValue?: boolean,
+    onValueChange: (value: string) => void
 }) {
+    const log = new Logger(LogSource.InteractionCardFieldItem)
 
     const shouldShow = props.hideWhenNoValue ? props.fieldValue !== '' : true;
 
-    return <div>
-        {shouldShow && <div className={'flex space-x-2 justify-items-center content-center'}>
-            <div className={'my-auto'}>
-                {props.icon}
-            </div>
+    function onTiptapSave(content: string) {
+        setShowEditor(false)
+        props.onValueChange(content)
 
-            <div>
-                {props.showLabel &&
-                    <span>{props.label}</span>
+    }
 
+    const [showEditor, setShowEditor] = useState(false)
 
-                }
-            </div>
-            <div className={'pretty-label-font'}>
-                {props.fieldValue ? <span>{props.fieldValue}</span> : <span className={'text-gray-300 font-bold'}>No value</span>}
-            </div>
-        </div> }
+    const showFields = (): ReactNode => {
+
+        if (props.fieldValue && !showEditor) {
+            return <span className={'cursor-text'} onClick={() => setShowEditor(true)}>{props.fieldValue}</span>
+        }
+
+        if (props.fieldValue && showEditor) {
+
+            return <Tiptap initialContent={props.fieldValue} size={'small'} onSave={onTiptapSave}></Tiptap>
+        }
+
+        return <span className={'text-gray-300 font-bold'}>No value</span>
+    }
+
+    return <div> {shouldShow && <div className={'flex space-x-2 justify-items-center content-center'}>
+        <div className={'my-auto'}>
+            {props.icon}
+        </div>
+
+        <div>
+            {props.showLabel &&
+                <span>{props.label}</span>
+            }
+        </div>
+        <div className={'pretty-label-font'}>
+        </div>
+        {showFields()}
+    </div>
+    }
     </div>
 }
 

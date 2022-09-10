@@ -22,7 +22,7 @@ export function InteractionCardRelationFieldItem<T>(props: {
     return <div className={''}>
         {shouldShow && <div className={'flex space-x-2 justify-items-center content-center'}>
             <div className={'my-auto'}>
-                {props.relationCount}
+                {props?.relationCount > 0 ? props.relationCount : ''}
             </div>
 
             <div className={'m-auto w-full'}>
@@ -36,6 +36,7 @@ export function InteractionCardRelationFieldItem<T>(props: {
                 <div className={'interaction-relation-field  w-full'}>
                     {props.relationData
                         ? <FilterInteractionMultiple
+                            onSelect={(value) => {}}
                             size={props.size}
                             style={{width: '100%'}}
                             filterByEntityRelation={props.filterByEntityRelation}

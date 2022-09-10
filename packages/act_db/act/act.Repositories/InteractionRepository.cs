@@ -31,54 +31,13 @@ public class InteractionRepository : IInteractionRepository
 
     public async Task<Interaction> GetInteractionFull(long id)
     {
-        return await _dbContext.Interactions
-            .Include(x => x.Contexts)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.Subjects)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.FirstActs)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.Objects)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.SecondActs)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.IndirectObjects)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.Parallels)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.Settings)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.Purposes)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.References)
-            .ThenInclude(x => x.LinkedInteraction)
-            .AsNoTracking()
+        return await GetFullInteractionList()
             .FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<ICollection<Interaction>> GetInteractionsFullByIds(long[] ids)
     {
-        return await _dbContext.Interactions
-            .Include(x => x.Contexts)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.Subjects)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.FirstActs)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.Objects)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.SecondActs)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.IndirectObjects)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.Parallels)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.Settings)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.Purposes)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.References)
-            .ThenInclude(x => x.LinkedInteraction)
+        return await GetFullInteractionList()
             .AsNoTracking()
             .Where(i => ids.Contains(i.Id))
             .ToListAsync();
@@ -87,39 +46,7 @@ public class InteractionRepository : IInteractionRepository
     public async Task<Interaction?> GetInteractionFullWithAllRelations(long id)
     {
         // include all relations of full interaction (including reverse as relations)
-        return await _dbContext.Interactions
-            .Include(x => x.Subjects)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.AsSubjects)
-            .ThenInclude(x => x.HostInteraction)
-            .Include(x => x.Objects)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.AsObjects)
-            .ThenInclude(x => x.HostInteraction)
-            .Include(x => x.Parallels)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.AsParallels)
-            .ThenInclude(x => x.HostInteraction)
-            .Include(x => x.Settings)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.AsSettings)
-            .ThenInclude(x => x.HostInteraction)
-            .Include(x => x.Contexts)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.AsContexts)
-            .ThenInclude(x => x.HostInteraction)
-            .Include(x => x.IndirectObjects)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.AsIndirectObjects)
-            .ThenInclude(x => x.HostInteraction)
-            .Include(x => x.Purposes)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.AsPurposes)
-            .ThenInclude(x => x.HostInteraction)
-            .Include(x => x.References)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.AsReferences)
-            .ThenInclude(x => x.HostInteraction)
+        return await GetFullInteractionList()
             .FirstOrDefaultAsync(i => i.Id == id);
     }
 
@@ -222,8 +149,18 @@ public class InteractionRepository : IInteractionRepository
             .AsQueryable();
     }
 
+    public IQueryable<Interaction?> GetInteractionFullList()
+    {
+        return GetFullInteractionList().AsNoTracking();
+    }
+
 
     public async Task<IQueryable<Interaction>> GetInteractionFullListByIdAndRelation()
+    {
+        return GetFullInteractionList();
+    }
+
+    private IQueryable<Interaction?> GetFullInteractionList()
     {
         // include
         var query = _dbContext.Interactions
@@ -258,8 +195,9 @@ public class InteractionRepository : IInteractionRepository
             .Include(x => x.References)
             .ThenInclude(x => x.LinkedInteraction)
             .Include(x => x.AsReferences)
-            .ThenInclude(x => x.HostInteraction).AsQueryable();
-
+            .ThenInclude(x => x.HostInteraction)
+            .AsNoTracking()
+            .AsQueryable();
         return query;
     }
 
