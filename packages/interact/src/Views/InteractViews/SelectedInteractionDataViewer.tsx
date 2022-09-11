@@ -2,7 +2,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../store";
 import {Interaction} from "../../BackEnd/grl-client/interact_db_client";
 import {useEffect, useState} from "react";
-import {InteractionCardView} from "../CardView/InteractionCardView";
+import {InteractCardView} from "../CardView/InteractCardView";
 import {getFullInteractionById} from "../../BackEnd/interact-db-client/filter-operations";
 import {Logger, LogSource} from "../../Services/logger";
 import {Button} from "@mantine/core";
@@ -52,7 +52,7 @@ export const SelectedInteractionDataViewer = () => {
                 </div>
                 <h2>Interaction data</h2>
                 {/*    User html table */}
-                <InteractionCardView interaction={fullInteraction}/>
+                <InteractCardView interaction={fullInteraction}/>
 
 
             </div>}

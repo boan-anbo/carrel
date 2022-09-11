@@ -25,7 +25,7 @@ import {
 import {FormButtons} from "./FormComponents/FormButtons";
 import {JsonView} from "../_ViewComponents/_ControlComponents/JsonView";
 import {InteractDatePicker} from "../_ViewComponents/_ControlComponents/DatePicker/DatePicker";
-import {parseISO} from "date-fns";
+import {parseDateForPicker} from "../../Utils/ParseDateForPicker";
 
 interface CreateOrUpdateInteractionFormViewProp {
     size: SizeType | undefined;
@@ -172,21 +172,6 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
     }
 
 
-    function getDate(end: unknown | null) {
-        if (!end) {
-            return null
-        }
-        // if it's a string, parse it
-        if (typeof end === 'string') {
-            return parseISO(end)
-        }
-
-        // if it's Date
-        if (end instanceof Date) {
-            return end
-        }
-        return null;
-    }
 
     return (
         <div
@@ -260,8 +245,9 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
             <FormDivider position={'center'} size={'xs'} label={'Dates'}/>
 
             <InteractDatePicker
+
                 size={'xs'}
-                value={getDate(formData.start)}
+                value={parseDateForPicker(formData.start)}
                 onChange={(e) => {
                     setFormData({...formData, start: e} as CreateInteractionFormData)
                 }}
@@ -273,7 +259,7 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
 
             <InteractDatePicker
                 size={'xs'}
-                value={getDate(formData.end)}
+                value={parseDateForPicker(formData.end)}
                 onChange={(e) => {
                     setFormData({...formData, end: e} as CreateInteractionFormData)
 

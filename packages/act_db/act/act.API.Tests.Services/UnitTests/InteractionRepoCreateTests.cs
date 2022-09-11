@@ -73,7 +73,7 @@ public class InteractionRepoTests : TestBase
             SettingDtos = null,
             ReferenceDtos = null,
             PurposeDtos = null,
-            Properties = null,
+            PropertyIds = null,
             Identity = InteractionIdentity.ACT
         };
 
@@ -185,7 +185,7 @@ public class InteractionRepoTests : TestBase
                     RelationType = RelationTypes.ReferenceRelation
                 }
             },
-            Properties = null,
+            PropertyIds = null,
             Identity = InteractionIdentity.ACT
         };
 

@@ -87,7 +87,7 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
         const fetchOptions = async (query?: string) => {
 
 
-            log.info('fetchOptions', 'query', query);
+            // log.info('fetchOptions', 'query', query);
             // load initial values
             const fetchedOptions = await fetchFilteredInteractionData(query ? query : '', undefined, props.filterByEntityRelation);
             updateMultiSelectionOptions(fetchedOptions);
@@ -118,7 +118,8 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
             if (convertedValues.length !== interactionIds.length) {
                 log.error("Conversion loss: some of the interactions are not found in the current interaction data pool for the MultiSelect", "before & after", {
                     interactionIds,
-                    convertedValues
+                    convertedValues,
+                    allInteractionsPool
                 })
             }
 
@@ -128,7 +129,6 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
         // most often the form data from already existing interaction.
         const loadInheritedData = async () => {
             const currentValueDtos: CreateRelationDto[] = props.currentValueDtos as CreateRelationDto[];
-            // log.('Loaded Dto from above', 'dtos', currentValueDtos);
             const inheritedSelectValues: SelectValue<Interaction>[] = [];
             // await loop
             let index = 0;
@@ -145,7 +145,7 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
             }
             index++;
 
-            log.info('Loaded Dto from above', 'Converted values', inheritedSelectValues);
+            // log.info('Loaded Dto from above', 'Converted values', inheritedSelectValues);
             // update all values with inherited values. This step does not use any other handling function to avoid pollution.
             setCurrentAvailableSectOptions(inheritedSelectValues.map(selectValue => selectValue.toMultiSelectValue<Interaction>()));
             setSelectedSelectValues(inheritedSelectValues);
@@ -155,13 +155,15 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
         /**
          * The pool is conditionally provided rather than let the function use the state directly, because the state is not updated immediately.
          * @param selectedIds
+         * @param passToUpperLevel
          */
-        const handleMultiControlSelectChange = (selectedIds: string[]) => {
+        const handleMultiControlSelectChange = (selectedIds: string[], passToUpperLevel?: boolean) => {
             setSelectedInteractionIds([...selectedIds]);
             const selectedSelectValues = loadSelectValuesFromPool(selectedIds);
-
             setSelectedSelectValues(selectedSelectValues);
-            passSelectionsUpwards(selectedSelectValues);
+            if (passToUpperLevel) {
+                passSelectionsUpwards(selectedSelectValues);
+            }
         };
 
         /**
@@ -194,12 +196,12 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
             const latestSelectedIds: string[] = [...selectedInteractionIds, selectionToAdd.toValueString()];
 
             // update local control selected values to reflex the latest selections including the newly created one
-            handleMultiControlSelectChange(latestSelectedIds);
+            handleMultiControlSelectChange(latestSelectedIds, true);
 
             // this is key: provide latest pool to the function to get the latest data, otherwise it will not be able to find the newly created interaction.
             const latestSelectedValues: SelectValue<Interaction>[] = [...selectedSelectValues, selectionToAdd];
 
-            // pass the latest selections to upper level
+            // // pass the latest selections to upper level
             passSelectionsUpwards(latestSelectedValues);
 
             return
@@ -253,7 +255,9 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
                         // @ts-ignore
                         onCreate={onMultiSelectControlCreate}
                         onSearchChange={fetchOptions}
-                        onChange={handleMultiControlSelectChange}
+                        onChange={(e) => {
+                            handleMultiControlSelectChange(e, true)
+                        }}
                         data={currentAvailableSelectOptions}
                     />
                 </div>
