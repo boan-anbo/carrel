@@ -277,6 +277,25 @@ query FilterReferenceRelationByHostId($hostId: Long!, $query: String!) {
     }
 }
 
+query FilterCategoryRelationByHostId($hostId: Long!, $query: String!) {
+    categoryRelations(
+        where: {
+            hostInteractionId: {eq: $hostId}
+            and:
+            {
+                linkedInteraction: {
+                    label: {contains: $query}
+                }
+            }
+        }
+        order: {
+            order: ASC
+        }
+
+    ) {
+        ...categoryRelationConnectionFragment
+    }
+}
 
 
 

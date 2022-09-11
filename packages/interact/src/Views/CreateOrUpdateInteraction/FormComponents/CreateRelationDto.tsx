@@ -1,4 +1,5 @@
 import {
+    CategoryRelation,
     ContextRelation,
     FirstActRelation,
     IndirectObjectRelation,
@@ -13,7 +14,7 @@ import {
     SubjectRelation
 } from "../../../BackEnd/grl-client/interact_db_client";
 
-export type AnyRelation = ContextRelation | SubjectRelation | FirstActRelation | ObjectRelation | SecondActRelation | IndirectObjectRelation | SettingRelation | PurposeRelation | ParallelRelation | ReferenceRelation;
+export type AnyRelation = ContextRelation | SubjectRelation | FirstActRelation | ObjectRelation | SecondActRelation | IndirectObjectRelation | SettingRelation | PurposeRelation | ParallelRelation | ReferenceRelation | CategoryRelation;
 
 
 

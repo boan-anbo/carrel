@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
 import {DistantApiSearchResponse, Passage} from "../../BackEnd/distant_api";
 import {searchDistant} from "../../BackEnd/distant-core-ops/search-distant";
-import {SearchSimple} from "../../ControlComponents/SearchSimple";
 import {DistantDocumentView} from "./DistantDocumentItem";
 import {useDispatch} from "react-redux";
 import {selectPassage} from "../../States/features/app-state/appStateSlice";
+import {TextInput} from "../_ViewComponents/_ControlComponents/Input/TextInput";
 
 export const DistantDocumentList = () => {
     const [searchResult, setSearchResult] = useState<DistantApiSearchResponse | null>(null);
@@ -27,7 +27,7 @@ export const DistantDocumentList = () => {
 
     return (
         <div>
-            <SearchSimple  onSearch={search}></SearchSimple>
+            <TextInput  onChange={search}></TextInput>
 
             <div>
                 {/*    Iterate over search result*/}

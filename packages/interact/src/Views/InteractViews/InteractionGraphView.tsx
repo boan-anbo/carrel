@@ -26,7 +26,8 @@ export const InteractionGraphView = (
     return (
         <div>
 
-            <FilterInteractionSingle placeholder={'View interaction'} style={{width: '100%'}} onSelect={onInteractionSelected}/>
+            <FilterInteractionSingle placeholder={'View interaction'} style={{width: '100%'}} onSingleSelectionChange={onInteractionSelected}
+            />
 
             {id > 0 && <GraphView id={id}/>}
         </div>

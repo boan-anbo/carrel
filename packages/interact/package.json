@@ -68,6 +68,7 @@
     "@graphql-codegen/cli": "^2.12.0",
     "@graphql-codegen/typescript-operations": "^2.5.3",
     "@graphql-codegen/typescript-react-apollo": "^3.3.3",
+    "@mantine/ds": "^5.3.0",
     "@storybook/addon-actions": "^6.5.10",
     "@storybook/addon-essentials": "^6.5.10",
     "@storybook/addon-interactions": "^6.5.10",

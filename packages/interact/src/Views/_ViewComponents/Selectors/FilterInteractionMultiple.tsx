@@ -151,7 +151,9 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
         // if it's control + alt + enter, submit the whole form
         if (event.ctrlKey && event.key === 'Enter') {
             log.info("Submitting the whole form", "event", event);
-            props.onSubmitForm();
+            if (props.onSubmitForm) {
+                props.onSubmitForm();
+            }
         }
     }
 
@@ -171,6 +173,8 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
                     onKeyDown={onMultiSelectControlKeyDown}
                     style={props.style}
                     getCreateLabel={(query) => `Create new entity: ${query}`}
+
+                    // @ts-ignore
                     onCreate={onMultiSelectControlCreate}
                     onChange={emitChange}
                     data={multiSelectOptions}

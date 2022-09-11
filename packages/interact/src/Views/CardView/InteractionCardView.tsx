@@ -1,26 +1,12 @@
 import FilterInteractionSingle from "../_ViewComponents/Selectors/FilterInteractionSingle";
 import {useEffect, useState} from "react";
-import {
-    CategoryRelation,
-    ContextRelation,
-    FirstActRelation,
-    IndirectObjectRelation,
-    Interaction,
-    ObjectRelation,
-    ParallelRelation,
-    PurposeRelation,
-    ReferenceRelation, Relation,
-    RelationTypes,
-    SecondActRelation,
-    SettingRelation,
-    SubjectRelation,
-} from "../../BackEnd/grl-client/interact_db_client";
+import {Interaction, Relation, RelationTypes,} from "../../BackEnd/grl-client/interact_db_client";
 import {getFullInteractionById} from "../../BackEnd/interact-db-client/filter-operations";
 import {InteractionCardFieldItem} from "./InteractCardFields/InteractionCardFieldItem";
 import {BiData, BiLabel, MdDescription, MdPermIdentity, SiContentful, SiReason} from "react-icons/all";
 import {InteractionCardRelationFieldItem} from "./InteractCardFields/InteractionCardRelationFieldItem";
 import {notify} from "../../Services/toast/notify";
-import { useDispatch } from "react-redux";
+import {useDispatch} from "react-redux";
 import {selectInteraction} from "../../States/features/app-state/appStateSlice";
 import {Logger, LogSource} from "../../Services/logger";
 
@@ -56,7 +42,7 @@ export function InteractionCardView(props: InteractionCardViewProps) {
 
             placeholder={'Search interaction'}
             style={{width: '100%'}}
-            onSelect={async (e) => {
+            onSingleSelectionChange={async (e) => {
                 if (e.value) {
                     const interaction = await getFullInteractionById(parseInt(e.value as string));
                     setInteraction(interaction);
@@ -115,7 +101,7 @@ export function InteractionCardView(props: InteractionCardViewProps) {
                             interaction={interaction}
                             icon={<SiReason/>}
                             label={'Categories'}
-                            size={'small'}
+                            size={'xs'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.ContextRelation
@@ -131,7 +117,7 @@ export function InteractionCardView(props: InteractionCardViewProps) {
                             interaction={interaction}
                             icon={<SiReason/>}
                             label={''}
-                            size={'small'}
+                            size={'xs'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.ContextRelation
@@ -149,7 +135,7 @@ export function InteractionCardView(props: InteractionCardViewProps) {
                             interaction={interaction}
                             icon={<SiReason/>}
                             label={'Subjects'}
-                            size={'small'}
+                            size={'xs'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.SubjectRelation
@@ -167,7 +153,7 @@ export function InteractionCardView(props: InteractionCardViewProps) {
                             interaction={interaction}
                             icon={<SiReason/>}
                             label={'1st Actions'}
-                            size={'small'}
+                            size={'xs'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.FirstActRelation
@@ -185,7 +171,7 @@ export function InteractionCardView(props: InteractionCardViewProps) {
                             interaction={interaction}
                             icon={<SiReason/>}
                             label={"Objects"}
-                            size={'small'}
+                            size={'xs'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.ObjectRelation
@@ -203,7 +189,7 @@ export function InteractionCardView(props: InteractionCardViewProps) {
                             interaction={interaction}
                             icon={<SiReason/>}
                             label={'2nd Actions'}
-                            size={'small'}
+                            size={'xs'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.SecondActRelation
@@ -222,7 +208,7 @@ export function InteractionCardView(props: InteractionCardViewProps) {
                             interaction={interaction}
                             icon={<SiReason/>}
                             label={'Indirect Objects'}
-                            size={'small'}
+                            size={'xs'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.IndirectObjectRelation
@@ -240,7 +226,7 @@ export function InteractionCardView(props: InteractionCardViewProps) {
                             interaction={interaction}
                             icon={<SiReason/>}
                             label={'Settings'}
-                            size={'small'}
+                            size={'xs'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.SettingRelation
@@ -259,7 +245,7 @@ export function InteractionCardView(props: InteractionCardViewProps) {
                             interaction={interaction}
                             icon={<SiReason/>}
                             label={'Purposes'}
-                            size={'small'}
+                            size={'xs'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.PurposeRelation
@@ -278,7 +264,7 @@ export function InteractionCardView(props: InteractionCardViewProps) {
                             interaction={interaction}
                             icon={<SiReason/>}
                             label={'References'}
-                            size={'small'}
+                            size={'xs'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.ReferenceRelation
@@ -296,7 +282,7 @@ export function InteractionCardView(props: InteractionCardViewProps) {
                             interaction={interaction}
                             icon={<SiReason/>}
                             label={'Parallels'}
-                            size={'small'}
+                            size={'xs'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.ParallelRelation

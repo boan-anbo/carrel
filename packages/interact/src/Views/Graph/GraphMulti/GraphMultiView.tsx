@@ -13,6 +13,8 @@ import {RootState} from "../../../store";
 import {addGraphHistory} from "../../../States/features/graph-state/graphStateSlice";
 import {selectInteraction} from "../../../States/features/app-state/appStateSlice";
 
+import "/node_modules/react-grid-layout/css/styles.css";
+import "/node_modules/react-resizable/css/styles.css";
 const {TreeCollapse} = Behaviors;
 const data = Utils.mock(5).tree().graphinTree() as GraphinTreeDataWithI;
 
@@ -123,7 +125,7 @@ export default () => {
         <div>
             <div className={'w-50p m-2'}>
                 <FilterInteractionSingle style={{width: '100%'}} placeholder={'Open interact'}
-                                         onSelect={onSelectInteractionToLoad}/>
+                                         onSingleSelectionChange={onSelectInteractionToLoad}/>
             </div>
             <div >
                 {<GraphTreeView

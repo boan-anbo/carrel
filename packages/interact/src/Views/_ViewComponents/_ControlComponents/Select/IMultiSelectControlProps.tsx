@@ -14,7 +14,7 @@ export interface IMultiSelectControlProps {
     style: React.CSSProperties | undefined;
     size?: MantineSize | undefined;
     getCreateLabel?: (query: string) => string;
-    onCreate?:  (query: string) => void;
+    onCreate?: (query: string) => SelectItem | string | null | undefined;
     onChange: (selectedIds: string[]) => void;
     shouldCreate?: (query: string, data: SelectItem[]) => boolean;
     data: MultiSelectValue<Interaction>[];

@@ -1,33 +1,42 @@
-import "/node_modules/react-grid-layout/css/styles.css";
-import "/node_modules/react-resizable/css/styles.css";
-
 import "./App.css";
 import {useSelector} from "react-redux";
 import {RootState} from "./store";
 import {SelectedTextViewer} from "./Views/_ViewComponents/InteractViewComponent/SelectedTextViewer";
 import {GridViewBoard} from "./GridViewBoard";
-import {Route, Routes} from "react-router-dom";
+import {LinkProps, Route, Routes, useNavigate} from "react-router-dom";
 import GraphMultiView from "./Views/Graph/GraphMulti/GraphMultiView";
+import {MainView, NavLinkProps} from "./MainView";
 
 
 function App() {
 
     const selectedPassage = useSelector((state: RootState) => state.appstate.selectedInputPassage);
 
+    let navigate = useNavigate();
+
+    const onNavLinks = (link: NavLinkProps) => {
+
+        navigate(link.link);
+        console.log(link)
+    }
 
     return (
-        <div className={'bg-black'}>
-
-            <div className={'flex space-x-4'}>
-
-                <SelectedTextViewer/>
-
-
-            </div>
+        <div>
+            <MainView onNavLinks={onNavLinks} links={
+                {
+                    mainLinks: [
+                        {label: 'Graph', link: '/graph'},
+                        {label: 'Grid', link: '/grid'},
+                    ],
+                    userLinks: [
+                        {label: 'Login', link: '/login'},
+                        {label: 'Register', link: '/register'},
+                    ]
+                }
+            }/>
             <Routes>
-                <Route path={"/"} element={<GridViewBoard/>}/>
-                <Route path={"/graph"} element={<GraphMultiView />}/>
-                <Route path={"/grid/:gridview"} element={<GridViewBoard />}/>
+                <Route path={"/graph"} element={<GraphMultiView/>}/>
+                <Route path={"/grid"} element={<GridViewBoard/>}/>
             </Routes>
         </div>
     );

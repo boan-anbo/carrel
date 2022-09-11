@@ -1,6 +1,6 @@
 import {getApolloClient} from "../../Services/get-apollo-client";
 import {
-    ContextRelationsConnection,
+    ContextRelationsConnection, FilterCategoryRelationByHostIdDocument, FilterCategoryRelationByHostIdQuery,
     FilterContextRelationByHostIdDocument,
     FilterContextRelationByHostIdQuery,
     FilterFirstActRelationByHostIdDocument,
@@ -113,6 +113,9 @@ export async function filterInteractionRelation(queryValue: string, filterByEnti
         case RelationTypes.SubjectRelation:
             queryDocument = FilterSubjectRelationByHostIdDocument;
             break;
+        case RelationTypes.CategoryRelation:
+            queryDocument = FilterCategoryRelationByHostIdDocument;
+            break;
 
     }
     const {data} = await getApolloClient().query({
@@ -146,6 +149,8 @@ export async function filterInteractionRelation(queryValue: string, filterByEnti
             return (data as FilterSettingRelationByHostIdQuery).settingsRelations as RelationConnection
         case RelationTypes.SubjectRelation:
             return (data as FilterSubjectRelationByHostIdQuery).subjectRelations as RelationConnection
+        case RelationTypes.CategoryRelation:
+            return (data as FilterCategoryRelationByHostIdQuery).categoryRelations as RelationConnection
 
     }
 }
