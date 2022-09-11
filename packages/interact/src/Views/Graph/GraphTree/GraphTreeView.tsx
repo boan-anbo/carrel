@@ -7,7 +7,7 @@ import {Interaction} from "../../../BackEnd/grl-client/interact_db_client";
 import {Layout} from "@antv/graphin/lib/typings/type";
 import FilterInteractionSingle from "../../_ViewComponents/Selectors/FilterInteractionSingle";
 import {SelectValue} from "../../_ViewComponents/_ControlComponents/Select/SelectValue";
-import {GraphTreeView} from "./GraphTreeView";
+import {GraphTreeCanvas} from "./GraphTreeCanvas";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../store";
 import {addGraphHistory} from "../../../States/features/graph-state/graphStateSlice";
@@ -15,8 +15,12 @@ import {selectInteraction} from "../../../States/features/app-state/appStateSlic
 
 import "/node_modules/react-grid-layout/css/styles.css";
 import "/node_modules/react-resizable/css/styles.css";
-import {Container, SimpleGrid} from '@mantine/core';
-import {PRIMARY_COL_HEIGHT} from "../../../PRIMARY_COL_HEIGHT";
+import {Breadcrumbs, Container, SimpleGrid, ThemeIcon} from '@mantine/core';
+import {PRIMARY_COL_HEIGHT} from "../../../MainViews/PRIMARY_COL_HEIGHT";
+import {Anchor} from "antd";
+import {Text} from '@mantine/core';
+import {IconArrowRight, IconArrowsRight, IconGraph} from "@tabler/icons";
+import {Button} from '@mantine/core';
 
 const {TreeCollapse} = Behaviors;
 const data = Utils.mock(5).tree().graphinTree() as GraphinTreeDataWithI;
@@ -39,30 +43,55 @@ walk(data, node => {
 });
 
 type layoutType = 'dendrogram' | 'mindmap'
-const layouts = [
+let layouts = [
 
     {
         type: 'dendrogram' as layoutType,
         options: {
-            direction: 'V', // H / V / LR / RL / TB / BT
-            nodeSep: 40,
-            rankSep: 100,
+            direction: 'LR', // H / V / LR / RL / TB / BT
+            nodeSep: 100,
+            rankSep: 250,
         },
         title: '生态树布局',
     },
 
 ] as Layout[];
 
+
+const directions: string[] = [
+    'V',
+    'H',
+    'LR',
+    'RL',
+    'TB',
+    'BT',
+
+]
 export default (props: {
     style?: React.CSSProperties,
 }) => {
     const log = new Logger(LogSource.GraphMultiView);
     const {graph, apis} = useContext(GraphinContext);
 
-    const [layout, setLayout] = React.useState(layouts[0]);
+    const [defaultLayout, setDefaultLayout] = React.useState<Layout>(layouts[0]);
+    const [currentLayout, setCurrentLayout] = React.useState(layouts[0]);
 
     const [graphData, setGraphData] = React.useState<GraphinTreeDataWithI>(data);
 
+    const switchDirection = (direction: 'V' | 'H' | 'LR' | 'RL' | 'TB' | 'BT') => {
+
+        const firstLayout = layouts[0];
+        const newLayout = {
+            ...firstLayout,
+                options: {
+                    ...firstLayout.options,
+                    direction,
+                },
+            };
+        log.debug("New layout is " + JSON.stringify(newLayout));
+        setDefaultLayout(newLayout);
+        refreshLayout();
+    }
     // current selected interaction
     const selectedInteraction = useSelector((state: RootState) => state.appstate.selectedInteraction);
     useEffect(() => {
@@ -128,7 +157,7 @@ export default (props: {
     }
 
     function refreshLayout() {
-        setLayout(layouts[0]);
+        setCurrentLayout(defaultLayout);
     }
 
     async function onGraphTreeViewSelectInteraction(interactionId: number) {
@@ -139,25 +168,64 @@ export default (props: {
         }
     }
 
+    function getElements() {
+        const last5Elements = graphHistory.slice(Math.max(graphHistory.length - 5, 0));
+        return last5Elements.map((historyItem, index) => {
+                return <Anchor className={'text-xs'} key={index}>
+
+                    <div className={'flex space-x-2'}>
+                        <ThemeIcon size={'sm'} variant={'outline'} color={'cyan'}>
+                            <IconGraph size={15}/>
+                        </ThemeIcon>
+
+                        <Text onClick={() => loadGraphData(historyItem.interactionId, false)} variant={'link'}>
+                            {historyItem?.style?.label?.value ?? historyItem.id}
+                        </Text>
+                    </div>
+                </Anchor>
+            }
+        )
+    }
+
+    //         <span
+    //             onClick={() => {
+    //                 loadGraphData(graph.interactionId, false);
+    //             }}
+    //             className={graph.interactionId.toString() == rootInteraction?.id ? 'b2-active' : 'b2'}>{graph.style?.label?.value ?? graph.interactionId.toString()}</span>);
+    // }
+
     return (
         <Container style={{width: '100vw'}} my="md">
             <SimpleGrid cols={1} spacing="md" breakpoints={[{maxWidth: 'xl', cols: 1}]}>
                 <FilterInteractionSingle style={{width: '100%'}} placeholder={'Open interact'}
                                          onSingleSelectionChange={onSelectInteractionToLoad}/>
-                {<GraphTreeView
+                <div className={'flex'}>
+                    {directions.map((direction, index) => {
+                        return <Button
+                            onClick={() => {
+                                switchDirection(direction as 'V' | 'H' | 'LR' | 'RL' | 'TB' | 'BT');
+                                refreshLayout();
+                            }}
+                            key={index}
+                                       variant={'white'}>
+                            {direction}
+                        </Button>
+                    })
+                    }
+                </div>
+                {<GraphTreeCanvas
                     style={{width: '100%', height: '60vh'}}
                     onLoadInteraction={loadGraphData}
-                    key={layout.type}
-                    layout={layout}
+                    key={currentLayout.type}
+                    layout={currentLayout}
                     rootInteraction={rootInteraction}
                     data={graphData}
                     type={type} onSelectInteraction={onGraphTreeViewSelectInteraction}/>
                 }
-                Browse History{graphHistory.map(graph => <span
-                onClick={() => {
-                    loadGraphData(graph.interactionId, false);
-                }}
-                className={graph.interactionId.toString() == rootInteraction?.id ? 'b2-active' : 'b2'}>{graph.style?.label?.value ?? graph.interactionId.toString()}</span>)}
+                <Breadcrumbs separator={<IconArrowRight color={'teal'}/>}>
+                    {getElements()}
+
+                </Breadcrumbs>
             </SimpleGrid>
         </Container>
     );

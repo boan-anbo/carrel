@@ -6,7 +6,7 @@ import {SelectedPassageViewer} from "./InteractViews/SelectedPassageViewer";
 import {CreateOrUpdateInteractionFormView} from "./CreateOrUpdateInteraction/CreateOrUpdateInteractionFormView";
 import {SelectedInteractionDataViewer} from "./InteractViews/SelectedInteractionDataViewer";
 import {RecentInteractionsList} from "./RecentCreatedInteractionList/RecentInteractionsList";
-import GraphMultiView from "./Graph/GraphMulti/GraphMultiView";
+import GraphMultiView from "./Graph/GraphTree/GraphTreeView";
 import {RecentViewedInteractionList} from "./RecentViewedInteractionList/RecentViewedInteractionList";
 
 export enum GridViewTypes {

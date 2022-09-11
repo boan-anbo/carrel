@@ -2,7 +2,7 @@ import {
     CategoryRelation,
     ContextRelation,
     FirstActRelation,
-    IndirectObjectRelation,
+    IndirectObjectRelation, Interaction,
     ObjectRelation,
     ParallelRelation,
     PurposeRelation,
@@ -29,6 +29,7 @@ export class CreateRelationDto {
     weight: RelationWeight | undefined = undefined;
     hits?: number;
     order?: number;
+    linkedInteraction: Interaction | undefined;
 
     public static fromRelation(relation: AnyRelation): CreateRelationDto {
         return {
@@ -42,6 +43,7 @@ export class CreateRelationDto {
             weight: relation.weight,
             hits: relation.hits,
             order: relation.order,
+            linkedInteraction: relation.linkedInteraction ?? undefined
         }
     }
 }

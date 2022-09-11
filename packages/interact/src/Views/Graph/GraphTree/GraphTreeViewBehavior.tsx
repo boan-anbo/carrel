@@ -1,7 +1,7 @@
 import {useContext, useEffect} from "react";
 import {GraphinContext} from "@antv/graphin";
-import {handleSingleClickOnNode} from "./HandleSingleClickOnNode";
-import {handleSingleClickOnEdge} from "./HandleClickOnEdge";
+import {handleSingleClickOnNode} from "./TreeGraphHandlers/HandleSingleClickOnNode";
+import {handleSingleClickOnEdge} from "./TreeGraphHandlers/HandleClickOnEdge";
 
 export const GraphTreeViewBehavior = (props: {
     onLoadInteraction: (interactionId: number) => Promise<void>;

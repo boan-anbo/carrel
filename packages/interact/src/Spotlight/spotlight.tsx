@@ -3,7 +3,7 @@ import { SpotlightProvider, openSpotlight } from '@mantine/spotlight';
 import type { SpotlightAction } from '@mantine/spotlight';
 import { IconHome, IconDashboard, IconFileText, IconSearch } from '@tabler/icons';
 
-function SpotlightControl() {
+export function SpotlightControl() {
     return (
         <Group position="center">
         <Button onClick={() => openSpotlight()}>Open spotlight</Button>
@@ -11,7 +11,7 @@ function SpotlightControl() {
 );
 }
 
-const actions: SpotlightAction[] = [
+export const spotlightActions: SpotlightAction[] = [
     {
         title: 'Home',
         description: 'Get to home page',
@@ -32,16 +32,3 @@ const actions: SpotlightAction[] = [
 },
 ];
 
-function Demo() {
-    return (
-        <SpotlightProvider
-            actions={actions}
-    searchIcon={<IconSearch size={18} />}
-    searchPlaceholder="Search..."
-    shortcut="mod + shift + 1"
-    nothingFoundMessage="Nothing found..."
-        >
-        <SpotlightControl />
-        </SpotlightProvider>
-);
-}

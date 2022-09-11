@@ -38,7 +38,7 @@ export function InteractionCardRelationFieldItem<T extends Relation>(props: {
                     }
                 >
                     {props.relationData?.map((relation, index) => {
-                        return <List.Item>
+                        return <List.Item key={index}>
                             <Text className={'cursor-pointer'} variant={'link'}
                                 onClick={() => props.onClickRelation && props.onClickRelation(relation)}> {relation.linkedInteraction?.label} </Text>
                         </List.Item>

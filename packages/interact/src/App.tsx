@@ -1,13 +1,13 @@
 import "./App.css";
 import {useSelector} from "react-redux";
 import {RootState} from "./store";
-import {GridViewBoard} from "./GridViewBoard";
+import {GridViewBoard} from "./MainViews/GridViewBoard";
 import {Route, Routes, useNavigate} from "react-router-dom";
-import GraphMultiView from "./Views/Graph/GraphMulti/GraphMultiView";
+import GraphMultiView from "./Views/Graph/GraphTree/GraphTreeView";
 import {MainHeader, NavLinkProps} from "./MainViews/MainHeader";
 import {MainFooter} from "./MainViews/Footer";
 import {MainNavBar} from "./MainViews/NavBar";
-import {CreateView} from "./CreateView";
+import {MainView} from "./MainViews/MainView";
 
 
 function DashBoard() {
@@ -58,7 +58,7 @@ function App() {
                     <Route path={ViewLinks.DASHBOARD} element={<DashBoard/>}/>
                     <Route path={ViewLinks.GRAPH_VIEW} element={<GraphMultiView />}/>
                     <Route path={ViewLinks.GRID_VIEW} element={<GridViewBoard/>}/>
-                    <Route path={ViewLinks.CREATE} element={<CreateView/>}/>
+                    <Route path={ViewLinks.CREATE} element={<MainView/>}/>
                 </Routes>
             </div>
             <MainFooter/>

@@ -1,6 +1,6 @@
 import {IG6GraphEvent} from "@antv/graphin";
 import {INode, NodeConfig} from "@antv/g6";
-import {Logger, LogSource} from "../../../Services/logger";
+import {Logger, LogSource} from "../../../../Services/logger";
 import {ApisType} from "@antv/graphin/lib/apis/types";
 
 const log = new Logger(LogSource.handleClickOnEdge);

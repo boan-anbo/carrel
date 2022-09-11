@@ -1,7 +1,10 @@
 import {useState} from 'react';
-import {createStyles, Header, Container, Anchor, Group, Burger} from '@mantine/core';
+import {createStyles, Kbd, Header, Container, Anchor, Group, Burger, Autocomplete} from '@mantine/core';
 import {useDisclosure} from '@mantine/hooks';
 import {MantineLogo} from '@mantine/ds';
+import {IconSearch} from "@tabler/icons";
+import {openSpotlight, SpotlightProvider, useSpotlight} from "@mantine/spotlight";
+import {spotlightActions, SpotlightControl} from "../Spotlight/spotlight";
 
 const HEADER_HEIGHT = 84;
 
@@ -79,14 +82,13 @@ interface DoubleHeaderProps {
 }
 
 export function MainHeader(props: {
-                             links: DoubleHeaderProps,
-                             onNavLinks: (link: NavLinkProps) => void
-                         }
+                               links: DoubleHeaderProps,
+                               onNavLinks: (link: NavLinkProps) => void
+                           }
 ) {
     const [opened, {toggle}] = useDisclosure(false);
     const {classes, cx} = useStyles();
     const [active, setActive] = useState(0);
-
     const mainItems = props.links.mainLinks.map((item, index) => (
         <Anchor<'a'>
             href={item.link}
@@ -119,9 +121,23 @@ export function MainHeader(props: {
     return (
         <Header height={HEADER_HEIGHT} mb={5}>
             <Container className={classes.inner}>
+
                 <MantineLogo size={34}/>
                 <div className={classes.links}>
-                    <Group position="right">{secondaryItems}</Group>
+                    <Group position="right">
+                        <Group>
+
+
+                            {<IconSearch size={16}
+                                         onClick={() => {
+                                             openSpotlight()
+                                         }}
+                                         stroke={1.5}/>}
+                        </Group>
+                        <Group>
+                            {secondaryItems}
+                        </Group>
+                    </Group>
                     <Group spacing={0} position="right" className={classes.mainLinks}>
                         {mainItems}
                     </Group>

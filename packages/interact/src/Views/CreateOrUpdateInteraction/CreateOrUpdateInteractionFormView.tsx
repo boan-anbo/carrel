@@ -128,11 +128,12 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         console.log("Form receiveed", updatedEntity)
         if (updatedEntity.id) {
             notify('Created interaction entity', `${updatedEntity.label} (click to select)`, 'success',
-                () => {
-                    dispatch(selectInteraction(null))
-                    dispatch(
-                        selectInteraction(updatedEntity)
-                    )
+                {
+                    onClick: () => {
+                        dispatch(
+                            selectInteraction(updatedEntity)
+                        )
+                    }
                 }
             )
         }

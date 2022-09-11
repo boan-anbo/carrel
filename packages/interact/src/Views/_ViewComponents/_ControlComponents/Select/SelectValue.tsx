@@ -28,7 +28,7 @@ export class SelectValue<T> {
     /**
      * Data payload
      */
-    data?: T | null;
+    data?: T ;
 
 
     constructor(key: string | number, label: string, value: string | null, data?: T) {

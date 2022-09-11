@@ -18,25 +18,27 @@ interface GraphTreeViewProps {
     onSelectInteraction: (interactionId: number) => void;
     style?: React.CSSProperties;
 }
+
 const options = [
     {
         key: 'load',
-        icon: <TagFilled />,
+        icon: <TagFilled/>,
         name: 'Load',
     },
     {
         key: 'delete',
-        icon: <DeleteFilled />,
+        icon: <DeleteFilled/>,
         name: 'Delete',
     },
     {
         key: 'expand',
-        icon: <ExpandAltOutlined />,
+        icon: <ExpandAltOutlined/>,
         name: '扩散',
     },
 ];
-const { Menu } = ContextMenu;
-export function GraphTreeView(props: GraphTreeViewProps) {
+const {Menu} = ContextMenu;
+
+export function GraphTreeCanvas(props: GraphTreeViewProps) {
     function onMenuChange(item: Item, data: any) {
         console.log(item, data);
         props.onLoadInteraction(data.interactionId);
@@ -44,18 +46,28 @@ export function GraphTreeView(props: GraphTreeViewProps) {
 
     return <Card
         title={props.layout.title} extra={<code>{props.rootInteraction?.label ?? "Interaction"}</code>}>
-                <Graphin
-                    style={props.style}
-                    data={props.data}
-                    layout={{type: props.type, ...props.layout.options}} fitView>
-                    <GraphTreeViewBehavior
-                        onLoadInteraction={props.onLoadInteraction}
-                        onSelectInteraction={props.onSelectInteraction}
-                    />
-                    <ContextMenu style={{ width: '80px' }}>
-                        <Menu
-                            options={options} bindType={'node'} onChange={onMenuChange}/>
-                    </ContextMenu>
-                </Graphin>
-            </Card>
+        <Graphin
+            animateCfg={{
+                duration: 5,
+                easing: 'easeLinear',
+                onFrame: undefined,
+            }}
+
+            defaultEdge={{
+                // @ts-ignore
+                "type": 'cubic-horizontal',
+            }}
+            style={props.style}
+            data={props.data}
+            layout={{type: props.type, ...props.layout.options}} fitView>
+            <GraphTreeViewBehavior
+                onLoadInteraction={props.onLoadInteraction}
+                onSelectInteraction={props.onSelectInteraction}
+            />
+            <ContextMenu style={{width: '80px'}}>
+                <Menu
+                    options={options} bindType={'node'} onChange={onMenuChange}/>
+            </ContextMenu>
+        </Graphin>
+    </Card>
 }

@@ -3,6 +3,7 @@ import {createSlice} from '@reduxjs/toolkit'
 import {Passage} from '../../../BackEnd/distant_api';
 import {Interaction} from "../../../BackEnd/grl-client/interact_db_client";
 import {Logger, LogSource} from "../../../Services/logger";
+import {notify} from "../../../Services/toast/notify";
 
 export interface AppState {
     selectedInputPassage: Passage | null;
@@ -45,11 +46,16 @@ export const appstateSlice = createSlice({
         },
 
         selectInteraction: (state, action: PayloadAction<Interaction | null>) => {
+            // clear selected interaction first
+            state.selectedInteraction = null;
+
             state.selectedInteraction = action.payload;
             // add to history
             if (action.payload) {
                 state.selectedInteractionHistory.push(action.payload);
             }
+
+            notify("Interaction Selected", action.payload?.label ?? action.payload?.id, "info");
         },
         unselectInteraction: (state) => {
             state.selectedInteraction = null;

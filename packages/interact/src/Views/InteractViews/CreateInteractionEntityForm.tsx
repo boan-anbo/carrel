@@ -36,11 +36,13 @@ export const CreateInteractionEntityForm = () => {
         console.log("Form receiveed", result)
         if (result.id) {
             notify('Created interaction entity', `${result.label} (click to show)`, 'success',
-                () => {
+                {
+                    onClick: () => {
 
-                    dispatch(
-                        selectInteraction(result)
-                    )
+                        dispatch(
+                            selectInteraction(result)
+                        )
+                    }
                 }
             )
         }

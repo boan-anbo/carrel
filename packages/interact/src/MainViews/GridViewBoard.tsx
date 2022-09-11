@@ -1,4 +1,4 @@
-import {GridView, GridViewTypes} from "./Views/GridView";
+import {GridView, GridViewTypes} from "../Views/GridView";
 import {Layout, Responsive, WidthProvider} from "react-grid-layout";
 import {useState} from "react";
 import {Button} from '@mantine/core';

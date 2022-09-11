@@ -54,11 +54,11 @@
     },
     "windows": [
       {
-        "fullscreen": false,
-        "height": 600,
+        "fullscreen": true,
+        "height": 1440,
         "resizable": true,
         "title": "interact",
-        "width": 800
+        "width": 2560
       }
     ]
   }

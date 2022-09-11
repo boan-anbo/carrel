@@ -1,4 +1,4 @@
-import {Logger, LogSource} from "../../../Services/logger";
+import {Logger, LogSource} from "../../../../Services/logger";
 import {IG6GraphEvent} from "@antv/graphin";
 import {INode, NodeConfig} from "@antv/g6";
 

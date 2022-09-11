@@ -1,1 +1,1 @@
-export const PRIMARY_COL_HEIGHT = 2000;
+export const PRIMARY_COL_HEIGHT = 1700;

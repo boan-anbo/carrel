@@ -1,12 +1,12 @@
 import {Container, Grid, ScrollArea, SimpleGrid, Skeleton, useMantineTheme} from '@mantine/core';
-import {CreateOrUpdateInteractionFormView} from "./Views/CreateOrUpdateInteraction/CreateOrUpdateInteractionFormView";
-import {SelectedInteractionDataViewer} from "./Views/InteractViews/SelectedInteractionDataViewer";
-import {RecentInteractionsList} from "./Views/RecentCreatedInteractionList/RecentInteractionsList";
+import {CreateOrUpdateInteractionFormView} from "../Views/CreateOrUpdateInteraction/CreateOrUpdateInteractionFormView";
+import {SelectedInteractionDataViewer} from "../Views/InteractViews/SelectedInteractionDataViewer";
+import {RecentInteractionsList} from "../Views/RecentCreatedInteractionList/RecentInteractionsList";
 import {PRIMARY_COL_HEIGHT} from "./PRIMARY_COL_HEIGHT";
-import GraphMultiView from "./Views/Graph/GraphTree/GraphTreeView";
-import {FilteredInteractionList} from "./Views/InteractViews/FilteredInteractionList";
+import GraphMultiView from "../Views/Graph/GraphTree/GraphTreeView";
+import {FilteredInteractionList} from "../Views/InteractViews/FilteredInteractionList";
 
-export function CreateView() {
+export function MainView() {
     const theme = useMantineTheme();
     const SECONDARY_COL_HEIGHT = PRIMARY_COL_HEIGHT / 2 - theme.spacing.md / 2;
 
