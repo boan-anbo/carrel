@@ -1,7 +1,7 @@
 import React, {FocusEvent} from "react";
 import {MultiSelectValue} from "./MultiSelectValue";
-import {Interaction} from "../../../../BackEnd/clients/grl-client/interact_db_client";
-import {Select} from "@mantine/core";
+import {Interaction} from "../../../../BackEnd/grl-client/interact_db_client";
+import {MantineSize, Select} from "@mantine/core";
 
 interface SingleSelectControlProps {
     onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -11,11 +11,13 @@ interface SingleSelectControlProps {
     style: React.CSSProperties | undefined;
     onChange: (selectedId: string) => void;
     data: MultiSelectValue<Interaction>[];
+    size?: MantineSize
 }
 
 export function SingleSelectControl(props: SingleSelectControlProps) {
 
     return <Select
+        size={props.size}
         onBlur={props.onBlur}
         onDropdownOpen={props.onDropdownOpen}
         clearable

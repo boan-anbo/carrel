@@ -159,6 +159,12 @@ public class Graph<NODE_TYPE, EDGE_TYPE>
             graph.Edges.Add(Edge<Relation>.FromInteraction(relation));
             graph.Nodes.Add(Node<Interaction>.FromInteraction(relation.LinkedInteraction));
         }
+        
+        foreach (var relation in hostInteraction.Categories)
+        {
+            graph.Edges.Add(Edge<Relation>.FromInteraction(relation));
+            graph.Nodes.Add(Node<Interaction>.FromInteraction(relation.LinkedInteraction));
+        }
 
         /// interate over edges and set display id
         var index = 0;

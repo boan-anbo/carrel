@@ -261,6 +261,12 @@ public class InteractTreeGrower : IInteractTreeGrower
                     .Where(x => x.HostInteractionId == rootInteractionId);
                 GrowRelation(branchType, referenceRelations, result);
                 break;
+            case RelationTypes.CategoryRelation :
+                var categoryRelations = _dbContext.CategoryRelations
+                    .Include(x => x.LinkedInteraction)
+                    .Where(x => x.HostInteractionId == rootInteractionId);
+                GrowRelation(branchType, categoryRelations, result);
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(branchType), branchType, null);
         }
@@ -343,6 +349,13 @@ public class InteractTreeGrower : IInteractTreeGrower
                     .AsNoTracking()
                     .Where(x => x.Contexts.Any(s => s.LinkedInteractionId == genzhuId));
                 GrowAsRelation(branchType, genzhuHasContext, result);
+                break;
+            case AsRelationTypes.AsCategoryRelation:
+                var genzhuHasCategory = _dbContext.Interactions
+                    .Include(x => x.Categories)
+                    .AsNoTracking()
+                    .Where(x => x.Categories.Any(s => s.LinkedInteractionId == genzhuId));
+                GrowAsRelation(branchType, genzhuHasCategory, result);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(branchType), branchType, null);

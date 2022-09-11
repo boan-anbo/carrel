@@ -1,4 +1,4 @@
-import {Interaction, InteractionIdentity} from "../../../../BackEnd/clients/grl-client/interact_db_client";
+import {Interaction, InteractionIdentity} from "../../../../BackEnd/grl-client/interact_db_client";
 import React from "react";
 import {v4} from "uuid";
 import {MultiSelectValue} from "./MultiSelectValue";
@@ -91,8 +91,8 @@ export class SelectValue<T> {
     public static getInteractionLabel(interaction: Interaction, opt: { includeEntity?: boolean; includeId?: boolean } | undefined) {
         if (!opt) {
             opt = {
-                includeEntity: true,
-                includeId: true,
+                includeEntity: false,
+                includeId: false,
             };
         }
         if (!interaction || !interaction.label) {

@@ -1,9 +1,9 @@
 import React, {useContext, useEffect} from 'react';
 import {Behaviors, GraphinContext, GraphinTreeData, Utils} from '@antv/graphin';
-import {getTreeGraph, GraphinTreeDataWithI} from "../../../BackEnd/clients/interact-db-client/graph-operations";
+import {getTreeGraph, GraphinTreeDataWithI} from "../../../BackEnd/interact-db-client/graph-operations";
 import {Logger, LogSource} from "../../../Services/logger";
-import {getFullInteractionById} from "../../../BackEnd/clients/interact-db-client/filter-operations";
-import {Interaction} from "../../../BackEnd/clients/grl-client/interact_db_client";
+import {getFullInteractionById} from "../../../BackEnd/interact-db-client/filter-operations";
+import {Interaction} from "../../../BackEnd/grl-client/interact_db_client";
 import {Layout} from "@antv/graphin/lib/typings/type";
 import FilterInteractionSingle from "../../_ViewComponents/Selectors/FilterInteractionSingle";
 import {SelectValue} from "../../_ViewComponents/_ControlComponents/Select/SelectValue";

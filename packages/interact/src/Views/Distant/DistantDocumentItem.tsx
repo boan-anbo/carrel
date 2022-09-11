@@ -1,4 +1,4 @@
-import {Passage} from "../../BackEnd/clients/distant_api";
+import {Passage} from "../../BackEnd/distant_api";
 import {FiFile} from "react-icons/all";
 import './DistantDocumentItem.css'
 import {DistantPassageText} from "./DistantPassageText";

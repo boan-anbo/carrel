@@ -1,20 +1,21 @@
 export enum LogSource {
-    App = 'App',
-    CreateInteractionForm = 'Create Interaction Form',
-    FilterInteractionMultiple = 'Filter Interaction Multiple',
-    GetInteractionSelectionLabel = 'Get Interaction Selection Label',
-    SelectedInteractionDataViewer = 'Selected Interaction Data Viewer',
-    CreateInteractionEntity = 'Create Interaction Entity Operation',
-    OnFormRelationSelectedHandler = 'On Form Relation Selected Handler',
-    CreateFormData = 'Create Form Data',
-    INTERACTION_GRAPH_VIEW = 'Interaction Graph View',
-    GraphMultiView = 'Graph Multi View',
-    handleDoubleClickOnNode = 'handle Double Click On Node',
-    handleSingleClickOnNode = 'handle Single Click On Node',
-    handleClickOnEdge = 'handle Click On Edge',
-    InteractionCardFieldItem = 'Interaction Card Field Item',
-    FetchFilteredInteractionData = 'Fetch Filtered Interaction Data',
-    FilterInteractionSingle = 'Filter Interaction Single',
+    CreateInteractionForm = 'CreateInteractionForm',
+    FilterInteractionMultiple = 'FilterInteractionMultiple',
+    GetInteractionSelectionLabel = 'GetInteractionSelectionLabel',
+    SelectedInteractionDataViewer = 'SelectedInteractionDataViewer',
+    CreateInteractionEntity = 'CreateInteractionEntity',
+    OnFormRelationSelectedHandler = 'OnFormRelationSelectedHandler',
+    CreateFormData = 'CreateFormData',
+    INTERACTION_GRAPH_VIEW = 'InteractionGraphView',
+    GraphMultiView = 'GraphMultiView',
+    handleDoubleClickOnNode = 'handleDoubleClickOnNode',
+    handleSingleClickOnNode = 'handleSingleClickOnNode',
+    handleClickOnEdge = 'handleClickOnEdge',
+    InteractionCardFieldItem = 'InteractionCardFieldItem',
+    FetchFilteredInteractionData = 'FetchFilteredInteractionData',
+    FilterInteractionSingle = 'FilterInteractionSingle',
+    InteractionCardView = 'InteractionCardView',
+    AppStateSlice   = 'AppStateSlice',
 }
 
 export class Logger {
@@ -68,7 +69,7 @@ export class Logger {
 
     private output = (message: string, payload: any) => {
 
-        return `[${this.logSource}] ${message}`;
+        return `[${this.logSource.toString()}] ${message}`;
     }
 
 }

@@ -169,6 +169,12 @@ fragment interactionFragment on Interaction {
     purposesCount
     asPurposesCount
 
+    categories {
+        ...categoryFragment
+    }
+    categoriesCount
+    asCategoriesCount
+
     start
     end
 
@@ -306,6 +312,19 @@ fragment indirectObjectFragment on IndirectObjectRelation {
     label
     weight
     hostInteractionId
+    linkedInteraction {
+        ...MinimalInteractionFragment
+    }
+    linkedInteractionId
+}
+
+fragment categoryFragment on CategoryRelation {
+    hostInteractionId
+    type
+    uuid
+    description
+    label
+    weight
     linkedInteraction {
         ...MinimalInteractionFragment
     }

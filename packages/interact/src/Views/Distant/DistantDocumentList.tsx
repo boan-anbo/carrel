@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import {DistantApiSearchResponse, Passage} from "../../BackEnd/clients/distant_api";
-import {searchDistant} from "../../BackEnd/clients/distant-core-ops/search-distant";
+import {DistantApiSearchResponse, Passage} from "../../BackEnd/distant_api";
+import {searchDistant} from "../../BackEnd/distant-core-ops/search-distant";
 import {SearchSimple} from "../../ControlComponents/SearchSimple";
 import {DistantDocumentView} from "./DistantDocumentItem";
 import {useDispatch} from "react-redux";

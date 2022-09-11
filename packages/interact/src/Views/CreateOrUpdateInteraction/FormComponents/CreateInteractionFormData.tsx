@@ -1,4 +1,5 @@
 import {
+    CategoryRelation,
     ContextRelation,
     FirstActRelation,
     IndirectObjectRelation,
@@ -12,7 +13,7 @@ import {
     SecondActRelation,
     SettingRelation,
     SubjectRelation
-} from "../../../BackEnd/clients/grl-client/interact_db_client";
+} from "../../../BackEnd/grl-client/interact_db_client";
 import {CreateRelationDto} from "./CreateRelationDto";
 import {Logger, LogSource} from "../../../Services/logger";
 
@@ -37,6 +38,7 @@ export class CreateInteractionFormData {
     settingDtos: CreateRelationDto[] = [];
     start: Date | null = null;
     subjectDtos: CreateRelationDto[] = [];
+    categoryDtos: CreateRelationDto[] = [];
     allInteractions: Interaction[] = [];
 
 
@@ -55,6 +57,7 @@ export class CreateInteractionFormData {
         this.referenceDtos.some(dto => dto.relationType !== RelationTypes.ReferenceRelation) && errors.push(new Error('referenceDtos has wrong relation type'));
         this.settingDtos.some(dto => dto.relationType !== RelationTypes.SettingRelation) && errors.push(new Error('settingDtos has wrong relation type'));
         this.subjectDtos.some(dto => dto.relationType !== RelationTypes.SubjectRelation) && errors.push(new Error('subjectDtos has wrong relation type'));
+        this.categoryDtos.some(dto => dto.relationType !== RelationTypes.CategoryRelation) && errors.push(new Error('categoryDtos has wrong relation type'));
         if (errors.length > 0) {
             errors.forEach(e => log.error(e.message, 'corrupted interaction data', this));
         }
@@ -73,6 +76,7 @@ export class CreateInteractionFormData {
         interaction.references?.forEach((referenceRelation) => referenceRelation?.linkedInteraction && allInteractions.push(referenceRelation.linkedInteraction));
         interaction.settings?.forEach((settingRelation) => settingRelation?.linkedInteraction && allInteractions.push(settingRelation.linkedInteraction));
         interaction.subjects?.forEach((subjectRelation) => subjectRelation?.linkedInteraction && allInteractions.push(subjectRelation.linkedInteraction));
+        interaction.categories?.forEach((categoryRelation) => categoryRelation?.linkedInteraction && allInteractions.push(categoryRelation.linkedInteraction));
 
         const newEntity = Object.assign(new CreateInteractionFormData(), {
             id: interaction.id,
@@ -93,6 +97,7 @@ export class CreateInteractionFormData {
             settingDtos: interaction.settings?.map(r => CreateRelationDto.fromRelation(r as SettingRelation)) ?? [],
             start: interaction.start,
             subjectDtos: interaction.subjects?.map(r => CreateRelationDto.fromRelation(r as SubjectRelation)) ?? [],
+            categoryDtos: interaction.categories?.map(r => CreateRelationDto.fromRelation(r as CategoryRelation)) ?? [],
             allInteractions: allInteractions
         });
         newEntity.validateOrThrow();

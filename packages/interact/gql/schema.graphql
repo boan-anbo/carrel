@@ -23,6 +23,40 @@ directive @stream(
     label: String
 ) on FIELD
 
+type CategoryRelation {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: Interaction
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: Interaction
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
+}
+
+"A connection to a list of items."
+type CategoryRelationsConnection {
+    "A list of edges."
+    edges: [CategoryRelationsEdge!]
+    "A flattened list of the nodes."
+    nodes: [CategoryRelation!]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+"An edge in a connection."
+type CategoryRelationsEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: CategoryRelation!
+}
+
 type ContextRelation {
     content: String
     description: String
@@ -127,6 +161,18 @@ type GraphQLMutation {
 }
 
 type GraphQLQuery {
+    categoryRelations(
+        "Returns the elements in the list that come after the specified cursor."
+        after: String,
+        "Returns the elements in the list that come before the specified cursor."
+        before: String,
+        "Returns the first _n_ elements from the list."
+        first: Int,
+        "Returns the last _n_ elements from the list."
+        last: Int,
+        order: [CategoryRelationSortInput!],
+        where: CategoryRelationFilterInput
+    ): CategoryRelationsConnection
     contextRelations(
         "Returns the elements in the list that come after the specified cursor."
         after: String,
@@ -344,6 +390,8 @@ type InteractTreeDataFlatChild {
 }
 
 type Interaction {
+    asCategories: [CategoryRelation]
+    asCategoriesCount: Long!
     asContexts: [ContextRelation]
     asContextsCount: Long!
     asFirstActs: [FirstActRelation]
@@ -364,6 +412,8 @@ type Interaction {
     asSettingsCount: Long!
     asSubjects: [SubjectRelation]
     asSubjectsCount: Long!
+    categories: [CategoryRelation]
+    categoriesCount: Long!
     content: String
     contexts: [ContextRelation]
     contextsCount: Long!
@@ -734,6 +784,7 @@ type SubjectRelationsEdge {
 }
 
 enum AsRelationTypes {
+    AS_CATEGORY_RELATION
     AS_CONTEXT_RELATION
     AS_FIRST_ACT_RELATION
     AS_INDIRECT_OBJECT_RELATION
@@ -770,6 +821,7 @@ enum InteractionResultType {
 }
 
 enum RelationTypes {
+    CATEGORY_RELATION
     CONTEXT_RELATION
     FIRST_ACT_RELATION
     INDIRECT_OBJECT_RELATION
@@ -810,6 +862,53 @@ input BranchesInput {
     branchFilterNodes: [InteractionInput!]
     hasBranches: [RelationTypes!]
     roots: [Long!]!
+}
+
+input CategoryRelationFilterInput {
+    and: [CategoryRelationFilterInput!]
+    content: StringOperationFilterInput
+    description: StringOperationFilterInput
+    hits: ComparableInt64OperationFilterInput
+    hostInteraction: InteractionFilterInput
+    hostInteractionId: ComparableInt64OperationFilterInput
+    label: StringOperationFilterInput
+    linkedInteraction: InteractionFilterInput
+    linkedInteractionId: ComparableInt64OperationFilterInput
+    or: [CategoryRelationFilterInput!]
+    order: ComparableInt64OperationFilterInput
+    type: RelationTypesOperationFilterInput
+    uuid: ComparableNullableOfGuidOperationFilterInput
+    weight: RelationWeightOperationFilterInput
+}
+
+input CategoryRelationInput {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: InteractionInput
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: InteractionInput
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
+}
+
+input CategoryRelationSortInput {
+    content: SortEnumType
+    description: SortEnumType
+    hits: SortEnumType
+    hostInteraction: InteractionSortInput
+    hostInteractionId: SortEnumType
+    label: SortEnumType
+    linkedInteraction: InteractionSortInput
+    linkedInteractionId: SortEnumType
+    order: SortEnumType
+    type: SortEnumType
+    uuid: SortEnumType
+    weight: SortEnumType
 }
 
 input ComparableDateTimeOperationFilterInput {
@@ -935,6 +1034,7 @@ input ContextRelationSortInput {
 }
 
 input CreateOrUpdateInteractionRequestDtoInput {
+    categoryDtos: [CreateOrUpdateRelationDtoInput!]
     content: String!
     contextDtos: [CreateOrUpdateRelationDtoInput!]
     data: String
@@ -1071,6 +1171,8 @@ input InteractTreeSeedInput {
 
 input InteractionFilterInput {
     and: [InteractionFilterInput!]
+    asCategories: ListFilterInputTypeOfCategoryRelationFilterInput
+    asCategoriesCount: ComparableInt64OperationFilterInput
     asContexts: ListFilterInputTypeOfContextRelationFilterInput
     asContextsCount: ComparableInt64OperationFilterInput
     asFirstActs: ListFilterInputTypeOfFirstActRelationFilterInput
@@ -1091,6 +1193,8 @@ input InteractionFilterInput {
     asSettingsCount: ComparableInt64OperationFilterInput
     asSubjects: ListFilterInputTypeOfSubjectRelationFilterInput
     asSubjectsCount: ComparableInt64OperationFilterInput
+    categories: ListFilterInputTypeOfCategoryRelationFilterInput
+    categoriesCount: ComparableInt64OperationFilterInput
     content: StringOperationFilterInput
     contexts: ListFilterInputTypeOfContextRelationFilterInput
     contextsCount: ComparableInt64OperationFilterInput
@@ -1136,6 +1240,8 @@ input InteractionIdentityOperationFilterInput {
 }
 
 input InteractionInput {
+    asCategories: [CategoryRelationInput]
+    asCategoriesCount: Long!
     asContexts: [ContextRelationInput]
     asContextsCount: Long!
     asFirstActs: [FirstActRelationInput]
@@ -1156,6 +1262,8 @@ input InteractionInput {
     asSettingsCount: Long!
     asSubjects: [SubjectRelationInput]
     asSubjectsCount: Long!
+    categories: [CategoryRelationInput]
+    categoriesCount: Long!
     content: String
     contexts: [ContextRelationInput]
     contextsCount: Long!
@@ -1193,6 +1301,7 @@ input InteractionInput {
 }
 
 input InteractionSortInput {
+    asCategoriesCount: SortEnumType
     asContextsCount: SortEnumType
     asFirstActsCount: SortEnumType
     asIndirectObjectsCount: SortEnumType
@@ -1203,6 +1312,7 @@ input InteractionSortInput {
     asSecondActsCount: SortEnumType
     asSettingsCount: SortEnumType
     asSubjectsCount: SortEnumType
+    categoriesCount: SortEnumType
     content: SortEnumType
     contextsCount: SortEnumType
     created: SortEnumType
@@ -1231,6 +1341,13 @@ input InteractionSortInput {
 input InteractionTreeOptInput {
     maxBranches: Int
     maxDepth: Int
+}
+
+input ListFilterInputTypeOfCategoryRelationFilterInput {
+    all: CategoryRelationFilterInput
+    any: Boolean
+    none: CategoryRelationFilterInput
+    some: CategoryRelationFilterInput
 }
 
 input ListFilterInputTypeOfContextRelationFilterInput {

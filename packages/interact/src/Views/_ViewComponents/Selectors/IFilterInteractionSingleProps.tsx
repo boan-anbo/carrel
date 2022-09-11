@@ -1,8 +1,8 @@
 import React from "react";
-import {Interaction, InteractionIdentity} from "../../../BackEnd/clients/grl-client/interact_db_client";
+import {Interaction, InteractionIdentity} from "../../../BackEnd/grl-client/interact_db_client";
 import {FilterByEntityRelation} from "./FilterComponents/FilterByEntityRelation";
-import {SizeType} from "antd/lib/config-provider/SizeContext";
 import {SelectValue} from "../_ControlComponents/Select/SelectValue";
+import {MantineSize} from "@mantine/core";
 
 export interface IFilterInteractionSingleProps<T> {
     placeholder: string;
@@ -18,6 +18,6 @@ export interface IFilterInteractionSingleProps<T> {
     // If this is provided, the filter will only query those interaction relations with the hostInteractionId and relationType
     filterByEntityRelation?: FilterByEntityRelation
     showLabel?: boolean;
-    size?: SizeType | undefined;
+    size?: MantineSize | undefined;
     value?: string
 }

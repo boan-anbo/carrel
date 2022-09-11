@@ -1,6 +1,7 @@
 import FilterInteractionSingle from "../_ViewComponents/Selectors/FilterInteractionSingle";
 import {useEffect, useState} from "react";
 import {
+    CategoryRelation,
     ContextRelation,
     FirstActRelation,
     IndirectObjectRelation,
@@ -8,25 +9,31 @@ import {
     ObjectRelation,
     ParallelRelation,
     PurposeRelation,
-    ReferenceRelation,
+    ReferenceRelation, Relation,
     RelationTypes,
     SecondActRelation,
     SettingRelation,
     SubjectRelation,
-} from "../../BackEnd/clients/grl-client/interact_db_client";
-import {getFullInteractionById} from "../../BackEnd/clients/interact-db-client/filter-operations";
+} from "../../BackEnd/grl-client/interact_db_client";
+import {getFullInteractionById} from "../../BackEnd/interact-db-client/filter-operations";
 import {InteractionCardFieldItem} from "./InteractCardFields/InteractionCardFieldItem";
 import {BiData, BiLabel, MdDescription, MdPermIdentity, SiContentful, SiReason} from "react-icons/all";
 import {InteractionCardRelationFieldItem} from "./InteractCardFields/InteractionCardRelationFieldItem";
 import {notify} from "../../Services/toast/notify";
+import { useDispatch } from "react-redux";
+import {selectInteraction} from "../../States/features/app-state/appStateSlice";
+import {Logger, LogSource} from "../../Services/logger";
 
 interface InteractionCardViewProps {
     interaction?: Interaction
 }
 
+const log = new Logger(LogSource.InteractionCardView)
 export function InteractionCardView(props: InteractionCardViewProps) {
 
+
     const [interaction, setInteraction] = useState<Interaction | null>(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
 
@@ -35,6 +42,13 @@ export function InteractionCardView(props: InteractionCardViewProps) {
         }
     }, [props.interaction?.id]);
 
+
+    function onInteractionCardRelationFieldItemClickRelation(relation: Relation) {
+        log.info('onInteractionCardRelationFieldItemClickRelation', 'relation', relation)
+        dispatch(
+            selectInteraction(relation.linkedInteraction as Interaction)
+        )
+    }
 
     return <div className={'px-4'} onMouseDown={e => e.stopPropagation()}>
 
@@ -54,7 +68,7 @@ export function InteractionCardView(props: InteractionCardViewProps) {
         />
         {interaction &&
             <div>
-                <div className={"space-x-0"}>
+                <div className={"space-x-0 space-y-2"}>
                     <div>
                         <InteractionCardFieldItem
                             label={'Label'}
@@ -92,11 +106,28 @@ export function InteractionCardView(props: InteractionCardViewProps) {
                     </div>
 
                     <div className={''}>
-                        <InteractionCardRelationFieldItem<ContextRelation>
+                        <InteractionCardRelationFieldItem<Relation>
+
+                            relationCount={interaction.categoriesCount}
+                            showLabel={false}
+                            placeholder={'Categories'}
+                            relationData={interaction.categories as Relation[]}
+                            interaction={interaction}
+                            icon={<SiReason/>}
+                            label={'Categories'}
+                            size={'small'}
+                            filterByEntityRelation={{
+                                hostId: interaction.id,
+                                relation: RelationTypes.ContextRelation
+                            }}
+                            onClickRelation={onInteractionCardRelationFieldItemClickRelation}/>
+                    </div>
+                    <div className={''}>
+                        <InteractionCardRelationFieldItem<Relation>
                             relationCount={interaction.contextsCount}
                             showLabel={false}
                             placeholder={'Contexts'}
-                            relationData={interaction.contexts as ContextRelation[]}
+                            relationData={interaction.contexts as Relation[]}
                             interaction={interaction}
                             icon={<SiReason/>}
                             label={''}
@@ -105,162 +136,172 @@ export function InteractionCardView(props: InteractionCardViewProps) {
                                 hostId: interaction.id,
                                 relation: RelationTypes.ContextRelation
                             }}
+                            onClickRelation={onInteractionCardRelationFieldItemClickRelation}
                         />
                     </div>
 
                     <div>
-                        <InteractionCardRelationFieldItem<SubjectRelation>
+                        <InteractionCardRelationFieldItem<Relation>
                             relationCount={interaction.subjectsCount}
                             showLabel={false}
                             placeholder={'Subjects'}
-                            relationData={interaction.subjects as SubjectRelation[]}
+                            relationData={interaction.subjects as Relation[]}
                             interaction={interaction}
                             icon={<SiReason/>}
-                            label={''}
+                            label={'Subjects'}
                             size={'small'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.SubjectRelation
                             }}
+                            onClickRelation={onInteractionCardRelationFieldItemClickRelation}
                         />
                     </div>
 
                     <div>
-                        <InteractionCardRelationFieldItem<FirstActRelation>
+                        <InteractionCardRelationFieldItem<Relation>
                             relationCount={interaction.firstActsCount}
                             showLabel={false}
                             placeholder={'First Acts'}
-                            relationData={interaction.firstActs as FirstActRelation[]}
+                            relationData={interaction.firstActs as Relation[]}
                             interaction={interaction}
                             icon={<SiReason/>}
-                            label={''}
+                            label={'1st Actions'}
                             size={'small'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.FirstActRelation
                             }}
+                            onClickRelation={onInteractionCardRelationFieldItemClickRelation}
                         />
                     </div>
 
                     <div>
-                        <InteractionCardRelationFieldItem<ObjectRelation>
+                        <InteractionCardRelationFieldItem<Relation>
                             relationCount={interaction.objectsCount}
                             showLabel={false}
                             placeholder={'Objects'}
-                            relationData={interaction.objects as ObjectRelation[]}
+                            relationData={interaction.objects as Relation[]}
                             interaction={interaction}
                             icon={<SiReason/>}
-                            label={''}
+                            label={"Objects"}
                             size={'small'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.ObjectRelation
                             }}
+                            onClickRelation={onInteractionCardRelationFieldItemClickRelation}
                         />
 
                     </div>
                     <div>
-                        <InteractionCardRelationFieldItem<SecondActRelation>
+                        <InteractionCardRelationFieldItem<Relation>
                             relationCount={interaction.secondActsCount}
                             showLabel={false}
                             placeholder={'Second Acts'}
-                            relationData={interaction.secondActs as SecondActRelation[]}
+                            relationData={interaction.secondActs as Relation[]}
                             interaction={interaction}
                             icon={<SiReason/>}
-                            label={''}
+                            label={'2nd Actions'}
                             size={'small'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.SecondActRelation
                             }}
+                            onClickRelation={onInteractionCardRelationFieldItemClickRelation}
                         />
 
                     </div>
 
                     <div>
-                        <InteractionCardRelationFieldItem<IndirectObjectRelation>
+                        <InteractionCardRelationFieldItem<Relation>
                             relationCount={interaction.indirectObjectsCount}
                             showLabel={false}
                             placeholder={'Indirect Objects'}
-                            relationData={interaction.indirectObjects as IndirectObjectRelation[]}
+                            relationData={interaction.indirectObjects as Relation[]}
                             interaction={interaction}
                             icon={<SiReason/>}
-                            label={''}
+                            label={'Indirect Objects'}
                             size={'small'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.IndirectObjectRelation
                             }}
+                            onClickRelation={onInteractionCardRelationFieldItemClickRelation}
                         />
                     </div>
                     <div>
                         {/*    Setting relation */}
-                        <InteractionCardRelationFieldItem<SettingRelation>
+                        <InteractionCardRelationFieldItem<Relation>
                             relationCount={interaction.settingsCount}
                             showLabel={false}
                             placeholder={'Settings'}
-                            relationData={interaction.settings as SettingRelation[]}
+                            relationData={interaction.settings as Relation[]}
                             interaction={interaction}
                             icon={<SiReason/>}
-                            label={''}
+                            label={'Settings'}
                             size={'small'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.SettingRelation
                             }}
+                            onClickRelation={onInteractionCardRelationFieldItemClickRelation}
                         />
 
                     </div>
 
                     <div>
-                        <InteractionCardRelationFieldItem<PurposeRelation>
+                        <InteractionCardRelationFieldItem<Relation>
                             relationCount={interaction.purposesCount}
                             showLabel={false}
                             placeholder={'Purposes'}
-                            relationData={interaction.purposes as PurposeRelation[]}
+                            relationData={interaction.purposes as Relation[]}
                             interaction={interaction}
                             icon={<SiReason/>}
-                            label={''}
+                            label={'Purposes'}
                             size={'small'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.PurposeRelation
                             }}
+                            onClickRelation={onInteractionCardRelationFieldItemClickRelation}
                         />
                     </div>
 
 
                     <div>
-                        <InteractionCardRelationFieldItem<ReferenceRelation>
+                        <InteractionCardRelationFieldItem<Relation>
                             relationCount={interaction.referencesCount}
                             showLabel={false}
                             placeholder={'References'}
-                            relationData={interaction.references as ReferenceRelation[]}
+                            relationData={interaction.references as Relation[]}
                             interaction={interaction}
                             icon={<SiReason/>}
-                            label={''}
+                            label={'References'}
                             size={'small'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.ReferenceRelation
                             }}
+                            onClickRelation={onInteractionCardRelationFieldItemClickRelation}
                         />
                     </div>
 
                     <div>
-                        <InteractionCardRelationFieldItem<ParallelRelation>
+                        <InteractionCardRelationFieldItem<Relation>
                             relationCount={interaction.parallelsCount}
                             showLabel={false}
                             placeholder={'Parallels'}
-                            relationData={interaction.parallels as ParallelRelation[]}
+                            relationData={interaction.parallels as Relation[]}
                             interaction={interaction}
                             icon={<SiReason/>}
-                            label={''}
+                            label={'Parallels'}
                             size={'small'}
                             filterByEntityRelation={{
                                 hostId: interaction.id,
                                 relation: RelationTypes.ParallelRelation
                             }}
+                            onClickRelation={onInteractionCardRelationFieldItemClickRelation}
                         />
 
                     </div>

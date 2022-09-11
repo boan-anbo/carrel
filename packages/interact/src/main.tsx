@@ -7,15 +7,18 @@ import {getApolloClient} from "./Services/get-apollo-client";
 import {Provider} from 'react-redux'
 import {store} from "./store";
 import {MantineProvider} from "@mantine/core";
+import {BrowserRouter} from "react-router-dom";
 
 
 ReactDOM.render(
     <ApolloProvider client={getApolloClient()}>
         <Provider store={store}>
-                <MantineProvider withGlobalStyles withNormalizeCSS>
+            <MantineProvider withGlobalStyles withNormalizeCSS>
 
-                <App/>
-                </MantineProvider>
+                <BrowserRouter>
+                    <App/>
+                </BrowserRouter>
+            </MantineProvider>
 
         </Provider>
     </ApolloProvider>,

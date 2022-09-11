@@ -301,6 +301,23 @@ public class Interaction
         get => AsReferences.Count;
         set {}
     }
+    
+    // category
+    public virtual ICollection<CategoryRelation> Categories { get; set; } = new List<CategoryRelation>();
+    
+    public long CategoriesCount {
+        get => Categories.Count;
+        set {}
+    }
+    
+    // as category
+    
+    public virtual ICollection<CategoryRelation> AsCategories { get; set; } = new List<CategoryRelation>();
+    
+    public long AsCategoriesCount {
+        get => AsCategories.Count;
+        set {}
+    }
         
 
     /// <inheritdoc cref="Property" />

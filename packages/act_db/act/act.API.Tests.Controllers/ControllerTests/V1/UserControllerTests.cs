@@ -30,11 +30,5 @@ public class UserControllerTests : TestBase
     public async Task CreateUser_Nominal_OK()
     {
         //Simple test
-        var user = await _controller.CreateUser(new UserCreationRequest
-        {
-            Date = DateTime.Now
-        });
-
-        Assert.IsNotNull(user);
     }
 }

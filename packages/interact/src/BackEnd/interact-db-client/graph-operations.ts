@@ -1,4 +1,4 @@
-import {getApolloClient} from "../../../Services/get-apollo-client";
+import {getApolloClient} from "../../Services/get-apollo-client";
 import {
     GrowGraphTreeDocument,
     GrowGraphTreeQuery,

@@ -1,7 +1,7 @@
 import {Title} from '@mantine/core';
-import {useEffect, useState} from "react";
-import {Interaction, RelationTypes} from "../../BackEnd/clients/grl-client/interact_db_client";
-import {createOrUpdateInteraction,} from "../../BackEnd/clients/interact-db-client/create-interaction-entity";
+import {useEffect, useRef, useState} from "react";
+import {Interaction, RelationTypes} from "../../BackEnd/grl-client/interact_db_client";
+import {createOrUpdateInteraction,} from "../../BackEnd/interact-db-client/create-interaction-entity";
 import {notify} from "../../Services/toast/notify";
 import {selectInteraction} from "../../States/features/app-state/appStateSlice";
 import {useDispatch} from "react-redux";
@@ -13,7 +13,7 @@ import {CreateOrUpdateInteractionFormValueInputs} from "./FormComponents/CreateO
 import {CreateInteractionFormData} from "./FormComponents/CreateInteractionFormData";
 import {onFormRelationSelectedHandler} from "./FormComponents/OnFormRelationSelectedHandler";
 import FilterInteractionSingle from "../_ViewComponents/Selectors/FilterInteractionSingle";
-import {getFullInteractionById} from "../../BackEnd/clients/interact-db-client/filter-operations";
+import {getFullInteractionById} from "../../BackEnd/interact-db-client/filter-operations";
 import {SelectValue} from "../_ViewComponents/_ControlComponents/Select/SelectValue";
 import {Logger, LogSource} from "../../Services/logger";
 import {validateInteractionForm} from "./utils/FormValidator";
@@ -23,7 +23,6 @@ import {
     InteractionIdentitySelection
 } from "../_ViewComponents/InteractionIdentitySelection/InteractionIdentitySelection";
 import {FormButtons} from "./FormComponents/FormButtons";
-import {useForm} from "@mantine/form";
 
 interface CreateOrUpdateInteractionFormViewProp {
     size: SizeType | undefined;
@@ -33,16 +32,24 @@ interface CreateOrUpdateInteractionFormViewProp {
 
 export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteractionFormViewProp) => {
 
-    const form = useForm();
     const log = new Logger(LogSource.CreateInteractionForm)
 
     const dispatch = useDispatch();
+
+    /**
+     * Hooked to label input field and automatically refocused on form clearance.
+     */
+    const focusRef = useRef(null)
 
     const [showRawJson, setShowRawJson] = useState(false);
 
     const [currentSelectedInteractionId, setCurrentSelectedInteractionId] = useState<string | undefined>(undefined);
 
+    /**
+     * Whether use edit or create mode
+     */
     const [mode, setMode] = useState<FormMode>(FormMode.CREATE);
+
 
     const [
         formData, // single source of truth for form data
@@ -52,6 +59,7 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
     )
 
     useEffect(() => {
+        // if an interaction is feeded, watch for it and convert it to editable form.
         if (props.existingFormData) {
             loadFormDataFromExistingInteraction(props.existingFormData);
         }
@@ -75,6 +83,9 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         setFormData(new CreateInteractionFormData());
         setCurrentSelectedInteractionId(undefined);
 
+        // @ts-ignore
+        focusRef.current.focus();
+
     }
 
     const validate = () => {
@@ -89,7 +100,7 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         }
     }
 
-    async function onFormFinish(_: any) {
+    async function onFormFinish() {
         log.info("onFormFinish", 'form Data when completed', formData);
 
         validate()
@@ -153,7 +164,7 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
 
             <FilterInteractionSingle
                 value={currentSelectedInteractionId}
-                size={'small'}
+                size={'xs'}
                 placeholder={'Select interaction to update'}
                 onSingleSelectionChange={(selectValue) => {
                     switchFormMode(FormMode.UPDATE)
@@ -164,70 +175,78 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
             />
 
 
-            <form onSubmit={form.onSubmit(onFormFinish)}>
-                {formData && formData.label.length > 0 &&
-                    <div className={'flex space-x-2'}>
-                        <Title order={3} size="h2">
-                            {formData.id && formData?.id > 0 ? formData.id : ''}
-                        </Title>
-                        <Title order={3} size="h2">
-                            {formData.label}
-                        </Title>
-                    </div>
-                }
-
+            {formData && formData.label.length > 0 &&
                 <div className={'flex space-x-2'}>
+                    <Title order={3} size="h2">
+                        {formData.id && formData?.id > 0 ? formData.id : ''}
+                    </Title>
+                    <Title order={3} size="h2">
+                        {formData.label}
+                    </Title>
+                </div>
+            }
 
-                    {/*Identity form*/}
-                    <InteractionIdentitySelection onChange={(value) => setFormData({
+            <div className={'flex space-x-2'}>
+
+                {/*Identity form*/}
+                <InteractionIdentitySelection onChange={(value) => setFormData({
+                    ...formData,
+                    identity: value
+                } as CreateInteractionFormData)}/>
+
+
+            </div>
+
+            <CreateOrUpdateInteractionFormValueInputs
+                focusRef={focusRef}
+                onSubmitForm={onFormFinish}
+                formData={formData} size={'xs'}
+                onLabelChange={(e) => {
+                    setFormData({...formData, label: e} as CreateInteractionFormData)
+                }}
+                onDescriptionChange={(e) => setFormData({
+                    ...formData,
+                    description: e
+                } as CreateInteractionFormData)}
+                onContentChange={(e) => setFormData({
                         ...formData,
-                        identity: value
-                    } as CreateInteractionFormData)}/>
+                        content: e
+                    } as CreateInteractionFormData
+                )}/>
 
+            <CreateOrUpdateInteractionFormRelationInputs
+                onSubmitForm={() => onFormFinish()}
+                formData={formData} size={'xs'}
+                onContextsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.ContextRelation, formData, setFormData)}
+                onSubjectsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.SubjectRelation, formData, setFormData)}
+                onFirstActsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.FirstActRelation, formData, setFormData)}
+                onObjectsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.ObjectRelation, formData, setFormData)}
+                onSecondActsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.SecondActRelation, formData, setFormData)}
 
-                </div>
+                onIndirectObjectsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.IndirectObjectRelation, formData, setFormData)}
+                onSettingsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.SettingRelation, formData, setFormData)}
+                onPurpoesSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.PurposeRelation, formData, setFormData)}
+                onParallelSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.ParallelRelation, formData, setFormData)}
+                onReferencesSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.ReferenceRelation, formData, setFormData)}
+                onCategoriesSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.CategoryRelation, formData, setFormData)}
+            />
 
-                <CreateOrUpdateInteractionFormValueInputs
-                    formData={formData} size={'xs'}
-                    onLabelChange={(e) => {
-                        setFormData({...formData, label: e} as CreateInteractionFormData)
-                    }}
-                    onDescriptionChange={(e) => setFormData({
-                        ...formData,
-                        description: e
-                    } as CreateInteractionFormData)}
-                    onContentChange={(e) => setFormData({
-                            ...formData,
-                            content: e
-                        } as CreateInteractionFormData
-                    )}/>
+            <div className={'flex justify-evenly my-2'}>
 
-                <CreateOrUpdateInteractionFormRelationInputs
-                    formData={formData} size={'xs'}
-                    onContextsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.ContextRelation, formData, setFormData)}
-                    onSubjectsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.SubjectRelation, formData, setFormData)}
-                    onFirstActsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.FirstActRelation, formData, setFormData)}
-                    onObjectsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.ObjectRelation, formData, setFormData)}
-                    onSecondActsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.SecondActRelation, formData, setFormData)}
+                <FormButtons onClearShowJson={() => {
 
-                    onIndirectObjectsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.IndirectObjectRelation, formData, setFormData)}
-                    onSettingsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.SettingRelation, formData, setFormData)}
-                    onPurpoesSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.PurposeRelation, formData, setFormData)}
-                    onParallelSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.ParallelRelation, formData, setFormData)}
-                    onReferencesSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.ReferenceRelation, formData, setFormData)}/>
+                    setShowRawJson(!showRawJson)
+                }}
 
-                <div className={'flex justify-evenly'}>
+                             onClickClear={() => clearFormData()}
+                             onSubmit={() => onFormFinish()}
+                />
+            </div>
+            <div>
 
-                    <FormButtons onClearShowJson={() => {
-                        setShowRawJson(!showRawJson)
-                    }} onClickClear={() => clearFormData()}/>
-                </div>
-                <div>
+                {showRawJson && <pre>{JSON.stringify(formData, null, 2)}</pre>}
+            </div>
 
-                    {showRawJson && <pre>{JSON.stringify(formData, null, 2)}</pre>}
-                </div>
-
-            </form>
         </div>
     );
 }

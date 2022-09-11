@@ -39,6 +39,7 @@ public class InteractDbContext : DbContext
     public DbSet<FirstActRelation?> FirstActRelations { get; set; }
     public DbSet<SecondActRelation?> SecondActRelations { get; set; }
 
+    public DbSet<CategoryRelation> CategoryRelations { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
@@ -220,6 +221,25 @@ public class InteractDbContext : DbContext
             .HasForeignKey(x => x.LinkedInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // category relations
+        modelBuilder.Entity<CategoryRelation>()
+            .HasKey(x => x.Uuid);
+                
+        
+        modelBuilder.Entity<CategoryRelation>()
+            .HasOne(x => x.HostInteraction)
+            .WithMany(x => x.Categories)
+            .HasForeignKey(x => x.HostInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        // reverse category relation
+        
+        modelBuilder.Entity<CategoryRelation>()
+            .HasOne(x => x.LinkedInteraction)
+            .WithMany(x => x.AsCategories)
+            .HasForeignKey(x => x.LinkedInteractionId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
 
         // interaction properties
         modelBuilder.Entity<Property>()
@@ -231,16 +251,16 @@ public class InteractDbContext : DbContext
 
         // configure eager loading for first and second act
 
-        // first acts alway include the linked act interaction
-        modelBuilder.Entity<FirstActRelation>()
-            .Navigation(x => x.LinkedInteraction)
-            .AutoInclude();
-
-
-        // second acts alway include the linked act interaction
-        modelBuilder.Entity<SecondActRelation>()
-            .Navigation(x => x.LinkedInteraction)
-            .AutoInclude();
+        // // first acts alway include the linked act interaction
+        // modelBuilder.Entity<FirstActRelation>()
+        //     .Navigation(x => x.LinkedInteraction)
+        //     .AutoInclude();
+        //
+        //
+        // // second acts alway include the linked act interaction
+        // modelBuilder.Entity<SecondActRelation>()
+        //     .Navigation(x => x.LinkedInteraction)
+        //     .AutoInclude();
 
             
         // Create a sample sentence representation.

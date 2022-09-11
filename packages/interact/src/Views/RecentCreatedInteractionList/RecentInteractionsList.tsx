@@ -1,8 +1,8 @@
 import {useState} from "react";
-import {Interaction, useGetRecentInteractionsQuery} from "../../../BackEnd/clients/grl-client/interact_db_client";
+import {Interaction, useGetRecentInteractionsQuery} from "../../BackEnd/grl-client/interact_db_client";
 import {useDispatch} from "react-redux";
-import {selectInteraction} from "../../../States/features/app-state/appStateSlice";
-import {InteractionList} from "../../_ViewComponents/InteractionList/InteractionList";
+import {selectInteraction} from "../../States/features/app-state/appStateSlice";
+import {InteractionList} from "../_ViewComponents/InteractionList/InteractionList";
 
 export const RecentInteractionsList = () => {
     const [recentInteractions, setRecentInteractions] = useState<Interaction[]>([]);
@@ -29,7 +29,6 @@ export const RecentInteractionsList = () => {
     return (
         <div onClick={e => e.stopPropagation()}>
             <InteractionList onClickInteraction={onClick} interactions={interactions}/>
-
         </div>
     )
 }

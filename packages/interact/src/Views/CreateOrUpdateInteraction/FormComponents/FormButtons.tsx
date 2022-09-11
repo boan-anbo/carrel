@@ -1,7 +1,7 @@
 import {Button} from "@mantine/core";
 import {IconClearAll, IconCode, IconPlus} from "@tabler/icons";
 
-export function FormButtons(props: { onClearShowJson: () => void, onClickClear: () => void }) {
+export function FormButtons(props: { onClearShowJson: () => void, onSubmit: () =>void, onClickClear: () => void }) {
     return <>
         <Button variant="white" leftIcon={<IconCode/>} onClick={props.onClearShowJson}>
             JSON
@@ -10,7 +10,7 @@ export function FormButtons(props: { onClearShowJson: () => void, onClickClear: 
             Clear
         </Button>
 
-        <Button type="submit" leftIcon={<IconPlus/>} variant="white" color="cyan">
+        <Button onClick={props.onSubmit} leftIcon={<IconPlus/>} variant="white" color="cyan">
             Submit
         </Button>
     </>;

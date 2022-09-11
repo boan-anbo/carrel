@@ -1,4 +1,4 @@
-import {Interaction} from "../../../BackEnd/clients/grl-client/interact_db_client";
+import {Interaction} from "../../../BackEnd/grl-client/interact_db_client";
 import Tiptap from "../../_ViewComponents/TextEditorView/Tiptap";
 import {Logger, LogSource} from "../../../Services/logger";
 import {ReactNode, useState} from "react";
@@ -10,7 +10,7 @@ export function InteractionCardFieldItem(props: {
     icon: JSX.Element,
     showLabel?: boolean,
     hideWhenNoValue?: boolean,
-    onValueChange: (value: string) => void
+    onValueChange?: (value: string) => void
 }) {
     const log = new Logger(LogSource.InteractionCardFieldItem)
 
@@ -18,7 +18,9 @@ export function InteractionCardFieldItem(props: {
 
     function onTiptapSave(content: string) {
         setShowEditor(false)
-        props.onValueChange(content)
+        if (props.onValueChange) {
+            props.onValueChange(content)
+        }
 
     }
 

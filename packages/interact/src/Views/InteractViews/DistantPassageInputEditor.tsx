@@ -1,4 +1,4 @@
-import {Passage} from "../../BackEnd/clients/distant_api";
+import {Passage} from "../../BackEnd/distant_api";
 import {DistantDocumentView} from "../Distant/DistantDocumentItem";
 
 export interface DistantPassageInputEditorProps {

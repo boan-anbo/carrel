@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Interaction, InteractionIdentity} from "../../../BackEnd/clients/grl-client/interact_db_client";
+import {Interaction, InteractionIdentity} from "../../../BackEnd/grl-client/interact_db_client";
 import {fetchFilteredInteractionData} from "./FilterComponents/FetchFilteredInteractionData";
 import {IFilterInteractionMultipleProps} from "./IFilterInteractionMultipleProps";
 import {SelectValue} from "../_ControlComponents/Select/SelectValue";
@@ -78,6 +78,7 @@ const FilterInteractionSingle = (props: IFilterInteractionSingleProps<Interactio
             <div className={''}>
                 {props.showLabel && <div>{props.label}</div>}
                 <SingleSelectControl
+                    size={props.size}
                     onDropdownOpen={onSelectDropdownOpen}
                     value={selectedValues}
                     placeholder={props.placeholder}

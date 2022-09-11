@@ -3,7 +3,7 @@ import {
     EdgeOfRelation,
     GraphOfRelationAndInteraction,
     NodeOfInteraction
-} from "../../BackEnd/clients/grl-client/interact_db_client";
+} from "../../BackEnd/grl-client/interact_db_client";
 
 
 export class InteractGraphNode implements IUserNode {

@@ -1,4 +1,4 @@
-import {Interaction, RelationTypes, RelationWeight} from "../../../BackEnd/clients/grl-client/interact_db_client";
+import {Interaction, RelationTypes, RelationWeight} from "../../../BackEnd/grl-client/interact_db_client";
 import {CreateRelationDto} from "./CreateRelationDto";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
 import {Dispatch, SetStateAction} from "react";
@@ -12,12 +12,12 @@ export const onFormRelationSelectedHandler = (
     relations: RelationTypes,
     formData: CreateInteractionFormData,
     setFormData: Dispatch<SetStateAction<CreateInteractionFormData>>) => {
-    log.debug("onFormRelationSelectedHandler", 'Provided selection data', {
-        selectValues,
-        relations,
-        formData,
-        setFormData
-    });
+    // log.info("onFormRelationSelectedHandler", 'Provided selection data', {
+    //     selectValues,
+    //     relations,
+    //     formData,
+    //     setFormData
+    // });
     const createDtos = SelectedInteractionToRelationDto(selectValues, relations)
 
     switch (relations) {

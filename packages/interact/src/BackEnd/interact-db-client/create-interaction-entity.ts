@@ -8,13 +8,13 @@ import {
     Interaction,
     InteractionIdentity
 } from "../grl-client/interact_db_client";
-import {getApolloClient} from "../../../Services/get-apollo-client";
+import {getApolloClient} from "../../Services/get-apollo-client";
 import {FetchResult} from "@apollo/client";
 import {
     CreateInteractionFormData
-} from "../../../Views/CreateOrUpdateInteraction/FormComponents/CreateInteractionFormData";
-import {CreateRelationDto} from "../../../Views/CreateOrUpdateInteraction/FormComponents/CreateRelationDto";
-import {Logger, LogSource} from "../../../Services/logger";
+} from "../../Views/CreateOrUpdateInteraction/FormComponents/CreateInteractionFormData";
+import {CreateRelationDto} from "../../Views/CreateOrUpdateInteraction/FormComponents/CreateRelationDto";
+import {Logger, LogSource} from "../../Services/logger";
 
 const log = new Logger(LogSource.CreateInteractionEntity);
 export async function createInteractionEntity(label: string, identity: InteractionIdentity, description?: string, content?: string): Promise<Interaction> {

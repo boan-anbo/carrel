@@ -1,15 +1,17 @@
 import {useSelector} from "react-redux";
 import {RootState} from "../../store";
-import {Interaction} from "../../BackEnd/clients/grl-client/interact_db_client";
+import {Interaction} from "../../BackEnd/grl-client/interact_db_client";
 import {useEffect, useState} from "react";
-import {InteractionCardView} from "./InteractionCardView";
-import {getFullInteractionById} from "../../BackEnd/clients/interact-db-client/filter-operations";
+import {InteractionCardView} from "../CardView/InteractionCardView";
+import {getFullInteractionById} from "../../BackEnd/interact-db-client/filter-operations";
 import {Logger, LogSource} from "../../Services/logger";
+import {Button} from "@mantine/core";
+import {goBackToLastInteraction} from "../../States/features/app-state/appStateSlice";
+import {IconArrowLeft} from "@tabler/icons";
 
 export const SelectedInteractionDataViewer = () => {
     const log = new Logger(LogSource.SelectedInteractionDataViewer)
     const [fullInteraction, setFullInteraction] = useState<Interaction | null>(null);
-    // get selected interaction
     const selectedInteraction = useSelector((state: RootState) => state.appstate.selectedInteraction);
 
 
@@ -25,10 +27,13 @@ export const SelectedInteractionDataViewer = () => {
     }
 
     useEffect(() => {
-            loadFullInteraction();
+        loadFullInteraction();
     }, [selectedInteraction]);
 
 
+    function onButtonClick() {
+        goBackToLastInteraction()
+    }
 
     return (
         <div onClick={e => e.stopPropagation()}>
@@ -36,9 +41,18 @@ export const SelectedInteractionDataViewer = () => {
             {fullInteraction && <div
                 onClick={e => e.stopPropagation()}
             >
+                <div>
+                    {/*    Mantine button to go back */}
+                    <Button variant='white'
+                            leftIcon={<IconArrowLeft/>}
+                            onClick={onButtonClick}
+                    >
+                        Go back
+                    </Button>
+                </div>
                 <h2>Interaction data</h2>
                 {/*    User html table */}
-                <InteractionCardView  interaction={fullInteraction}/>
+                <InteractionCardView interaction={fullInteraction}/>
 
 
             </div>}

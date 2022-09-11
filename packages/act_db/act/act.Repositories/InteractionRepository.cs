@@ -164,38 +164,61 @@ public class InteractionRepository : IInteractionRepository
     {
         // include
         var query = _dbContext.Interactions
-            .Include(x => x.Subjects)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.AsSubjects)
-            .ThenInclude(x => x.HostInteraction)
-            .Include(x => x.Objects)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.AsObjects)
-            .ThenInclude(x => x.HostInteraction)
-            .Include(x => x.Parallels)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.AsParallels)
-            .ThenInclude(x => x.HostInteraction)
-            .Include(x => x.Settings)
-            .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.AsSettings)
-            .ThenInclude(x => x.HostInteraction)
+                // Contexts
             .Include(x => x.Contexts)
             .ThenInclude(x => x.LinkedInteraction)
             .Include(x => x.AsContexts)
             .ThenInclude(x => x.HostInteraction)
+            
+                // Subjects
+            .Include(x => x.Subjects)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsSubjects)
+            .ThenInclude(x => x.HostInteraction)
+                // Objects
+            .Include(x => x.Objects)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsObjects)
+            .ThenInclude(x => x.HostInteraction)
+                // first acts
+            .Include(x => x.FirstActs)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsFirstActs)
+            .ThenInclude(x => x.HostInteraction)
+                // second acts
+            .Include(x => x.SecondActs)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsSecondActs)
+            .ThenInclude(x => x.HostInteraction)
+            //     // indrect objects
             .Include(x => x.IndirectObjects)
             .ThenInclude(x => x.LinkedInteraction)
             .Include(x => x.AsIndirectObjects)
             .ThenInclude(x => x.HostInteraction)
+                // settings
+            .Include(x => x.Settings)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsSettings)
+            .ThenInclude(x => x.HostInteraction)
+                // parallels
+            .Include(x => x.Parallels)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsParallels)
+            .ThenInclude(x => x.HostInteraction)
+                // purposes
             .Include(x => x.Purposes)
             .ThenInclude(x => x.LinkedInteraction)
             .Include(x => x.AsPurposes)
             .ThenInclude(x => x.HostInteraction)
+                // references
             .Include(x => x.References)
             .ThenInclude(x => x.LinkedInteraction)
             .Include(x => x.AsReferences)
             .ThenInclude(x => x.HostInteraction)
+                // categories
+            .Include(x => x.Categories)
+            .ThenInclude(x => x.LinkedInteraction)
+            .Include(x => x.AsCategories)
             .AsNoTracking()
             .AsQueryable();
         return query;

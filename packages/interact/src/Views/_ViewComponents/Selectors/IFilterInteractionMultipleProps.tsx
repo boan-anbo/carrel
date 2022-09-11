@@ -1,5 +1,5 @@
 import React, {ReactNode} from "react";
-import {Interaction, InteractionIdentity} from "../../../BackEnd/clients/grl-client/interact_db_client";
+import {Interaction, InteractionIdentity} from "../../../BackEnd/grl-client/interact_db_client";
 import {FilterByEntityRelation} from "./FilterComponents/FilterByEntityRelation";
 import {CreateRelationDto} from "../../CreateOrUpdateInteraction/FormComponents/CreateRelationDto";
 import {SelectValue} from "../_ControlComponents/Select/SelectValue";
@@ -21,4 +21,7 @@ export interface IFilterInteractionMultipleProps<T> {
     filterByEntityRelation?: FilterByEntityRelation
     size?: MantineSize | undefined;
     currentValueDtos?: CreateRelationDto[];
+    readOnly?: boolean;
+    // To request the form to be submitted to the upper components.
+    onSubmitForm?: () => void;
 }

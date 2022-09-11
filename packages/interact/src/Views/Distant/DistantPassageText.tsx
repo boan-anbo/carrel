@@ -1,4 +1,4 @@
-import {Passage} from "../../BackEnd/clients/distant_api";
+import {Passage} from "../../BackEnd/distant_api";
 import {MouseEvent} from "react";
 import {useDispatch} from "react-redux";
 import {selectInputText} from "../../States/features/app-state/appStateSlice";

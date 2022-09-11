@@ -49,4 +49,7 @@ public interface IRelationRepository
     IQueryable<ParallelRelation> GetParallelRelationsFull();
     IQueryable<PurposeRelation> GetPurposeRelationsFull();
     IQueryable<SecondActRelation> GetSecondActRelationsFull();
+    
+    // for category
+    IQueryable<CategoryRelation> GetCategoryRelationsFull();
 }

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Interaction, InteractionIdentity} from "../../../BackEnd/clients/grl-client/interact_db_client";
+import {Interaction, InteractionIdentity} from "../../../BackEnd/grl-client/interact_db_client";
 import {CreateRelationDto} from "../../CreateOrUpdateInteraction/FormComponents/CreateRelationDto";
 import {fetchFilteredInteractionData} from "./FilterComponents/FetchFilteredInteractionData";
 import {IFilterInteractionMultipleProps} from "./IFilterInteractionMultipleProps";
@@ -7,6 +7,7 @@ import {SelectValue} from "../_ControlComponents/Select/SelectValue";
 import {Logger, LogSource} from "../../../Services/logger";
 import {MultiSelectValue} from "../_ControlComponents/Select/MultiSelectValue";
 import {MultiSelectControl} from "../_ControlComponents/Select/MultiSelectControl";
+import {createInteractionEntity} from "../../../BackEnd/interact-db-client/create-interaction-entity";
 
 const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Interaction>) => {
     const log = new Logger(LogSource.FilterInteractionMultiple);
@@ -28,7 +29,11 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
 
     }, [props.currentValueDtos]);
 
-    function loadPoolsAndOptions(fetchedOptions: SelectValue<Interaction>[]) {
+    /**
+     * Single source of truth for setting/update the selected values.
+     * @param fetchedOptions
+     */
+    function updateDatePool(fetchedOptions: SelectValue<Interaction>[]) {
 
         setInteractionPool(fetchedOptions);
         setMultiSelectOptions(fetchedOptions.map((selection) => selection.toMultiSelectValue()));
@@ -38,19 +43,21 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
 
         // load initial values
         const fetchedOptions = await fetchFilteredInteractionData('', undefined, props.filterByEntityRelation);
-        loadPoolsAndOptions(fetchedOptions);
+        updateDatePool(fetchedOptions);
 
     }
 
-
-    const loadInteractionsFromPool = (interactionIds: string[]): SelectValue<Interaction>[] => {
-        return interactionPool.filter(i => interactionIds.includes(i.toValueString()));
+    const findInteractionsFromPoolByIds = (interactionIds: string[]) => {
+        return interactionPool.filter(i =>  interactionIds.includes(i.toValueString()));
     }
 
-    const loadSelectValuesFromPool = (interactionIds: string[]): SelectValue<Interaction>[] => {
+    const loadSelectValuesFromPool = (interactionIds: string[], pool?: SelectValue<Interaction>[] | undefined): SelectValue<Interaction>[] => {
 
-        const convertedValues = loadInteractionsFromPool(interactionIds)
-            .map((selection) => {
+        const foundInteractions = pool ?
+            pool.filter(i => interactionIds.includes(i.toValueString())) :
+            findInteractionsFromPoolByIds(interactionIds);
+
+        const convertedValues = foundInteractions.map((selection) => {
                 if (!selection.data) {
                     log.error("Submitting selection to upper level failed because it cannot find the Interaction data from the fetched selection pools", 'Selection Id', selection);
                 }
@@ -75,7 +82,7 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
         let index = 0;
         for await (const currentValueDto of currentValueDtos) {
             if (currentValueDto.linkedInteractionId) {
-                const interactionSelectValue = loadInteractionsFromPool([currentValueDto.linkedInteractionId.toString()])[0];
+                const interactionSelectValue = findInteractionsFromPoolByIds([currentValueDto.linkedInteractionId.toString()])[0];
                 if (interactionSelectValue) {
                     values.push(interactionSelectValue);
                 }
@@ -88,25 +95,64 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
         setSelectedValues(values.map(v => v.toValueString()));
     }
 
-    const handleChange = (selectedIds: string[]) => {
+    /**
+     * The pool is conditionally provided rather than let the function use the state directly, because the state is not updated immediately.
+     * @param selectedIds
+     * @param pool
+     */
+    const emitChange = (selectedIds: string[], pool?: SelectValue<Interaction>[]) => {
 
         // check duplicates
 
         setSelectedValues([...selectedIds]);
-        const latestSelections: SelectValue<Interaction>[] = loadSelectValuesFromPool(selectedIds);
+        const latestSelections: SelectValue<Interaction>[] = loadSelectValuesFromPool(selectedIds, pool);
         log.info("SelectValuesToPassUpwards", 'Selections', latestSelections)
         // pass on latest selections to upper component
         props.onMultiSelectionChange(latestSelections);
     };
 
     /**
-     * Add the newly selected/created/retrived interaction to the options pool and selection
-     * @param interaction
+     * Handler for creating a new interaction on-the-goal
+     * Add the newly selected/created/retrived interaction to the options pool and selection after creation
+     * @param newInteractionLabel
      */
-    function addInteractionToOptionsAndSelection(interaction: Interaction) {
-        const selectionToAdd: SelectValue<Interaction> = SelectValue.fromInteraction(interaction);
-        setMultiSelectOptions([...multiSelectOptions, selectionToAdd.toMultiSelectValue()]);
-        handleChange([...selectedValues, selectionToAdd.toValueString()]);
+    const onMultiSelectControlCreate = async (newInteractionLabel: string) => {
+
+        log.info("onMultiSelectControlCreate", "newInteractionLabel", newInteractionLabel);
+        const createdInteraction = await createInteractionEntity(newInteractionLabel, props.createInteractionIdentity ?? InteractionIdentity.Entity);
+        log.info("onMultiSelectControlCreate", "createdInteraction", createdInteraction);
+        const selectionToAdd: SelectValue<Interaction> = SelectValue.fromInteraction(createdInteraction);
+        // update the option pool of {@see SelectValue<Interaction>}[] so that the newly created interaction can be selected
+        updateDatePool([...interactionPool, selectionToAdd]);
+        // update the selected values so that the newly created interaction can be selected
+        emitChange([...selectedValues, selectionToAdd.toValueString()], [...interactionPool, selectionToAdd]);
+        return
+    }
+
+    /**
+     * On keydown
+     */
+    const onMultiSelectControlKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        // if it's Ctrl + Enter, create a new interaction
+        if (event.altKey && event.key === 'Enter') {
+            const query = event.currentTarget.value;
+            if (!(query.trim().length > 0)) {
+                return;
+            }
+
+            log.info("Creating entity on the goal", "event", event);
+            onMultiSelectControlCreate(event.currentTarget.value);
+            // blur the input field
+            event.currentTarget.blur();
+            // refocus the input field
+            event.currentTarget.focus();
+        }
+
+        // if it's control + alt + enter, submit the whole form
+        if (event.ctrlKey && event.key === 'Enter') {
+            log.info("Submitting the whole form", "event", event);
+            props.onSubmitForm();
+        }
     }
 
     return (
@@ -114,15 +160,20 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
             {/*{JSON.stringify(selectedValues)}*/}
             <div className={''}>
                 <MultiSelectControl
+                    readOnly={props.readOnly}
+                    clearSearchOnChange={true}
                     size={props.size}
+                    clearSearchOnBlur={true}
                     description={props.description}
-                    label={props.label} value={selectedValues} placeholder={props.placeholder}
-                    style={props.style} createLabel={(query) => `Create new entity: ${query}`}
-                    onCreate={(query) => {
-                        const item = {value: query, label: query};
-                        setMultiSelectOptions((current) => [...current, item]);
-                        return item;
-                    }} onChange={handleChange} data={multiSelectOptions}
+                    label={props.label}
+                    value={selectedValues}
+                    placeholder={props.placeholder}
+                    onKeyDown={onMultiSelectControlKeyDown}
+                    style={props.style}
+                    getCreateLabel={(query) => `Create new entity: ${query}`}
+                    onCreate={onMultiSelectControlCreate}
+                    onChange={emitChange}
+                    data={multiSelectOptions}
                 />
             </div>
         </div>

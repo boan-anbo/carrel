@@ -1,5 +1,5 @@
 import FilterInteractionMultiple from "../../_ViewComponents/Selectors/FilterInteractionMultiple";
-import {Interaction, InteractionIdentity} from "../../../BackEnd/clients/grl-client/interact_db_client";
+import {Interaction, InteractionIdentity} from "../../../BackEnd/grl-client/interact_db_client";
 import {CreateInteractionFormData} from "./CreateInteractionFormData";
 import {SelectValue} from "../../_ViewComponents/_ControlComponents/Select/SelectValue";
 import {MantineSize} from "@mantine/core";
@@ -17,12 +17,23 @@ interface CreateOrUpdateInteractionFormRelationInputProps {
     onPurpoesSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
     onParallelSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
     onReferencesSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
+    onCategoriesSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
+    onSubmitForm: () => void;
 }
 
 export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdateInteractionFormRelationInputProps) {
     return <div className={'space-y-4'}>
+        <FilterInteractionMultiple
+            onSubmitForm={props.onSubmitForm}
+            currentValueDtos={props.formData.categoryDtos}
+            label="Categories"
+            size={props.size}
+            placeholder={"Category interactions"} style={{width: "100%"}} onMultiSelectionChange={
+            props.onCategoriesSelected
+        }></FilterInteractionMultiple>
         {/*Relation inputs*/}
         <FilterInteractionMultiple
+            onSubmitForm={props.onSubmitForm}
             description={'Contextual relationship'}
             currentValueDtos={props.formData.contextDtos}
             label="Contexts"
@@ -32,6 +43,7 @@ export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdat
         }></FilterInteractionMultiple>
 
         <FilterInteractionMultiple
+            onSubmitForm={props.onSubmitForm}
             currentValueDtos={props.formData.subjectDtos}
             label="Subjects"
             size={props.size}
@@ -42,6 +54,7 @@ export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdat
 
         {/*Controls for first act*/}
         <FilterInteractionMultiple
+            onSubmitForm={props.onSubmitForm}
             currentValueDtos={props.formData.firstActDtos}
             label="First Acts"
             size={props.size}
@@ -52,6 +65,7 @@ export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdat
 
 
         <FilterInteractionMultiple
+            onSubmitForm={props.onSubmitForm}
             currentValueDtos={props.formData.objectDtos}
             label="Objects"
             size={props.size}
@@ -61,6 +75,7 @@ export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdat
 
         {/*Controls for second act*/}
         <FilterInteractionMultiple
+            onSubmitForm={props.onSubmitForm}
             currentValueDtos={props.formData.secondActDtos}
             label="Second Acts"
             size={props.size}
@@ -71,6 +86,7 @@ export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdat
 
 
         <FilterInteractionMultiple
+            onSubmitForm={props.onSubmitForm}
             currentValueDtos={props.formData.indirectObjectDtos}
             label="Indirect Objects"
             size={props.size}
@@ -79,6 +95,7 @@ export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdat
         }></FilterInteractionMultiple>
 
         <FilterInteractionMultiple
+            onSubmitForm={props.onSubmitForm}
             currentValueDtos={props.formData.settingDtos}
             label="Settings"
             size={props.size}
@@ -88,6 +105,7 @@ export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdat
 
 
         <FilterInteractionMultiple
+            onSubmitForm={props.onSubmitForm}
             currentValueDtos={props.formData.purposeDtos}
             label="Purposes"
             size={props.size}
@@ -96,6 +114,7 @@ export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdat
         }></FilterInteractionMultiple>
 
         <FilterInteractionMultiple
+            onSubmitForm={props.onSubmitForm}
             currentValueDtos={props.formData.parallelDtos}
             label="Parallels"
             size={props.size}
@@ -104,6 +123,7 @@ export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdat
         }></FilterInteractionMultiple>
 
         <FilterInteractionMultiple
+            onSubmitForm={props.onSubmitForm}
             currentValueDtos={props.formData.referenceDtos}
             label="References"
             size={props.size}

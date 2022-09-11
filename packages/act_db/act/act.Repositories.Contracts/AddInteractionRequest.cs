@@ -47,6 +47,8 @@ public class CreateOrUpdateInteractionRequestDto
     public List<CreateOrUpdateRelationDto>? SettingDtos { get; set; } = new();
     public List<CreateOrUpdateRelationDto>? ReferenceDtos { get; set; } = new();
     public List<CreateOrUpdateRelationDto>? PurposeDtos { get; set; } = new();
+    
+    public List<CreateOrUpdateRelationDto>? CategoryDtos { get; set; } = new();
     public List<long>? PropertyIds { get; set; } = new();
     public InteractionIdentity Identity { get; set; } = InteractionIdentity.ENTITY;
 
@@ -123,6 +125,14 @@ public class CreateOrUpdateInteractionRequestDto
         if (PurposeDtos != null && PurposeDtos.Any(x => x.RelationType != RelationTypes.PurposeRelation))
             throw new Exception(
                 $"Relation items in purposeIds must be of the type PurposeRelation, but you provided {PurposeDtos.FindAll(x => x.RelationType != RelationTypes.PurposeRelation).FirstOrDefault()!.RelationType}");
+        
+        if (CategoryDtos != null && CategoryDtos.Any(x => !(x.LinkedInteractionId > 0)))
+            throw new Exception("CategoryIds must be larger than 0");
+        if (CategoryDtos != null && CategoryDtos.Any(x => x.RelationType != RelationTypes.CategoryRelation))
+            throw new Exception(
+                $"Relation items in categoryIds must be of the type CategoryRelation, but you provided {CategoryDtos.FindAll(x => x.RelationType != RelationTypes.CategoryRelation).FirstOrDefault()!.RelationType}");
+            
+        
 
         return true;
     }
@@ -303,6 +313,18 @@ public class CreateOrUpdateRelationDto
                 order
             ) as T,
             RelationTypes.SecondActRelation => Relation.Create<SecondActRelation>(
+                uuid,
+                dto.HostInteractionId,
+                dto.LinkedInteractionId,
+                dto.RelationType,
+                label,
+                description,
+                content,
+                dto.Weight,
+                hits,
+                order
+            ) as T,
+            RelationTypes.CategoryRelation => Relation.Create<CategoryRelation>(
                 uuid,
                 dto.HostInteractionId,
                 dto.LinkedInteractionId,

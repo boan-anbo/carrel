@@ -1,12 +1,13 @@
 import {useEffect, useState} from "react";
 import {FilteredInteractionList} from "./InteractViews/FilteredInteractionList";
-import {InteractionCardView} from "./InteractViews/InteractionCardView";
+import {InteractionCardView} from "./CardView/InteractionCardView";
 import {InteractionGraphView} from "./InteractViews/InteractionGraphView";
 import {SelectedPassageViewer} from "./InteractViews/SelectedPassageViewer";
 import {CreateOrUpdateInteractionFormView} from "./CreateOrUpdateInteraction/CreateOrUpdateInteractionFormView";
 import {SelectedInteractionDataViewer} from "./InteractViews/SelectedInteractionDataViewer";
-import {RecentInteractionsList} from "./InteractViews/RecentInteractions/RecentInteractionsList";
+import {RecentInteractionsList} from "./RecentCreatedInteractionList/RecentInteractionsList";
 import GraphMultiView from "./Graph/GraphMulti/GraphMultiView";
+import {RecentViewedInteractionList} from "./RecentViewedInteractionList/RecentViewedInteractionList";
 
 export enum GridViewTypes {
     NONE,
@@ -19,6 +20,7 @@ export enum GridViewTypes {
     RECENT_INTERACTIONS = 'Recent',
     GRAPH_MULTI_VIEW = 'Multi Graph',
     TEXT_EDITOR = 'Text Editor',
+    Recent_Viewed_Interaction = 'Recent Viewed Interaction',
 
 }
 
@@ -36,6 +38,7 @@ export const GridView = (props: {
         GridViewTypes.CREATE_INTERACTION_FORM,
         GridViewTypes.SELECTED_INTERACTION_CARD,
         GridViewTypes.GRAPH_MULTI_VIEW,
+        GridViewTypes.Recent_Viewed_Interaction
     ]
     useEffect(() => {
         setSelectedView(props.selectedView)
@@ -67,6 +70,7 @@ export const GridView = (props: {
                     {selectedView === GridViewTypes.INTERACTION_CARD_VIEW && <div><InteractionCardView/></div>}
                     {selectedView === GridViewTypes.CREATE_INTERACTION_FORM &&
                         <div><CreateOrUpdateInteractionFormView/></div>}
+                    {selectedView === GridViewTypes.Recent_Viewed_Interaction && <div><RecentViewedInteractionList /></div>}
                 </div>
         </div>
     )

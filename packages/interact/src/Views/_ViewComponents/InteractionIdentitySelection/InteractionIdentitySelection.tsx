@@ -1,5 +1,5 @@
 import {Radio} from "@mantine/core";
-import {InteractionIdentity} from "../../../BackEnd/clients/grl-client/interact_db_client";
+import {InteractionIdentity} from "../../../BackEnd/grl-client/interact_db_client";
 
 export interface InteractionIdentitySelectionProps {
     onChange: (value: InteractionIdentity) => void;

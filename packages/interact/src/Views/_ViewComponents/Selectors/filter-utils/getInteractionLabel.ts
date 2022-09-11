@@ -1,4 +1,4 @@
-import {Interaction, InteractionIdentity} from "../../../../BackEnd/clients/grl-client/interact_db_client";
+import {Interaction, InteractionIdentity} from "../../../../BackEnd/grl-client/interact_db_client";
 import {Logger, LogSource} from "../../../../Services/logger";
 
 const log = new Logger(LogSource.GetInteractionSelectionLabel);

@@ -1,6 +1,6 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createSlice} from '@reduxjs/toolkit'
-import {GraphinTreeDataWithI} from "../../../BackEnd/clients/interact-db-client/graph-operations";
+import {GraphinTreeDataWithI} from "../../../BackEnd/interact-db-client/graph-operations";
 
 export interface GraphState {
     graphHistory: GraphinTreeDataWithI[];

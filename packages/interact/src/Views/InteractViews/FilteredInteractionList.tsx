@@ -1,9 +1,9 @@
-import {Interaction} from "../../BackEnd/clients/grl-client/interact_db_client";
+import {Interaction} from "../../BackEnd/grl-client/interact_db_client";
 import {useState} from "react";
 import {InteractionList} from "../_ViewComponents/InteractionList/InteractionList";
 import {useDispatch} from "react-redux";
 import {selectInteraction} from "../../States/features/app-state/appStateSlice";
-import {filterInteractions} from "../../BackEnd/clients/interact-db-client/filter-operations";
+import {filterInteractions} from "../../BackEnd/interact-db-client/filter-operations";
 import {TextInput} from "../_ViewComponents/_ControlComponents/Input/TextInput";
 
 export const FilteredInteractionList = () => {

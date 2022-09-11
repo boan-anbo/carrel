@@ -535,6 +535,45 @@ public class InteractionService : IInteractionService
                 }
             });
         }
+        
+        // for categories
+        
+        // if no categories are provided, remove all categories
+        
+        if (requestDto.CategoryDtos is null)
+        {
+            interaction.Categories.Clear();
+        }
+        else
+        {
+            foreach (var interactionCategory in GetHostRelationsWOTracing<CategoryRelation>(interaction,
+                         RelationTypes.CategoryRelation))
+            {
+                // if the category is not in the requestDto.categoryDtos, remove it
+                if (!requestDto.CategoryDtos.Any(s => s.Uuid == interactionCategory.Uuid))
+                {
+                    _logger.LogInformation($"Removing category {interactionCategory.Uuid}");
+                    _dbContext.CategoryRelations.Remove(interactionCategory);
+                }
+            }
+        }
+        
+        if (requestDto.CategoryDtos is not null)
+        {
+            requestDto.CategoryDtos?.ForEach(createCategoryDto =>
+            {
+                ValidateOrCorrectDtoHostInteractionId(interaction, createCategoryDto);
+                try
+                {
+                    _relationRepo.CreateOrUpdateRelation<CategoryRelation>(createCategoryDto);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error creating category relation");
+                    throw;
+                }
+            });
+        }
     }
 
     private IQueryable<T> GetHostRelationsWOTracing<T>(Interaction interaction,
@@ -562,6 +601,8 @@ public class InteractionService : IInteractionService
             RelationTypes.ParallelRelation => _dbContext.ParallelRelations.Where(x =>
                 x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
             RelationTypes.ReferenceRelation => _dbContext.ReferenceRelations.Where(x =>
+                x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
+            RelationTypes.CategoryRelation => _dbContext.CategoryRelations.Where(x =>
                 x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
             _ => throw new ArgumentOutOfRangeException(nameof(relationType), relationType, null)
         };

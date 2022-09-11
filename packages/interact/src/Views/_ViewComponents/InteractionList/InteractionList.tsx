@@ -1,10 +1,11 @@
-import {Interaction, InteractionIdentity} from "../../../BackEnd/clients/grl-client/interact_db_client";
+import {Interaction, InteractionIdentity} from "../../../BackEnd/grl-client/interact_db_client";
 import {Text, Timeline} from "@mantine/core";
 import {IconActivity, IconBuildingWarehouse, IconGrain, IconNotebook} from '@tabler/icons';
 import {parseISO} from 'date-fns';
 
 export interface InteractionListProps {
 
+    reverseOrder?: boolean;
     interactions: Interaction[];
     title?: string;
     onClickInteraction?: (interaction: Interaction) => void;
@@ -28,9 +29,10 @@ export function InteractionList(props: InteractionListProps) {
         }
     }
 
+
     return <>
         <h2 className={'text-center'}>{props.title}</h2>
-        <Timeline active={0} bulletSize={24} lineWidth={2}>
+        <Timeline  bulletSize={24} lineWidth={2}>
             {props.interactions.map((interaction, index) =>
                 <Timeline.Item
                     key={index}

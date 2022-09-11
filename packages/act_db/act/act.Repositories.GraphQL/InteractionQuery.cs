@@ -283,6 +283,23 @@ public class GraphQLQuery
     {
         return _repo.GetPurposeRelationsFull();
     }
+    
+    /// <summary>
+    /// Filter category relations
+    ///  </summary>
+    [UsePaging(
+        IncludeTotalCount = true,
+        MaxPageSize = 10000,
+        DefaultPageSize = 100
+    )]
+    [UseFiltering]
+[UseSorting]
+    public IQueryable<CategoryRelation> GetCategoryRelations(
+        [Service(ServiceKind.Synchronized)] IRelationRepository _repo
+    )
+    {
+        return _repo.GetCategoryRelationsFull();
+    }
 
     /// <summary>
     /// Get Tree Graph from relations

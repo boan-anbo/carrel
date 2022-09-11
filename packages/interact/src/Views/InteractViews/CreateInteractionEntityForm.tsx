@@ -1,7 +1,7 @@
 import {Button, Form, Input, Radio} from "antd";
 import {useState} from "react";
-import {InteractionIdentity} from "../../BackEnd/clients/grl-client/interact_db_client";
-import {createInteractionEntity,} from "../../BackEnd/clients/interact-db-client/create-interaction-entity";
+import {InteractionIdentity} from "../../BackEnd/grl-client/interact_db_client";
+import {createInteractionEntity,} from "../../BackEnd/interact-db-client/create-interaction-entity";
 import {notify} from "../../Services/toast/notify";
 import {selectInteraction} from "../../States/features/app-state/appStateSlice";
 import {useDispatch} from "react-redux";

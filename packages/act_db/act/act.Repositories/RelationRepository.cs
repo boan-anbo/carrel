@@ -51,6 +51,8 @@ public class RelationRepository : IRelationRepository
                 return await _dbContext.FirstActRelations.FindAsync(relationId) as T;
             case RelationTypes.SecondActRelation:
                 return await _dbContext.SecondActRelations.FindAsync(relationId) as T;
+            case RelationTypes.CategoryRelation:
+                return await _dbContext.CategoryRelations.FindAsync(relationId) as T;
             default:
                 throw new ArgumentOutOfRangeException(nameof(relationType), relationType, null);
         }
@@ -91,6 +93,10 @@ public class RelationRepository : IRelationRepository
             case RelationTypes.SecondActRelation:
                 _dbContext.SecondActRelations.Remove(relation as SecondActRelation);
                 break;
+            case RelationTypes.CategoryRelation:
+                _dbContext.CategoryRelations.Remove(relation as CategoryRelation);
+                break;
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
@@ -115,6 +121,9 @@ public class RelationRepository : IRelationRepository
             RelationTypes.ReferenceRelation =>
                 await _dbContext.ReferenceRelations.AnyAsync(i => i.Uuid == relationUuid),
             RelationTypes.ContextRelation => await _dbContext.ContextRelations.AnyAsync(i => i.Uuid == relationUuid),
+            RelationTypes.FirstActRelation => await _dbContext.FirstActRelations.AnyAsync(i => i.Uuid == relationUuid),
+            RelationTypes.SecondActRelation => await _dbContext.SecondActRelations.AnyAsync(i => i.Uuid == relationUuid),
+            RelationTypes.CategoryRelation => await _dbContext.CategoryRelations.AnyAsync(i => i.Uuid == relationUuid),
             _ => throw new ArgumentOutOfRangeException(nameof(relationType), relationType, null)
         };
     }
@@ -176,6 +185,10 @@ public class RelationRepository : IRelationRepository
                 var referenceRelation = CreateOrUpdateRelationDto.toRelation<ReferenceRelation>(request);
                 _dbContext.ReferenceRelations.Update(referenceRelation);
                 return referenceRelation as T;
+            case RelationTypes.CategoryRelation:
+                var categoryRelation = CreateOrUpdateRelationDto.toRelation<CategoryRelation>(request);
+                _dbContext.CategoryRelations.Update(categoryRelation);
+                return categoryRelation as T;
             default:
                 throw new ArgumentOutOfRangeException(nameof(request.RelationType), request.RelationType,
                     "Relation type not supported");
@@ -238,6 +251,11 @@ public class RelationRepository : IRelationRepository
                 break;
             case RelationTypes.ReferenceRelation:
                 _dbContext.ReferenceRelations.Remove(await _dbContext.ReferenceRelations.FirstOrDefaultAsync(x =>
+                    x.Uuid == relationId && x.HostInteractionId == hostInteractionId &&
+                    x.LinkedInteractionId == linkedInteractionId));
+                break;
+            case RelationTypes.CategoryRelation:
+                _dbContext.CategoryRelations.Remove(await _dbContext.CategoryRelations.FirstOrDefaultAsync(x =>
                     x.Uuid == relationId && x.HostInteractionId == hostInteractionId &&
                     x.LinkedInteractionId == linkedInteractionId));
                 break;
@@ -324,6 +342,14 @@ public class RelationRepository : IRelationRepository
     public IQueryable<SecondActRelation> GetSecondActRelationsFull()
     {
         return _dbContext.SecondActRelations
+            .Include(x => x.HostInteraction)
+            .Include(x => x.LinkedInteraction)
+            .AsQueryable();
+    }
+    
+    public IQueryable<CategoryRelation> GetCategoryRelationsFull()
+    {
+        return _dbContext.CategoryRelations
             .Include(x => x.HostInteraction)
             .Include(x => x.LinkedInteraction)
             .AsQueryable();

@@ -68,6 +68,14 @@ query GetReferenceRelationByHostId($hostId: Long!) {
     }
 }
 
+# Category relation
+
+query GetCategoryRelationByHostId($hostId: Long!) {
+    categoryRelations(where: {hostInteractionId: {eq: $hostId}}) {
+        ...categoryRelationConnectionFragment
+    }
+}
+
 # Filter by search
 query FilterSubjectRelationByHostId($hostId: Long!, $query: String!) {
     subjectRelations(
@@ -736,5 +744,47 @@ fragment referenceRelationFragment on ReferenceRelation {
     }
 }
 
+# Category fragment
+fragment categoryRelationConnectionFragment on CategoryRelationsConnection {
+    nodes {
+        ...categoryRelationFragment
+    }
+    edges {
+        ...categoryRelationEdge
+    }
+    pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+    }
+    totalCount
+}
+
+fragment categoryRelationEdge on CategoryRelationsEdge {
+    cursor
+    node {
+        ...categoryRelationFragment
+    }
+
+}
+
+fragment categoryRelationFragment on CategoryRelation {
+    label
+    description
+    content
+    linkedInteractionId
+    uuid
+    type
+    weight
+    hostInteractionId
+
+    linkedInteraction {
+        ...interactionFragment
+    }
+    hostInteraction {
+        ...interactionFragment
+    }
+}
 
 
