@@ -16,6 +16,7 @@ export enum LogSource {
     FilterInteractionSingle = 'FilterInteractionSingle',
     InteractionCardView = 'InteractionCardView',
     AppStateSlice   = 'AppStateSlice',
+    SearchState    = 'SearchState',
 }
 
 export class Logger {

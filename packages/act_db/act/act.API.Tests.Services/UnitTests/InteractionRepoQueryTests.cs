@@ -119,7 +119,7 @@ public class InteractionRepoQueryTests : TestBase
                     RelationType = RelationTypes.ReferenceRelation
                 }
             },
-            PropertyIds = null,
+            Properties = null,
             Identity = InteractionIdentity.ACT
         };
 

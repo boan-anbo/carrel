@@ -2,6 +2,7 @@ import {Interaction} from "../../../BackEnd/grl-client/interact_db_client";
 import Tiptap from "../../_ViewComponents/TextEditorView/Tiptap";
 import {Logger, LogSource} from "../../../Services/logger";
 import {ReactNode, useState} from "react";
+import {ThemeIcon, Text} from "@mantine/core";
 
 export function InteractionCardFieldItem(props: {
     fieldValue: string | undefined | null;
@@ -26,7 +27,7 @@ export function InteractionCardFieldItem(props: {
 
     const [showEditor, setShowEditor] = useState(false)
 
-    const showFields = (): ReactNode => {
+    const getFieldValue = (): ReactNode => {
 
         if (props.fieldValue && !showEditor) {
             return <span className={'cursor-text'} onClick={() => setShowEditor(true)}>{props.fieldValue}</span>
@@ -42,17 +43,18 @@ export function InteractionCardFieldItem(props: {
 
     return <div> {shouldShow && <div className={'flex space-x-2 justify-items-center content-center'}>
         <div className={'my-auto'}>
-            {props.icon}
+            <ThemeIcon variant="outline" color="teal">
+                {props.icon}
+            </ThemeIcon>
         </div>
 
         <div>
             {props.showLabel &&
-                <span>{props.label}</span>
-            }
+                <span>{props.label}</span>}
         </div>
-        <div className={'pretty-label-font'}>
-        </div>
-        {showFields()}
+        <Text>
+            {getFieldValue()}
+        </Text>
     </div>
     }
     </div>

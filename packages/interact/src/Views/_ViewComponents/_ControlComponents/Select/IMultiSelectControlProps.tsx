@@ -5,6 +5,7 @@ import {MantineSize} from "@mantine/core";
 import {SelectItem} from "@mantine/core/lib/Select/types";
 
 export interface IMultiSelectControlProps {
+    onSearchChange?: (value: string) => void;
     clearSearchOnChange?: boolean;
     clearSearchOnBlur?: boolean;
     label?: ReactNode | undefined;

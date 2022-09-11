@@ -1,12 +1,27 @@
 import "./App.css";
 import {useSelector} from "react-redux";
 import {RootState} from "./store";
-import {SelectedTextViewer} from "./Views/_ViewComponents/InteractViewComponent/SelectedTextViewer";
 import {GridViewBoard} from "./GridViewBoard";
-import {LinkProps, Route, Routes, useNavigate} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import GraphMultiView from "./Views/Graph/GraphMulti/GraphMultiView";
-import {MainView, NavLinkProps} from "./MainView";
+import {MainHeader, NavLinkProps} from "./MainViews/MainHeader";
+import {MainFooter} from "./MainViews/Footer";
+import {MainNavBar} from "./MainViews/NavBar";
+import {CreateView} from "./CreateView";
 
+
+function DashBoard() {
+    return null;
+}
+
+enum ViewLinks {
+    GRAPH_VIEW = '/graph',
+    DASHBOARD = '/dashboard',
+    CREATE = '/',
+    GRID_VIEW = '/grid',
+    HOME = '/home',
+
+}
 
 function App() {
 
@@ -22,11 +37,14 @@ function App() {
 
     return (
         <div>
-            <MainView onNavLinks={onNavLinks} links={
+            <MainHeader
+                onNavLinks={onNavLinks} links={
                 {
                     mainLinks: [
-                        {label: 'Graph', link: '/graph'},
-                        {label: 'Grid', link: '/grid'},
+                        {label: 'Graph', link: ViewLinks.GRAPH_VIEW},
+                        {label: 'Grid', link: ViewLinks.GRID_VIEW},
+                        {label: 'Home', link: ViewLinks.HOME},
+                        {label: 'Create', link: ViewLinks.CREATE},
                     ],
                     userLinks: [
                         {label: 'Login', link: '/login'},
@@ -34,10 +52,17 @@ function App() {
                     ]
                 }
             }/>
-            <Routes>
-                <Route path={"/graph"} element={<GraphMultiView/>}/>
-                <Route path={"/grid"} element={<GridViewBoard/>}/>
-            </Routes>
+            <div className={'flex'}>
+                <MainNavBar/>
+                <Routes>
+                    <Route path={ViewLinks.DASHBOARD} element={<DashBoard/>}/>
+                    <Route path={ViewLinks.GRAPH_VIEW} element={<GraphMultiView />}/>
+                    <Route path={ViewLinks.GRID_VIEW} element={<GridViewBoard/>}/>
+                    <Route path={ViewLinks.CREATE} element={<CreateView/>}/>
+                </Routes>
+            </div>
+            <MainFooter/>
+
         </div>
     );
 }

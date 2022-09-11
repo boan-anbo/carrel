@@ -1,6 +1,6 @@
 import {Interaction} from "../../BackEnd/grl-client/interact_db_client";
 import {useState} from "react";
-import {InteractionList} from "../_ViewComponents/InteractionList/InteractionList";
+import {InteractTimeLineList} from "../_ViewComponents/InteractionList/InteractTimeLineList";
 import {useDispatch} from "react-redux";
 import {selectInteraction} from "../../States/features/app-state/appStateSlice";
 import {filterInteractions} from "../../BackEnd/interact-db-client/filter-operations";
@@ -36,10 +36,19 @@ export const FilteredInteractionList = () => {
 
     return (
         <div>
+            <InteractTimeLineList
+                title={'Quick Filter'}
+                dividerLabel={'By label'}
+                showTimeline={false}
+                interactions={interactions} onClickInteraction={onInteractionListClickInteraction}>
+
             <TextInput
 
+                placeholder={'Search interactions'}
+                size={'xs'}
                 onChange={onFilterInteractionSingleSelect}/>
-            <InteractionList interactions={interactions} onClickInteraction={onInteractionListClickInteraction}/>
+            </InteractTimeLineList>
+
         </div>
 
     )

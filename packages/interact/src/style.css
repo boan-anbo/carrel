@@ -40,3 +40,7 @@
     @apply b2 border-b border-red-500 b-core
 }
 
+.text-main {
+    color: #228be6
+}
+

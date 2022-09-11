@@ -12,6 +12,8 @@ interface SingleSelectControlProps {
     onChange: (selectedId: string) => void;
     data: MultiSelectValue<Interaction>[];
     size?: MantineSize
+    label?: string;
+    onSearchChange?: (value: string) => void;
 }
 
 export function SingleSelectControl(props: SingleSelectControlProps) {
@@ -21,7 +23,9 @@ export function SingleSelectControl(props: SingleSelectControlProps) {
         onBlur={props.onBlur}
         onDropdownOpen={props.onDropdownOpen}
         clearable
+        onSearchChange={props.onSearchChange}
         searchable
+        label={props.label}
         value={props.value}
         placeholder={props.placeholder}
         style={props.style}

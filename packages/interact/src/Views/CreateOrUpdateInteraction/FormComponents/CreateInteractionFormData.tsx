@@ -25,6 +25,7 @@ export class CreateInteractionFormData {
     label: string = '';
     description: string = '';
     content: string = '';
+    sentence: string = '';
     identity: InteractionIdentity = InteractionIdentity.Entity
     contextDtos: CreateRelationDto[] = [];
     end: Date | null = null;
@@ -85,6 +86,7 @@ export class CreateInteractionFormData {
             description: interaction.description ?? '',
             content: interaction.content ?? '',
             identity: interaction.identity,
+            sentence: interaction.sentence ?? '',
             contextDtos: interaction.contexts?.map(r => CreateRelationDto.fromRelation(r as ContextRelation)) ?? [],
             end: interaction.end,
             firstActDtos: interaction.firstActs?.map(r => CreateRelationDto.fromRelation(r as FirstActRelation)) ?? [],
@@ -99,7 +101,7 @@ export class CreateInteractionFormData {
             subjectDtos: interaction.subjects?.map(r => CreateRelationDto.fromRelation(r as SubjectRelation)) ?? [],
             categoryDtos: interaction.categories?.map(r => CreateRelationDto.fromRelation(r as CategoryRelation)) ?? [],
             allInteractions: allInteractions
-        });
+        } as CreateInteractionFormData);
         newEntity.validateOrThrow();
         return newEntity;
     }

@@ -1,4 +1,4 @@
-import {Title} from '@mantine/core';
+import {Divider, MantineSize, Title} from '@mantine/core';
 import {useEffect, useRef, useState} from "react";
 import {Interaction, RelationTypes} from "../../BackEnd/grl-client/interact_db_client";
 import {createOrUpdateInteraction,} from "../../BackEnd/interact-db-client/create-interaction-entity";
@@ -23,12 +23,30 @@ import {
     InteractionIdentitySelection
 } from "../_ViewComponents/InteractionIdentitySelection/InteractionIdentitySelection";
 import {FormButtons} from "./FormComponents/FormButtons";
+import {JsonView} from "../_ViewComponents/_ControlComponents/JsonView";
+import {InteractDatePicker} from "../_ViewComponents/_ControlComponents/DatePicker/DatePicker";
+import {parseISO} from "date-fns";
 
 interface CreateOrUpdateInteractionFormViewProp {
     size: SizeType | undefined;
     existingFormData?: Interaction;
 }
 
+
+function FormDivider(props: {
+    position: 'left' | 'right' | 'center';
+    label?: string;
+    size?: MantineSize;
+}) {
+    return <Divider my={props.size} label={<span className={"text-gray-400 font-bold"}>{props.label}</span>}
+                    labelPosition={props.position}/>;
+}
+
+FormDivider.defaultProps = {
+    position: 'center',
+    size: 'md'
+
+}
 
 export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteractionFormViewProp) => {
 
@@ -125,6 +143,8 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
         if (mode === FormMode.UPDATE) {
             loadFormDataFromExistingInteraction(updatedEntity);
         }
+        // select the newly created interaction
+        dispatch(selectInteraction(updatedEntity))
     }
 
 
@@ -151,9 +171,25 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
     }
 
 
+    function getDate(end: unknown | null) {
+        if (!end) {
+            return null
+        }
+        // if it's a string, parse it
+        if (typeof end === 'string') {
+            return parseISO(end)
+        }
+
+        // if it's Date
+        if (end instanceof Date) {
+            return end
+        }
+        return null;
+    }
+
     return (
         <div
-            className={'bg-gray-100 rounded drop-shadow px-4 py-2 space-y-4'}
+            className={'rounded drop-shadow px-4 py-2 space-y-4'}
             onMouseDown={e => e.stopPropagation()}>
 
             <div className={'text-center'}>
@@ -163,6 +199,7 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
             </div>
 
             <FilterInteractionSingle
+                label={'Select interaction to edit'}
                 value={currentSelectedInteractionId}
                 size={'xs'}
                 placeholder={'Select interaction to update'}
@@ -174,28 +211,33 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
 
             />
 
+            <FormDivider label={'Interaction'}/>
 
             {formData && formData.label.length > 0 &&
-                <div className={'flex space-x-2'}>
-                    <Title order={3} size="h2">
-                        {formData.id && formData?.id > 0 ? formData.id : ''}
-                    </Title>
-                    <Title order={3} size="h2">
-                        {formData.label}
-                    </Title>
+                <div>
+                    <div className={'flex space-x-2'}>
+                        <Title order={3} size="h2">
+                            {formData.id && formData?.id > 0 ? formData.id : ''}
+                        </Title>
+                        <Title order={3} size="h2">
+                            {formData.label}
+                        </Title>
+                    </div>
+
+                    <div>
+                        <Title className={'opacity-50'} order={6}>{formData.sentence}</Title>
+                    </div>
                 </div>
             }
 
-            <div className={'flex space-x-2'}>
 
-                {/*Identity form*/}
-                <InteractionIdentitySelection onChange={(value) => setFormData({
-                    ...formData,
-                    identity: value
-                } as CreateInteractionFormData)}/>
+            <InteractionIdentitySelection onChange={(value) => setFormData({
+                ...formData,
+                identity: value
+            } as CreateInteractionFormData)}/>
 
 
-            </div>
+            <FormDivider label={'Properties'} size={'xs'}/>
 
             <CreateOrUpdateInteractionFormValueInputs
                 focusRef={focusRef}
@@ -213,6 +255,35 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
                         content: e
                     } as CreateInteractionFormData
                 )}/>
+
+            <FormDivider position={'center'} size={'xs'} label={'Dates'}/>
+
+            <InteractDatePicker
+                size={'xs'}
+                value={getDate(formData.start)}
+                onChange={(e) => {
+                    setFormData({...formData, start: e} as CreateInteractionFormData)
+                }}
+                allowFreeInput={true}
+                label={'Start Date Time'}
+                description={'The start date time of the interaction'}
+                placeholder={'Start Date Time'}
+            />
+
+            <InteractDatePicker
+                size={'xs'}
+                value={getDate(formData.end)}
+                onChange={(e) => {
+                    setFormData({...formData, end: e} as CreateInteractionFormData)
+
+                }}
+                allowFreeInput={true}
+                description={'The end date time of the interaction'}
+                label={'End Date Time'}
+                placeholder={'End Date Time'}
+            />
+
+            <FormDivider position={'center'} size={'xs'} label={'Relations'}/>
 
             <CreateOrUpdateInteractionFormRelationInputs
                 onSubmitForm={() => onFormFinish()}
@@ -242,9 +313,14 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
                              onSubmit={() => onFormFinish()}
                 />
             </div>
+
+            {showRawJson &&
+                <FormDivider position={'center'} size={'xs'} label={'Raw Json'}/>
+            }
+
             <div>
 
-                {showRawJson && <pre>{JSON.stringify(formData, null, 2)}</pre>}
+                {showRawJson && <JsonView json={JSON.stringify(formData, null, 2)} label={'Form Data in JSON'}/>}
             </div>
 
         </div>

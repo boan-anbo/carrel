@@ -21,6 +21,7 @@ export function MultiSelectControl(props: IMultiSelectControlProps) {
         shouldCreate={props.shouldCreate}
         onCreate={props.onCreate}
         onChange={props.onChange}
+        onSearchChange={props.onSearchChange}
         data={props.data}
         readOnly={props.readOnly}
     >

@@ -109,6 +109,7 @@ fragment interactionFragment on Interaction {
     content
     label,
     identity,
+    sentence,
 
     subjects {
         ...subjectFragment

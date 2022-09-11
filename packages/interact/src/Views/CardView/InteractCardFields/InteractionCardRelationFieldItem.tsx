@@ -1,7 +1,7 @@
 import {Interaction, Relation} from "../../../BackEnd/grl-client/interact_db_client";
 import {FilterByEntityRelation} from "../../_ViewComponents/Selectors/FilterComponents/FilterByEntityRelation";
 import {List, MantineSize, Text, ThemeIcon, Title} from "@mantine/core";
-import {IconCircleCheck, IconHierarchy, IconRelationOneToMany} from "@tabler/icons";
+import {IconRelationOneToMany} from "@tabler/icons";
 
 export function InteractionCardRelationFieldItem<T extends Relation>(props: {
     onClickRelation?: (relation: T) => void,
@@ -24,7 +24,7 @@ export function InteractionCardRelationFieldItem<T extends Relation>(props: {
     return <div className={''}>
         {shouldShow &&
             <div>
-                <Title className={'drop-shadow'} size={'h6'}>
+                <Title  className={'drop-shadow my-2'} size={'h6'}>
                     {props.label}
                 </Title>
                 <List
@@ -32,12 +32,15 @@ export function InteractionCardRelationFieldItem<T extends Relation>(props: {
                     size="sm"
                     center
                     icon={
-                        <IconHierarchy className={'text-red-500'} size={17}/>
+                        <ThemeIcon variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }}>
+                            <IconRelationOneToMany size={20} />
+                        </ThemeIcon>
                     }
                 >
                     {props.relationData?.map((relation, index) => {
                         return <List.Item>
-                            <Text onClick={() => props.onClickRelation && props.onClickRelation(relation)}> {relation.linkedInteraction?.label} </Text>
+                            <Text className={'cursor-pointer'} variant={'link'}
+                                onClick={() => props.onClickRelation && props.onClickRelation(relation)}> {relation.linkedInteraction?.label} </Text>
                         </List.Item>
                     })}
                 </List>

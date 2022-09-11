@@ -30,10 +30,10 @@ const FilterInteractionSingle = (props: IFilterInteractionSingleProps<Interactio
         setMultiSelectOptions(fetchedOptions.map((selection) => selection.toMultiSelectValue()));
     }
 
-    const fetchOptions = async () => {
+    const fetchOptions = async (query?: string) => {
 
         // load initial values
-        const fetchedOptions = await fetchFilteredInteractionData('', undefined, props.filterByEntityRelation);
+        const fetchedOptions = await fetchFilteredInteractionData(query ? query : '', undefined, props.filterByEntityRelation);
         loadPoolsAndOptions(fetchedOptions);
 
     }
@@ -78,12 +78,14 @@ const FilterInteractionSingle = (props: IFilterInteractionSingleProps<Interactio
             <div className={''}>
                 {props.showLabel && <div>{props.label}</div>}
                 <SingleSelectControl
+                    label={props.label}
                     size={props.size}
                     onDropdownOpen={onSelectDropdownOpen}
                     value={selectedValues}
                     placeholder={props.placeholder}
                     style={props.style}
                     onChange={handleChange}
+                    onSearchChange={fetchOptions}
                     data={multiSelectOptions}/>
             </div>
         </div>

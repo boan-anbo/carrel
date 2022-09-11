@@ -16,7 +16,7 @@ public class GraphQLMutation : IGraphQLMutation
     // inject db context 
     public GraphQLMutation(
         ILogger<GraphQLMutation> logger
-        )
+    )
     {
         _logger = logger;
     }
@@ -99,6 +99,7 @@ public class GraphQLMutation : IGraphQLMutation
 
         Interaction interaction = requestDto.toInteraction();
 
+
         // check if all subject relations are not tracked by dbcontext's change tracker
 
         // attach the interaction to the dbcontext
@@ -123,8 +124,10 @@ public class GraphQLMutation : IGraphQLMutation
              */
             await _interactionService.UpdateInteractionRelations(requestDto, interaction);
 
+
             // persist
             await _dbContext.SaveChangesAsync();
+
 
             // log persisted
             // add first act if not exists, this has to be done after saving changes
@@ -140,7 +143,12 @@ public class GraphQLMutation : IGraphQLMutation
 
             // return a new interaction with all essential relations.
             var result = await _interactionRepo.GetInteractionFull(interaction.Id);
-            
+
+            // Complete calculations for the fields
+            result.calculateFields();
+            await _interactionRepo.SaveChanges();
+
+
             // remove all relations from the change tracker
             // detach interaction
             // _dbContext.Entry(interaction).State = EntityState.Detached;

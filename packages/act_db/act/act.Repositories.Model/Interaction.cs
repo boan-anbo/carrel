@@ -362,6 +362,7 @@ public class Interaction
     public void UpdateSentence()
     {
         var sb = new StringBuilder();
+        
         var contexts = this.Contexts.Select(s => s.LinkedInteraction.Label).ToList();
         var subjects = this.Subjects.Select(s => s.LinkedInteraction.Label).ToList();
         var firstActs = this.FirstActs.Select(s => s.LinkedInteraction.Label).ToList();
@@ -445,5 +446,13 @@ public class Interaction
         sb.Append(' ');
         sb.Append(label);
         return sb;
+    }
+
+    /// <summary>
+    /// Method to perform before each update.
+    /// </summary>
+    public void calculateFields()
+    {
+        UpdateSentence();
     }
 }

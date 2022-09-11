@@ -78,7 +78,7 @@ interface DoubleHeaderProps {
     userLinks: NavLinkProps[];
 }
 
-export function MainView(props: {
+export function MainHeader(props: {
                              links: DoubleHeaderProps,
                              onNavLinks: (link: NavLinkProps) => void
                          }
@@ -117,7 +117,7 @@ export function MainView(props: {
     ));
 
     return (
-        <Header height={HEADER_HEIGHT} mb={120}>
+        <Header height={HEADER_HEIGHT} mb={5}>
             <Container className={classes.inner}>
                 <MantineLogo size={34}/>
                 <div className={classes.links}>

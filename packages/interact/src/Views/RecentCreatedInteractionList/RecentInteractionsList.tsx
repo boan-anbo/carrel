@@ -2,9 +2,12 @@ import {useState} from "react";
 import {Interaction, useGetRecentInteractionsQuery} from "../../BackEnd/grl-client/interact_db_client";
 import {useDispatch} from "react-redux";
 import {selectInteraction} from "../../States/features/app-state/appStateSlice";
-import {InteractionList} from "../_ViewComponents/InteractionList/InteractionList";
+import {InteractTimeLineList} from "../_ViewComponents/InteractionList/InteractTimeLineList";
+import {MantineSize} from "@mantine/core";
 
-export const RecentInteractionsList = () => {
+export const RecentInteractionsList = (props: {
+    size?: MantineSize;
+}) => {
     const [recentInteractions, setRecentInteractions] = useState<Interaction[]>([]);
 
     const {data, loading, error} = useGetRecentInteractionsQuery();
@@ -28,7 +31,10 @@ export const RecentInteractionsList = () => {
 
     return (
         <div onClick={e => e.stopPropagation()}>
-            <InteractionList onClickInteraction={onClick} interactions={interactions}/>
+            <InteractTimeLineList
+                title={'Recent Interactions'}
+                dividerLabel={'By created date'}
+                size={props.size} onClickInteraction={onClick} interactions={interactions}/>
         </div>
     )
 }

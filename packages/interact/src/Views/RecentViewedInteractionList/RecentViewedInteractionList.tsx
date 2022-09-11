@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {Interaction, useGetRecentInteractionsQuery} from "../../BackEnd/grl-client/interact_db_client";
 import {useDispatch, useSelector} from "react-redux";
-import {InteractionList} from "../_ViewComponents/InteractionList/InteractionList";
+import {InteractTimeLineList} from "../_ViewComponents/InteractionList/InteractTimeLineList";
 import {RootState} from "../../store";
 
 export const RecentViewedInteractionList = () => {
@@ -15,7 +15,7 @@ export const RecentViewedInteractionList = () => {
 
     return (
         <div onClick={e => e.stopPropagation()}>
-            <InteractionList
+            <InteractTimeLineList
 
                 onClickInteraction={onInteractionListClickInteraction} interactions={selectedInteractions}/>
         </div>

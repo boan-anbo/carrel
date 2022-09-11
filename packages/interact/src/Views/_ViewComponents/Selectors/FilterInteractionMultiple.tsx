@@ -8,6 +8,9 @@ import {Logger, LogSource} from "../../../Services/logger";
 import {MultiSelectValue} from "../_ControlComponents/Select/MultiSelectValue";
 import {MultiSelectControl} from "../_ControlComponents/Select/MultiSelectControl";
 import {createInteractionEntity} from "../../../BackEnd/interact-db-client/create-interaction-entity";
+import {SearchState, updateSearchOptionPool} from "../../../States/features/search-state/searchStateSlice";
+import {RootState} from "../../../store";
+import {useDispatch, useSelector} from "react-redux";
 
 const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Interaction>) => {
     const log = new Logger(LogSource.FilterInteractionMultiple);
@@ -15,13 +18,18 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
      * Data for displayed options. Fetched from the backend as {@see Interaction}[], and converted to {@see SelectValue<Interaction>[]} for the Select component.
      */
     const [multiSelectOptions, setMultiSelectOptions] = useState<MultiSelectValue<Interaction>[]>([]);
-    const [interactionPool, setInteractionPool] = useState<SelectValue<Interaction>[]>([]);
     const [selectedValues, setSelectedValues] = useState<string []>([]);
+
+    const searchOptionPool = useSelector<RootState, SearchState>(state => state.searchstate);
+
+    const dispatch = useDispatch();
 
     // on mount
     useEffect(() => {
 
         fetchOptions();
+
+        log.debug('searchOptionPool', 'search pool', searchOptionPool);
 
         if (props.currentValueDtos) {
             loadInitialData();
@@ -35,20 +43,23 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
      */
     function updateDatePool(fetchedOptions: SelectValue<Interaction>[]) {
 
-        setInteractionPool(fetchedOptions);
+        dispatch(
+        updateSearchOptionPool(fetchedOptions)
+        );
         setMultiSelectOptions(fetchedOptions.map((selection) => selection.toMultiSelectValue()));
     }
 
-    const fetchOptions = async () => {
+    const fetchOptions = async (query?: string) => {
+
 
         // load initial values
-        const fetchedOptions = await fetchFilteredInteractionData('', undefined, props.filterByEntityRelation);
+        const fetchedOptions = await fetchFilteredInteractionData(query ? query : '', undefined, props.filterByEntityRelation);
         updateDatePool(fetchedOptions);
 
     }
 
     const findInteractionsFromPoolByIds = (interactionIds: string[]) => {
-        return interactionPool.filter(i =>  interactionIds.includes(i.toValueString()));
+        return searchOptionPool.filter(i => interactionIds.includes(i.toValueString()));
     }
 
     const loadSelectValuesFromPool = (interactionIds: string[], pool?: SelectValue<Interaction>[] | undefined): SelectValue<Interaction>[] => {
@@ -58,12 +69,12 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
             findInteractionsFromPoolByIds(interactionIds);
 
         const convertedValues = foundInteractions.map((selection) => {
-                if (!selection.data) {
-                    log.error("Submitting selection to upper level failed because it cannot find the Interaction data from the fetched selection pools", 'Selection Id', selection);
-                }
-                return SelectValue.fromInteraction(selection.data!)
+            if (!selection.data) {
+                log.error("Submitting selection to upper level failed because it cannot find the Interaction data from the fetched selection pools", 'Selection Id', selection);
+            }
+            return SelectValue.fromInteraction(selection.data!)
 
-            });
+        });
         if (convertedValues.length !== interactionIds.length) {
             log.error("Conversion loss", "before & after", {
                 interactionIds,
@@ -123,9 +134,9 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
         log.info("onMultiSelectControlCreate", "createdInteraction", createdInteraction);
         const selectionToAdd: SelectValue<Interaction> = SelectValue.fromInteraction(createdInteraction);
         // update the option pool of {@see SelectValue<Interaction>}[] so that the newly created interaction can be selected
-        updateDatePool([...interactionPool, selectionToAdd]);
+        updateDatePool([...searchOptionPool, selectionToAdd]);
         // update the selected values so that the newly created interaction can be selected
-        emitChange([...selectedValues, selectionToAdd.toValueString()], [...interactionPool, selectionToAdd]);
+        emitChange([...selectedValues, selectionToAdd.toValueString()], [...searchOptionPool, selectionToAdd]);
         return
     }
 
@@ -176,6 +187,7 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
 
                     // @ts-ignore
                     onCreate={onMultiSelectControlCreate}
+                    onSearchChange={fetchOptions}
                     onChange={emitChange}
                     data={multiSelectOptions}
                 />

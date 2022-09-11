@@ -15,6 +15,9 @@ import {selectInteraction} from "../../../States/features/app-state/appStateSlic
 
 import "/node_modules/react-grid-layout/css/styles.css";
 import "/node_modules/react-resizable/css/styles.css";
+import {Container, SimpleGrid} from '@mantine/core';
+import {PRIMARY_COL_HEIGHT} from "../../../PRIMARY_COL_HEIGHT";
+
 const {TreeCollapse} = Behaviors;
 const data = Utils.mock(5).tree().graphinTree() as GraphinTreeDataWithI;
 
@@ -50,7 +53,9 @@ const layouts = [
 
 ] as Layout[];
 
-export default () => {
+export default (props: {
+    style?: React.CSSProperties,
+}) => {
     const log = new Logger(LogSource.GraphMultiView);
     const {graph, apis} = useContext(GraphinContext);
 
@@ -58,15 +63,27 @@ export default () => {
 
     const [graphData, setGraphData] = React.useState<GraphinTreeDataWithI>(data);
 
+    // current selected interaction
+    const selectedInteraction = useSelector((state: RootState) => state.appstate.selectedInteraction);
     useEffect(() => {
 
-        currentRootInteraction(graphData.interactionId)
+        // currentRootInteraction(graphData.interactionId)
+
+        if (selectedInteraction) {
+            const parseInteractionId = parseInt(selectedInteraction.id);
+            // if is number
+            if (parseInteractionId) {
+                loadGraphData(selectedInteraction.id);
+            }
+        }
+
         return () => {
         };
-    }, []);
+    }, [selectedInteraction]);
 
     // use graph state to store the current root interaction redux state
     const graphHistory = useSelector((state: RootState) => state.graphstate.graphHistory);
+
 
     const dispatch = useDispatch();
 
@@ -95,6 +112,7 @@ export default () => {
         setRootInteraction(interactionFull);
     }
 
+
     const {type} = layouts[0];
 
     function onSelectInteractionToLoad(selection: SelectValue<Interaction>) {
@@ -122,14 +140,12 @@ export default () => {
     }
 
     return (
-        <div>
-            <div className={'w-50p m-2'}>
+        <Container style={{width: '100vw'}} my="md">
+            <SimpleGrid cols={1} spacing="md" breakpoints={[{maxWidth: 'xl', cols: 1}]}>
                 <FilterInteractionSingle style={{width: '100%'}} placeholder={'Open interact'}
                                          onSingleSelectionChange={onSelectInteractionToLoad}/>
-            </div>
-            <div >
                 {<GraphTreeView
-                    style={{height: '1200px'}}
+                    style={{width: '100%', height: '60vh'}}
                     onLoadInteraction={loadGraphData}
                     key={layout.type}
                     layout={layout}
@@ -137,14 +153,12 @@ export default () => {
                     data={graphData}
                     type={type} onSelectInteraction={onGraphTreeViewSelectInteraction}/>
                 }
-            </div>
-            <div>
                 Browse History{graphHistory.map(graph => <span
                 onClick={() => {
                     loadGraphData(graph.interactionId, false);
                 }}
                 className={graph.interactionId.toString() == rootInteraction?.id ? 'b2-active' : 'b2'}>{graph.style?.label?.value ?? graph.interactionId.toString()}</span>)}
-            </div>
-        </div>
+            </SimpleGrid>
+        </Container>
     );
 };
