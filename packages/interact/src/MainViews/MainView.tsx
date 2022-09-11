@@ -3,7 +3,7 @@ import {CreateOrUpdateInteractionFormView} from "./Views/CreateOrUpdateInteracti
 import {SelectedInteractionDataViewer} from "./Views/InteractViews/SelectedInteractionDataViewer";
 import {RecentInteractionsList} from "./Views/RecentCreatedInteractionList/RecentInteractionsList";
 import {PRIMARY_COL_HEIGHT} from "./PRIMARY_COL_HEIGHT";
-import GraphMultiView from "./Views/Graph/GraphMulti/GraphMultiView";
+import GraphMultiView from "./Views/Graph/GraphTree/GraphTreeView";
 import {FilteredInteractionList} from "./Views/InteractViews/FilteredInteractionList";
 
 export function CreateView() {
