@@ -51,8 +51,8 @@ public class RelationRepository : IRelationRepository
                 return await _dbContext.FirstActRelations.FindAsync(relationId) as T;
             case RelationTypes.SecondActRelation:
                 return await _dbContext.SecondActRelations.FindAsync(relationId) as T;
-            case RelationTypes.CategoryRelation:
-                return await _dbContext.CategoryRelations.FindAsync(relationId) as T;
+            case RelationTypes.TagRelation:
+                return await _dbContext.TagRelations.FindAsync(relationId) as T;
             default:
                 throw new ArgumentOutOfRangeException(nameof(relationType), relationType, null);
         }
@@ -93,8 +93,8 @@ public class RelationRepository : IRelationRepository
             case RelationTypes.SecondActRelation:
                 _dbContext.SecondActRelations.Remove(relation as SecondActRelation);
                 break;
-            case RelationTypes.CategoryRelation:
-                _dbContext.CategoryRelations.Remove(relation as CategoryRelation);
+            case RelationTypes.TagRelation:
+                _dbContext.TagRelations.Remove(relation as TagRelation);
                 break;
 
             default:
@@ -123,7 +123,7 @@ public class RelationRepository : IRelationRepository
             RelationTypes.ContextRelation => await _dbContext.ContextRelations.AnyAsync(i => i.Uuid == relationUuid),
             RelationTypes.FirstActRelation => await _dbContext.FirstActRelations.AnyAsync(i => i.Uuid == relationUuid),
             RelationTypes.SecondActRelation => await _dbContext.SecondActRelations.AnyAsync(i => i.Uuid == relationUuid),
-            RelationTypes.CategoryRelation => await _dbContext.CategoryRelations.AnyAsync(i => i.Uuid == relationUuid),
+            RelationTypes.TagRelation => await _dbContext.TagRelations.AnyAsync(i => i.Uuid == relationUuid),
             _ => throw new ArgumentOutOfRangeException(nameof(relationType), relationType, null)
         };
     }
@@ -185,10 +185,10 @@ public class RelationRepository : IRelationRepository
                 var referenceRelation = CreateOrUpdateRelationDto.toRelation<ReferenceRelation>(request);
                 _dbContext.ReferenceRelations.Update(referenceRelation);
                 return referenceRelation as T;
-            case RelationTypes.CategoryRelation:
-                var categoryRelation = CreateOrUpdateRelationDto.toRelation<CategoryRelation>(request);
-                _dbContext.CategoryRelations.Update(categoryRelation);
-                return categoryRelation as T;
+            case RelationTypes.TagRelation:
+                var tagRelation = CreateOrUpdateRelationDto.toRelation<TagRelation>(request);
+                _dbContext.TagRelations.Update(tagRelation);
+                return tagRelation as T;
             default:
                 throw new ArgumentOutOfRangeException(nameof(request.RelationType), request.RelationType,
                     "Relation type not supported");
@@ -254,8 +254,8 @@ public class RelationRepository : IRelationRepository
                     x.Uuid == relationId && x.HostInteractionId == hostInteractionId &&
                     x.LinkedInteractionId == linkedInteractionId));
                 break;
-            case RelationTypes.CategoryRelation:
-                _dbContext.CategoryRelations.Remove(await _dbContext.CategoryRelations.FirstOrDefaultAsync(x =>
+            case RelationTypes.TagRelation:
+                _dbContext.TagRelations.Remove(await _dbContext.TagRelations.FirstOrDefaultAsync(x =>
                     x.Uuid == relationId && x.HostInteractionId == hostInteractionId &&
                     x.LinkedInteractionId == linkedInteractionId));
                 break;
@@ -347,9 +347,9 @@ public class RelationRepository : IRelationRepository
             .AsQueryable();
     }
     
-    public IQueryable<CategoryRelation> GetCategoryRelationsFull()
+    public IQueryable<TagRelation> GetTagRelationsFull()
     {
-        return _dbContext.CategoryRelations
+        return _dbContext.TagRelations
             .Include(x => x.HostInteraction)
             .Include(x => x.LinkedInteraction)
             .AsQueryable();

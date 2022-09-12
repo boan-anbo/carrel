@@ -39,7 +39,7 @@ public class InteractDbContext : DbContext
     public DbSet<FirstActRelation?> FirstActRelations { get; set; }
     public DbSet<SecondActRelation?> SecondActRelations { get; set; }
 
-    public DbSet<CategoryRelation> CategoryRelations { get; set; }
+    public DbSet<TagRelation> TagRelations { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
@@ -222,21 +222,21 @@ public class InteractDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
 
         // category relations
-        modelBuilder.Entity<CategoryRelation>()
+        modelBuilder.Entity<TagRelation>()
             .HasKey(x => x.Uuid);
                 
         
-        modelBuilder.Entity<CategoryRelation>()
+        modelBuilder.Entity<TagRelation>()
             .HasOne(x => x.HostInteraction)
-            .WithMany(x => x.Categories)
+            .WithMany(x => x.Tags)
             .HasForeignKey(x => x.HostInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
         
         // reverse category relation
         
-        modelBuilder.Entity<CategoryRelation>()
+        modelBuilder.Entity<TagRelation>()
             .HasOne(x => x.LinkedInteraction)
-            .WithMany(x => x.AsCategories)
+            .WithMany(x => x.AsTags)
             .HasForeignKey(x => x.LinkedInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
         

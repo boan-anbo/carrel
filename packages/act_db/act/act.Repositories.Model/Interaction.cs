@@ -135,197 +135,216 @@ public class Interaction
     public long ContextsCount
     {
         get => Contexts.Count;
-        set {}
+        set { }
     }
 
     /// as contexts
     public virtual ICollection<ContextRelation> AsContexts { get; set; } = new List<ContextRelation>();
 
     // computed field of number of times the interaction is used AS first act in the DB. Should hold large number of first acts.
-    public long AsContextsCount 
+    public long AsContextsCount
     {
         get => AsContexts.Count;
-        set {}
+        set { }
     }
 
     /// <inheritdoc cref="Act"/>
     public virtual ICollection<FirstActRelation> FirstActs { get; set; } = new List<FirstActRelation>();
-    
-    public long FirstActsCount 
+
+    public long FirstActsCount
     {
         get => FirstActs.Count;
-        set {}
+        set { }
     }
 
     // as first acts
     public virtual ICollection<FirstActRelation> AsFirstActs { get; set; } = new List<FirstActRelation>();
-    
+
     // computed field of number of times the interaction is used AS first act in the DB. Should hold large number of first acts.
-    public long AsFirstActsCount 
+    public long AsFirstActsCount
     {
         // get count from db
         get => AsFirstActs.Count;
-        set {}
+        set { }
     }
 
     /// Link to Act: <see cref="Act"/>
     /// <inheritdoc cref="Act"/> 
     public virtual ICollection<SecondActRelation> SecondActs { get; set; } = new List<SecondActRelation>();
-    
-    public long SecondActsCount {
+
+    public long SecondActsCount
+    {
         get => SecondActs.Count;
-        set {}
+        set { }
     }
-     
+
 
     // as second acts
     public virtual ICollection<SecondActRelation> AsSecondActs { get; set; } = new List<SecondActRelation>();
-        
-    public long AsSecondActsCount {
+
+    public long AsSecondActsCount
+    {
         get => AsSecondActs.Count;
-        set {}
+        set { }
     }
 
-    
+
     /// <inheritdoc cref="SubjectRelation" />
     public virtual ICollection<SubjectRelation> Subjects { get; set; } = new List<SubjectRelation>();
-    
-    public long SubjectsCount {
+
+    public long SubjectsCount
+    {
         get => Subjects.Count;
-        set {}
+        set { }
     }
-    
+
 
     /// as subject
     public virtual ICollection<SubjectRelation> AsSubjects { get; set; } = new List<SubjectRelation>();
 
-    public long AsSubjectsCount {
+    public long AsSubjectsCount
+    {
         get => AsSubjects.Count;
-        set {}
+        set { }
     }
 
     /// <inheritdoc cref="ParallelRelation" />
     public virtual ICollection<ParallelRelation> Parallels { get; set; } = new List<ParallelRelation>();
-     
-    public long ParallelsCount {
+
+    public long ParallelsCount
+    {
         get => Parallels.Count;
-        set {}
+        set { }
     }
 
     /// as parallel
     public virtual ICollection<ParallelRelation> AsParallels { get; set; } = new List<ParallelRelation>();
-    
-    public long AsParallelsCount {
+
+    public long AsParallelsCount
+    {
         get => AsParallels.Count;
-        set {}
+        set { }
     }
 
     /// <inheritdoc cref="SubjectRelation" />
     public virtual ICollection<ObjectRelation> Objects { get; set; } = new List<ObjectRelation>();
-    
-    public long ObjectsCount {
+
+    public long ObjectsCount
+    {
         get => Objects.Count;
-        set {}
+        set { }
     }
 
     /// as object
     public virtual ICollection<ObjectRelation> AsObjects { get; set; } = new List<ObjectRelation>();
-    
-    public long AsObjectsCount {
+
+    public long AsObjectsCount
+    {
         get => AsObjects.Count;
-        set {}
+        set { }
     }
 
     /// <inheritdoc cref="SettingRelation" />
     public virtual ICollection<SettingRelation> Settings { get; set; } = new List<SettingRelation>();
-    
-    public long SettingsCount   {
+
+    public long SettingsCount
+    {
         get => Settings.Count;
-        set {}
+        set { }
     }
 
     /// as setting
     public virtual ICollection<SettingRelation> AsSettings { get; set; } = new List<SettingRelation>();
-    
-    public long AsSettingsCount     {
+
+    public long AsSettingsCount
+    {
         get => AsSettings.Count;
-        set {}
+        set { }
     }
 
     /// <inheritdoc cref="SettingRelation" />
     public virtual ICollection<PurposeRelation> Purposes { get; set; } = new List<PurposeRelation>();
-    
-    public long PurposesCount {
+
+    public long PurposesCount
+    {
         get => Purposes.Count;
-        set {}
+        set { }
     }
 
     /// as purpose
     public virtual ICollection<PurposeRelation> AsPurposes { get; set; } = new List<PurposeRelation>();
-    
-    public long AsPurposesCount {
+
+    public long AsPurposesCount
+    {
         get => AsPurposes.Count;
-        set {}
+        set { }
     }
 
     /// <inheritdoc cref="SettingRelation" />
     public virtual ICollection<IndirectObjectRelation> IndirectObjects { get; set; } =
         new List<IndirectObjectRelation>();
-    
-    public long IndirectObjectsCount {
+
+    public long IndirectObjectsCount
+    {
         get => IndirectObjects.Count;
-        set {}
+        set { }
     }
 
     /// as indirect object
     public virtual ICollection<IndirectObjectRelation> AsIndirectObjects { get; set; } =
         new List<IndirectObjectRelation>();
-    
-    public long AsIndirectObjectsCount {
+
+    public long AsIndirectObjectsCount
+    {
         get => AsIndirectObjects.Count;
-        set {}
+        set { }
     }
 
     /// <inheritdoc cref="ReferenceRelation" />
     public virtual ICollection<ReferenceRelation> References { get; set; } = new List<ReferenceRelation>();
-    
-    public long ReferencesCount {
+
+    public long ReferencesCount
+    {
         get => References.Count;
-        set {}
+        set { }
     }
 
     /// as reference
     public virtual ICollection<ReferenceRelation> AsReferences { get; set; } = new List<ReferenceRelation>();
-    
-    public long AsReferencesCount   {
+
+    public long AsReferencesCount
+    {
         get => AsReferences.Count;
-        set {}
+        set { }
     }
-    
+
     // category
-    public virtual ICollection<CategoryRelation> Categories { get; set; } = new List<CategoryRelation>();
-    
-    public long CategoriesCount {
-        get => Categories.Count;
-        set {}
+    public virtual ICollection<TagRelation> Tags { get; set; } = new List<TagRelation>();
+
+    public long TagsCount
+    {
+        get => Tags.Count;
+        set { }
     }
-    
+
     // as category
-    
-    public virtual ICollection<CategoryRelation> AsCategories { get; set; } = new List<CategoryRelation>();
-    
-    public long AsCategoriesCount {
-        get => AsCategories.Count;
-        set {}
+
+    public virtual ICollection<TagRelation> AsTags { get; set; } = new List<TagRelation>();
+
+    public long AsTagsCount
+    {
+        get => AsTags.Count;
+        set { }
     }
-        
+
 
     /// <inheritdoc cref="Property" />
     public virtual ICollection<Property> Properties { get; set; } = new List<Property>();
-    
-    public long PropertiesCount {
+
+    public long PropertiesCount
+    {
         get => Properties.Count;
-        set {}
+        set { }
     }
 
 
@@ -346,7 +365,7 @@ public class Interaction
         var interaction = new Interaction { Label = label };
         return interaction;
     }
-    
+
     /// <summary>
     ///  Factory pattern from label and identiy
     ///  </summary>
@@ -362,7 +381,7 @@ public class Interaction
     public void UpdateSentence()
     {
         var sb = new StringBuilder();
-        
+
         var contexts = this.Contexts.Select(s => s.LinkedInteraction.Label).ToList();
         var subjects = this.Subjects.Select(s => s.LinkedInteraction.Label).ToList();
         var firstActs = this.FirstActs.Select(s => s.LinkedInteraction.Label).ToList();
@@ -373,6 +392,7 @@ public class Interaction
         var purposes = this.Purposes.Select(s => s.LinkedInteraction.Label).ToList();
         var parallels = this.Parallels.Select(s => s.LinkedInteraction.Label).ToList();
         var references = this.References.Select(s => s.LinkedInteraction.Label).ToList();
+        var tags = this.Tags.Select(s => s.LinkedInteraction.Label).ToList();
 
         if (contexts.Any())
         {
@@ -401,7 +421,7 @@ public class Interaction
                 sb = SentenceClauseBuilder(index, sb, label, objects.Count - 1);
             }
         }
-        
+
         if (firstActs.Any())
         {
             // for each loop with index

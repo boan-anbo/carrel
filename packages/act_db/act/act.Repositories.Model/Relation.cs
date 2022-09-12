@@ -19,7 +19,7 @@ public enum RelationTypes
     PurposeRelation,
     ParallelRelation,
     ReferenceRelation,
-    CategoryRelation
+    TagRelation
 
     // to string method
 }
@@ -44,7 +44,7 @@ public enum AsRelationTypes
     AsPurposeRelation,
     AsParallelRelation,
     AsReferenceRelation,
-    AsCategoryRelation,
+    AsTagRelation,
 }
 
 // static to string for relation types
@@ -72,11 +72,10 @@ public static class RelationTypesExtensions
                 return "for the purpose of";
             case RelationTypes.ParallelRelation:
                 return "is related to";
-
             case RelationTypes.ReferenceRelation:
                 return "is cited from";
-            case RelationTypes.CategoryRelation:
-                return "is a category of";
+            case RelationTypes.TagRelation:
+                return "is a tag of";
             default:
                 throw new ArgumentOutOfRangeException(nameof(value), value, null);
         }
@@ -373,7 +372,7 @@ public class SecondActRelation : Relation
 /// <summary>
 /// Category relations
 /// </summary>
-public class CategoryRelation : Relation
+public class TagRelation : Relation
 {
     
 }

@@ -294,11 +294,11 @@ public class GraphQLQuery
     )]
     [UseFiltering]
 [UseSorting]
-    public IQueryable<CategoryRelation> GetCategoryRelations(
+    public IQueryable<TagRelation> GetTagRelations(
         [Service(ServiceKind.Synchronized)] IRelationRepository _repo
     )
     {
-        return _repo.GetCategoryRelationsFull();
+        return _repo.GetTagRelationsFull();
     }
 
     /// <summary>

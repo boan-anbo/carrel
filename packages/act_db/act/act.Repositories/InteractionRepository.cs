@@ -216,9 +216,9 @@ public class InteractionRepository : IInteractionRepository
             .Include(x => x.AsReferences)
             .ThenInclude(x => x.HostInteraction)
                 // categories
-            .Include(x => x.Categories)
+            .Include(x => x.Tags)
             .ThenInclude(x => x.LinkedInteraction)
-            .Include(x => x.AsCategories)
+            .Include(x => x.AsTags)
             .AsNoTracking()
             .AsQueryable();
         return query;

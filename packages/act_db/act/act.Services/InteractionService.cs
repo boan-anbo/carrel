@@ -540,32 +540,32 @@ public class InteractionService : IInteractionService
         
         // if no categories are provided, remove all categories
         
-        if (requestDto.CategoryDtos is null)
+        if (requestDto.TagDtos is null)
         {
-            interaction.Categories.Clear();
+            interaction.Tags.Clear();
         }
         else
         {
-            foreach (var interactionCategory in GetHostRelationsWOTracing<CategoryRelation>(interaction,
-                         RelationTypes.CategoryRelation))
+            foreach (var interactionTag in GetHostRelationsWOTracing<TagRelation>(interaction,
+                         RelationTypes.TagRelation))
             {
                 // if the category is not in the requestDto.categoryDtos, remove it
-                if (!requestDto.CategoryDtos.Any(s => s.Uuid == interactionCategory.Uuid))
+                if (!requestDto.TagDtos.Any(s => s.Uuid == interactionTag.Uuid))
                 {
-                    _logger.LogInformation($"Removing category {interactionCategory.Uuid}");
-                    _dbContext.CategoryRelations.Remove(interactionCategory);
+                    _logger.LogInformation($"Removing category {interactionTag.Uuid}");
+                    _dbContext.TagRelations.Remove(interactionTag);
                 }
             }
         }
         
-        if (requestDto.CategoryDtos is not null)
+        if (requestDto.TagDtos is not null)
         {
-            requestDto.CategoryDtos?.ForEach(createCategoryDto =>
+            requestDto.TagDtos?.ForEach(createTagDto =>
             {
-                ValidateOrCorrectDtoHostInteractionId(interaction, createCategoryDto);
+                ValidateOrCorrectDtoHostInteractionId(interaction, createTagDto);
                 try
                 {
-                    _relationRepo.CreateOrUpdateRelation<CategoryRelation>(createCategoryDto);
+                    _relationRepo.CreateOrUpdateRelation<TagRelation>(createTagDto);
                 }
                 catch (Exception e)
                 {
@@ -602,7 +602,7 @@ public class InteractionService : IInteractionService
                 x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
             RelationTypes.ReferenceRelation => _dbContext.ReferenceRelations.Where(x =>
                 x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
-            RelationTypes.CategoryRelation => _dbContext.CategoryRelations.Where(x =>
+            RelationTypes.TagRelation => _dbContext.TagRelations.Where(x =>
                 x.HostInteractionId == interaction.Id).AsNoTracking() as IQueryable<T>,
             _ => throw new ArgumentOutOfRangeException(nameof(relationType), relationType, null)
         };

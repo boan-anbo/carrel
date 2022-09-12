@@ -160,7 +160,7 @@ public class Graph<NODE_TYPE, EDGE_TYPE>
             graph.Nodes.Add(Node<Interaction>.FromInteraction(relation.LinkedInteraction));
         }
         
-        foreach (var relation in hostInteraction.Categories)
+        foreach (var relation in hostInteraction.Tags)
         {
             graph.Edges.Add(Edge<Relation>.FromInteraction(relation));
             graph.Nodes.Add(Node<Interaction>.FromInteraction(relation.LinkedInteraction));

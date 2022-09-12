@@ -51,5 +51,5 @@ public interface IRelationRepository
     IQueryable<SecondActRelation> GetSecondActRelationsFull();
     
     // for category
-    IQueryable<CategoryRelation> GetCategoryRelationsFull();
+    IQueryable<TagRelation> GetTagRelationsFull();
 }
