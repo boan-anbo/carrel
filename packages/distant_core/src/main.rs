@@ -33,10 +33,18 @@ pub mod api_error {
     include!("generated/api_error.rs");
 }
 
-
+use std::env;
+use crate::app::{OPENAPI_SPEC_JSON_PATH, SWAGGER_PATH};
 
 #[tokio::main]
 async fn main() {
+
+    let args: Vec<String> = std::env::args().collect();
+
+    // get first arg
+    let user_provided_port = args.get(1).unwrap_or(&"3000".to_string()).clone();
+    // try parse port as number
+    let port: u16 = user_provided_port.parse().unwrap_or(3000);
 
 
     // initialize .env
@@ -51,8 +59,10 @@ async fn main() {
 
     let app = app::get_app();
     // build the grpc service
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    let addr = SocketAddr::from(([127, 0, 0, 1], port));
     tracing::info!("listening on {}", addr);
+    tracing::info!("swagger ui available at {}{}", addr, SWAGGER_PATH.replace("*tail", ""));
+    tracing::info!("openapi spec available at {}{}", addr, OPENAPI_SPEC_JSON_PATH);
     axum::Server::bind(&addr)
         .serve(
             app.into_make_service()
