@@ -8,6 +8,7 @@ using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Services.Contracts;
 using act.Services.Model;
+using act.Services.Model.Utils;
 using AutoMapper;
 using HotChocolate;
 using Microsoft.EntityFrameworkCore;
@@ -574,6 +575,20 @@ public class InteractionService : IInteractionService
                 }
             });
         }
+        
+    }
+
+    public async Task updateInteractionSentence(Interaction result)
+    {
+        // load all relations for interaction, and linked interactions
+        var interactionWithAllRelations = await _interactionRepo.GetInteractionFullWithAllRelations(result.Id);
+        _dbContext.ChangeTracker.Clear();
+        interactionWithAllRelations.UpdateCalculatedFields();
+        // update
+        _dbContext.Update(interactionWithAllRelations);
+        // save changes
+        await _dbContext.SaveChangesAsync();
+         
     }
 
     private IQueryable<T> GetHostRelationsWOTracing<T>(Interaction interaction,

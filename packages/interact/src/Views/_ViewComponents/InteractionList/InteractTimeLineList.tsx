@@ -55,7 +55,10 @@ export function InteractTimeLineList(props: InteractionListProps) {
                     title={interaction.label}>
 
                     <Text color="dimmed" size={props.size}>
-                        <Text size={props.size} variant="link" component="span" inherit>{interaction.sentence}</Text>
+                        <Text size={props.size} variant="link" component="span" inherit>{
+                            // use first 12 words of description
+                            interaction.sentence?.split(' ').slice(0, 12).join(' ')
+                        }</Text>
                     </Text>
                     <Text size={props.size} mt={4}>
 

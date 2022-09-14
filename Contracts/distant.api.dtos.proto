@@ -26,3 +26,51 @@ message DistantApiSearchResponse {
 message DistantApiScrollRequest {
   string scroll_id = 1;
 }
+
+// #[serde(rename = "health")]
+// pub health: String,
+
+// #[serde(rename = "status")]
+// pub status: String,
+
+// #[serde(rename = "index")]
+// pub index: String,
+
+// #[serde(rename = "uuid")]
+// pub uuid: String,
+
+// #[serde(rename = "pri")]
+// pub pri: String,
+
+// #[serde(rename = "rep")]
+// pub rep: String,
+
+// #[serde(rename = "docs.count")]
+// pub docs_count: String,
+
+// #[serde(rename = "docs.deleted")]
+// pub docs_deleted: String,
+
+// #[serde(rename = "store.size")]
+// pub store_size: String,
+
+// #[serde(rename = "pri.store.size")]
+// pub pri_store_size: String,
+message IndexInfo {
+  string health = 1;
+  string status = 2;
+  string index = 3;
+  string uuid = 4;
+  string pri = 5;
+  string rep = 6;
+  string docs_count = 7;
+  string docs_deleted = 8;
+  string store_size = 9;
+  string pri_store_size = 10;
+}
+
+message DistantListIndexResponse {
+  repeated IndexInfo indices = 1;
+  // count sint32
+   int32 count = 2;
+}

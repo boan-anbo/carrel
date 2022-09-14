@@ -23,40 +23,6 @@ directive @stream(
     label: String
 ) on FIELD
 
-type CategoryRelation {
-    content: String
-    description: String
-    hits: Long!
-    hostInteraction: Interaction
-    hostInteractionId: Long!
-    label: String
-    linkedInteraction: Interaction
-    linkedInteractionId: Long!
-    order: Long!
-    type: RelationTypes!
-    uuid: UUID
-    weight: RelationWeight!
-}
-
-"A connection to a list of items."
-type CategoryRelationsConnection {
-    "A list of edges."
-    edges: [CategoryRelationsEdge!]
-    "A flattened list of the nodes."
-    nodes: [CategoryRelation!]
-    "Information to aid in pagination."
-    pageInfo: PageInfo!
-    totalCount: Int!
-}
-
-"An edge in a connection."
-type CategoryRelationsEdge {
-    "A cursor for use in pagination."
-    cursor: String!
-    "The item at the end of the edge."
-    node: CategoryRelation!
-}
-
 type ContextRelation {
     content: String
     description: String
@@ -161,18 +127,6 @@ type GraphQLMutation {
 }
 
 type GraphQLQuery {
-    categoryRelations(
-        "Returns the elements in the list that come after the specified cursor."
-        after: String,
-        "Returns the elements in the list that come before the specified cursor."
-        before: String,
-        "Returns the first _n_ elements from the list."
-        first: Int,
-        "Returns the last _n_ elements from the list."
-        last: Int,
-        order: [CategoryRelationSortInput!],
-        where: CategoryRelationFilterInput
-    ): CategoryRelationsConnection
     contextRelations(
         "Returns the elements in the list that come after the specified cursor."
         after: String,
@@ -319,6 +273,18 @@ type GraphQLQuery {
         order: [SubjectRelationSortInput!],
         where: SubjectRelationFilterInput
     ): SubjectRelationsConnection
+    tagRelations(
+        "Returns the elements in the list that come after the specified cursor."
+        after: String,
+        "Returns the elements in the list that come before the specified cursor."
+        before: String,
+        "Returns the first _n_ elements from the list."
+        first: Int,
+        "Returns the last _n_ elements from the list."
+        last: Int,
+        order: [TagRelationSortInput!],
+        where: TagRelationFilterInput
+    ): TagRelationsConnection
     treeGraph(seed: InteractTreeSeedInput!): [InteractTreeDataFlat!]!
 }
 
@@ -390,8 +356,6 @@ type InteractTreeDataFlatChild {
 }
 
 type Interaction {
-    asCategories: [CategoryRelation]
-    asCategoriesCount: Long!
     asContexts: [ContextRelation]
     asContextsCount: Long!
     asFirstActs: [FirstActRelation]
@@ -412,8 +376,8 @@ type Interaction {
     asSettingsCount: Long!
     asSubjects: [SubjectRelation]
     asSubjectsCount: Long!
-    categories: [CategoryRelation]
-    categoriesCount: Long!
+    asTags: [TagRelation]
+    asTagsCount: Long!
     content: String
     contexts: [ContextRelation]
     contextsCount: Long!
@@ -447,6 +411,8 @@ type Interaction {
     start: DateTime
     subjects: [SubjectRelation]
     subjectsCount: Long!
+    tags: [TagRelation]
+    tagsCount: Long!
     uuid: UUID!
 }
 
@@ -783,8 +749,41 @@ type SubjectRelationsEdge {
     node: SubjectRelation!
 }
 
+type TagRelation {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: Interaction
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: Interaction
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
+}
+
+"A connection to a list of items."
+type TagRelationsConnection {
+    "A list of edges."
+    edges: [TagRelationsEdge!]
+    "A flattened list of the nodes."
+    nodes: [TagRelation!]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+    totalCount: Int!
+}
+
+"An edge in a connection."
+type TagRelationsEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: TagRelation!
+}
+
 enum AsRelationTypes {
-    AS_CATEGORY_RELATION
     AS_CONTEXT_RELATION
     AS_FIRST_ACT_RELATION
     AS_INDIRECT_OBJECT_RELATION
@@ -795,6 +794,7 @@ enum AsRelationTypes {
     AS_SECOND_ACT_RELATION
     AS_SETTING_RELATION
     AS_SUBJECT_RELATION
+    AS_TAG_RELATION
 }
 
 enum BranchDirection {
@@ -821,7 +821,6 @@ enum InteractionResultType {
 }
 
 enum RelationTypes {
-    CATEGORY_RELATION
     CONTEXT_RELATION
     FIRST_ACT_RELATION
     INDIRECT_OBJECT_RELATION
@@ -832,6 +831,7 @@ enum RelationTypes {
     SECOND_ACT_RELATION
     SETTING_RELATION
     SUBJECT_RELATION
+    TAG_RELATION
 }
 
 enum RelationWeight {
@@ -862,53 +862,6 @@ input BranchesInput {
     branchFilterNodes: [InteractionInput!]
     hasBranches: [RelationTypes!]
     roots: [Long!]!
-}
-
-input CategoryRelationFilterInput {
-    and: [CategoryRelationFilterInput!]
-    content: StringOperationFilterInput
-    description: StringOperationFilterInput
-    hits: ComparableInt64OperationFilterInput
-    hostInteraction: InteractionFilterInput
-    hostInteractionId: ComparableInt64OperationFilterInput
-    label: StringOperationFilterInput
-    linkedInteraction: InteractionFilterInput
-    linkedInteractionId: ComparableInt64OperationFilterInput
-    or: [CategoryRelationFilterInput!]
-    order: ComparableInt64OperationFilterInput
-    type: RelationTypesOperationFilterInput
-    uuid: ComparableNullableOfGuidOperationFilterInput
-    weight: RelationWeightOperationFilterInput
-}
-
-input CategoryRelationInput {
-    content: String
-    description: String
-    hits: Long!
-    hostInteraction: InteractionInput
-    hostInteractionId: Long!
-    label: String
-    linkedInteraction: InteractionInput
-    linkedInteractionId: Long!
-    order: Long!
-    type: RelationTypes!
-    uuid: UUID
-    weight: RelationWeight!
-}
-
-input CategoryRelationSortInput {
-    content: SortEnumType
-    description: SortEnumType
-    hits: SortEnumType
-    hostInteraction: InteractionSortInput
-    hostInteractionId: SortEnumType
-    label: SortEnumType
-    linkedInteraction: InteractionSortInput
-    linkedInteractionId: SortEnumType
-    order: SortEnumType
-    type: SortEnumType
-    uuid: SortEnumType
-    weight: SortEnumType
 }
 
 input ComparableDateTimeOperationFilterInput {
@@ -1034,7 +987,6 @@ input ContextRelationSortInput {
 }
 
 input CreateOrUpdateInteractionRequestDtoInput {
-    categoryDtos: [CreateOrUpdateRelationDtoInput!]
     content: String!
     contextDtos: [CreateOrUpdateRelationDtoInput!]
     data: String
@@ -1054,6 +1006,7 @@ input CreateOrUpdateInteractionRequestDtoInput {
     settingDtos: [CreateOrUpdateRelationDtoInput!]
     start: DateTime
     subjectDtos: [CreateOrUpdateRelationDtoInput!]
+    tagDtos: [CreateOrUpdateRelationDtoInput!]
     uuid: UUID
 }
 
@@ -1171,8 +1124,6 @@ input InteractTreeSeedInput {
 
 input InteractionFilterInput {
     and: [InteractionFilterInput!]
-    asCategories: ListFilterInputTypeOfCategoryRelationFilterInput
-    asCategoriesCount: ComparableInt64OperationFilterInput
     asContexts: ListFilterInputTypeOfContextRelationFilterInput
     asContextsCount: ComparableInt64OperationFilterInput
     asFirstActs: ListFilterInputTypeOfFirstActRelationFilterInput
@@ -1193,8 +1144,8 @@ input InteractionFilterInput {
     asSettingsCount: ComparableInt64OperationFilterInput
     asSubjects: ListFilterInputTypeOfSubjectRelationFilterInput
     asSubjectsCount: ComparableInt64OperationFilterInput
-    categories: ListFilterInputTypeOfCategoryRelationFilterInput
-    categoriesCount: ComparableInt64OperationFilterInput
+    asTags: ListFilterInputTypeOfTagRelationFilterInput
+    asTagsCount: ComparableInt64OperationFilterInput
     content: StringOperationFilterInput
     contexts: ListFilterInputTypeOfContextRelationFilterInput
     contextsCount: ComparableInt64OperationFilterInput
@@ -1229,6 +1180,8 @@ input InteractionFilterInput {
     start: ComparableNullableOfDateTimeOperationFilterInput
     subjects: ListFilterInputTypeOfSubjectRelationFilterInput
     subjectsCount: ComparableInt64OperationFilterInput
+    tags: ListFilterInputTypeOfTagRelationFilterInput
+    tagsCount: ComparableInt64OperationFilterInput
     uuid: ComparableGuidOperationFilterInput
 }
 
@@ -1240,8 +1193,6 @@ input InteractionIdentityOperationFilterInput {
 }
 
 input InteractionInput {
-    asCategories: [CategoryRelationInput]
-    asCategoriesCount: Long!
     asContexts: [ContextRelationInput]
     asContextsCount: Long!
     asFirstActs: [FirstActRelationInput]
@@ -1262,8 +1213,8 @@ input InteractionInput {
     asSettingsCount: Long!
     asSubjects: [SubjectRelationInput]
     asSubjectsCount: Long!
-    categories: [CategoryRelationInput]
-    categoriesCount: Long!
+    asTags: [TagRelationInput]
+    asTagsCount: Long!
     content: String
     contexts: [ContextRelationInput]
     contextsCount: Long!
@@ -1297,11 +1248,12 @@ input InteractionInput {
     start: DateTime
     subjects: [SubjectRelationInput]
     subjectsCount: Long!
+    tags: [TagRelationInput]
+    tagsCount: Long!
     uuid: UUID!
 }
 
 input InteractionSortInput {
-    asCategoriesCount: SortEnumType
     asContextsCount: SortEnumType
     asFirstActsCount: SortEnumType
     asIndirectObjectsCount: SortEnumType
@@ -1312,7 +1264,7 @@ input InteractionSortInput {
     asSecondActsCount: SortEnumType
     asSettingsCount: SortEnumType
     asSubjectsCount: SortEnumType
-    categoriesCount: SortEnumType
+    asTagsCount: SortEnumType
     content: SortEnumType
     contextsCount: SortEnumType
     created: SortEnumType
@@ -1335,19 +1287,13 @@ input InteractionSortInput {
     settingsCount: SortEnumType
     start: SortEnumType
     subjectsCount: SortEnumType
+    tagsCount: SortEnumType
     uuid: SortEnumType
 }
 
 input InteractionTreeOptInput {
     maxBranches: Int
     maxDepth: Int
-}
-
-input ListFilterInputTypeOfCategoryRelationFilterInput {
-    all: CategoryRelationFilterInput
-    any: Boolean
-    none: CategoryRelationFilterInput
-    some: CategoryRelationFilterInput
 }
 
 input ListFilterInputTypeOfContextRelationFilterInput {
@@ -1425,6 +1371,13 @@ input ListFilterInputTypeOfSubjectRelationFilterInput {
     any: Boolean
     none: SubjectRelationFilterInput
     some: SubjectRelationFilterInput
+}
+
+input ListFilterInputTypeOfTagRelationFilterInput {
+    all: TagRelationFilterInput
+    any: Boolean
+    none: TagRelationFilterInput
+    some: TagRelationFilterInput
 }
 
 input ObjectRelationFilterInput {
@@ -1793,6 +1746,53 @@ input SubjectRelationInput {
 }
 
 input SubjectRelationSortInput {
+    content: SortEnumType
+    description: SortEnumType
+    hits: SortEnumType
+    hostInteraction: InteractionSortInput
+    hostInteractionId: SortEnumType
+    label: SortEnumType
+    linkedInteraction: InteractionSortInput
+    linkedInteractionId: SortEnumType
+    order: SortEnumType
+    type: SortEnumType
+    uuid: SortEnumType
+    weight: SortEnumType
+}
+
+input TagRelationFilterInput {
+    and: [TagRelationFilterInput!]
+    content: StringOperationFilterInput
+    description: StringOperationFilterInput
+    hits: ComparableInt64OperationFilterInput
+    hostInteraction: InteractionFilterInput
+    hostInteractionId: ComparableInt64OperationFilterInput
+    label: StringOperationFilterInput
+    linkedInteraction: InteractionFilterInput
+    linkedInteractionId: ComparableInt64OperationFilterInput
+    or: [TagRelationFilterInput!]
+    order: ComparableInt64OperationFilterInput
+    type: RelationTypesOperationFilterInput
+    uuid: ComparableNullableOfGuidOperationFilterInput
+    weight: RelationWeightOperationFilterInput
+}
+
+input TagRelationInput {
+    content: String
+    description: String
+    hits: Long!
+    hostInteraction: InteractionInput
+    hostInteractionId: Long!
+    label: String
+    linkedInteraction: InteractionInput
+    linkedInteractionId: Long!
+    order: Long!
+    type: RelationTypes!
+    uuid: UUID
+    weight: RelationWeight!
+}
+
+input TagRelationSortInput {
     content: SortEnumType
     description: SortEnumType
     hits: SortEnumType

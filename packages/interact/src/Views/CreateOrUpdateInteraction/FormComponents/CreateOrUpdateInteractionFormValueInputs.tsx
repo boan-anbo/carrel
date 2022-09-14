@@ -18,7 +18,7 @@ export function CreateOrUpdateInteractionFormValueInputs(props: ICreateOrUpdateI
 
         <TextInput
             focusRef={props.focusRef}
-            onSubmitForm={props.onSubmitForm}
+            onPressCtrlEnter={props.onSubmitForm}
             label={'Label'}
             required
             size={props.size}
@@ -28,7 +28,7 @@ export function CreateOrUpdateInteractionFormValueInputs(props: ICreateOrUpdateI
         />
 
         <TextInput
-            onSubmitForm={props.onSubmitForm}
+            onPressCtrlEnter={props.onSubmitForm}
             label={'Description'}
             size={props.size}
             value={props.formData.description}
@@ -37,7 +37,7 @@ export function CreateOrUpdateInteractionFormValueInputs(props: ICreateOrUpdateI
         />
 
         <TextInput
-            onSubmitForm={props.onSubmitForm}
+            onPressCtrlEnter={props.onSubmitForm}
             label={'Content'}
             size={props.size}
             value={props.formData.content}

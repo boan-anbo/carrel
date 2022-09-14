@@ -32,4 +32,6 @@ public interface IInteractionService
         CreateOrUpdateInteractionRequestDto requestDto,
         Interaction? interaction
     );
+
+    Task updateInteractionSentence(Interaction result);
 }

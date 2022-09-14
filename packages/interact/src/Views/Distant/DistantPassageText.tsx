@@ -2,6 +2,7 @@ import {Passage} from "../../BackEnd/distant_api";
 import {MouseEvent} from "react";
 import {useDispatch} from "react-redux";
 import {selectInputText} from "../../States/features/app-state/appStateSlice";
+import { Paper } from "@mantine/core";
 
 export function DistantPassageText(props: { passage: Passage; onTextSelected?: (text: string | null) => void }) {
     // dispatch the selected text to the store
@@ -23,10 +24,13 @@ export function DistantPassageText(props: { passage: Passage; onTextSelected?: (
 
     }
 
-    return <div
+    return <Paper
 
-        className="p-2 rounded bg-gray-50 drop-shadow" dangerouslySetInnerHTML={{__html: props.passage.text}}
+        shadow={'xs'}
+        p={'md'}
+        className={'mt-2'}
+        dangerouslySetInnerHTML={{__html: props.passage.text}}
         onMouseUp={onDivMouseUp}>
 
-    </div>;
+    </Paper>;
 }

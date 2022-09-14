@@ -71,7 +71,7 @@ query GetReferenceRelationByHostId($hostId: Long!) {
 # Category relation
 
 query GetCategoryRelationByHostId($hostId: Long!) {
-    categoryRelations(where: {hostInteractionId: {eq: $hostId}}) {
+    tagRelations(where: {hostInteractionId: {eq: $hostId}}) {
         ...categoryRelationConnectionFragment
     }
 }
@@ -277,8 +277,8 @@ query FilterReferenceRelationByHostId($hostId: Long!, $query: String!) {
     }
 }
 
-query FilterCategoryRelationByHostId($hostId: Long!, $query: String!) {
-    categoryRelations(
+query FilterTagRelationByHostId($hostId: Long!, $query: String!) {
+    tagRelations(
         where: {
             hostInteractionId: {eq: $hostId}
             and:
@@ -764,7 +764,7 @@ fragment referenceRelationFragment on ReferenceRelation {
 }
 
 # Category fragment
-fragment categoryRelationConnectionFragment on CategoryRelationsConnection {
+fragment categoryRelationConnectionFragment on TagRelationsConnection {
     nodes {
         ...categoryRelationFragment
     }
@@ -780,7 +780,7 @@ fragment categoryRelationConnectionFragment on CategoryRelationsConnection {
     totalCount
 }
 
-fragment categoryRelationEdge on CategoryRelationsEdge {
+fragment categoryRelationEdge on TagRelationsEdge {
     cursor
     node {
         ...categoryRelationFragment
@@ -788,7 +788,7 @@ fragment categoryRelationEdge on CategoryRelationsEdge {
 
 }
 
-fragment categoryRelationFragment on CategoryRelation {
+fragment categoryRelationFragment on TagRelation {
     label
     description
     content

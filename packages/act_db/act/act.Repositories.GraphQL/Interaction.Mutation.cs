@@ -124,6 +124,7 @@ public class GraphQLMutation : IGraphQLMutation
              */
             await _interactionService.UpdateInteractionRelations(requestDto, interaction);
 
+            // Complete calculations for the fields
 
             // persist
             await _dbContext.SaveChangesAsync();
@@ -141,13 +142,13 @@ public class GraphQLMutation : IGraphQLMutation
 
             _logger.LogInformation($"Interaction Scalar Added: {interaction.ToJson()}");
 
+            // Update the interaction sentence.
+            await _interactionService.updateInteractionSentence(interaction);
+            
             // return a new interaction with all essential relations.
             var result = await _interactionRepo.GetInteractionFull(interaction.Id);
 
-            // Complete calculations for the fields
-            result.calculateFields();
-            await _interactionRepo.SaveChanges();
-
+            
 
             // remove all relations from the change tracker
             // detach interaction

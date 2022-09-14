@@ -1,16 +1,17 @@
 import {Interaction} from "../../BackEnd/grl-client/interact_db_client";
 import {InteractionCardFieldItem} from "./InteractCardFields/InteractionCardFieldItem";
 import {BiData, BiLabel, MdDescription, MdPermIdentity, SiContentful} from "react-icons/all";
-import {IconCalendar, IconCalendarOff, IconCalendarPlus, IconWorld} from "@tabler/icons";
+import {IconCalendar, IconCalendarOff, IconCalendarPlus, IconWorld, IconWriting} from "@tabler/icons";
 import {parseDateTime} from "../../Utils/ParseDateForPicker";
+import {JsonView} from "../_ViewComponents/_ControlComponents/JsonView";
 
 export function InteractCardPropertyFields(props: { interaction: Interaction }) {
     return <>
-
         <div>
             <InteractionCardFieldItem
                 label={"Sentence"}
-                icon={<IconWorld/>}
+                icon={<IconWriting/>}
+                size={"sm"}
                 interaction={props.interaction}
                 fieldValue={props.interaction.sentence}/>
         </div>
@@ -18,6 +19,7 @@ export function InteractCardPropertyFields(props: { interaction: Interaction }) 
         <div>
             <InteractionCardFieldItem
                 label={"Label"}
+                size={"sm"}
                 icon={<BiLabel/>}
                 interaction={props.interaction}
                 fieldValue={props.interaction.label}/>
@@ -25,6 +27,7 @@ export function InteractCardPropertyFields(props: { interaction: Interaction }) 
         <div>
             <InteractionCardFieldItem
                 label={"Description"}
+                size={"sm"}
                 icon={<MdDescription/>}
                 interaction={props.interaction}
                 fieldValue={props.interaction.description}/>
@@ -32,6 +35,7 @@ export function InteractCardPropertyFields(props: { interaction: Interaction }) 
         <div>
             <InteractionCardFieldItem
                 label={"Content"}
+                size={"sm"}
                 icon={<SiContentful/>}
                 interaction={props.interaction}
                 fieldValue={props.interaction.content}/>
@@ -39,6 +43,7 @@ export function InteractCardPropertyFields(props: { interaction: Interaction }) 
         <div>
             <InteractionCardFieldItem
                 label={"Identity"}
+                size={"sm"}
                 icon={<MdPermIdentity/>}
                 interaction={props.interaction}
                 fieldValue={props.interaction.identity}/>

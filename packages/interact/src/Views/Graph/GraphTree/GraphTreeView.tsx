@@ -124,7 +124,7 @@ export default (props: {
             return;
         }
         const result = await getTreeGraph(interactionId);
-        log.info("Loaded Graph Data from Server", 'loaded graph', result);
+        log.info("Loaded Graph Data from DistantServerCardIndex", 'loaded graph', result);
         setGraphData(result);
         if (addToBrowseHistory) {
             dispatch(addGraphHistory(result));
@@ -136,7 +136,7 @@ export default (props: {
         if (!(interactionId > 0)) {
             return;
         }
-        log.debug("Loaded root Interaction Data from Server", 'loaded interaction', interactionId);
+        log.debug("Loaded root Interaction Data from DistantServerCardIndex", 'loaded interaction', interactionId);
         const interactionFull = await getFullInteractionById(interactionId);
         setRootInteraction(interactionFull);
     }

@@ -8,6 +8,7 @@ import {Logger, LogSource} from "../../../Services/logger";
 import {MultiSelectValue} from "../_ControlComponents/Select/MultiSelectValue";
 import {MultiSelectControl} from "../_ControlComponents/Select/MultiSelectControl";
 import {createInteractionEntity} from "../../../BackEnd/interact-db-client/create-interaction-entity";
+import {notify} from "../../../Services/toast/notify";
 
 const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Interaction>) => {
         const log = new Logger(LogSource.FilterInteractionMultiple);
@@ -185,6 +186,9 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
             log.info("onMultiSelectControlCreate", "newInteractionLabel", newInteractionLabel);
             const createdInteraction = await createInteractionEntity(newInteractionLabel, props.createInteractionIdentity ?? InteractionIdentity.Entity);
             log.info("onMultiSelectControlCreate", "createdInteraction", createdInteraction);
+
+            notify("Created new interaction: " + createdInteraction.label, "success");
+
             const selectionToAdd: SelectValue<Interaction> = SelectValue.fromInteraction(createdInteraction);
 
             // including all {SelectValue<Interaction>} in the pool.

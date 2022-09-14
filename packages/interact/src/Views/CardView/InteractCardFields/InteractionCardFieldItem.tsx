@@ -2,11 +2,12 @@ import {Interaction} from "../../../BackEnd/grl-client/interact_db_client";
 import Tiptap from "../../_ViewComponents/TextEditorView/Tiptap";
 import {Logger, LogSource} from "../../../Services/logger";
 import {ReactNode, useState} from "react";
-import {ThemeIcon, Text} from "@mantine/core";
+import {ThemeIcon, Text, MantineSize} from "@mantine/core";
 
 export function InteractionCardFieldItem(props: {
     fieldValue: string | undefined | null;
     interaction: Interaction,
+    size?: MantineSize,
     label: string,
     icon: JSX.Element,
     showLabel?: boolean,
@@ -52,7 +53,7 @@ export function InteractionCardFieldItem(props: {
             {props.showLabel &&
                 <span>{props.label}</span>}
         </div>
-        <Text>
+        <Text size={props.size}>
             {getFieldValue()}
         </Text>
     </div>

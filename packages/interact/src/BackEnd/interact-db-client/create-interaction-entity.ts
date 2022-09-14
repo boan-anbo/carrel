@@ -17,6 +17,7 @@ import {CreateRelationDto} from "../../Views/CreateOrUpdateInteraction/FormCompo
 import {Logger, LogSource} from "../../Services/logger";
 
 const log = new Logger(LogSource.CreateInteractionEntity);
+
 export async function createInteractionEntity(label: string, identity: InteractionIdentity, description?: string, content?: string): Promise<Interaction> {
     try {
 
@@ -33,7 +34,7 @@ export async function createInteractionEntity(label: string, identity: Interacti
         return data.data?.addNewEntityInteraction as Interaction;
     } catch (e) {
 
-        console.error('Error when creating interaction entity',e);
+        console.error('Error when creating interaction entity', e);
         throw e;
     }
 }
@@ -72,6 +73,7 @@ const CreateDtoToCreateOrUpdateInteractionRequestDtoInput = (createDto: CreateIn
         objectDtos: dtoToInput(createDto.objectDtos),
         indirectObjectDtos: dtoToInput(createDto.indirectObjectDtos),
         settingDtos: dtoToInput(createDto.settingDtos),
+        tagDtos: dtoToInput(createDto.tagDtos),
         purposeDtos: dtoToInput(createDto.purposeDtos),
         parallelDtos: dtoToInput(createDto.parallelDtos),
         referenceDtos: dtoToInput(createDto.referenceDtos),

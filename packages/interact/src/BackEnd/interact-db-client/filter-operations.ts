@@ -1,6 +1,6 @@
 import {getApolloClient} from "../../Services/get-apollo-client";
 import {
-    ContextRelationsConnection, FilterCategoryRelationByHostIdDocument, FilterCategoryRelationByHostIdQuery,
+    ContextRelationsConnection,
     FilterContextRelationByHostIdDocument,
     FilterContextRelationByHostIdQuery,
     FilterFirstActRelationByHostIdDocument,
@@ -21,7 +21,7 @@ import {
     FilterSettingRelationByHostIdDocument,
     FilterSettingRelationByHostIdQuery,
     FilterSubjectRelationByHostIdDocument,
-    FilterSubjectRelationByHostIdQuery,
+    FilterSubjectRelationByHostIdQuery, FilterTagRelationByHostIdDocument, FilterTagRelationByHostIdQuery,
     FirstActRelationsConnection,
     GetInteractionFullDocument,
     GetInteractionFullQuery,
@@ -113,8 +113,8 @@ export async function filterInteractionRelation(queryValue: string, filterByEnti
         case RelationTypes.SubjectRelation:
             queryDocument = FilterSubjectRelationByHostIdDocument;
             break;
-        case RelationTypes.CategoryRelation:
-            queryDocument = FilterCategoryRelationByHostIdDocument;
+        case RelationTypes.TagRelation:
+            queryDocument = FilterTagRelationByHostIdDocument;
             break;
 
     }
@@ -149,8 +149,8 @@ export async function filterInteractionRelation(queryValue: string, filterByEnti
             return (data as FilterSettingRelationByHostIdQuery).settingsRelations as RelationConnection
         case RelationTypes.SubjectRelation:
             return (data as FilterSubjectRelationByHostIdQuery).subjectRelations as RelationConnection
-        case RelationTypes.CategoryRelation:
-            return (data as FilterCategoryRelationByHostIdQuery).categoryRelations as RelationConnection
+        case RelationTypes.TagRelation:
+            return (data as FilterTagRelationByHostIdQuery).tagRelations as RelationConnection
 
     }
 }

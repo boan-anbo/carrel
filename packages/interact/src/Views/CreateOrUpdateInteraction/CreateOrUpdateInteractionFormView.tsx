@@ -24,8 +24,7 @@ import {
 } from "../_ViewComponents/InteractionIdentitySelection/InteractionIdentitySelection";
 import {FormButtons} from "./FormComponents/FormButtons";
 import {JsonView} from "../_ViewComponents/_ControlComponents/JsonView";
-import {InteractDatePicker} from "../_ViewComponents/_ControlComponents/DatePicker/DatePicker";
-import {parseDateForPicker} from "../../Utils/ParseDateForPicker";
+import {InteractFormDatePickers} from "./InteractFormDatePickers";
 
 interface CreateOrUpdateInteractionFormViewProp {
     size: SizeType | undefined;
@@ -172,7 +171,6 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
     }
 
 
-
     return (
         <div
             className={'rounded drop-shadow px-4 py-2 space-y-4'}
@@ -244,31 +242,12 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
 
             <FormDivider position={'center'} size={'xs'} label={'Dates'}/>
 
-            <InteractDatePicker
-
-                size={'xs'}
-                value={parseDateForPicker(formData.start)}
+            <InteractFormDatePickers
+                onSubmitForm={onFormFinish}
+                formData={formData}
                 onChange={(e) => {
                     setFormData({...formData, start: e} as CreateInteractionFormData)
-                }}
-                allowFreeInput={true}
-                label={'Start Date Time'}
-                description={'The start date time of the interaction'}
-                placeholder={'Start Date Time'}
-            />
-
-            <InteractDatePicker
-                size={'xs'}
-                value={parseDateForPicker(formData.end)}
-                onChange={(e) => {
-                    setFormData({...formData, end: e} as CreateInteractionFormData)
-
-                }}
-                allowFreeInput={true}
-                description={'The end date time of the interaction'}
-                label={'End Date Time'}
-                placeholder={'End Date Time'}
-            />
+                }}/>
 
             <FormDivider position={'center'} size={'xs'} label={'Relations'}/>
 
@@ -280,13 +259,12 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
                 onFirstActsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.FirstActRelation, formData, setFormData)}
                 onObjectsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.ObjectRelation, formData, setFormData)}
                 onSecondActsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.SecondActRelation, formData, setFormData)}
-
                 onIndirectObjectsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.IndirectObjectRelation, formData, setFormData)}
                 onSettingsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.SettingRelation, formData, setFormData)}
                 onPurpoesSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.PurposeRelation, formData, setFormData)}
                 onParallelSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.ParallelRelation, formData, setFormData)}
                 onReferencesSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.ReferenceRelation, formData, setFormData)}
-                onCategoriesSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.CategoryRelation, formData, setFormData)}
+                onTagsSelected={(e) => onFormRelationSelectedHandler(e, RelationTypes.TagRelation, formData, setFormData)}
             />
 
             <div className={'flex justify-evenly my-2'}>
@@ -295,7 +273,6 @@ export const CreateOrUpdateInteractionFormView = (props: CreateOrUpdateInteracti
 
                     setShowRawJson(!showRawJson)
                 }}
-
                              onClickClear={() => clearFormData()}
                              onSubmit={() => onFormFinish()}
                 />

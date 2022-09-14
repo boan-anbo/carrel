@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using act.Services.Model.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace act.Services.Model;
 
@@ -57,7 +59,13 @@ public class Interaction
     ///     unique Uuid for double checking
     /// </summary>
     public Guid Uuid { get; set; } = Guid.NewGuid();
+    
 
+    /// <summary>
+    /// Unique identifier of the interaction
+    ///  </summary>
+    public string Uri { get; set; }
+    
     /// <summary>
     ///     The label of the interaction. This is freely defined, unlike <see cref="FirstAct" />. Should be short. If not unique,
     ///     use <see cref="Description" />.
@@ -126,6 +134,13 @@ public class Interaction
     /// A general field for data objects such as file or photo.
     ///     </summary>
     public string? Data { get; set; } = null;
+    
+    /// <summary>
+    /// Description of the date field, such as JSON, video, Textual Objects etc.
+    ///   </summary>
+    public string? DataType { get; set; } = null;
+    
+    
 
 
     /// <inheritdoc cref="Relation" />
@@ -366,6 +381,14 @@ public class Interaction
         return interaction;
     }
 
+   /// <summary>
+    /// Method to perform before each update.
+    /// </summary>
+    public void UpdateCalculatedFields()
+    {
+        Sentence = InteractionSpeak.UpdateSentence(this);
+    }
+   
     /// <summary>
     ///  Factory pattern from label and identiy
     ///  </summary>
@@ -373,106 +396,5 @@ public class Interaction
     {
         var interaction = new Interaction { Label = label, Identity = identity };
         return interaction;
-    }
-
-    /// <summary>
-    /// Update sentence based on current entities and relations
-    ///  </summary>
-    public void UpdateSentence()
-    {
-        var sb = new StringBuilder();
-
-        var contexts = this.Contexts.Select(s => s.LinkedInteraction.Label).ToList();
-        var subjects = this.Subjects.Select(s => s.LinkedInteraction.Label).ToList();
-        var firstActs = this.FirstActs.Select(s => s.LinkedInteraction.Label).ToList();
-        var objects = this.Objects.Select(s => s.LinkedInteraction.Label).ToList();
-        var secondActs = this.SecondActs.Select(s => s.LinkedInteraction.Label).ToList();
-        var indirectObjects = this.IndirectObjects.Select(s => s.LinkedInteraction.Label).ToList();
-        var settings = this.Settings.Select(s => s.LinkedInteraction.Label).ToList();
-        var purposes = this.Purposes.Select(s => s.LinkedInteraction.Label).ToList();
-        var parallels = this.Parallels.Select(s => s.LinkedInteraction.Label).ToList();
-        var references = this.References.Select(s => s.LinkedInteraction.Label).ToList();
-        var tags = this.Tags.Select(s => s.LinkedInteraction.Label).ToList();
-
-        if (contexts.Any())
-        {
-            sb.Append("In the context(s) of");
-            // for each loop with index
-            foreach (var (label, index) in contexts.Select((value, i) => (value, i)))
-            {
-                sb = SentenceClauseBuilder(index, sb, label, contexts.Count - 1);
-            }
-        }
-
-        if (subjects.Any())
-        {
-            // for each loop with index
-            foreach (var (label, index) in subjects.Select((value, i) => (value, i)))
-            {
-                sb = SentenceClauseBuilder(index, sb, label, subjects.Count - 1);
-            }
-        }
-
-        if (objects.Any())
-        {
-            // for each loop with index
-            foreach (var (label, index) in objects.Select((value, i) => (value, i)))
-            {
-                sb = SentenceClauseBuilder(index, sb, label, objects.Count - 1);
-            }
-        }
-
-        if (firstActs.Any())
-        {
-            // for each loop with index
-            foreach (var (label, index) in firstActs.Select((value, i) => (value, i)))
-            {
-                sb = SentenceClauseBuilder(index, sb, label, firstActs.Count - 1);
-            }
-        }
-
-        if (settings.Any())
-        {
-            if (sb.Length > 0)
-            {
-                sb.Append(' ');
-                sb.Append("in the setting(s) of");
-            }
-
-            // for each loop with index
-            foreach (var (label, index) in settings.Select((value, i) => (value, i)))
-            {
-                sb = SentenceClauseBuilder(index, sb, label, settings.Count - 1);
-            }
-        }
-
-
-        Sentence = sb.ToString().Trim();
-    }
-
-    private static StringBuilder SentenceClauseBuilder(int index, StringBuilder sb, string label, int lastIndex)
-    {
-        if (index > 1)
-        {
-            sb.Append(',');
-        }
-
-        // if it's the last index
-        if (index > 0 && index == lastIndex)
-        {
-            sb.Append(" and");
-        }
-
-        sb.Append(' ');
-        sb.Append(label);
-        return sb;
-    }
-
-    /// <summary>
-    /// Method to perform before each update.
-    /// </summary>
-    public void calculateFields()
-    {
-        UpdateSentence();
     }
 }

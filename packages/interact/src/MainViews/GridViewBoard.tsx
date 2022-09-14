@@ -66,7 +66,7 @@ export function GridViewBoard(props: {}) {
 
 
         <div key="left_panel">
-            {/*<DistantDocumentList/>*/}
+            {/*<DistantDocumentIndex/>*/}
             <GridView bg={"bg-white"} selectedView={GridViewTypes.CREATE_INTERACTION_FORM}/>
         </div>
 

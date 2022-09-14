@@ -15,8 +15,13 @@ export enum LogSource {
     FetchFilteredInteractionData = 'FetchFilteredInteractionData',
     FilterInteractionSingle = 'FilterInteractionSingle',
     InteractionCardView = 'InteractionCardView',
-    AppStateSlice   = 'AppStateSlice',
-    SearchState    = 'SearchState',
+    AppStateSlice = 'AppStateSlice',
+    SearchState = 'SearchState',
+    App = 'App',
+    ServerService = "ServerService",
+    DistantServer   = "DistantServer",
+    InteractServer = "InteractServer",
+    InteractServerIndex = "InteractServerIndex",
 }
 
 export class Logger {

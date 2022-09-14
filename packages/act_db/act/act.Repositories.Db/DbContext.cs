@@ -9,9 +9,13 @@ public class InteractDbContext : DbContext
     {
         // const Environment.SpecialFolder folder = Environment.SpecialFolder.LocalApplicationData;
         // use project folder for now
-        const Environment.SpecialFolder folder = Environment.SpecialFolder.MyDocuments;
-        var path = Environment.GetFolderPath(folder);
-        DbPath = Path.Join(path, "act.db");
+        // const Environment.SpecialFolder folder = Environment.SpecialFolder.MyDocuments;
+        // var path = Environment.GetFolderPath(folder);
+        // DbPath = Path.Join(path, "interact.db");
+        // use debug and release folder
+       // AppDomain.CurrentDomain.BaseDirectory 
+        // DbPath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, "interact.db");
+        DbPath = "interact.db";
         Database.EnsureCreated();
     }
 
@@ -19,25 +23,25 @@ public class InteractDbContext : DbContext
 
 
     // interaction table
-    public DbSet<Interaction?> Interactions { get; set; }
+    public DbSet<Interaction> Interactions { get; set; }
 
     // interaction type table
 
     // interaction properties
-    public DbSet<Property?> Properties { get; set; }
+    public DbSet<Property> Properties { get; set; }
 
     // relation tables
-    public DbSet<SubjectRelation?> SubjectRelations { get; set; }
-    public DbSet<ObjectRelation?> ObjectRelations { get; set; }
-    public DbSet<ParallelRelation?> ParallelRelations { get; set; }
-    public DbSet<SettingRelation?> SettingRelations { get; set; }
-    public DbSet<ReferenceRelation?> ReferenceRelations { get; set; }
-    public DbSet<IndirectObjectRelation?> IndirectObjectRelations { get; set; }
-    public DbSet<PurposeRelation?> PurposeRelations { get; set; }
-    public DbSet<ContextRelation?> ContextRelations { get; set; }
+    public DbSet<SubjectRelation> SubjectRelations { get; set; }
+    public DbSet<ObjectRelation> ObjectRelations { get; set; }
+    public DbSet<ParallelRelation> ParallelRelations { get; set; }
+    public DbSet<SettingRelation> SettingRelations { get; set; }
+    public DbSet<ReferenceRelation> ReferenceRelations { get; set; }
+    public DbSet<IndirectObjectRelation> IndirectObjectRelations { get; set; }
+    public DbSet<PurposeRelation> PurposeRelations { get; set; }
+    public DbSet<ContextRelation> ContextRelations { get; set; }
 
-    public DbSet<FirstActRelation?> FirstActRelations { get; set; }
-    public DbSet<SecondActRelation?> SecondActRelations { get; set; }
+    public DbSet<FirstActRelation> FirstActRelations { get; set; }
+    public DbSet<SecondActRelation> SecondActRelations { get; set; }
 
     public DbSet<TagRelation> TagRelations { get; set; }
 
@@ -50,6 +54,10 @@ public class InteractDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Unique id
+        modelBuilder.Entity<Interaction>().HasIndex(i => i.Uri).IsUnique();
+        
+        
         // context relations
         modelBuilder.Entity<ContextRelation>()
             .HasKey(x => x.Uuid);
@@ -78,7 +86,7 @@ public class InteractDbContext : DbContext
             .HasForeignKey(x => x.HostInteractionId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        /// reverse relation
+        // reverse relation
         modelBuilder.Entity<SubjectRelation>()
             .HasOne(x => x.LinkedInteraction)
             .WithMany(x => x.AsSubjects)
@@ -224,22 +232,22 @@ public class InteractDbContext : DbContext
         // category relations
         modelBuilder.Entity<TagRelation>()
             .HasKey(x => x.Uuid);
-                
-        
+
+
         modelBuilder.Entity<TagRelation>()
             .HasOne(x => x.HostInteraction)
             .WithMany(x => x.Tags)
             .HasForeignKey(x => x.HostInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         // reverse category relation
-        
+
         modelBuilder.Entity<TagRelation>()
             .HasOne(x => x.LinkedInteraction)
             .WithMany(x => x.AsTags)
             .HasForeignKey(x => x.LinkedInteractionId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
 
         // interaction properties
         modelBuilder.Entity<Property>()
@@ -262,7 +270,7 @@ public class InteractDbContext : DbContext
         //     .Navigation(x => x.LinkedInteraction)
         //     .AutoInclude();
 
-            
+
         // Create a sample sentence representation.
 
         // Context: Air pollution
@@ -363,6 +371,16 @@ public class InteractDbContext : DbContext
                     Id = 13,
                     Label = "climate change",
                     Identity = InteractionIdentity.ENTITY
+                },
+                new Interaction
+                {
+                    Id = 15,
+                    Label = "Environmentality",
+                },
+                new Interaction
+                {
+                    Id = 16,
+                    Label = "An idea"
                 }
             );
 
@@ -498,6 +516,23 @@ public class InteractDbContext : DbContext
                 Type = RelationTypes.ParallelRelation,
             }
         );
+
+        // add tags
+        modelBuilder.Entity<TagRelation>().HasData(
+            new TagRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 14,
+                LinkedInteractionId = 15,
+                Type = RelationTypes.TagRelation,
+            },
+            new TagRelation
+            {
+                Uuid = Guid.NewGuid(),
+                HostInteractionId = 14,
+                LinkedInteractionId = 16,
+                Type = RelationTypes.TagRelation,
+            });
 
 
         // data seeding for interaction table

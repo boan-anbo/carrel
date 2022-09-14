@@ -185,6 +185,14 @@ public class InteractionRepoTests : TestBase
                     RelationType = RelationTypes.ReferenceRelation
                 }
             },
+            TagDtos =  new List<CreateOrUpdateRelationDto>
+            {
+                new CreateOrUpdateRelationDto()
+                {
+                    LinkedInteractionId = 1,
+                    RelationType = RelationTypes.TagRelation
+                }
+            },
             PropertyIds = null,
             Identity = InteractionIdentity.ACT
         };
@@ -207,5 +215,6 @@ public class InteractionRepoTests : TestBase
         Assert.AreEqual(1, iWithMultipleRelations.IndirectObjects.Count);
         Assert.AreEqual(1, iWithMultipleRelations.Settings.Count);
         Assert.AreEqual(1, iWithMultipleRelations.References.Count);
+        Assert.AreEqual(1, iWithMultipleRelations.Tags.Count);
     }
 }

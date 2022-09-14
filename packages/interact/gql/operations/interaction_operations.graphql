@@ -170,11 +170,11 @@ fragment interactionFragment on Interaction {
     purposesCount
     asPurposesCount
 
-    categories {
+    tags {
         ...categoryFragment
     }
-    categoriesCount
-    asCategoriesCount
+    tagsCount
+    asTagsCount
 
     start
     end
@@ -319,7 +319,7 @@ fragment indirectObjectFragment on IndirectObjectRelation {
     linkedInteractionId
 }
 
-fragment categoryFragment on CategoryRelation {
+fragment categoryFragment on TagRelation {
     hostInteractionId
     type
     uuid

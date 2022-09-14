@@ -8,17 +8,17 @@ export function InteractCardRelationFields(props: { interaction: Interaction, on
         <div className={""}>
             <InteractionCardRelationFieldItem<Relation>
 
-                relationCount={props.interaction.categoriesCount}
+                relationCount={props.interaction.tagsCount}
                 showLabel={false}
-                placeholder={"Categories"}
-                relationData={props.interaction.categories as Relation[]}
+                placeholder={"Tags"}
+                relationData={props.interaction.tags as Relation[]}
                 interaction={props.interaction}
                 icon={<IconCategory/>}
-                label={"Categories"}
+                label={"Tags"}
                 size={"xs"}
                 filterByEntityRelation={{
                     hostId: props.interaction.id,
-                    relation: RelationTypes.CategoryRelation
+                    relation: RelationTypes.TagRelation
                 }}
                 onClickRelation={props.onClickRelation}/>
         </div>

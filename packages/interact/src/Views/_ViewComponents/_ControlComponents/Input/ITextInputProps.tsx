@@ -1,8 +1,10 @@
 import {MantineSize} from "@mantine/core";
 
 export interface ITextInputProps {
-    onSubmitForm?: () => void;
+    onPressEnter?: (e: string) => void;
+    onPressCtrlEnter?: () => void;
     required?: boolean;
+    disabled?: boolean;
     size?: MantineSize
     value?: string;
     label?: string;
@@ -11,5 +13,5 @@ export interface ITextInputProps {
     placeholder?: string;
     focusRef?: any;
     id?: string;
-    onChange: (e: string) => void;
+    onChange?: (e: string) => void;
 }

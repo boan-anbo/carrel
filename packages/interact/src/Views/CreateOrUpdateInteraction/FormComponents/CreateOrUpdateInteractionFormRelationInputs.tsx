@@ -17,7 +17,7 @@ interface CreateOrUpdateInteractionFormRelationInputProps {
     onPurpoesSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
     onParallelSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
     onReferencesSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
-    onCategoriesSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
+    onTagsSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
     onSubmitForm: () => void;
 }
 
@@ -25,11 +25,11 @@ export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdat
     return <div className={'space-y-4'}>
         <FilterInteractionMultiple
             onSubmitForm={props.onSubmitForm}
-            currentValueDtos={props.formData.categoryDtos}
-            label="Categories"
+            currentValueDtos={props.formData.tagDtos}
+            label="Tags"
             size={props.size}
-            placeholder={"Category interactions"} style={{width: "100%"}} onMultiSelectionChange={
-            props.onCategoriesSelected
+            placeholder={"Tag interactions"} style={{width: "100%"}} onMultiSelectionChange={
+            props.onTagsSelected
         }></FilterInteractionMultiple>
         {/*Relation inputs*/}
         <FilterInteractionMultiple

@@ -1,0 +1,15 @@
+"Unhandled exception. System.NullReferenceException: Object reference not set to an instance of an object.
+   at act.API.Startup.ConfigureServices(IServiceCollection services)
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.InvokeCore(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass9_0.<Invoke>g__Startup|0(IServiceCollection serviceCollection)
+   at Microsoft.AspNetCore.Hosting.StartupLoader.ConfigureServicesDelegateBuilder`1.<>c__DisplayClass15_0.<BuildStartupServicesFilterPipeline>g__RunPipeline|0(IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.Invoke(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass8_0.<Build>b__0(IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.StartupLoader.ConfigureServicesDelegateBuilder`1.<>c__DisplayClass14_0.<ConfigureServices>g__ConfigureServicesWithContainerConfiguration|0(IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConventionBasedStartup.ConfigureServices(IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.WebHost.EnsureApplicationServices()
+   at Microsoft.AspNetCore.Hosting.WebHost.Initialize()
+   at Microsoft.AspNetCore.Hosting.WebHostBuilder.Build()
+   at act.API.Program.Main(String[] args)"

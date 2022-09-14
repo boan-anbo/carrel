@@ -28,8 +28,8 @@ export const onFormRelationSelectedHandler = (
         case RelationTypes.ContextRelation:
             setFormData({...formData, contextDtos: createDtos} as CreateInteractionFormData);
             break;
-        case RelationTypes.CategoryRelation:
-            setFormData({...formData, categoryDtos: createDtos} as CreateInteractionFormData);
+        case RelationTypes.TagRelation:
+            setFormData({...formData, tagDtos: createDtos} as CreateInteractionFormData);
             break;
         case RelationTypes.SubjectRelation:
             setFormData({...formData, subjectDtos: createDtos} as CreateInteractionFormData);

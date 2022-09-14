@@ -50,6 +50,7 @@ public interface IRelationRepository
     IQueryable<PurposeRelation> GetPurposeRelationsFull();
     IQueryable<SecondActRelation> GetSecondActRelationsFull();
     
+    
     // for category
     IQueryable<TagRelation> GetTagRelationsFull();
 }

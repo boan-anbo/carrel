@@ -165,7 +165,7 @@ public class GraphQLQueryTests : TestBase
     public async Task Full_Sentence_Should_Workd()
     {
         var fullInteraction = await _interactionRepository.GetInteractionFull(14);
-        fullInteraction.UpdateSentence();
+        fullInteraction.UpdateCalculatedFields();
         Assert.IsTrue(
             fullInteraction.Sentence.Length > 0
         );
