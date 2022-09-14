@@ -15,13 +15,10 @@ func replaceMarkerInFile(filePath string, markerMap map[string]string) error {
 		return err
 	}
 
-	// replace marker
-	for k, v := range markerMap {
-		fileContent = bytes.ReplaceAll(fileContent, []byte(k), []byte(v))
+	// replace marker content between {{ and }}, with regular expression, ignoring cases
+	for marker, content := range markerMap {
+		fileContent = bytes.ReplaceAll(fileContent, []byte("{{"+marker+"}}"), []byte(content))
 	}
-
 	// return the new file content without writing to disk
 	return ioutil.WriteFile(filePath, fileContent, 0644)
-
-	
 }
