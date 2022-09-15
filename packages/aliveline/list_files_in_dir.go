@@ -2,19 +2,19 @@
 
 // Language: go
 
-// Path: main.go
+// Path: aliveline.go
 // entry
 
 package main
 
 import (
-	"io/ioutil"
 	"log"
+	"os"
+	"strings"
 )
 
-
 func listFiles(dir string) []string {
-	files, err := ioutil.ReadDir(dir)
+	files, err := os.ReadDir(dir)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,22 +27,28 @@ func listFiles(dir string) []string {
 	return fileList
 }
 
-// list all files recursively
+// list all files recursively and return absolute paths
 func listFilesRecursive(dir string) []string {
-	files, err := ioutil.ReadDir(dir)
+	// trim string
+	dir = strings.TrimSpace(dir)
+	files, err := os.ReadDir(dir)
 	if err != nil {
 		log.Fatal(err)
+
 	}
 
 	var fileList []string
 	for _, f := range files {
+
 		if f.IsDir() {
-			fileList = append(fileList, listFilesRecursive(f.Name())...)
+			fileList = append(fileList, listFilesRecursive(dir+"/"+f.Name())...)
 		} else {
-			fileList = append(fileList, f.Name())
+			// return absolute path
+			fileList = append(fileList, dir+"/"+f.Name())
+			//fileList = append(fileList, f.Name())
+
 		}
 	}
 
 	return fileList
 }
-
