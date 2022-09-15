@@ -26,8 +26,7 @@ import {FormButtons} from "./FormComponents/FormButtons";
 import {JsonView} from "../_ViewComponents/_ControlComponents/JsonView";
 import {InteractFormDatePickers} from "./InteractFormDatePickers";
 import {RootState} from "../../store";
-import {Subscription} from "rxjs";
-import {useInputPassageRadioStore} from "../../zstore-explorer";
+import {LinkInputButton} from "./LinkInputButton";
 
 interface CreateOrUpdateInteractionFormViewProp {
     size: SizeType | undefined;
@@ -265,6 +264,8 @@ export const CreateOrUpdateFormIndex = (props: CreateOrUpdateInteractionFormView
                 }}/>
 
             <FormDivider position={'center'} size={'xs'} label={'Relations'}/>
+
+            <LinkInputButton></LinkInputButton>
 
             <CreateOrUpdateInteractionFormRelationInputs
                 onSubmitForm={() => onFormFinish()}
