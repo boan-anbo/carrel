@@ -5,7 +5,7 @@ import {RootState} from "../../store";
 export const SelectedPassageViewer = () => {
     const {selectedPassage} = useSelector((state: RootState) => {
                 return {
-                    selectedPassage: state.appstate.selectedInputPassage,
+                    selectedPassage: state.explorerstate.selectedInputPassage,
                 }
             }
         )

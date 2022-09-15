@@ -709,6 +709,7 @@ export type Interaction = {
   contextsCount: Scalars['Long'];
   created: Scalars['DateTime'];
   data?: Maybe<Scalars['String']>;
+  dataType?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   end?: Maybe<Scalars['DateTime']>;
   firstActs?: Maybe<Array<Maybe<FirstActRelation>>>;
@@ -739,6 +740,7 @@ export type Interaction = {
   subjectsCount: Scalars['Long'];
   tags?: Maybe<Array<Maybe<TagRelation>>>;
   tagsCount: Scalars['Long'];
+  uri?: Maybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -771,6 +773,7 @@ export type InteractionFilterInput = {
   contextsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   created?: InputMaybe<ComparableDateTimeOperationFilterInput>;
   data?: InputMaybe<StringOperationFilterInput>;
+  dataType?: InputMaybe<StringOperationFilterInput>;
   description?: InputMaybe<StringOperationFilterInput>;
   end?: InputMaybe<ComparableNullableOfDateTimeOperationFilterInput>;
   firstActs?: InputMaybe<ListFilterInputTypeOfFirstActRelationFilterInput>;
@@ -802,6 +805,7 @@ export type InteractionFilterInput = {
   subjectsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
   tags?: InputMaybe<ListFilterInputTypeOfTagRelationFilterInput>;
   tagsCount?: InputMaybe<ComparableInt64OperationFilterInput>;
+  uri?: InputMaybe<StringOperationFilterInput>;
   uuid?: InputMaybe<ComparableGuidOperationFilterInput>;
 };
 
@@ -848,6 +852,7 @@ export type InteractionInput = {
   contextsCount: Scalars['Long'];
   created: Scalars['DateTime'];
   data?: InputMaybe<Scalars['String']>;
+  dataType?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
   end?: InputMaybe<Scalars['DateTime']>;
   firstActs?: InputMaybe<Array<InputMaybe<FirstActRelationInput>>>;
@@ -878,6 +883,7 @@ export type InteractionInput = {
   subjectsCount: Scalars['Long'];
   tags?: InputMaybe<Array<InputMaybe<TagRelationInput>>>;
   tagsCount: Scalars['Long'];
+  uri?: InputMaybe<Scalars['String']>;
   uuid: Scalars['UUID'];
 };
 
@@ -913,6 +919,7 @@ export type InteractionSortInput = {
   contextsCount?: InputMaybe<SortEnumType>;
   created?: InputMaybe<SortEnumType>;
   data?: InputMaybe<SortEnumType>;
+  dataType?: InputMaybe<SortEnumType>;
   description?: InputMaybe<SortEnumType>;
   end?: InputMaybe<SortEnumType>;
   firstActsCount?: InputMaybe<SortEnumType>;
@@ -932,6 +939,7 @@ export type InteractionSortInput = {
   start?: InputMaybe<SortEnumType>;
   subjectsCount?: InputMaybe<SortEnumType>;
   tagsCount?: InputMaybe<SortEnumType>;
+  uri?: InputMaybe<SortEnumType>;
   uuid?: InputMaybe<SortEnumType>;
 };
 

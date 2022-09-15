@@ -383,6 +383,7 @@ type Interaction {
     contextsCount: Long!
     created: DateTime!
     data: String
+    dataType: String
     description: String
     end: DateTime
     firstActs: [FirstActRelation]
@@ -413,6 +414,7 @@ type Interaction {
     subjectsCount: Long!
     tags: [TagRelation]
     tagsCount: Long!
+    uri: String
     uuid: UUID!
 }
 
@@ -1151,6 +1153,7 @@ input InteractionFilterInput {
     contextsCount: ComparableInt64OperationFilterInput
     created: ComparableDateTimeOperationFilterInput
     data: StringOperationFilterInput
+    dataType: StringOperationFilterInput
     description: StringOperationFilterInput
     end: ComparableNullableOfDateTimeOperationFilterInput
     firstActs: ListFilterInputTypeOfFirstActRelationFilterInput
@@ -1182,6 +1185,7 @@ input InteractionFilterInput {
     subjectsCount: ComparableInt64OperationFilterInput
     tags: ListFilterInputTypeOfTagRelationFilterInput
     tagsCount: ComparableInt64OperationFilterInput
+    uri: StringOperationFilterInput
     uuid: ComparableGuidOperationFilterInput
 }
 
@@ -1220,6 +1224,7 @@ input InteractionInput {
     contextsCount: Long!
     created: DateTime!
     data: String
+    dataType: String
     description: String
     end: DateTime
     firstActs: [FirstActRelationInput]
@@ -1250,6 +1255,7 @@ input InteractionInput {
     subjectsCount: Long!
     tags: [TagRelationInput]
     tagsCount: Long!
+    uri: String
     uuid: UUID!
 }
 
@@ -1269,6 +1275,7 @@ input InteractionSortInput {
     contextsCount: SortEnumType
     created: SortEnumType
     data: SortEnumType
+    dataType: SortEnumType
     description: SortEnumType
     end: SortEnumType
     firstActsCount: SortEnumType
@@ -1288,6 +1295,7 @@ input InteractionSortInput {
     start: SortEnumType
     subjectsCount: SortEnumType
     tagsCount: SortEnumType
+    uri: SortEnumType
     uuid: SortEnumType
 }
 

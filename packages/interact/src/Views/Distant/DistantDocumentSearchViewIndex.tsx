@@ -1,14 +1,17 @@
 import {CSSProperties, useEffect, useState} from "react";
-import {DistantApiSearchResponse, IndexInfo, Passage} from "../../BackEnd/distant_api";
+import {IndexInfo, Passage} from "../../BackEnd/distant_api";
 import {DistantDocumentView} from "./DistantDocumentItem";
 import {useDispatch} from "react-redux";
 import {TextInput} from "../_ViewComponents/_ControlComponents/Input/TextInput";
 import {useDistantApiStore} from "../../zstore-distant";
-import {ScrollArea, Button, Select} from "@mantine/core";
+import {Button, ScrollArea, Select} from "@mantine/core";
 import {IconArrowDown} from "@tabler/icons";
 import {SelectItem} from "@mantine/core/lib/Select/types";
 import {useInputPassageRadioStore} from "../../zstore-explorer";
 import {selectPassage} from "../../States/features/explorer-state/explorerStateSlice";
+import {Logger, LogSource} from "../../Services/logger";
+
+const log = new Logger(LogSource.DistantDocumentSearchViewIndex);
 
 export const DistantDocumentSearchViewIndex = (props: {
     style?: CSSProperties
@@ -52,6 +55,7 @@ export const DistantDocumentSearchViewIndex = (props: {
                 });
                 setDocuments(data.passages);
             } catch (e) {
+                log.debug('onSearch', 'onSearch', e);
                 console.log(e);
                 setDocuments([]);
             }

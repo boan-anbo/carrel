@@ -23,6 +23,7 @@ export enum LogSource {
     InteractServer = "InteractServer",
     InteractServerIndex = "InteractServerIndex",
 ExplorerState = "ExplorerState",
+    DistantDocumentSearchViewIndex  = "DistantDocumentSearchViewIndex",
 }
 
 export class Logger {

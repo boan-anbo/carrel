@@ -18,4 +18,7 @@ pub struct Passage {
     #[prost(message, optional, tag="5")]
     #[schema(value_type=Document)]
     pub document: ::core::option::Option<super::document::Document>,
+    /// localtion type, describes what the location is, e.g. page number
+    #[prost(string, tag="6")]
+    pub location_type: ::prost::alloc::string::String,
 }

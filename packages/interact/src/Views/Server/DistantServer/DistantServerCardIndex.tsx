@@ -7,6 +7,7 @@ import {notify} from "../../../Services/toast/notify";
 import {Logger, LogSource} from "../../../Services/logger";
 import {useDistantApiStore} from "../../../zstore-distant";
 import {DistantDocumentSearchViewIndex} from "../../Distant/DistantDocumentSearchViewIndex";
+import {invoke} from "@tauri-apps/api";
 
 const defaultMessage = "Check if server is running"
 
@@ -21,10 +22,9 @@ function DistantServerCardIndex() {
     const setListIndicesApi = useDistantApiStore((state) => state.setListIndicesApi);
 
     const onLaunchServer = async () => {
-        if (serverProcess) {
-            await serverProcess.process.kill();
-        }
         const receivedPid = await launchDistantServer()
+
+        console.log("Received pid", receivedPid)
 
         if (receivedPid) {
             setServerProcess(receivedPid);
@@ -46,9 +46,10 @@ function DistantServerCardIndex() {
 
     async function onStopServer() {
         if (serverProcess) {
-            await serverProcess.process.kill();
-            setServerProcess(null);
-            notify("DistantServerCardIndex stopped", "Distant DistantServerCardIndex", 'warning');
+            await invoke('kill_distant_sidecar' );
+            // await serverProcess.process.kill();
+            // setServerProcess(null);
+            // notify("DistantServerCardIndex stopped", "Distant DistantServerCardIndex", 'warning');
         }
     }
 

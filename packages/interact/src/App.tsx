@@ -1,6 +1,4 @@
 import "./App.css";
-import {useSelector} from "react-redux";
-import {RootState} from "./store";
 import {GridViewBoard} from "./MainViews/GridViewBoard";
 import {Route, Routes, useNavigate} from "react-router-dom";
 import GraphMultiView from "./Views/Graph/GraphTree/GraphTreeView";
@@ -10,7 +8,6 @@ import {MainNavBar} from "./MainViews/NavBar";
 import {MainView} from "./MainViews/MainView";
 import {RoutingViewLinks} from "./Routing/RoutingViewLinks";
 import {Logger, LogSource} from "./Services/logger";
-import DistantServerCardIndex from "./Views/Server/DistantServer/DistantServerCardIndex";
 import {DistantDataEntryViewIndex} from "./Views/DistantDataEntryView/DistantDataEntryViewIndex";
 import {ServerCardsIndex} from "./Views/Server/ServerCardsIndex";
 
