@@ -32,7 +32,7 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
          *
          * TODO currently this pool keeps expand as user fetch more data from the server in one session.
          *
-         * FIXME I will add a function to drop non-selected interactions from this pool when the user leaves the page.
+         * FIXME I will add a function to drop non-selected interactions.
          *
          */
         const [allInteractionsPool, setAllAllInteractionsPool] = useState<SelectValue<Interaction>[]>([]);
@@ -75,7 +75,9 @@ const FilterInteractionMultiple = (props: IFilterInteractionMultipleProps<Intera
                 const index = latestPool.findIndex((poolItem) => poolItem.value === fetchedOption.value);
                 if (index >= 0) {
                     latestPool[index] = fetchedOption;
-                } else {
+                }
+
+                else {
                     latestPool.push(fetchedOption);
                 }
             })

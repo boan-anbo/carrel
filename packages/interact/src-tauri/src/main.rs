@@ -3,6 +3,8 @@
     windows_subsystem = "windows"
 )]
 
+mod side_car_launcher;
+
 use tauri::api::process::{Command, CommandEvent};
 use tauri::Manager;
 
