@@ -1,4 +1,5 @@
 use uuid::Uuid;
+use crate::document::Document;
 use crate::passage::Passage;
 
 // impl default trait for Passage
@@ -18,11 +19,13 @@ impl Passage {
 impl From<&distant_es_client::responses::search_result::Hit> for Passage {
     fn from(hit: &distant_es_client::responses::search_result::Hit) -> Passage {
         let source = &hit.source;
+
+
         Passage {
             text: hit.highlight.text.join("\n"),
             description: source.file_name.to_string(),
             location: hit.source.page_index.to_string(),
-            document: None,
+            document: Some(Document::from(source)),
             ..Default::default()
         }
     }

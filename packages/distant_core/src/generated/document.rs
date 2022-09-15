@@ -46,4 +46,7 @@ pub struct Document {
     /// / created date
     #[prost(int64, tag="14")]
     pub created: i64,
+    /// / content type
+    #[prost(string, tag="15")]
+    pub content: ::prost::alloc::string::String,
 }
