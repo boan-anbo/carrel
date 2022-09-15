@@ -1,5 +1,5 @@
 import {Container, Grid, ScrollArea, SimpleGrid, Skeleton, useMantineTheme} from '@mantine/core';
-import {CreateOrUpdateInteractionFormView} from "../CreateOrUpdateInteraction/CreateOrUpdateInteractionFormView";
+import {CreateOrUpdateFormIndex} from "../CreateOrUpdateInteraction/CreateOrUpdateFormIndex";
 import {SelectedInteractionDataViewer} from "../InteractViews/SelectedInteractionDataViewer";
 import {RecentInteractionsList} from "../RecentCreatedInteractionList/RecentInteractionsList";
 import {PRIMARY_COL_HEIGHT} from "../../MainViews/PRIMARY_COL_HEIGHT";
@@ -16,7 +16,7 @@ export function DistantDataEntryViewIndex() {
             <SimpleGrid cols={3} spacing="md" breakpoints={[{maxWidth: 'lg', cols: 1}]}>
                 {/*<Skeleton height={PRIMARY_COL_HEIGHT} radius="md" animate={false} />*/}
                 <ScrollArea className={'bg-slate-50  rounded drop-shadow'} style={{height: PRIMARY_COL_HEIGHT}}>
-                    <CreateOrUpdateInteractionFormView/>
+                    <CreateOrUpdateFormIndex/>
                 </ScrollArea>
                 <ScrollArea style={{height: PRIMARY_COL_HEIGHT}}>
 

@@ -3,7 +3,7 @@ import {FilteredInteractionList} from "./InteractViews/FilteredInteractionList";
 import {InteractCardView} from "./CardView/InteractCardView";
 import {InteractionGraphView} from "./InteractViews/InteractionGraphView";
 import {SelectedPassageViewer} from "./InteractViews/SelectedPassageViewer";
-import {CreateOrUpdateInteractionFormView} from "./CreateOrUpdateInteraction/CreateOrUpdateInteractionFormView";
+import {CreateOrUpdateFormIndex} from "./CreateOrUpdateInteraction/CreateOrUpdateFormIndex";
 import {SelectedInteractionDataViewer} from "./InteractViews/SelectedInteractionDataViewer";
 import {RecentInteractionsList} from "./RecentCreatedInteractionList/RecentInteractionsList";
 import GraphMultiView from "./Graph/GraphTree/GraphTreeView";
@@ -69,7 +69,7 @@ export const GridView = (props: {
                     {selectedView === GridViewTypes.INTERACTION_GRAPH_VIEW && <div><InteractionGraphView/></div>}
                     {selectedView === GridViewTypes.INTERACTION_CARD_VIEW && <div><InteractCardView/></div>}
                     {selectedView === GridViewTypes.CREATE_INTERACTION_FORM &&
-                        <div><CreateOrUpdateInteractionFormView/></div>}
+                        <div><CreateOrUpdateFormIndex/></div>}
                     {selectedView === GridViewTypes.Recent_Viewed_Interaction && <div><RecentViewedInteractionList /></div>}
                 </div>
         </div>

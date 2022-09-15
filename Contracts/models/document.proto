@@ -47,5 +47,8 @@ message Document {
     /// created date
     int64 created = 14;
 
+    /// content type
+    string content = 15;
+
 
 }

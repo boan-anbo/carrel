@@ -1,5 +1,5 @@
 import {Container, Grid, ScrollArea, SimpleGrid, Skeleton, Title, useMantineTheme} from '@mantine/core';
-import {CreateOrUpdateInteractionFormView} from "../Views/CreateOrUpdateInteraction/CreateOrUpdateInteractionFormView";
+import {CreateOrUpdateFormIndex} from "../Views/CreateOrUpdateInteraction/CreateOrUpdateFormIndex";
 import {SelectedInteractionDataViewer} from "../Views/InteractViews/SelectedInteractionDataViewer";
 import {RecentInteractionsList} from "../Views/RecentCreatedInteractionList/RecentInteractionsList";
 import {PRIMARY_COL_HEIGHT} from "./PRIMARY_COL_HEIGHT";
@@ -28,7 +28,7 @@ export function MainView() {
                     <Title align={'center'} order={3} color={'dimmed'}>
                         Data Entry
                     </Title>
-                    <CreateOrUpdateInteractionFormView/>
+                    <CreateOrUpdateFormIndex/>
                 </ScrollArea>
                 <Grid gutter="md">
                     <Grid.Col>

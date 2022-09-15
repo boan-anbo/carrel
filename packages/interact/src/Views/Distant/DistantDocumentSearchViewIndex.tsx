@@ -1,14 +1,14 @@
 import {CSSProperties, useEffect, useState} from "react";
 import {DistantApiSearchResponse, IndexInfo, Passage} from "../../BackEnd/distant_api";
-import {searchDistant} from "../../BackEnd/distant-core-ops/search-distant";
 import {DistantDocumentView} from "./DistantDocumentItem";
 import {useDispatch} from "react-redux";
-import {selectPassage} from "../../States/features/app-state/appStateSlice";
 import {TextInput} from "../_ViewComponents/_ControlComponents/Input/TextInput";
-import {useDistantApiStore} from "../../zstore";
+import {useDistantApiStore} from "../../zstore-distant";
 import {ScrollArea, Button, Select} from "@mantine/core";
 import {IconArrowDown} from "@tabler/icons";
 import {SelectItem} from "@mantine/core/lib/Select/types";
+import {useInputPassageRadioStore} from "../../zstore-explorer";
+import {selectPassage} from "../../States/features/explorer-state/explorerStateSlice";
 
 export const DistantDocumentSearchViewIndex = (props: {
     style?: CSSProperties
@@ -20,6 +20,8 @@ export const DistantDocumentSearchViewIndex = (props: {
     const listIndicesApi = useDistantApiStore((state) => state.listIndicesApi);
 
     const [currentIndex, setCurrentIndex] = useState<string | null>(null);
+
+    const inputPassageRadio = useInputPassageRadioStore((state) => state.inputPassageRadio);
 
 
     const [availableIndices, setAvailableIndices] = useState<IndexInfo[] | null>([]);
@@ -64,9 +66,12 @@ export const DistantDocumentSearchViewIndex = (props: {
         }
     }
 
+    // select
+
+
     function onSelectPassage(event: React.MouseEvent<HTMLDivElement>, result: Passage) {
         console.log(result)
-        dispatch(selectPassage(result))
+        dispatch(selectPassage(result));
     }
 
     const Elements = documents.map((result, index) => {

@@ -5,7 +5,7 @@ import {launchDistantServer, SideCarProcess} from "./DistantServerService";
 import {CratecontrollerlistIndicesApi, CratecontrollersearchApi} from "../../../BackEnd/distant_api";
 import {notify} from "../../../Services/toast/notify";
 import {Logger, LogSource} from "../../../Services/logger";
-import {useDistantApiStore} from "../../../zstore";
+import {useDistantApiStore} from "../../../zstore-distant";
 import {DistantDocumentSearchViewIndex} from "../../Distant/DistantDocumentSearchViewIndex";
 
 const defaultMessage = "Check if server is running"

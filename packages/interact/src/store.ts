@@ -3,6 +3,7 @@ import {configureStore} from '@reduxjs/toolkit'
 import {appstateSlice} from "./States/features/app-state/appStateSlice";
 import {graphStateSlice} from "./States/features/graph-state/graphStateSlice";
 import {searchStateSlice} from "./States/features/search-state/searchStateSlice";
+import {explorerStateSlice} from "./States/features/explorer-state/explorerStateSlice";
 
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
         appstate: appstateSlice.reducer,
         graphstate: graphStateSlice.reducer,
         searchstate: searchStateSlice.reducer,
+        explorerstate: explorerStateSlice.reducer,
     },
 })
 
