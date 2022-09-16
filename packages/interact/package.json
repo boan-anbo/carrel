@@ -11,7 +11,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "codegen:interact_client": "cd gql && graphql-codegen",
-    "codegen:distant_core": "openapi-generator-cli generate -i http://127.0.0.1:3000/api-doc/openapi.json -g typescript-axios -o  src/BackEnd/distant_api",
+    "codegen:distant_core": "java -jar openapi-generator-cli-6.1.0.jar generate -i http://127.0.0.1:3000/api-doc/openapi.json -g typescript-axios -o  src/BackEnd/distant_api",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -52,6 +52,7 @@
     "date-fns": "^2.29.2",
     "dayjs": "^1.11.5",
     "embla-carousel-react": "^7.0.2",
+    "global": "^4.4.0",
     "l": "^0.6.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

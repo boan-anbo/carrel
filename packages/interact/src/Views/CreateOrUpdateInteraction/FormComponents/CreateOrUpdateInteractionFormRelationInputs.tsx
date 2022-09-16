@@ -1,11 +1,11 @@
 import FilterInteractionMultiple from "../../_ViewComponents/Selectors/FilterInteractionMultiple";
 import {Interaction, InteractionIdentity} from "../../../BackEnd/grl-client/interact_db_client";
-import {CreateInteractionFormData} from "./CreateInteractionFormData";
+import {CreateOrUpdateInteractionForm} from "./CreateOrUpdateInteractionForm";
 import {SelectValue} from "../../_ViewComponents/_ControlComponents/Select/SelectValue";
 import {MantineSize} from "@mantine/core";
 
 interface CreateOrUpdateInteractionFormRelationInputProps {
-    formData: CreateInteractionFormData;
+    formData: CreateOrUpdateInteractionForm;
     size: MantineSize | undefined;
     onContextsSelected: ((value: SelectValue<Interaction>[]) => void) | undefined
     onSubjectsSelected: ((value: SelectValue<Interaction>[]) => void) | undefined

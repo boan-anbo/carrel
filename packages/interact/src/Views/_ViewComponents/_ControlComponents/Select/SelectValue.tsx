@@ -108,7 +108,8 @@ export class SelectValue<T> {
             label.push(this.getIdentityMarker((interaction as Interaction).identity));
         }
         label.push(interaction.label);
-        return label.join(' ');
+        // use at most 7 words
+        return label.join(' ').split(' ').slice(0, 7).join(' ');
     }
 
     private static getIdentityMarker(identity: InteractionIdentity): string {

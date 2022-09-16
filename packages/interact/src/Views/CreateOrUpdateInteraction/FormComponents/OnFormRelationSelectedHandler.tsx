@@ -1,6 +1,6 @@
 import {Interaction, RelationTypes, RelationWeight} from "../../../BackEnd/grl-client/interact_db_client";
 import {CreateRelationDto} from "./CreateRelationDto";
-import {CreateInteractionFormData} from "./CreateInteractionFormData";
+import {CreateOrUpdateInteractionForm} from "./CreateOrUpdateInteractionForm";
 import {Dispatch, SetStateAction} from "react";
 import {Logger, LogSource} from "../../../Services/logger";
 import {SelectValue} from "../../_ViewComponents/_ControlComponents/Select/SelectValue";
@@ -14,8 +14,8 @@ const log = new Logger(LogSource.OnFormRelationSelectedHandler)
 export const onFormRelationSelectedHandler = (
     selectValues: SelectValue<Interaction>[],
     relations: RelationTypes,
-    formData: CreateInteractionFormData,
-    setFormData: Dispatch<SetStateAction<CreateInteractionFormData>>) => {
+    formData: CreateOrUpdateInteractionForm,
+    setFormData: Dispatch<SetStateAction<CreateOrUpdateInteractionForm>>) => {
     log.info("onFormRelationSelectedHandler", 'Provided selection data', {
         selectValues,
         relations,
@@ -26,37 +26,37 @@ export const onFormRelationSelectedHandler = (
 
     switch (relations) {
         case RelationTypes.ContextRelation:
-            setFormData({...formData, contextDtos: createDtos} as CreateInteractionFormData);
+            setFormData({...formData, contextDtos: createDtos} as CreateOrUpdateInteractionForm);
             break;
         case RelationTypes.TagRelation:
-            setFormData({...formData, tagDtos: createDtos} as CreateInteractionFormData);
+            setFormData({...formData, tagDtos: createDtos} as CreateOrUpdateInteractionForm);
             break;
         case RelationTypes.SubjectRelation:
-            setFormData({...formData, subjectDtos: createDtos} as CreateInteractionFormData);
+            setFormData({...formData, subjectDtos: createDtos} as CreateOrUpdateInteractionForm);
             break;
         case RelationTypes.FirstActRelation:
-            setFormData({...formData, firstActDtos: createDtos} as CreateInteractionFormData);
+            setFormData({...formData, firstActDtos: createDtos} as CreateOrUpdateInteractionForm);
             break;
         case RelationTypes.ObjectRelation:
-            setFormData({...formData, objectDtos: createDtos} as CreateInteractionFormData);
+            setFormData({...formData, objectDtos: createDtos} as CreateOrUpdateInteractionForm);
             break;
         case RelationTypes.SecondActRelation:
-            setFormData({...formData, secondActDtos: createDtos} as CreateInteractionFormData);
+            setFormData({...formData, secondActDtos: createDtos} as CreateOrUpdateInteractionForm);
             break;
         case RelationTypes.IndirectObjectRelation:
-            setFormData({...formData, indirectObjectDtos: createDtos} as CreateInteractionFormData);
+            setFormData({...formData, indirectObjectDtos: createDtos} as CreateOrUpdateInteractionForm);
             break;
         case RelationTypes.ParallelRelation:
-            setFormData({...formData, parallelDtos: createDtos} as CreateInteractionFormData);
+            setFormData({...formData, parallelDtos: createDtos} as CreateOrUpdateInteractionForm);
             break;
         case RelationTypes.PurposeRelation:
-            setFormData({...formData, purposeDtos: createDtos} as CreateInteractionFormData);
+            setFormData({...formData, purposeDtos: createDtos} as CreateOrUpdateInteractionForm);
             break;
         case RelationTypes.ReferenceRelation:
-            setFormData({...formData, referenceDtos: createDtos} as CreateInteractionFormData);
+            setFormData({...formData, referenceDtos: createDtos} as CreateOrUpdateInteractionForm);
             break;
         case RelationTypes.SettingRelation:
-            setFormData({...formData, settingDtos: createDtos} as CreateInteractionFormData);
+            setFormData({...formData, settingDtos: createDtos} as CreateOrUpdateInteractionForm);
             break;
     }
 }
@@ -73,12 +73,12 @@ export const onFormRelationSelectedHandler = (
  * @constructor
  */
 const SelectedInteractionToRelationDto = (selectValues: SelectValue<Interaction>[], relationType: RelationTypes): CreateRelationDto[] => {
-    return selectValues.map((labeledValue) => {
+    return selectValues.map((selectValue) => {
         const createRelationDto = new CreateRelationDto();
-        createRelationDto.linkedInteractionId = parseInt(labeledValue.value as string);
+        createRelationDto.linkedInteractionId = parseInt(selectValue.value as string);
         createRelationDto.relationType = relationType;
         createRelationDto.weight = RelationWeight.NotImportant;
-        createRelationDto.linkedInteraction = labeledValue.data;
+        createRelationDto.linkedInteraction = selectValue.data;
         return createRelationDto;
     })
 }

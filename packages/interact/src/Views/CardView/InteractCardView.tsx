@@ -1,7 +1,7 @@
 import FilterInteractionSingle from "../_ViewComponents/Selectors/FilterInteractionSingle";
 import {useEffect, useState} from "react";
 import {Interaction, Relation,} from "../../BackEnd/grl-client/interact_db_client";
-import {getFullInteractionById} from "../../BackEnd/interact-db-client/filter-operations";
+import {getFullInteractionById} from "../../BackEnd/interact-db-client/query-operations";
 import {notify} from "../../Services/toast/notify";
 import {useDispatch} from "react-redux";
 import {selectInteraction} from "../../States/features/app-state/appStateSlice";
@@ -29,7 +29,7 @@ export function InteractCardView(props: InteractionCardViewProps) {
         if (props.interaction) {
             setInteraction(props.interaction);
         }
-    }, [props.interaction?.id]);
+    }, [props.interaction]);
 
 
     function onInteractionCardRelationFieldItemClickRelation(relation: Relation) {

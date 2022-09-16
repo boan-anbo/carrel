@@ -39,10 +39,13 @@ public class InteractionResult
     public Interaction Interaction { get; set; }
     public Graph<Relation, Interaction> Graph { get; set; }
 
-    public InteractionResult(Interaction interaction, InteractionResultType interactionResultType)
+    public InteractionResult(Interaction? interaction, InteractionResultType interactionResultType)
     {
         ResultType = interactionResultType;
         Interaction = interaction;
-        Graph = Graph<Relation, Interaction>.FromInteraction(interaction);
+        if (interaction != null)
+        {
+            Graph = Graph<Relation, Interaction>.FromInteraction(interaction);
+        }
     }
 }

@@ -66,17 +66,32 @@ public class GraphQLQuery
     )
     {
         var interaction = await _repo.GetInteractionFull(id);
+        // // check if interaction is null, if so throw an error
+        // if (interaction == null)
+        // {
+        //     throw new QueryException(
+        //         ErrorBuilder.New()
+        //             .SetMessage("Interaction not found")
+        //             .SetCode("NOT_FOUND")
+        //             .SetExtension("id", id)
+        //             .Build()
+        //     );
+        // }
+
+        var result = new InteractionResult(interaction, InteractionResultType.FullInteraction);
+        return result;
+    }
+    
+    /// <summary>
+    /// Get full interaction by URI
+    /// </summary>
+    public async Task<InteractionResult> GetInteractionFullByUri(
+        [Service(ServiceKind.Synchronized)] IInteractionRepository _repo,
+        string uri
+    )
+    {
+        var interaction = await _repo.GetInteractionFullByUri(uri);
         // check if interaction is null, if so throw an error
-        if (interaction == null)
-        {
-            throw new QueryException(
-                ErrorBuilder.New()
-                    .SetMessage("Interaction not found")
-                    .SetCode("NOT_FOUND")
-                    .SetExtension("id", id)
-                    .Build()
-            );
-        }
 
         var result = new InteractionResult(interaction, InteractionResultType.FullInteraction);
         return result;

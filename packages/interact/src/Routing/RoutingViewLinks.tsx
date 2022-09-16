@@ -1,9 +1,9 @@
 export enum RoutingViewLinks {
     GRAPH_VIEW = '/graph',
     DASHBOARD = '/dashboard',
-    CREATE = '/',
+    CREATE = '/Create',
     GRID_VIEW = '/grid',
-    HOME = '/home',
+    HOME = '/',
     SERVER = '/server',
     DISTANT = '/distant',
 }

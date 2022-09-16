@@ -585,7 +585,9 @@ public class InteractionService : IInteractionService
         _dbContext.ChangeTracker.Clear();
         interactionWithAllRelations.UpdateCalculatedFields();
         // update
-        _dbContext.Update(interactionWithAllRelations);
+        // _dbContext.Update(interactionWithAllRelations);
+        // set modified state
+        _dbContext.Entry(interactionWithAllRelations).State = EntityState.Modified;
         // save changes
         await _dbContext.SaveChangesAsync();
          

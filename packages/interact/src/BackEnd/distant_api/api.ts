@@ -159,6 +159,12 @@ export interface Document {
      */
     'citation': string;
     /**
+     * / content type
+     * @type {string}
+     * @memberof Document
+     */
+    'content': string;
+    /**
      * / created date
      * @type {number}
      * @memberof Document
@@ -353,6 +359,12 @@ export interface Passage {
      * @memberof Passage
      */
     'location': string;
+    /**
+     * localtion type, describes what the location is, e.g. page number
+     * @type {string}
+     * @memberof Passage
+     */
+    'location_type': string;
     /**
      * passage text
      * @type {string}

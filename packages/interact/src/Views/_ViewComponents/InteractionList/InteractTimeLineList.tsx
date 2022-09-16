@@ -12,6 +12,7 @@ export interface InteractionListProps {
     title?: string;
     onClickInteraction?: (interaction: Interaction) => void;
     showTimeline?: boolean;
+    onRefresh?: () => void;
 }
 
 export function InteractTimeLineList(props: InteractionListProps) {
@@ -32,26 +33,26 @@ export function InteractTimeLineList(props: InteractionListProps) {
 
     return <>
         <Title className={'my-4 flex space-x-2 text-main'} order={6}>
-            <div ><IconNews size={24}/></div>
-            <Text>{props.title}</Text>
+            <div><IconNews size={24}/></div>
+            <Text onClick={props.onRefresh}>{props.title}</Text>
         </Title>
 
-        <Divider className={'my-4'} label={props.dividerLabel && <span className={'text-opacity-50'}>{props.dividerLabel}</span>} labelPosition={'center'}/>
+        <Divider className={'my-4'}
+                 label={props.dividerLabel && <span className={'text-opacity-50'}>{props.dividerLabel}</span>}
+                 labelPosition={'center'}/>
         <Timeline
 
+            className={'cursor-pointer'}
             bulletSize={24} lineWidth={2}>
 
             {props.children}
 
             {props.interactions.map((interaction, index) =>
                 <Timeline.Item
-
-
                     key={index}
-                    className={'cursor-pointer'}
                     onClick={() => props.onClickInteraction?.(interaction)}
                     bullet={getIcon(interaction, 12)
-                }
+                    }
                     title={interaction.label}>
 
                     <Text color="dimmed" size={props.size}>

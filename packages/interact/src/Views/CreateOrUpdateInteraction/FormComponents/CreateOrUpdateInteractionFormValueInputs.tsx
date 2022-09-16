@@ -1,10 +1,10 @@
-import {CreateInteractionFormData} from "./CreateInteractionFormData";
+import {CreateOrUpdateInteractionForm} from "./CreateOrUpdateInteractionForm";
 import {TextInput} from "../../_ViewComponents/_ControlComponents/Input/TextInput";
 import {MantineSize} from "@mantine/core";
 
 interface ICreateOrUpdateInteractionFormValueInputProps {
     onSubmitForm?: () => void;
-    formData: CreateInteractionFormData;
+    formData: CreateOrUpdateInteractionForm;
     size: MantineSize | undefined;
     onLabelChange: (e: string) => void;
     onDescriptionChange: (e: string) => void;

@@ -33,6 +33,10 @@ public class CreateOrUpdateInteractionRequestDto
     public DateTime? End { get; set; } = null;
 
     public string? Data { get; set; } = null;
+    
+    public string? DataType { get; set; } = null;
+    
+    public string? Uri { get; set; } = null;
 
 
     public List<CreateOrUpdateRelationDto>? ContextDtos { get; set; } = new();
@@ -147,13 +151,19 @@ public class CreateOrUpdateInteractionRequestDto
         {
             Id = Id ?? 0,
             Uuid = Uuid ?? Guid.NewGuid(),
+            Uri = Uri ?? Guid.NewGuid().ToString(),
+            
             Label = Label,
+            
             Description = Description,
             Identity = Identity,
             Content = Content,
+            
             Start = Start,
             End = End,
+            
             Data = Data,
+            DataType = DataType,
         };
     }
 }

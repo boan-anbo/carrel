@@ -11,8 +11,8 @@ import {
 import {getApolloClient} from "../../Services/get-apollo-client";
 import {FetchResult} from "@apollo/client";
 import {
-    CreateInteractionFormData
-} from "../../Views/CreateOrUpdateInteraction/FormComponents/CreateInteractionFormData";
+    CreateOrUpdateInteractionForm
+} from "../../Views/CreateOrUpdateInteraction/FormComponents/CreateOrUpdateInteractionForm";
 import {CreateRelationDto} from "../../Views/CreateOrUpdateInteraction/FormComponents/CreateRelationDto";
 import {Logger, LogSource} from "../../Services/logger";
 
@@ -39,9 +39,9 @@ export async function createInteractionEntity(label: string, identity: Interacti
     }
 }
 
-export async function createOrUpdateInteraction(createDto: CreateInteractionFormData): Promise<Interaction> {
+export async function createOrUpdateInteraction(createDto: CreateOrUpdateInteractionForm): Promise<Interaction> {
     // validate form data
-    CreateInteractionFormData.validateOrThrow(createDto);
+    CreateOrUpdateInteractionForm.validateOrThrow(createDto);
     log.info('createOrUpdateInteraction', 'Create Dto to convert', createDto);
 
     const request: CreateOrUpdateInteractionRequestDtoInput = CreateDtoToCreateOrUpdateInteractionRequestDtoInput(createDto);
@@ -56,7 +56,7 @@ export async function createOrUpdateInteraction(createDto: CreateInteractionForm
     return data.data?.createOrUpdateInteraction as Interaction;
 }
 
-const CreateDtoToCreateOrUpdateInteractionRequestDtoInput = (createDto: CreateInteractionFormData): CreateOrUpdateInteractionRequestDtoInput => {
+const CreateDtoToCreateOrUpdateInteractionRequestDtoInput = (createDto: CreateOrUpdateInteractionForm): CreateOrUpdateInteractionRequestDtoInput => {
     const result = {
         id: createDto.id ?? 0,
         uuid: createDto.uuid ?? null,
@@ -66,6 +66,10 @@ const CreateDtoToCreateOrUpdateInteractionRequestDtoInput = (createDto: CreateIn
         end: createDto.end ?? null,
         description: createDto.description,
         content: createDto.content,
+        data: createDto.data,
+        dataType: createDto.dataType,
+        uri: createDto.uri,
+
         categoryDtos: dtoToInput(createDto.categoryDtos),
         contextDtos: dtoToInput(createDto.contextDtos),
         subjectDtos: dtoToInput(createDto.subjectDtos),

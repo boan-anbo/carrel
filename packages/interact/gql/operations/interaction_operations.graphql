@@ -81,6 +81,13 @@ query GetInteractionFull($id: Long!) {
     }
 }
 
+# Get interaction by URI
+query GetInteractionByUri($uri: String!) {
+    interactionFullByUri(uri: $uri) {
+        ...interactionResultFragment
+    }
+}
+
 # Delete
 mutation DeleteInteraction($id: Long!) {
     deleteInteraction(id: $id)

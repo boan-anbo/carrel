@@ -9,6 +9,7 @@ import {Route} from "react-router-dom";
 import {RoutingViewLinks} from "../Routing/RoutingViewLinks";
 import {DistantDataEntryViewIndex} from "../Views/DistantDataEntryView/DistantDataEntryViewIndex";
 import {DistantDocumentSearchViewIndex} from "../Views/Distant/DistantDocumentSearchViewIndex";
+import {TitleBlock} from "../Layouts/TitleBlock";
 
 export function MainView() {
     const theme = useMantineTheme();
@@ -16,24 +17,24 @@ export function MainView() {
 
     return (
         <Container size={'xl'} style={{width: '100%'}} my="md">
-            <SimpleGrid cols={3} spacing="md" breakpoints={[{maxWidth: 'lg', cols: 1}]}>
+            <SimpleGrid cols={3} spacing="md" breakpoints={[{maxWidth: 'xl', cols: 1}]}>
 
-                <ScrollArea className={'bg-gray-50 rounded drop-shadow p-4'} style={{height: PRIMARY_COL_HEIGHT}}>
-                    <Title align={'center'} order={3} color={'dimmed'}>
-                        Data Source
-                    </Title>
-                    <DistantDocumentSearchViewIndex/>
-                </ScrollArea>
-                <ScrollArea  className={'bg-slate-50  rounded drop-shadow'} style={{height: PRIMARY_COL_HEIGHT}}>
-                    <Title align={'center'} order={3} color={'dimmed'}>
-                        Data Entry
-                    </Title>
-                    <CreateOrUpdateFormIndex/>
-                </ScrollArea>
+                <div>
+                    <TitleBlock title={'Data Input'}/>
+                    <ScrollArea className={'bg-gray-50 rounded drop-shadow p-4'} style={{height: PRIMARY_COL_HEIGHT}}>
+                        <DistantDocumentSearchViewIndex/>
+                    </ScrollArea>
+                </div>
+                <div>
+                    <TitleBlock title={'Create or update'}/>
+                    <ScrollArea className={'bg-slate-50  rounded drop-shadow'} style={{height: PRIMARY_COL_HEIGHT}}>
+                        <CreateOrUpdateFormIndex/>
+                    </ScrollArea>
+                </div>
                 <Grid gutter="md">
                     <Grid.Col>
-
-                        <ScrollArea  className={'bg-gray-50 p-4 rounded drop-shadow'}
+                        <TitleBlock title={"Interaction Viewer"}/>
+                        <ScrollArea className={'bg-gray-50 rounded drop-shadow'}
                                     style={{height: SECONDARY_COL_HEIGHT}}>
                             <SelectedInteractionDataViewer/>
                         </ScrollArea>
@@ -48,14 +49,14 @@ export function MainView() {
 
                         <ScrollArea className={'bg-gray-50 p-4 rounded drop-shadow'}
                                     style={{height: SECONDARY_COL_HEIGHT}}>
-                            <FilteredInteractionList />
+                            <FilteredInteractionList/>
                         </ScrollArea>
                     </Grid.Col>
                 </Grid>
-                <Grid gutter="md">
-                    <Grid.Col>
-                    <GraphMultiView
-                    />
+                <Grid align={'center'} justify={'center'} gutter="md">
+                    <Grid.Col span={3} >
+                        <GraphMultiView
+                        />
                     </Grid.Col>
                 </Grid>
             </SimpleGrid>

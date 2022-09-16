@@ -2,6 +2,7 @@ using act.Repositories.Contracts;
 using act.Repositories.Db;
 using act.Services.Contracts;
 using act.Services.Model;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StackExchange.Profiling.Internal;
@@ -77,8 +78,9 @@ public class GraphQLMutation : IGraphQLMutation
         [Service(ServiceKind.Synchronized)] InteractDbContext _dbContext,
         CreateOrUpdateInteractionRequestDto requestDto)
     {
-        _logger.LogInformation($"CreateOrUpdateInteraction: {requestDto.ToJson()}");
-        /// check validity of request
+        _logger.LogInformation("CreateOrUpdateInteraction: {Json}", requestDto.ToJson());
+
+        // check validity of request
         requestDto.ValidateOrThrow();
 
         // load related entities
@@ -102,26 +104,54 @@ public class GraphQLMutation : IGraphQLMutation
 
         // check if all subject relations are not tracked by dbcontext's change tracker
 
+
         // attach the interaction to the dbcontext
         // this adds to the change tracker
         await _interactionRepo.CreateOrUpdateInteractionWithoutSaving(interaction);
+
         // log ready to persis
         _logger.LogInformation($"Interaction Scalar Added Without Saving: {interaction.ToJson()}");
 
-        // if the interaction does not have ID, persist it to get the ID first
-        if (!(interaction.Id > 0))
+        try
         {
-            await _interactionRepo.SaveChanges();
-            _logger.LogInformation($"Interaction Scalar Added: {interaction.ToJson()}");
+            // if the interaction does not have ID, persist it to get the ID first
+            if (!(interaction.Id > 0))
+            {
+                await _interactionRepo.SaveChanges();
+                _logger.LogInformation($"Interaction Scalar Added: {interaction.ToJson()}");
+            }
+        }
+        catch (DbUpdateException e)
+        {
+            // check if it's unique constraint violation inner exception\
+            if (e.InnerException is SqliteException sqliteException &&
+                sqliteException.SqliteErrorCode == 19)
+            {
+                
+                // check if it's a unique constraint violation on the Uri
+                if (e.Message.Contains("Uri"))
+                {
+                    throw new ArgumentException(
+                        "Interaction with the same Uri already exists. Please use a different Uri."
+                    );
+                }
+                // if it is, throw a custom exception
+                throw;
+            }
+
+            throw;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
 
         // saving relations
         try
         {
-            /**
-             * 1. add or update relations
-             * 2. delete relations
-             */
+            // 1. add or update relations
+            // 2. delete relations
             await _interactionService.UpdateInteractionRelations(requestDto, interaction);
 
             // Complete calculations for the fields
@@ -144,11 +174,10 @@ public class GraphQLMutation : IGraphQLMutation
 
             // Update the interaction sentence.
             await _interactionService.updateInteractionSentence(interaction);
-            
+
             // return a new interaction with all essential relations.
             var result = await _interactionRepo.GetInteractionFull(interaction.Id);
 
-            
 
             // remove all relations from the change tracker
             // detach interaction

@@ -1,0 +1,4 @@
+enum SideCars {
+    Distant,
+    InteractDb,
+}

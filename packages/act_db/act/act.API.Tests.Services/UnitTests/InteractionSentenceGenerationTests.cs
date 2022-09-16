@@ -151,7 +151,7 @@ public class InteractionSentenceGenerationTest : TestBase
         var sen = fullExample.Interaction;
         fullExample.Interaction.UpdateCalculatedFields();
         Assert.IsTrue(sen.Sentence.Length > 0);
-        Assert.AreEqual("It makes sense", sen.Sentence);
+        Assert.AreEqual("Given Air pollution, you and I to avoid plastic bottles to preserve the environment, in settings of earth, for the future. Tags: Environmentality and An idea. Source: common sense. See also climate change.", sen.Sentence);
         
         
     }

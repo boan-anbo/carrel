@@ -35,7 +35,6 @@ function DistantServerCardIndex() {
             setSearchApi(distantSearchApi);
             const distantListIndicesApi = new CratecontrollerlistIndicesApi(undefined, url);
             setListIndicesApi(distantListIndicesApi);
-            // notify("DistantServerCardIndex stopped", "Distant DistantServerCardIndex", 'success');
             notify
             ("DistantServerCardIndex started", "Distant DistantServerCardIndex", 'success');
         }
@@ -45,12 +44,8 @@ function DistantServerCardIndex() {
 
 
     async function onStopServer() {
-        if (serverProcess) {
-            await invoke('kill_distant_sidecar' );
-            // await serverProcess.process.kill();
-            // setServerProcess(null);
-            // notify("DistantServerCardIndex stopped", "Distant DistantServerCardIndex", 'warning');
-        }
+        await invoke('kill_distant_sidecar');
+        notify("DistantServerCardIndex stopped", "Distant DistantServerCardIndex", 'warning');
     }
 
     return <>

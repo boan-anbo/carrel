@@ -165,6 +165,7 @@ type GraphQLQuery {
         where: IndirectObjectRelationFilterInput
     ): IndirectObjectRelationsConnection
     interactionFull(id: Long!): InteractionResult!
+    interactionFullByUri(uri: String!): InteractionResult!
     interactions(
         "Returns the elements in the list that come after the specified cursor."
         after: String,
@@ -992,6 +993,7 @@ input CreateOrUpdateInteractionRequestDtoInput {
     content: String!
     contextDtos: [CreateOrUpdateRelationDtoInput!]
     data: String
+    dataType: String
     description: String!
     end: DateTime
     firstActDtos: [CreateOrUpdateRelationDtoInput!]!
@@ -1009,6 +1011,7 @@ input CreateOrUpdateInteractionRequestDtoInput {
     start: DateTime
     subjectDtos: [CreateOrUpdateRelationDtoInput!]
     tagDtos: [CreateOrUpdateRelationDtoInput!]
+    uri: String
     uuid: UUID
 }
 

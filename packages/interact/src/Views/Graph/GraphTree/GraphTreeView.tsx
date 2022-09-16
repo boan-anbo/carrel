@@ -2,7 +2,7 @@ import React, {useContext, useEffect} from 'react';
 import {Behaviors, GraphinContext, GraphinTreeData, Utils} from '@antv/graphin';
 import {getTreeGraph, GraphinTreeDataWithI} from "../../../BackEnd/interact-db-client/graph-operations";
 import {Logger, LogSource} from "../../../Services/logger";
-import {getFullInteractionById} from "../../../BackEnd/interact-db-client/filter-operations";
+import {getFullInteractionById} from "../../../BackEnd/interact-db-client/query-operations";
 import {Interaction} from "../../../BackEnd/grl-client/interact_db_client";
 import {Layout} from "@antv/graphin/lib/typings/type";
 import FilterInteractionSingle from "../../_ViewComponents/Selectors/FilterInteractionSingle";

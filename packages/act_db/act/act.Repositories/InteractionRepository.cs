@@ -43,6 +43,13 @@ public class InteractionRepository : IInteractionRepository
             .ToListAsync();
     }
 
+    public async Task<Interaction> GetInteractionFullByUri(string uri)
+    {
+        return await GetFullInteractionList()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(i => i.Uri == uri);
+    }
+    
     public async Task<Interaction?> GetInteractionFullWithAllRelations(long id)
     {
         // include all relations of full interaction (including reverse as relations)
@@ -159,6 +166,7 @@ public class InteractionRepository : IInteractionRepository
     {
         return GetFullInteractionList();
     }
+
 
     private IQueryable<Interaction?> GetFullInteractionList()
     {

@@ -10,10 +10,10 @@ import {
     CreateOrUpdateInteractionFormRelationInputs
 } from "./FormComponents/CreateOrUpdateInteractionFormRelationInputs";
 import {CreateOrUpdateInteractionFormValueInputs} from "./FormComponents/CreateOrUpdateInteractionFormValueInputs";
-import {CreateInteractionFormData} from "./FormComponents/CreateInteractionFormData";
+import {CreateOrUpdateInteractionForm} from "./FormComponents/CreateOrUpdateInteractionForm";
 import {onFormRelationSelectedHandler} from "./FormComponents/OnFormRelationSelectedHandler";
 import FilterInteractionSingle from "../_ViewComponents/Selectors/FilterInteractionSingle";
-import {getFullInteractionById} from "../../BackEnd/interact-db-client/filter-operations";
+import {getFullInteractionById} from "../../BackEnd/interact-db-client/query-operations";
 import {SelectValue} from "../_ViewComponents/_ControlComponents/Select/SelectValue";
 import {Logger, LogSource} from "../../Services/logger";
 import {validateInteractionForm} from "./utils/FormValidator";
@@ -27,6 +27,8 @@ import {JsonView} from "../_ViewComponents/_ControlComponents/JsonView";
 import {InteractFormDatePickers} from "./InteractFormDatePickers";
 import {RootState} from "../../store";
 import {LinkInputButton} from "./LinkInputButton";
+import {CreateRelationDto} from "./FormComponents/CreateRelationDto";
+import {TitleBlock} from "../../Layouts/TitleBlock";
 
 interface CreateOrUpdateInteractionFormViewProp {
     size: SizeType | undefined;
@@ -75,8 +77,8 @@ export const CreateOrUpdateFormIndex = (props: CreateOrUpdateInteractionFormView
     const [
         formData, // single source of truth for form data
         setFormData
-    ] = useState<CreateInteractionFormData>(
-        new CreateInteractionFormData()
+    ] = useState<CreateOrUpdateInteractionForm>(
+        new CreateOrUpdateInteractionForm()
     )
 
 
@@ -111,7 +113,7 @@ export const CreateOrUpdateFormIndex = (props: CreateOrUpdateInteractionFormView
 
     const clearFormData = () => {
         log.info("Clearing form data");
-        setFormData(new CreateInteractionFormData());
+        setFormData(new CreateOrUpdateInteractionForm());
         setCurrentSelectedInteractionId(undefined);
 
         // @ts-ignore
@@ -164,7 +166,7 @@ export const CreateOrUpdateFormIndex = (props: CreateOrUpdateInteractionFormView
 
     function loadFormDataFromExistingInteraction(interaction: Interaction) {
         log.info("loadFormDataFromExistingInteraction", 'interaction', interaction);
-        const formDataFromInteraction = CreateInteractionFormData.fromInteraction(interaction);
+        const formDataFromInteraction = CreateOrUpdateInteractionForm.fromInteraction(interaction);
         log.info("Parsing form data from interaction", 'form data from interaction', formDataFromInteraction);
         setFormData(formDataFromInteraction);
     }
@@ -185,10 +187,61 @@ export const CreateOrUpdateFormIndex = (props: CreateOrUpdateInteractionFormView
     }
 
 
+    function onLinkInputButtonReferenceInputChange(referenceInput: Interaction | null) {
+
+        // when unlinking
+        if (referenceInput === null) {
+            const newReferenceDtos = formData.referenceDtos.filter((dto) => dto.linkedInteraction?.label !== selectedPassage?.document.title);
+            setFormData(
+                (state) => {
+                    return {
+                        ...state,
+                        referenceDtos: [...newReferenceDtos]
+                    } as CreateOrUpdateInteractionForm
+                }
+            )
+            log.info("Unlinked reference input", 'new reference dtos', newReferenceDtos);
+            return;
+        }
+
+        // start linking
+
+        // filter out existing relation dto if existed
+        const newReferenceDtos = formData.referenceDtos.filter(
+            r => r.linkedInteractionId != referenceInput?.id
+        )
+        const newReferenceDto = new CreateRelationDto()
+        newReferenceDto.linkedInteractionId = referenceInput?.id
+        newReferenceDto.hostInteractionId = formData.id
+        newReferenceDto.relationType = RelationTypes.ReferenceRelation
+        if (selectedPassage?.location) {
+
+            const n = parseInt(selectedPassage?.location);
+            // if n is number
+            if (!isNaN(n)) {
+                newReferenceDto.order = n;
+            }
+        }
+        newReferenceDto.linkedInteraction = referenceInput ?? undefined;
+        setFormData(
+            (state) => {
+                return {
+                    ...state,
+                    referenceDtos: [...newReferenceDtos, newReferenceDto]
+                } as CreateOrUpdateInteractionForm
+            }
+        )
+        log.info("onLinkInputButtonReferenceInputChange", 'new reference dtos', formData.referenceDtos)
+
+
+    }
+
     return (
         <div
-            className={'rounded drop-shadow px-4 py-2 space-y-4'}
+            className={'rounded drop-shadow p-4 space-y-4'}
             onMouseDown={e => e.stopPropagation()}>
+
+
 
             <div className={'text-center'}>
                 <FormModeToggle
@@ -232,7 +285,7 @@ export const CreateOrUpdateFormIndex = (props: CreateOrUpdateInteractionFormView
             <InteractionIdentitySelection onChange={(value) => setFormData({
                 ...formData,
                 identity: value
-            } as CreateInteractionFormData)}/>
+            } as CreateOrUpdateInteractionForm)}/>
 
 
             <FormDivider label={'Properties'} size={'xs'}/>
@@ -242,16 +295,16 @@ export const CreateOrUpdateFormIndex = (props: CreateOrUpdateInteractionFormView
                 onSubmitForm={onFormFinish}
                 formData={formData} size={'xs'}
                 onLabelChange={(e) => {
-                    setFormData({...formData, label: e} as CreateInteractionFormData)
+                    setFormData({...formData, label: e} as CreateOrUpdateInteractionForm)
                 }}
                 onDescriptionChange={(e) => setFormData({
                     ...formData,
                     description: e
-                } as CreateInteractionFormData)}
+                } as CreateOrUpdateInteractionForm)}
                 onContentChange={(e) => setFormData({
                         ...formData,
                         content: e
-                    } as CreateInteractionFormData
+                    } as CreateOrUpdateInteractionForm
                 )}/>
 
             <FormDivider position={'center'} size={'xs'} label={'Dates'}/>
@@ -260,12 +313,15 @@ export const CreateOrUpdateFormIndex = (props: CreateOrUpdateInteractionFormView
                 onSubmitForm={onFormFinish}
                 formData={formData}
                 onChange={(e) => {
-                    setFormData({...formData, start: e} as CreateInteractionFormData)
+                    setFormData({...formData, start: e} as CreateOrUpdateInteractionForm)
                 }}/>
 
             <FormDivider position={'center'} size={'xs'} label={'Relations'}/>
 
-            <LinkInputButton></LinkInputButton>
+            <LinkInputButton
+                onReferenceInputChange={onLinkInputButtonReferenceInputChange}
+                passage={selectedPassage}
+            ></LinkInputButton>
 
             <CreateOrUpdateInteractionFormRelationInputs
                 onSubmitForm={() => onFormFinish()}

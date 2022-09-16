@@ -1,12 +1,10 @@
 import {Badge, Button, Card, Grid, Group, Text, Title} from "@mantine/core";
 import {IconServer} from "@tabler/icons";
 import {useState} from "react";
-import { launchInteractServer, SideCarProcess} from "./InteractServerService";
-import {CratecontrollerlistIndicesApi, CratecontrollersearchApi} from "../../../BackEnd/distant_api";
-import {notify} from "../../../Services/toast/notify";
 import {Logger, LogSource} from "../../../Services/logger";
-import {useDistantApiStore} from "../../../zstore-distant";
 import {DistantDocumentSearchViewIndex} from "../../Distant/DistantDocumentSearchViewIndex";
+import {invoke} from "@tauri-apps/api";
+import {SideCarProcess} from "./InteractServerService";
 
 const defaultMessage = "Check if server is running"
 
@@ -17,38 +15,15 @@ function InteractServerCardIndex() {
 
     const [serverProcess, setServerProcess] = useState<SideCarProcess | null>(null);
 
-    const setSearchApi = useDistantApiStore((state) => state.setSearchApi);
-    const setListIndicesApi = useDistantApiStore((state) => state.setListIndicesApi);
 
     const onLaunchServer = async () => {
-        if (serverProcess) {
-            await serverProcess.process.kill();
-        }
-        const receivedPid = await launchInteractServer()
-
-        if (receivedPid) {
-            setServerProcess(receivedPid);
-
-            const url = `http://localhost:${receivedPid?.port}`;
-            log.info('InteractServerCardIndex url', 'ServerCardIndex url', url);
-            const distantSearchApi = new CratecontrollersearchApi(undefined, url);
-            setSearchApi(distantSearchApi);
-            const distantListIndicesApi = new CratecontrollerlistIndicesApi(undefined, url);
-            setListIndicesApi(distantListIndicesApi);
-            notify
-            ("InteractServerCardIndex started", "Interact DistantServerCardIndex", 'success');
-        }
-
-
+        log.info('Launching server');
+       await invoke('launch_db_sidecar');
     };
 
 
     async function onStopServer() {
-        if (serverProcess) {
-            await serverProcess.process.kill();
-            setServerProcess(null);
-            notify("InteractServerCardIndex stopped", "Interact DistantServerCardIndex", 'warning');
-        }
+      await invoke('kill_db_sidecar');
     }
 
     return <>

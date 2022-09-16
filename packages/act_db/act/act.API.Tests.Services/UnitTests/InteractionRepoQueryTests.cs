@@ -125,7 +125,7 @@ public class InteractionRepoQueryTests : TestBase
 
         var iWithMultipleRelations =
             await _mutationService.CreateOrUpdateInteraction(
-                _interactionRepo, 
+                _interactionRepo,
                 _interactionService,
                 _relationRepo, _dbContext, createOrUpdateDto);
 
@@ -141,11 +141,72 @@ public class InteractionRepoQueryTests : TestBase
         Assert.AreEqual(1, iWithMultipleRelations.IndirectObjects.Count);
         Assert.AreEqual(1, iWithMultipleRelations.Settings.Count);
         Assert.AreEqual(1, iWithMultipleRelations.References.Count);
-        
+
         var retrievedInteraction = await _queryService.GetInteractionFull(
             _interactionRepo,
             iWithMultipleRelations.Id);
         Assert.IsNotNull(retrievedInteraction);
         Assert.AreEqual(retrievedInteraction.Interaction.Settings.Count, 1);
+    }
+
+    [TestMethod]
+    public async Task GetInteractionByUriShouldWork()
+    {
+        // create empty interaction
+
+        var uri = Guid.NewGuid().ToString();
+        var createOrUpdateDto = new CreateOrUpdateInteractionRequestDto
+        {
+            Id = null,
+            Uuid = null,
+            Label = "Example",
+            Description = null,
+            Content = null,
+            Start = null,
+            End = null,
+            Data = null,
+            DataType = null,
+            Uri = uri,
+            ContextDtos = null,
+            SubjectDtos = null,
+            FirstActDtos = null,
+            ObjectDtos = null,
+            SecondActDtos = null,
+            ParallelDtos = null,
+            IndirectObjectDtos = null,
+            SettingDtos = null,
+            ReferenceDtos = null,
+            PurposeDtos = null,
+            TagDtos = null,
+            PropertyIds = null,
+            Identity = InteractionIdentity.ACT
+        };
+        var createdInteraction = await _mutationService.CreateOrUpdateInteraction(
+            _interactionRepo,
+            _interactionService,
+            _relationRepo,
+            _dbContext,
+            createOrUpdateDto);
+
+        Assert.IsNotNull(createdInteraction);
+
+        var interact = await _interactionRepo.GetInteractionFullByUri(uri);
+
+        Assert.IsNotNull(interact);
+
+        Assert.AreEqual(createOrUpdateDto.Uri, interact.Uri);
+    }
+    
+    // query non existing interaction should return response but with null interaction
+    [TestMethod]
+    public async Task GetNonExistingInteractionByUriShouldReturnResponse()
+    {
+        var uri = Guid.NewGuid().ToString();
+        var interactResponse = await _queryService.GetInteractionFullByUri(
+            _interactionRepo,
+            uri);
+
+        Assert.IsNotNull(interactResponse);
+        Assert.IsNull(interactResponse.Interaction);
     }
 }

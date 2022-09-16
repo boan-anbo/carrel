@@ -2,7 +2,7 @@ import {Interaction, RelationTypes} from "../../../../BackEnd/grl-client/interac
 import {
     filterInteractionRelation,
     filterInteractions
-} from "../../../../BackEnd/interact-db-client/filter-operations";
+} from "../../../../BackEnd/interact-db-client/query-operations";
 import {SelectValue} from "../../_ControlComponents/Select/SelectValue";
 import {Logger, LogSource} from "../../../../Services/logger";
 

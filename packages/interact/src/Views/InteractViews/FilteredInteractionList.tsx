@@ -3,7 +3,7 @@ import {useState} from "react";
 import {InteractTimeLineList} from "../_ViewComponents/InteractionList/InteractTimeLineList";
 import {useDispatch} from "react-redux";
 import {selectInteraction} from "../../States/features/app-state/appStateSlice";
-import {filterInteractions} from "../../BackEnd/interact-db-client/filter-operations";
+import {filterInteractions} from "../../BackEnd/interact-db-client/query-operations";
 import {TextInput} from "../_ViewComponents/_ControlComponents/Input/TextInput";
 
 export const FilteredInteractionList = () => {

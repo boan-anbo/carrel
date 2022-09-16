@@ -19,11 +19,12 @@ export enum LogSource {
     SearchState = 'SearchState',
     App = 'App',
     ServerService = "ServerService",
-    DistantServer   = "DistantServer",
+    DistantServer = "DistantServer",
     InteractServer = "InteractServer",
     InteractServerIndex = "InteractServerIndex",
-ExplorerState = "ExplorerState",
-    DistantDocumentSearchViewIndex  = "DistantDocumentSearchViewIndex",
+    ExplorerState = "ExplorerState",
+    DistantDocumentSearchViewIndex = "DistantDocumentSearchViewIndex",
+    LinkInputButton = "LinkInputButton",
 }
 
 export class Logger {

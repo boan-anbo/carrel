@@ -3,14 +3,23 @@
     windows_subsystem = "windows"
 )]
 
-mod side_car_launcher;
+mod open_file;
+mod distant_sidecar_launcher;
+mod db_sidecar_launcher;
+mod e_side_cars;
 
 use tauri::api::process::{Command, CommandEvent};
 use tauri::Manager;
-use side_car_launcher::{
+use distant_sidecar_launcher::{
     launch_distant_sidecar,
     kill_distant_sidecar
 };
+use db_sidecar_launcher::{
+    launch_db_sidecar,
+    kill_db_sidecar
+};
+use open_file::open_file;
+
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -22,7 +31,10 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             greet,
             launch_distant_sidecar,
-            kill_distant_sidecar
+            kill_distant_sidecar,
+            open_file,
+            launch_db_sidecar,
+            kill_db_sidecar
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

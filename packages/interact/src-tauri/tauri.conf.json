@@ -18,7 +18,7 @@
           {"name":  "bin/distant/distant",
             "sidecar": true
           },
-            {"name":  "bin/db/interact-db",
+            {"name":  "bin/db/db",
                 "sidecar": true
             }
         ]
@@ -33,7 +33,7 @@
       },
       "externalBin": [
         "bin/distant/distant",
-        "bin/db/interact-db"
+        "bin/db/db"
       ],
       "icon": [
         "icons/32x32.png",

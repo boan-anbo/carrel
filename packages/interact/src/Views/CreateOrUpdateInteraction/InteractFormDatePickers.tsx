@@ -1,10 +1,10 @@
-import {CreateInteractionFormData} from "./FormComponents/CreateInteractionFormData";
+import {CreateOrUpdateInteractionForm} from "./FormComponents/CreateOrUpdateInteractionForm";
 import {InteractDatePicker} from "../_ViewComponents/_ControlComponents/DatePicker/DatePicker";
 import {parseDateForPicker} from "../../Utils/ParseDateForPicker";
 
 interface InteractFormDatePickersProps {
     onSubmitForm: () => Promise<void>;
-    formData: CreateInteractionFormData;
+    formData: CreateOrUpdateInteractionForm;
     onChange: (e: Date|null ) => void;
 }
 

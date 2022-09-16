@@ -17,7 +17,9 @@ import {IconSearch} from "@tabler/icons";
 ReactDOM.render(
     <ApolloProvider client={getApolloClient()}>
         <Provider store={store}>
-            <MantineProvider withGlobalStyles withNormalizeCSS>
+            <MantineProvider
+                theme={{ loader: 'bars' }}
+                withGlobalStyles withNormalizeCSS>
 
                 <SpotlightProvider
                     actions={spotlightActions}

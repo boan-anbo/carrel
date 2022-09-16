@@ -1,8 +1,8 @@
 import {
-    TagRelation,
     ContextRelation,
     FirstActRelation,
-    IndirectObjectRelation, Interaction,
+    IndirectObjectRelation,
+    Interaction,
     ObjectRelation,
     ParallelRelation,
     PurposeRelation,
@@ -11,7 +11,8 @@ import {
     RelationWeight,
     SecondActRelation,
     SettingRelation,
-    SubjectRelation
+    SubjectRelation,
+    TagRelation
 } from "../../../BackEnd/grl-client/interact_db_client";
 
 export type AnyRelation = ContextRelation | SubjectRelation | FirstActRelation | ObjectRelation | SecondActRelation | IndirectObjectRelation | SettingRelation | PurposeRelation | ParallelRelation | ReferenceRelation | TagRelation;
@@ -26,7 +27,7 @@ export class CreateRelationDto {
     linkedInteractionId: number | undefined = 0;
     relationType: RelationTypes | undefined = undefined;
     uuid?: string;
-    weight: RelationWeight | undefined = undefined;
+    weight: RelationWeight | undefined = RelationWeight.NotImportant;
     hits?: number;
     order?: number;
     linkedInteraction: Interaction | undefined;

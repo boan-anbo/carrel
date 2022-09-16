@@ -137,7 +137,8 @@ public class InteractionRepoUpdateTests : TestBase
 
         Assert.AreEqual(updatedI.FirstActs.Count, 1);
         Assert.AreEqual(2, updatedI.Subjects.Count);
-        Assert.AreEqual("First_Subject_Old_Label",  updatedI.Subjects.Where(x => x.LinkedInteractionId == 1).FirstOrDefault()?.Label);
+        Assert.AreEqual("First_Subject_Old_Label",
+            updatedI.Subjects.Where(x => x.LinkedInteractionId == 1).FirstOrDefault()?.Label);
         var firstSubjectUuid = updatedI.Subjects.First().Uuid;
         var secondSubjectUuid = updatedI.Subjects.Last().Uuid;
 
@@ -365,10 +366,11 @@ public class InteractionRepoUpdateTests : TestBase
 
         Assert.AreEqual(updatedI.FirstActs.Count, 1);
         Assert.AreEqual(2, updatedI.Parallels.Count);
-        Assert.AreEqual("First_Subject_Old_Label", updatedI.Parallels.Where(x => x.LinkedInteractionId == 1).FirstOrDefault().Label);
+        Assert.AreEqual("First_Subject_Old_Label",
+            updatedI.Parallels.Where(x => x.LinkedInteractionId == 1).FirstOrDefault().Label);
         var firstSubjectUuid = updatedI.Parallels.First().Uuid;
         var secondSubjectUuid = updatedI.Parallels.Last().Uuid;
-        
+
         // detach to avoid tracking
         _dbContext.Entry(updatedI).State = EntityState.Detached;
         // detach updatedI.Parallels to avoid tracking
@@ -416,7 +418,7 @@ public class InteractionRepoUpdateTests : TestBase
             RelationTypes.ParallelRelation);
         Assert.IsNotNull(thirdSubject);
     }
-    
+
     // test updating content
     [TestMethod]
     public async Task Interaction_Update_Should_Work_With_Content()
@@ -452,12 +454,60 @@ public class InteractionRepoUpdateTests : TestBase
                 Content = null,
                 Identity = InteractionIdentity.ACT
             });
-        
+
         // check properties
         Assert.AreEqual(null, updatedI.Content);
         Assert.AreEqual("1", updatedI.Label);
         Assert.AreEqual(null, updatedI.Description);
+    }
 
+    /// <summary>
+    /// Interaction with the same URI should be able to update
+    /// </summary>
+    [TestMethod]
+    public async Task Interaction_Update_Should_Work_WithUri()
+    {
+        var uri = Guid.NewGuid().ToString();
+        var emptyDto = new CreateOrUpdateInteractionRequestDto
+        {
+            Label = "Test_Label_Old",
+            Description = "Test_Description_Old",
+            Content = "Test_Content_Old",
+            Identity = InteractionIdentity.ACT,
+            Uri = uri
+        };
 
+        var createdI =
+            await _mutationService.CreateOrUpdateInteraction(_interactionRepo,
+                _interactionService,
+                _relationRepo, _dbContext, emptyDto);
+
+        Assert.AreEqual(createdI.FirstActs.Count, 1);
+        // check properties
+        Assert.AreEqual("Test_Content_Old", createdI.Content);
+        Assert.AreEqual("Test_Label_Old", createdI.Label);
+        Assert.AreEqual("Test_Description_Old", createdI.Description);
+
+        // add two subject relations
+        var updatedI = await _mutationService.CreateOrUpdateInteraction(_interactionRepo,
+            _interactionService,
+            _relationRepo, _dbContext, new CreateOrUpdateInteractionRequestDto
+            {
+                Id = createdI.Id,
+                Uuid = createdI.Uuid,
+                Label = "1",
+                Description = null,
+                Content = null,
+                Identity = InteractionIdentity.ACT,
+                Uri = uri
+            });
+
+        // check properties
+        Assert.AreEqual(null, updatedI.Content);
+        Assert.AreEqual("1", updatedI.Label);
+        Assert.AreEqual(null, updatedI.Description);
+        Assert.AreEqual(uri, updatedI.Uri);
+        
+        
     }
 }

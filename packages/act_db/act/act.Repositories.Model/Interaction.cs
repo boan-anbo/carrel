@@ -59,13 +59,16 @@ public class Interaction
     ///     unique Uuid for double checking
     /// </summary>
     public Guid Uuid { get; set; } = Guid.NewGuid();
-    
+
 
     /// <summary>
-    /// Unique identifier of the interaction
+    /// Unique identifier of the interaction, default to a uuid.
     ///  </summary>
-    public string Uri { get; set; }
-    
+    /// <remarks>
+    /// This is different from uuid in that it's often coming from an unique identifier in the source, such as a url, or a doi, or citekey.
+    /// </remarks>
+    public string Uri { get; set; } = Guid.NewGuid().ToString();
+
     /// <summary>
     ///     The label of the interaction. This is freely defined, unlike <see cref="FirstAct" />. Should be short. If not unique,
     ///     use <see cref="Description" />.
@@ -134,13 +137,11 @@ public class Interaction
     /// A general field for data objects such as file or photo.
     ///     </summary>
     public string? Data { get; set; } = null;
-    
+
     /// <summary>
     /// Description of the date field, such as JSON, video, Textual Objects etc.
     ///   </summary>
     public string? DataType { get; set; } = null;
-    
-    
 
 
     /// <inheritdoc cref="Relation" />
@@ -381,14 +382,14 @@ public class Interaction
         return interaction;
     }
 
-   /// <summary>
+    /// <summary>
     /// Method to perform before each update.
     /// </summary>
     public void UpdateCalculatedFields()
     {
         Sentence = InteractionSpeak.UpdateSentence(this);
     }
-   
+
     /// <summary>
     ///  Factory pattern from label and identiy
     ///  </summary>

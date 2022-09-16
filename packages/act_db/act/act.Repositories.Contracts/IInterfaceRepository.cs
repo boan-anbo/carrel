@@ -36,4 +36,5 @@ public interface IInteractionRepository
     void LoadAllRelationsOfInteraction(long id);
 
     Task<IQueryable<Interaction>> GetInteractionFullListByIdAndRelation();
+    Task<Interaction> GetInteractionFullByUri(string uri);
 }

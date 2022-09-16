@@ -8,9 +8,8 @@ import {MantineSize} from "@mantine/core";
 export const RecentInteractionsList = (props: {
     size?: MantineSize;
 }) => {
-    const [recentInteractions, setRecentInteractions] = useState<Interaction[]>([]);
 
-    const {data, loading, error} = useGetRecentInteractionsQuery();
+    const {data, loading, error, refetch} = useGetRecentInteractionsQuery();
 
     const dispatch = useDispatch();
 
@@ -29,9 +28,14 @@ export const RecentInteractionsList = (props: {
         dispatch(selectInteraction(interaction));
     }
 
+    async function onRefresh() {
+        await refetch();
+    }
+
     return (
         <div onClick={e => e.stopPropagation()}>
             <InteractTimeLineList
+                onRefresh={onRefresh}
                 title={'Recent Interactions'}
                 dividerLabel={'By created date'}
                 size={props.size} onClickInteraction={onClick} interactions={interactions}/>
