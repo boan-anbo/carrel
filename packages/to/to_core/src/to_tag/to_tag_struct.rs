@@ -9,11 +9,21 @@ use crate::to_parser::parser_option::ToParserOption;
 use crate::to_ticket::to_ticket_marker::ToMarker;
 use crate::to_ticket::to_ticket_struct::ToTicket;
 
+
+/// This is a
 #[derive(Deserialize, Serialize, Clone)]
 pub struct ToTag {
-    key: String,
-    value: Option<String>,
-    note: Option<String>,
+    pub key: String,
+    pub value: Option<String>,
+    pub note: Option<String>,
+}
+
+/// Tag scan result
+#[derive(Deserialize, Serialize, Clone)]
+pub struct ToTagScanResult {
+    pub text_original: String,
+    pub text_without_tags: String,
+    pub tags: Vec<ToTag>,
 }
 
 // implement from TextualObjectTicket
@@ -52,25 +62,6 @@ impl From<ToTicket> for ToTag {
 
 impl ToTag {
 
-    // return (cleaned text, list of tags).
-    // Cleaned text = text without tags.
-    // List of tags = list of tags found in text.
-    pub fn scan_text_for_tags(text: &str) -> (String, Vec<ToTag>) {
-        let all_tickets = ToParser::scan_text_for_tickets(text, ToParserOption::default());
-        let mut tags: Vec<ToTag> = Vec::new();
-        for ticket in all_tickets {
-            let tag = ToTag::from(ticket);
-            tags.push(tag);
-        }
-        // replace all tags with empty string
-        let mut text = text.to_string();
-        for tag in &tags {
-            text = text.replace(&tag.print_tag(None), "");
-        }
-        (text, tags)
-
-
-    }
 
     // implement print tag
     pub fn print_tag(&self, to_mark: Option<ToMarker>) -> String {
@@ -99,7 +90,7 @@ impl ToTag {
 mod test {
     use std::borrow::Borrow;
 
-    
+
 
     use crate::to_tag::to_tag_struct::ToTag;
     use crate::to_parser::parser_option::ToParserOption;
@@ -161,13 +152,5 @@ mod test {
         assert_eq!(tag_print, "[[KEY]]");
     }
 
-    // test scan text for tags
-    #[test]
-    fn test_scan_text_for_tags() {
-        let raw_text = "1[[KEY|VALUE|NOTE]]\n2[[KEY2|VALUE2|NOTE2]]\n3[[KEY3|VALUE3|NOTE3]]";
-        let _result = ToParser::scan_text_for_tickets(raw_text, ToParserOption::default());
-        let (cleaned, tags) = ToTag::scan_text_for_tags(&raw_text);
-        assert_eq!(cleaned, "1\n2\n3");
-        assert_eq!(tags.len(), 3);
-    }
+
 }

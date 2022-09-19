@@ -275,12 +275,12 @@ mod test {
         assert_eq!(result_found_one.found_tos.len(), 1);
         assert_eq!(result_found_one.found_tos_count, 1);
         assert_eq!(result_found_one.missing_tos_count, 2);
-        let first_found = result_found_one.found_tos.get(&to_1.ticket_id).unwrap();
+        let first_found = result_found_one.found_tos.first().unwrap();
         assert_eq!(first_found.ticket_id, to_1.ticket_id);
         // add three
         textual_object_machine.add_textual_object(&to_2).await;
         textual_object_machine.add_textual_object(&to_3).await;
-        let first_found_to = result_found_one.found_tos.get(&to_1.ticket_id).unwrap();
+        let first_found_to = result_found_one.found_tos.first().unwrap();
         assert_eq!(first_found_to.ticket_id, to_1.ticket_id);
         // search again
         let result_found_all_wrapped = textual_object_machine.find_tos_by_ticket_ids(&find_request_dto).await;
@@ -289,11 +289,13 @@ mod test {
         assert_eq!(result_found_all.missing_tos_ids.len(), 0);
         assert_eq!(result_found_all.found_tos.len(), 3);
         // check found tos
-        let first_found_to = result_found_all.found_tos.get(&to_1.ticket_id).unwrap();
+        let first_found_to = result_found_all.found_tos.first().unwrap();
         assert_eq!(first_found_to.ticket_id, to_1.ticket_id);
-        let second_found_to = result_found_all.found_tos.get(&to_2.ticket_id).unwrap();
+        // check found tos, second
+        let second_found_to = result_found_all.found_tos.get(1).unwrap();
         assert_eq!(second_found_to.ticket_id, to_2.ticket_id);
-        let third_found_to = result_found_all.found_tos.get(&to_3.ticket_id).unwrap();
+        // check found tos, third
+        let third_found_to = result_found_all.found_tos.get(2).unwrap();
         assert_eq!(third_found_to.ticket_id, to_3.ticket_id);
 
         // check result store url equals to machine store url

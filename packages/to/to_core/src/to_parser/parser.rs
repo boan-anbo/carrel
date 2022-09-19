@@ -1,6 +1,7 @@
 use regex::{escape, Regex};
 
 use crate::to_parser::parser_option::ToParserOption;
+use crate::to_tag::to_tag_struct::{ToTag, ToTagScanResult};
 use crate::to_ticket::to_ticket_position::ToTicketPositionInfo;
 use crate::to_ticket::to_ticket_struct::ToTicket;
 
@@ -37,13 +38,57 @@ impl ToParser {
 
         result
     }
+
+
+    /// Scans plain texts for TO Tags and returns a list of ToTag
+    ///
+    /// # Arguments
+    /// * `text` - raw text to parse
+    ///
+    /// # Returns
+    /// * `ToTagScanResult` - list of ToTag extracted from the text with original and cleaned text
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use to_core::to_parser::parser::ToParser;
+    /// use to_core::to_tag_struct::ToTag;
+    /// use to_core::to_parser::parser_option::ToParserOption;
+    /// let raw_text = "[[KEY|VALUE|NOTE]]";
+    /// let result = ToParser::scan_text_for_tags(raw_text, ToParserOption::default());
+    /// assert_eq!(result.tags.len(), 1);
+    /// assert_eq!(result.tags.first().unwrap().key, "KEY");
+    /// assert_eq!(result.tags.first().unwrap().value, "VALUE");
+    /// assert_eq!(result.tags.first().unwrap().note, "NOTE");
+    ///
+    /// ```
+
+    pub fn scan_text_for_tags(text: &str, opt: ToParserOption) -> ToTagScanResult {
+        let text_original = text.to_string();
+        let all_tickets = ToParser::scan_text_for_tickets(text, opt);
+        let mut tags: Vec<ToTag> = Vec::new();
+        for ticket in all_tickets {
+            let tag = ToTag::from(ticket);
+            tags.push(tag);
+        }
+        // replace all tags with empty string
+        let mut text_without_tags = text.to_string();
+        for tag in &tags {
+            text_without_tags = text_without_tags.replace(&tag.print_tag(None), "");
+        }
+        ToTagScanResult {
+            text_original,
+            text_without_tags,
+            tags,
+        }
+    }
 }
 
 // test create default TextualObjectTicket
 #[cfg(test)]
 mod tests {
-    use crate::to_parser::parser::ToParser;
-    use crate::to_parser::parser_option::ToParserOption;
+    use std::borrow::Borrow;
+    use super::*;
 
     #[test]
     fn test_one_mark() {
@@ -128,5 +173,26 @@ mod tests {
         assert_eq!(result[0].values.len(), 3);
         let first_key = result[0].values.keys().next().unwrap();
         assert_eq!(first_key, "IMPORTANT");
+        let second_key = result[0].values.keys().nth(1).unwrap();
+        assert_eq!(second_key, "RELEVANT");
+        let third_key = result[0].values.keys().nth(2).unwrap();
+        assert_eq!(third_key, "THIS is something that blahblah");
+    }
+
+    // test scan text for tags
+    #[test]
+    fn test_scan_text_for_tags() {
+        let raw_text = "1[[KEY|VALUE|NOTE]]\n2[[KEY2|VALUE2|NOTE2]]\n3[[KEY3|VALUE3|NOTE3]]";
+        let _result = ToParser::scan_text_for_tickets(raw_text, ToParserOption::default());
+        let result = ToParser::scan_text_for_tags(raw_text, ToParserOption::default());
+        assert_eq!(result.text_without_tags, "1\n2\n3");
+        assert_eq!(result.tags.len(), 3);
+        assert_eq!(result.text_original, raw_text);
+        // check first tag
+        assert_eq!(result.tags[0].key, "KEY");
+        // check second tag
+        // check third tag
+
+
     }
 }
