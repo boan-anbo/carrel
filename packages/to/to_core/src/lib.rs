@@ -30,8 +30,10 @@ pub mod enums;
 pub mod to;
 pub mod db;
 pub mod to_card;
-mod to_tag;
+pub mod to_tag;
 pub mod error;
 pub mod to_parser;
+pub mod to_dtos;
+pub mod file_utils;
 
 

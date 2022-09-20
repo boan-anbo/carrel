@@ -1,12 +1,16 @@
+use std::borrow::Borrow;
+
 use axum::Router;
 use axum::routing::{get, post};
-use utoipa::{
-    Modify,
-    OpenApi,
-};
+use to_core::to_dtos::to_add_dto::{ ToAddManyDto};
+use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
+use crate::api_paths::ApiPaths;
+use crate::controllers::tags::scan_text_for_tags;
 use crate::controllers::tos::{add_tos, find_tos};
+use crate::to_api_dtos::{ToApiScanRequest, ToApiTagScanResult, ToApiTag};
+
 
 pub fn get_app() -> Router {
     #[derive(OpenApi)]
@@ -15,14 +19,15 @@ pub fn get_app() -> Router {
     paths(
     crate::controllers::tos::add_tos,
     crate::controllers::tos::find_tos,
+    crate::controllers::tags::scan_text_for_tags,
     ),
     components(
     schemas(
-    to_core::to::to_dtos::to_add_dto::TextualObjectAddManyDto,
-    to_core::to::to_dtos::to_add_dto::TextualObjectAddDto,
-    to_core::to::to_dtos::to_add_dto::TextualObjectStoredReceipt,
-    to_core::to::to_dtos::to_find_dto::TextualObjectFindRequestDto,
-    to_core::to::to_dtos::to_find_dto::TextualObjectFindResultDto,
+    to_core::to_dtos::to_add_dto::ToAddManyDto,
+    to_core::to_dtos::to_add_dto::ToAddDto,
+    ToApiScanRequest,
+    ToApiTagScanResult,
+    ToApiTag
     )
     ),
     tags(
@@ -38,6 +43,9 @@ pub fn get_app() -> Router {
         .route("/", get(crate::root))
         // `POST /users` goes to `create_user`
         .route("/add_tos", post(add_tos))
-        .route("/find_tos", post(find_tos));
+        .route("/find_tos", post(find_tos))
+        .route(ApiPaths::ScanTags.into(), post(scan_text_for_tags));
+    ;
+
     app
 }

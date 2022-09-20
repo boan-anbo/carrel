@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 use crate::error::ToErrors;
 
-use crate::to::to_dtos::to_add_dto::{ToAddManyDto, TextualObjectStoredReceipt};
-use crate::to::to_dtos::to_find_dto::{ToFindRequestDto, ToFindResultDto};
-use crate::to::to_dtos::to_scan_dto::{ToScanRequestDto, ToScanResultDto};
+use crate::to_dtos::to_add_dto::{ToAddManyDto, TextualObjectStoredReceipt};
+use crate::to_dtos::to_find_dto::{ToFindRequestDto, ToFindResultDto};
+use crate::to_dtos::to_scan_dto::{ToScanRequestDto, ToScanResultDto};
 use crate::to::to_struct::TextualObject;
 use crate::to_machine::to_machine_struct::ToMachine;
 use crate::to_parser::parser::ToParser;
@@ -110,7 +110,7 @@ impl ToMachine {
             }
         }
         // use find method to get all tos
-        let matched_to_tickets = ToParser::scan_text_for_tickets(&scan_request.text, ToParserOption::default());
+        let matched_to_tickets = ToParser::scan_text_for_tickets(&scan_request.text, &ToParserOption::default());
 
         let found_tos = self.find_by_ticket_ids(&matched_to_tickets.iter().map(
             |ticket_id| ticket_id.ticket_id.to_string()
@@ -140,8 +140,8 @@ mod test {
     use crate::enums::store_type::StoreType;
     use crate::error::error_message::ToErrorMessage;
     use crate::error::ToErrors;
-    use crate::to::to_dtos::to_add_dto::ToAddManyDto;
-    use crate::to::to_dtos::to_find_dto::ToFindRequestDto;
+    use crate::to_dtos::to_add_dto::ToAddManyDto;
+    use crate::to_dtos::to_find_dto::ToFindRequestDto;
     use crate::to::to_struct::TextualObject;
     use crate::to_machine::to_machine_option::ToMachineOption;
     use crate::to_machine::to_machine_struct::ToMachine;

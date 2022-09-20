@@ -6,21 +6,27 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = "0.5.1"
+axum = "0.5.15"
 hyper = { version = "0.14", features = ["full"] }
-tokio = {version = "1.20.1", features = ["full"]}
+tokio = { version = "1.20.1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "^1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-to_core = { path = "../to_parser" }
-utoipa = { version = "1.1.0", git = "https://github.com/juhaku/utoipa", features = ["axum_extras"] }
-utoipa-swagger-ui = { version = "1.1.0", git = "https://github.com/juhaku/utoipa", features = ["axum"] }
+to_core = { path = "../to_core" }
+utoipa = { version = "2", features = ["axum_extras"] }
+utoipa-swagger-ui = { version = "2.0.1", features = ["axum"] }
 dotenv = "0.15.0"
 tower-http = { version = "0.3.0", features = ["trace"] }
 mime = "0.3"
 strum = { version = "0.24.1", features = ["derive"] }
 strum_macros = "0.24"
 
+prost = "0.11.0"
+prost-types = "0.11.1"
+bytes = "1.2.1"
+
 [dev-dependencies]
-tower = { version = "0.4", features = ["util"] }
+tower = { version = "0.4.13", features = ["util"] }
+[build-dependencies]
+prost-build = { version = "0.11.0" }

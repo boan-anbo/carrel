@@ -16,9 +16,26 @@ mod app;
 pub mod api_doc;
 pub mod api_paths;
 pub(crate) mod test_utils;
+pub mod open_api_paths;
+pub mod dto_impls;
 
+pub mod to_api_dtos {
+    include!("dtos/to_api_dtos.rs");
+}
+
+
+use open_api_paths::{SWAGGER_PATH, OPENAPI_SPEC_JSON_PATH};
 #[tokio::main]
 async fn main() {
+
+    // check if user provided port
+    let args: Vec<String> = std::env::args().collect();
+
+    // get first arg
+    let user_provided_port = args.get(1).unwrap_or(&"13003".to_string()).clone();
+    // try parse port as number
+    let port: u16 = user_provided_port.parse().unwrap();
+
     // initialize .env
     dotenv::dotenv().ok();
 
@@ -32,11 +49,11 @@ async fn main() {
 
     let app = app::get_app();
 
+    let addr = SocketAddr::from(([127, 0, 0, 1], port));
+    tracing::info!("listening on {}", addr);
+    tracing::info!("swagger ui available at {}{}", addr, SWAGGER_PATH.replace("*tail", ""));
+    tracing::info!("openapi spec available at {}{}", addr, OPENAPI_SPEC_JSON_PATH);
 
-    // run our app with hyper
-    // `axum::Server` is a re-export of `hyper::Server`
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
-    tracing::debug!("listening on {}", addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await

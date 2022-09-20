@@ -1,0 +1,36 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\Bo\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add global tauri-app
+
+PATH: 
+  C:\Program Files (x86)\Razer Chroma SDK\bin;C:\Program Files\Razer Chroma SDK\bin;C:\Program Files (x86)\Razer\ChromaBroadcast\bin;C:\Program Files\Razer\ChromaBroadcast\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Oculus\Support\oculus-runtime;C:\Program Files\Microsoft\jdk-11.0.12.7-hotspot\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Maven\bin;C:\Users\Bo\.jdks\openjdk-17\bin;C:\sdks\flutter\bin;C:\ProgramData\chocolatey\bin;c:\libs\sqlite;C:\Program Files\Calibre2\;C:\Program Files\dotnet\;C:\Program Files (x86)\ABBYY FineReader 15\;C:\Users\Bo\RiderProjects\duxiu-finder\bin\Release\net6.0\win10-x64\;D:\Dropbox\boan-apps\zotero-read;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\sqlite3;C:\Users\Bo\.poetry\bin;C:\Users\Bo\AppData\Local\Programs\Python\Python39;C:\Users\Bo\AppData\Local\Programs\Python\Python39\scripts;C:\Program Files\Pandoc\;C:\Users\Bo\.local\bin\;C:\Windows\system32\config\systemprofile\AppData\Local\Microsoft\WindowsApps;C:\Program Files\nodejs\;C:\Windows\System32\Wbem;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\sdks\protoc-21.5-win64\bin;C:\Program Files\Git\cmd;C:\Script\carrel\releases\aliveline;;C:\TDM-GCC-64\bin;C:\Users\Bo\AppData\Local\pnpm;C:\Ruby31-x64\bin;C:\Ruby30-x64\bin;C:\Users\Bo\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\Bo\AppData\Local\Programs\Python\Python39\;C:\Users\Bo\.cargo\bin;C:\Users\Bo\AppData\Local\Microsoft\WindowsApps;C:\texlive\2021\bin\win32;C:\Users\Bo\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Bo\.dotnet\tools;C:\Program Files (x86)\Rico Suter\NSwagStudio\;C:\Users\Bo\AppData\Local\Programs\Microsoft VS Code Insiders\bin;C:\Users\Bo\AppData\Roaming\npm;C:\Windows\System32\Wbem;C:\Users\Bo\AppData\Local\JetBrains\Toolbox\scripts;C:\Program Files\OpenSSL-Win64\bin;C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;
+
+Yarn version: 
+  1.22.15
+
+Node version: 
+  16.14.2
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/tauri-app: Not found
+      at Request.params.callback [as _callback] (C:\Users\Bo\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66140:18)
+      at Request.self.callback (C:\Users\Bo\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140885:22)
+      at Request.emit (node:events:526:28)
+      at Request.<anonymous> (C:\Users\Bo\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141857:10)
+      at Request.emit (node:events:526:28)
+      at IncomingMessage.<anonymous> (C:\Users\Bo\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141779:12)
+      at Object.onceWrapper (node:events:645:28)
+      at IncomingMessage.emit (node:events:538:35)
+      at endReadableNT (node:internal/streams/readable:1345:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

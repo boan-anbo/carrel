@@ -1,9 +1,11 @@
 use axum::http::StatusCode;
 use axum::Json;
 use axum::response::IntoResponse;
-use to_core::to::to_dtos::to_add_dto::TextualObjectAddManyDto;
-use to_core::to::to_dtos::to_find_dto::TextualObjectFindRequestDto;
-use to_core::to_machine::to_machine_struct::TextualObjectMachine;
+use to_core::to_dtos::to_add_dto::ToAddDto;
+use to_core::to_dtos::to_add_dto::ToAddManyDto;
+use to_core::to_dtos::to_find_dto::ToFindRequestDto;
+use to_core::to_dtos::to_find_dto::ToFindResultDto;
+use to_core::to_machine::to_machine_struct::ToMachine;
 
 #[utoipa::path(
 post,
@@ -16,16 +18,16 @@ responses(
 pub(crate) async fn find_tos(
     // this argument tells axum to parse the request body
     // as JSON into a `CreateUser` type
-    Json(_payload): Json<TextualObjectFindRequestDto>,
+    Json(_payload): Json<ToFindRequestDto>,
 ) -> impl IntoResponse {
     // insert your application logic here
 
-    let mut tom = TextualObjectMachine::new_from_find_dto(
+    let mut tom = ToMachine::new_from_find_dto(
         &_payload).await;
 
     // this will be converted into a JSON response
     // with a status code of `201 Created`
-    let result = tom.find_tos_by_ticket_ids(&_payload).await;
+    let result = tom.find_tos_by_ticket_ids(&_payload).await.unwrap();
 
     (StatusCode::CREATED, Json(result))
 }
@@ -41,16 +43,15 @@ responses(
 pub(crate) async fn add_tos(
     // this argument tells axum to parse the request body
     // as JSON into a `CreateUser` type
-    Json(_payload): Json<TextualObjectAddManyDto>,
+    Json(_payload): Json<ToAddManyDto>,
 ) -> impl IntoResponse {
-    // insert your application logic here
 
-    let mut tom = TextualObjectMachine::new_from_add_dto(
+    let mut tom = ToMachine::new_from_add_dto(
         &_payload).await;
 
     // this will be converted into a JSON response
     // with a status code of `201 Created`
-    let receipt = tom.add_tos(_payload).await;
+    let receipt = tom.add_tos(_payload).await.unwrap();
     (StatusCode::CREATED, Json(receipt))
 }
 
@@ -58,18 +59,18 @@ pub(crate) async fn add_tos(
 #[cfg(test)]
 mod test {
     use std::collections::HashMap;
+
     use axum::body::{Body, HttpBody};
     use axum::http;
     use axum::http::{Request, StatusCode};
     use serde_json::{json, Value};
-    use to_core::to::to_dtos::to_add_dto::TextualObjectAddDto;
-    use super::*;
     use tower::ServiceExt;
-    use crate::api_paths::ApiPaths;
 
+    use crate::api_paths::ApiPaths;
     use crate::app::get_app;
     use crate::test_utils::test_utils::get_test_folder_path_string;
 
+    use super::*;
 
     #[tokio::test]
     async fn add_todos_should_work() {
@@ -79,18 +80,9 @@ mod test {
         // get cargo test folder
 
 
-        let mut tos: Vec<TextualObjectAddDto> = Vec::new();
+        let mut tos: Vec<ToAddDto> = Vec::new();
 
-        // tos.push( TextualObjectAddDto {
-        //     json: json!(
-        //         {
-        //                 "test_key": "test_value"
-        //         }
-        //     ),
-        //     ..Default::default()
-        // });
-
-        let request_body = TextualObjectAddManyDto {
+        let request_body = ToAddManyDto {
             store_dir: cargo_test_folder,
             tos,
             ..Default::default()

@@ -1,22 +1,24 @@
-use strum::{EnumString, Display, EnumIter};
+use strum::{Display, EnumIter, EnumString, IntoStaticStr};
 
-
-
-#[derive(EnumString, Debug, Display, EnumIter)]
+#[derive(EnumString, Debug, Display, EnumIter, IntoStaticStr)]
 pub enum ApiPaths {
     // set the strum string for the enum
     #[strum(serialize = "/add_tos")]
     AddTos,
     #[strum(serialize = "/find_tos")]
     FindTos,
+    #[strum(serialize = "/scan_tags")]
+    ScanTags,
 }
 
 
 // test
 #[cfg(test)]
 mod test {
-    use super::*;
     use strum::IntoEnumIterator;
+
+    use super::*;
+
     // test if api paths is automatically converted to string
     #[test]
     fn test_api_paths_to_string() {

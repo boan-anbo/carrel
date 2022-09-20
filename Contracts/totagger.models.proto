@@ -1,0 +1,27 @@
+// #[derive(Deserialize, Serialize, Clone)]
+// pub struct ScanResult {
+//     pub file_path: String,
+//     pub file_name: String,
+//     pub results: ToParserResult<ToTag>,
+// }
+
+
+syntax = "proto3";
+
+package totagger_models;
+
+import "to.api.models.proto";
+
+message ScanResult {
+    string file_path = 1;
+    string file_name = 2;
+    // To have package name `to_api_models` is crucial for imports, otherwise Protoc will complain
+    ToParserResult results = 3;
+}
+
+message ToParserResult {
+    string text_original = 1;
+    string text_cleaned = 2;
+    repeated to_api_models.ToApiTag tos = 3;
+    
+}
