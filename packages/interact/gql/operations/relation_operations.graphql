@@ -6,7 +6,7 @@ query GetSubjectRelationByHostId($hostId: Long!) {
     }
 }
 
-# Repeat for other types: Object Relation, Context Relation, Parallel Relation, Indirect Object Relation, Purpose Relation, First Act relation, second act relation, setting object, reference object
+# Repeat for other types: Object Relation, Context Relation, Parallel Relation, Indirect Object Relation, Purpose Relation, First Act relation, second interact-app relation, setting object, reference object
 
 query GetSubjectRelationByHostId($hostId: Long!) {
     subjectRelations(where: {hostInteractionId: {eq: $hostId}}) {
@@ -587,7 +587,7 @@ fragment purposeRelationFragment on PurposeRelation {
     }
 }
 
-# first act fragments
+# first interact-app fragments
 
 fragment firstActRelationConnectionFragment on FirstActRelationsConnection {
     nodes {
@@ -631,7 +631,7 @@ fragment firstActRelationFragment on FirstActRelation {
     }
 }
 
-# second act fragments
+# second interact-app fragments
 
 fragment secondActRelationConnectionFragment on SecondActRelationsConnection {
     nodes {

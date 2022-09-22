@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "act.Repositories.GraphQLMutation.AddInteraction";
+option csharp_namespace = "interact-app.Repositories.GraphQLMutation.AddInteraction";
 
 package act.Repositories.addinteraction;
 enum AddInteractionIdentity {
@@ -39,7 +39,7 @@ message CreateOrUpdateInteraction {
     repeated int32 objectIds = 10;
     repeated int32 propertyIds = 11;
     AddInteractionIdentity identity = 12;
-}  
+}
 
 message AddNewEntityInteractionRequest {
     string label = 1;

@@ -52,14 +52,14 @@ export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdat
                 props.onSubjectsSelected
             }></FilterInteractionMultiple>
 
-        {/*Controls for first act*/}
+        {/*Controls for first interact-app*/}
         <FilterInteractionMultiple
             onSubmitForm={props.onSubmitForm}
             currentValueDtos={props.formData.firstActDtos}
             label="First Acts"
             size={props.size}
             createInteractionIdentity={InteractionIdentity.Act}
-            placeholder={"First act interactions"} style={{width: "100%"}} onMultiSelectionChange={
+            placeholder={"First interact-app interactions"} style={{width: "100%"}} onMultiSelectionChange={
             props.onFirstActsSelected
         }></FilterInteractionMultiple>
 
@@ -73,14 +73,14 @@ export function CreateOrUpdateInteractionFormRelationInputs(props: CreateOrUpdat
             props.onObjectsSelected
         }></FilterInteractionMultiple>
 
-        {/*Controls for second act*/}
+        {/*Controls for second interact-app*/}
         <FilterInteractionMultiple
             onSubmitForm={props.onSubmitForm}
             currentValueDtos={props.formData.secondActDtos}
             label="Second Acts"
             size={props.size}
             createInteractionIdentity={InteractionIdentity.Act}
-            placeholder={"Second act interactions"} style={{width: "100%"}} onMultiSelectionChange={
+            placeholder={"Second interact-app interactions"} style={{width: "100%"}} onMultiSelectionChange={
             props.onSecondActsSelected
         }></FilterInteractionMultiple>
 
