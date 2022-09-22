@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MSTest.TestFramework" Version="2.2.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\act.API.Tests.Controllers\act.API.Tests.Controllers.csproj" />
+      <ProjectReference Include="..\Interact.Graph.Lib\Interact.Graph.Lib.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="appsettings.Development.json">
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="appsettings.json">
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>

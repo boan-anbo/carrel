@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="10.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\act.API.Common\act.API.Common.csproj" />
+        <ProjectReference Include="..\act.Repositories.Contracts\act.Repositories.Contracts.csproj" />
+        <ProjectReference Include="..\act.Repositories.Db\act.Repositories.Db.csproj" />
+        <ProjectReference Include="..\act.Services.Contracts\act.Services.Contracts.csproj" />
+        <ProjectReference Include="..\act.Repositories.Model\act.Repositories.Model.csproj" />
+    </ItemGroup>
+
+</Project>

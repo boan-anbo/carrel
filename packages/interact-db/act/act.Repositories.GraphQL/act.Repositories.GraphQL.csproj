@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Google.Protobuf" Version="3.21.5" />
+        <PackageReference Include="HotChocolate.AspNetCore" Version="12.13.0" />
+        <PackageReference Include="HotChocolate.Data.EntityFramework" Version="12.12.1" />
+        <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.22" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\act.API.DataContracts\act.API.DataContracts.csproj" />
+        <ProjectReference Include="..\act.Repositories.Contracts\act.Repositories.Contracts.csproj" />
+        <ProjectReference Include="..\act.Repositories.Db\act.Repositories.Db.csproj" />
+        <ProjectReference Include="..\act.Repositories\act.Repositories.csproj" />
+        <ProjectReference Include="..\act.Services.Contracts\act.Services.Contracts.csproj" />
+        <ProjectReference Include="..\Interact.Graph.Lib\Interact.Graph.Lib.csproj" />
+        <ProjectReference Include="..\Interact.Graph.Service\Interact.Graph.Service.csproj" />
+    </ItemGroup>
+
+</Project>
