@@ -26,4 +26,6 @@ pub struct ToApiTag {
     pub value: ::prost::alloc::string::String,
     #[prost(string, tag="3")]
     pub note: ::prost::alloc::string::String,
+    #[prost(string, tag="4")]
+    pub tag_string: ::prost::alloc::string::String,
 }

@@ -7,7 +7,7 @@ message ScaffoldNewProjectRequest {
     string project_name = 1;
     string project_parent_dir = 2;
 }
-
+    
 message ScaffoldNewProjectResponse {
     string project_dir = 1;
 }
