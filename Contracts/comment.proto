@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 
-package comment;
+package common.comment.v1;
 
 message Comment {
     // id

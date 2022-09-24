@@ -19,7 +19,7 @@ fn main() {
         // output generated code to the out_dir
         .out_dir(out_dir)
 
-        .compile_protos(&[proto_file], &["../../../contracts/", "../../../contracts/models/"])
+        .compile_protos(&[proto_file], &["../../../contracts/", "../../../contracts/to/"])
         .unwrap_or_else(|e| panic!("protobuf compile error: {}", e));
 
     println!("cargo:rerun-if-changed={}", proto_file);

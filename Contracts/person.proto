@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package person;
+package common.person.v1;
 
 
 /// a unique id in the original place

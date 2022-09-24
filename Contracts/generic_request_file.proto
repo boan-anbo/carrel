@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+
+package generic.api.files_request.v1;
+
+// A generic request contains an array of file paths.
+message FilesRequest {
+  repeated string file_paths = 1;
+  // description of the request.
+  string note = 2;
+}

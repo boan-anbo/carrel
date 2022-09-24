@@ -10,7 +10,7 @@ import "person.proto";
 ///Can be used as source.
 /// Can be used as a reference
 /// Can be used a digital object.
-package document;
+package common.document.v1;
 
 
 /// An abstract document.
@@ -25,7 +25,7 @@ message Document {
     /// publication date
     string publicationDate = 5;
     /// creators
-    repeated person.Person creators = 6;
+    repeated common.person.v1.Person creators = 6;
     /// In the case of a Zotero Item, this is the Zotero URI.
     string source_id = 7;
     /// Describes what the unique Id refers to.
@@ -35,7 +35,7 @@ message Document {
     /// archive location
     string archive_location = 10;
     /// file
-    repeated file.File files = 11;
+    repeated common.file.v1.File files = 11;
     // pages protobuf number type
     string pages = 12;
 

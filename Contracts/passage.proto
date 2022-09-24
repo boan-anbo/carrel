@@ -4,8 +4,8 @@ syntax = "proto3";
 import "document.proto";
 
 
+package common.passage.v1;
 
-package passage;
 
 message Passage {
     // id
@@ -16,10 +16,8 @@ message Passage {
     string description = 3;
     // e.g. "book1/chapter1" or page number
     string location = 4;
-
     // passage document
-    document.Document document = 5;
-
+    common.document.v1.Document document = 5;
     // localtion type, describes what the location is, e.g. page number
     string location_type = 6;
 }

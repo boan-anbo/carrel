@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+
+package firefly_keeper.api.v1;
+
+import "generic_request_directory.proto";
+import "tag.proto";
+    
+/// Fireflies capture project-wide (i.e. within the project folder) tags and category them by important types.
+/// Those tags in these types are presumed to be important, even though they are not unlike any other tags.
+message Fireflies {
+    // all tags
+    repeated common.tag.v1.Tag all_tags = 1;
+    // all tags count
+    int32 all_tags_count = 2;
+
+      // this is a special sense of note as in `annotation`, which is the essence of knowledge-making such as in commenting, summarizing, paraphrasing, expanding etc on a passage.
+      // Marker: [[Note]] or [[N]]
+    repeated common.tag.v1.Tag notes = 3;
+    // notes count
+    int32 notes_count = 4;
+
+    // this is for tasks. E.g. "revise this part", "search for another keyword"
+    // Marker: [[Todo]] or [[T]]
+   repeated common.tag.v1.Tag todos = 5;
+    // todos count
+    int32 todos_count = 6;
+
+   // this is for original ideas from the researcher
+      // Marker: [[Idea]] or [[I]]
+   repeated common.tag.v1.Tag ideas = 7; 
+    // ideas count
+    int32 ideas_count = 8;
+
+    // summary of key points or ideas from materials. [[Summary]]
+    // Marker: [[Summary]] or [[S]]
+    repeated common.tag.v1.Tag summaries = 9;
+    // summaries count
+    int32 summaries_count = 10;
+
+   // points, similar to ideas, but usable for writing.
+    // Marker: [[Point]] or [[P]]
+    repeated common.tag.v1.Tag points = 11;
+    // points count
+    int32 points_count = 12;
+
+    // facts, to mark important facts or data points.
+    // Marker: [[Fact]] or [[F]]
+    repeated common.tag.v1.Tag facts = 13;
+    // facts count
+    int32 facts_count = 14;
+
+    // quotes, to mark important quotes to use.
+    // Marker: [[Quote]] or [[Q]]
+    repeated common.tag.v1.Tag quotes = 15;
+    // quotes count
+    int32 quotes_count = 16;
+
+    // questions, to mark important questions to ask.
+    // Marker: [[Question]] or [[?]]
+    repeated common.tag.v1.Tag questions = 17;
+    // questions count
+    int32 questions_count = 18;
+
+    // keywords, to mark important keywords to use.
+    // Marker: [[Keyword]] or [[K]]
+    repeated common.tag.v1.Tag keywords = 19;
+    // keywords count
+    int32 keywords_count = 20;
+    
+    // references, to mark important references to use.
+    // Marker: [[Reference]] or [[R]]
+    repeated common.tag.v1.Tag references = 21;
+    // references count
+    int32 references_count = 22;
+
+    // others' points, point by another, usually from readings.
+    // Marker: [[OPoint]] or [[OP]]
+    repeated common.tag.v1.Tag opoints = 23;
+    // opoints count
+    int32 opoints_count = 24;
+
+    // Others' evidences, examples by another, usually from readings.
+    // Marker: [[OEvidence]] or [[OE]]
+    repeated common.tag.v1.Tag oevidences = 25;
+    // oevidences count
+    int32 oevidences_count = 26;
+
+    // data, to mark important data to use.
+    // Marker: [[Data]] or [[D]]
+    repeated common.tag.v1.Tag data = 27;
+    // data count
+    int32 data_count = 28;
+
+    // the rest of the tags that are not categorized.
+    repeated common.tag.v1.Tag unclassified = 29;
+    // unclassified count
+    int32 unclassified_count = 30;
+
+    
+    
+}
+
+service FireflyKeeperService {
+    rpc Scanfolder( generic.api.request_directory.v1.DirectoryRequest) returns (Fireflies);
+}

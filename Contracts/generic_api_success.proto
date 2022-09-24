@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+
+package generic.api.response.success.v1;
+
+// The response message containing the greetings.
+message SuccessResponse {
+  string message = 1;
+}

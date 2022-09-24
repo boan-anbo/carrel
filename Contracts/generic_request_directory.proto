@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+
+package generic.api.request_directory.v1;
+
+// A generic request with a single directory path.
+message DirectoryRequest {
+  string directory_path = 1;
+  // description of the request.
+  string note = 2;
+}

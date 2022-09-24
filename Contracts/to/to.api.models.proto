@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package to_api_models;
+package to_api_models.v1;
 
 
 

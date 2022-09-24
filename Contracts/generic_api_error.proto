@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package api_error;
+package generic.api.response.error.v1;
 
 // The greeting service definition.
 // The request message containing the user's name.
-message ApiError {
+message ErrorResponse {
     /// code
     string code = 1;
     /// message

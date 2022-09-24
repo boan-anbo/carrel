@@ -9,7 +9,7 @@ pub struct Person {
     pub id: Uuid,
     pub name: String,
     pub description: String,
-    pub extra: Vec<String>
+    pub extra: Vec<String>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -32,10 +32,15 @@ pub struct ToCard {
     store_info: String,
     // card data
     title: String,
+    // meta-description of the card
     description: String,
+    // main content of the card, usually the key information the card contains, e.g. highlighted text.
+    content: String,
+    // the context content of the card, usually needed to make sense of the content, e.g. full text.
+    context: String,
     creators: IndexMap<usize, Person>,
     comments: Vec<Comment>,
-    extra: Vec<String>
+    extra: Vec<String>,
 }
 
 #[derive(Debug, Display, EnumString, EnumIter)]
@@ -59,7 +64,7 @@ pub enum ToCardField {
     #[strum(serialize = "comments")]
     Comments,
     #[strum(serialize = "extra")]
-    Extra
+    Extra,
 }
 
 // implement default
@@ -72,10 +77,12 @@ impl Default for ToCard {
             store_url: "store_url_value".to_string(),
             store_info: "store_info_value".to_string(),
             title: "".to_string(),
+            content: "".to_string(),
+            context: "".to_string(),
             description: "".to_string(),
             creators: IndexMap::new(),
             comments: Vec::new(),
-            extra: Vec::new()
+            extra: Vec::new(),
         }
     }
 }
