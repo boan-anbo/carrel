@@ -9,4 +9,9 @@ edition = "2021"
 carrel_scaffold = { path = "../carrel_scaffold" }
 # The reason fireflies is not in `carrel_fireflies` is because fireflies is still useful as independent app (for managing totags in files), while carrel_scaffold is not without using carrel.
 fireflies = { path = "../../fireflies" }
+serde = { version = "1.0.145", features = ["derive"] }
 prost = "0.11.0"
+
+[build-dependencies]
+prost-build = "0.11.1"
+carrel_utils = { path = "../carrel_utils" }

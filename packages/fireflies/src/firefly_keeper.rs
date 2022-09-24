@@ -4,7 +4,7 @@ use to_core::to_parser::parser_option::ToParserOption;
 use to_core::to_tag::to_tag_struct::ToTag;
 use crate::firefly_keeper_model::model::v1::Fireflies;
 
-pub struct FireFlyKeeper {
+pub struct FireflyKeeper {
     // directory
     directory: String,
     // result
@@ -13,10 +13,10 @@ pub struct FireFlyKeeper {
 }
 
 // constructor
-impl FireFlyKeeper {
-    pub fn new(directory: String) -> FireFlyKeeper {
-        FireFlyKeeper {
-            directory,
+impl FireflyKeeper {
+    pub fn new(directory: &str) -> FireflyKeeper {
+        FireflyKeeper {
+            directory: directory.to_string(),
             result: Fireflies::default()
         }
     }
@@ -24,7 +24,7 @@ impl FireFlyKeeper {
 
 
 // scanning directory
-impl FireFlyKeeper {
+impl FireflyKeeper {
     pub fn scan_directory(&self) -> Result<Fireflies, std::io::Error> {
         // all files under directory
         let mut all_tags: Vec<ToTag> = Vec::new();
@@ -67,7 +67,7 @@ mod tests {
         // use its test folder as directory to scan
         let test_directory = format!("{}/tests", root_dir);
 
-        let firefly_keeper = FireFlyKeeper::new(test_directory);
+        let firefly_keeper = FireflyKeeper::new(test_directory);
         let result = firefly_keeper.scan_directory().expect("error scanning directory");
         assert_eq!(result.all_tags_count, 3);
         assert_eq!(result.notes.len(), 1);

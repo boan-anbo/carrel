@@ -30,28 +30,7 @@ fn main() {
         .unwrap_or_else(|e| panic!("protobuf compile error: {}", e));
 
     // rename generated file to snake case
-    rename_prost_generated_filenames(&out_dir).unwrap();
+    // rename generated file to snake case
+    carrel_utils::build::proto::post_process::rename_prost_generated_filenames(&out_dir).unwrap();
 
-}
-
-fn rename_prost_generated_filenames(dir: &Path) -> Result<(), Error> {
-    if dir.is_dir() {
-        for entry in read_dir(dir)? {
-            let entry = entry?;
-            let path = entry.path();
-
-            if path.is_file() {
-                let file_stem_renamed = &path
-                    .file_stem()
-                    .unwrap()
-                    .to_str()
-                    .unwrap()
-                    .replace(".", "_");
-
-                rename(&path, dir.join(format!("{}.rs", file_stem_renamed)))?;
-            }
-        }
-    }
-    println!("cargo:rerun-if-changed=build.rs");
-    Ok(())
 }

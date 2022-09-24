@@ -1,10 +1,21 @@
-/// ! A manager of tags represented as textual objects in text files.
-///
-///
-///!
-pub mod fireflies_impl;
+//! A manager of tags represented as textual objects in text files.
+//!
+//!
+//!
+//! # Examples
+//!
+//! ```
+//! use fireflies::firefly_keeper::FireflyKeeper;
+//! use to::ToParser;
+//! use to::ToParserOption;
+//!
+//! let directory_to_scan = "directory_to_scan";
+//! let firefly_keeper = FireflyKeeper::new(directory_to_scan);
+//! let fireflies = firefly_keeper.scan_directory().expect("directory not found");
+//! ```
+mod fireflies_impl;
 pub mod firefly_keeper;
-pub mod tag_impl;
+mod tag_impl;
 
 pub mod firefly_keeper_model {
     pub mod model {
