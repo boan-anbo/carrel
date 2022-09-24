@@ -1,10 +1,10 @@
 syntax = "proto3";
 
 /// import source
-import "common/file.proto";
+import "common/file/v1/file.proto";
 
 /// import person
-import "common/person.proto";
+import "common/person/v1/person.proto";
 
 /// The source is an abstract reference that could contain document info and other metadata that can have multiple.
 ///Can be used as source.

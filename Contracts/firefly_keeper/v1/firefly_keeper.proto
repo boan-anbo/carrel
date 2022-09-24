@@ -1,11 +1,10 @@
 syntax = "proto3";
 
 
-package carrel.firefly_keeper.model.v1;
+package carrel.firefly_keeper.v1;
 
-import "common/tag.proto";
+import "common/tag/v1/tag.proto";
     
-
 
 /// Fireflies capture project-wide (i.e. within the project folder) tags and category them by important types.
 /// Those tags in these types are presumed to be important, even though they are not unlike any other tags.

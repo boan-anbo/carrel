@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 /// import document from document.proto
-import "common/document.proto";
+import "common/document/v1/document.proto";
 
 
 package carrel.common.passage.v1;

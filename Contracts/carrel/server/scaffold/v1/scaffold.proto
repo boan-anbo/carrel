@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 
-package carrel_scaffold.v1;
+package carrel.server.scaffold.v1;
 
 message ScaffoldNewProjectRequest {
     string project_name = 1;

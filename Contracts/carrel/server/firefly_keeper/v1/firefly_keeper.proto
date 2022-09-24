@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+
+package carrel.server.firefly_keeper.v1;
+
+import "generic/api/request_directory/v1/request_directory.proto";
+
+import "firefly_keeper/v1/firefly_keeper.proto";
+
+
+
+    
+
+service FirefliesService {
+    rpc ScanFolderForFireflies(
+        generic.api.request_directory.v1.DirectoryRequest
+    ) returns (
+        FireFliesResponse
+    );
+}
+
+message FireFliesResponse {
+    carrel.firefly_keeper.v1.Fireflies fireflies = 1;
+}
