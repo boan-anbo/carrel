@@ -1,11 +1,3 @@
-/// ! A manager of tags represented as textual objects in text files.
-///
-///
-///!
-pub mod fireflies_impl;
-pub mod firefly_keeper;
-pub mod tag_impl;
-
 pub mod firefly_keeper_model {
     pub mod model {
         pub mod v1 {

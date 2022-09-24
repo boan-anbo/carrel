@@ -40,7 +40,7 @@ impl FireFlyKeeper {
             if path.is_file() {
 
                 // get file tags
-                let file_tags = ToParser::scan_file_for_tags(&path.to_str().unwrap().to_string(), &ToParserOption::default());
+                let file_tags = ToParser::scan_file_for_tags(path.to_str().unwrap(), &ToParserOption::default());
 
                 // add file tags to all tags
                 all_tags.extend(file_tags.tos);
