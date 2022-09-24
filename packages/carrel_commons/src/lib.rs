@@ -16,10 +16,26 @@ mod implementations;
 pub mod carrel {
     pub const FILE_DESCRIPTOR_SET: &[u8] = include_bytes!("generated/carrel_descriptor.bin");
 
+//     "carrel/common/tag/v1/tag.proto",
+// "carrel/common/file/v1/file.proto",
+// "carrel/common/importance/v1/importance.proto",
+// "carrel/common/person/v1/person.proto",
+// "carrel/common/passage/v1/passage.proto",
+// "carrel/common/storage_info/v1/storage_info.proto",
+//     "carrel/common/card/v1/card.proto",
+//     "carrel/common/comment/v1/comment.proto",
+//     "carrel/common/document/v1/document.proto",
+//     "carrel/common/snippet_location/v1/snippet_location.proto",
     pub mod common {
         pub mod tag {
             pub mod v1 {
                 include!("generated/carrel_common_tag_v1.rs");
+            }
+        }
+
+        pub mod document {
+            pub mod v1 {
+                include!("generated/carrel_common_document_v1.rs");
             }
         }
 
@@ -28,6 +44,49 @@ pub mod carrel {
                 include!("generated/carrel_common_snippet_location_v1.rs");
             }
         }
+
+        pub mod comment {
+            pub mod v1 {
+                include!("generated/carrel_common_comment_v1.rs");
+            }
+        }
+
+        pub mod card {
+            pub mod v1 {
+                include!("generated/carrel_common_card_v1.rs");
+            }
+        }
+
+        pub mod file {
+            pub mod v1 {
+                include!("generated/carrel_common_file_v1.rs");
+            }
+        }
+
+        pub mod importance {
+            pub mod v1 {
+                include!("generated/carrel_common_importance_v1.rs");
+            }
+        }
+
+        pub mod person {
+            pub mod v1 {
+                include!("generated/carrel_common_person_v1.rs");
+            }
+        }
+
+        pub mod passage {
+            pub mod v1 {
+                include!("generated/carrel_common_passage_v1.rs");
+            }
+        }
+
+        pub mod storage_info {
+            pub mod v1 {
+                include!("generated/carrel_common_storage_info_v1.rs");
+            }
+        }
+
     }
 
     pub mod server {

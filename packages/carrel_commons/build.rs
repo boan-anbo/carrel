@@ -4,8 +4,21 @@ use std::path::PathBuf;
 ///! Generate the proto files for Carrel Server.
 fn main() {
     let proto_files = vec![
+        // commons
+        "carrel/common/tag/v1/tag.proto",
+        "carrel/common/file/v1/file.proto",
+        "carrel/common/importance/v1/importance.proto",
+        "carrel/common/person/v1/person.proto",
+        "carrel/common/passage/v1/passage.proto",
+        "carrel/common/storage_info/v1/storage_info.proto",
+        "carrel/common/card/v1/card.proto",
+        "carrel/common/comment/v1/comment.proto",
+        "carrel/common/document/v1/document.proto",
+        "carrel/common/snippet_location/v1/snippet_location.proto",
+        // services and apis
         "carrel/server/scaffold/v1/scaffold.proto",
         "carrel/server/firefly_keeper/v1/firefly_keeper.proto",
+
     ];
 
     let proto_root_folders = vec![
