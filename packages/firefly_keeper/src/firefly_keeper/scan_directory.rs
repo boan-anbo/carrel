@@ -1,31 +1,14 @@
 use std::io;
+use carrel_commons::carrel::firefly_keeper::v1::Fireflies;
+use to_core::to_tag::to_tag_struct::ToTag;
 use to_core::to_parser::parser::ToParser;
 use to_core::to_parser::parser_option::ToParserOption;
-use to_core::to_tag::to_tag_struct::ToTag;
-use crate::firefly_keeper_model::model::v1::Fireflies;
-
-pub struct FireflyKeeper {
-    // directory
-    directory: String,
-    // result
-    result: Fireflies
-
-}
-
-// constructor
-impl FireflyKeeper {
-    pub fn new(directory: &str) -> FireflyKeeper {
-        FireflyKeeper {
-            directory: directory.to_string(),
-            result: Fireflies::default()
-        }
-    }
-}
-
+use crate::firefly_keeper::collect_fireflies::collect_fireflies;
+use crate::firefly_keeper::core::FireflyKeeper;
 
 // scanning directory
 impl FireflyKeeper {
-    pub fn scan_directory(&self) -> Result<Fireflies, std::io::Error> {
+    pub fn scan_directory(&self) -> Result<Fireflies, io::Error> {
         // all files under directory
         let mut all_tags: Vec<ToTag> = Vec::new();
 
@@ -48,26 +31,24 @@ impl FireflyKeeper {
             }
         };
 
-        let result = Fireflies::from(all_tags);
+        let result = collect_fireflies(all_tags);
+        // test result
         Ok(result)
 
     }
 }
-
-
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-   fn test_scan_directory() {
+    fn test_scan_directory() {
         // get rust environment variable for root directory of project
         let root_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
         // use its test folder as directory to scan
         let test_directory = format!("{}/tests", root_dir);
 
-        let firefly_keeper = FireflyKeeper::new(test_directory);
+        let firefly_keeper = FireflyKeeper::new(&test_directory);
         let result = firefly_keeper.scan_directory().expect("error scanning directory");
         assert_eq!(result.all_tags_count, 3);
         assert_eq!(result.notes.len(), 1);

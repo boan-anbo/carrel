@@ -1,0 +1,9 @@
+target/
+debug/
+.idea
+
+generated/
+
+Cargo.lock
+
+carrel_proto.iml

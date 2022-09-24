@@ -18,7 +18,9 @@ pub fn rename_prost_generated_filenames(dir: &Path) -> Result<(), Error> {
                     .unwrap()
                     .replace(".", "_");
 
-                rename(&path, dir.join(format!("{}.rs", file_stem_renamed)))?;
+                let ext = path.extension().unwrap().to_str().unwrap();
+
+                rename(&path, dir.join(format!("{}.{}", file_stem_renamed, ext)))?;
             }
         }
     }

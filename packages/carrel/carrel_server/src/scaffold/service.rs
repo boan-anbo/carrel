@@ -1,7 +1,7 @@
 use std::borrow::Borrow;
+use carrel_commons::carrel::server::scaffold::v1::scaffold_new_project_service_server::ScaffoldNewProjectService;
+use carrel_commons::carrel::server::scaffold::v1::{ScaffoldNewProjectRequest, ScaffoldNewProjectResponse};
 use tonic::{Request, Response, Status};
-use crate::scaffold::{ScaffoldNewProjectRequest, ScaffoldNewProjectResponse};
-use crate::scaffold::scaffold_new_project_service_server::ScaffoldNewProjectService;
 
 #[derive(Debug, Default)]
 pub struct ScaffoldService {}
@@ -31,14 +31,14 @@ impl ScaffoldNewProjectService for ScaffoldService {
 #[cfg(test)]
 mod test
 {
-    use crate::scaffold::scaffold_new_project_service_client::ScaffoldNewProjectServiceClient;
+    use carrel_commons::carrel::server::scaffold::v1::scaffold_new_project_service_client::ScaffoldNewProjectServiceClient;
     use super::*;
 
     #[tokio::test]
     async fn test_scaffold_new_project() -> Result<(), Box<dyn std::error::Error>> {
         let mut client = ScaffoldNewProjectServiceClient::connect("http://127.0.0.1:8081").await?;
 
-        let request = tonic::Request::new(crate::scaffold::ScaffoldNewProjectRequest {
+        let request = tonic::Request::new(ScaffoldNewProjectRequest {
             project_name: "test111".to_string(),
             project_parent_dir: "".to_string()
         });

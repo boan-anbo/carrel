@@ -1,6 +1,5 @@
-use fireflies::firefly_keeper::FireflyKeeper;
-use fireflies::firefly_keeper_model::model::v1::Fireflies;
-
+use carrel_commons::carrel::firefly_keeper::v1::Fireflies;
+use firefly_keeper::firefly_keeper::core::FireflyKeeper;
 use crate::errors::carrel_core_error::CarrelCoreError;
 use crate::errors::carrel_core_error::CarrelCoreError::IoError;
 

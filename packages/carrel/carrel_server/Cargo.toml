@@ -1,11 +1,15 @@
 [package]
-name = "carrel_grpc"
+name = "carrel_server"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+# Carrel components
+carrel_core = { path = "../carrel_core" }
+carrel_commons = { path = "../../carrel_commons" }
+# Other dependencies
 tonic = "0.8.1"
 prost = "0.11.0"
 tokio = { version = "1.21.1", features = ["macros", "rt-multi-thread"] }
@@ -16,7 +20,4 @@ tower-http = { version = "0.3.4", features = ["cors"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 dotenv = "0.15.0"
-carrel_core = { path = "../carrel_core" }
-
-[build-dependencies]
-tonic-build = "0.8.0"
+serde = { version = "1.0.130", features = ["derive"] }
