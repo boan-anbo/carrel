@@ -100,7 +100,3 @@ message Fireflies {
     
     
 }
-
-service FireflyKeeperService {
-    rpc Scanfolder( generic.api.request_directory.v1.DirectoryRequest) returns (Fireflies);
-}

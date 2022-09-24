@@ -1,8 +1,8 @@
 pub mod error_message;
 
-use std::fmt;
-use serde_json::Value;
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
+use std::fmt;
 
 // message: String, suggestion: String, payload: Value
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -25,7 +25,6 @@ impl Default for TextualObjectErrorMessage {
             payload_from_user: serde_json::Value::Null,
         }
     }
-
 }
 // impl default with generic error message
 impl ToErrors {
@@ -40,13 +39,11 @@ impl ToErrors {
     }
 }
 
-
 #[derive(Debug)]
 pub enum ToErrors {
     AddManyRequestError(TextualObjectErrorMessage),
     FindRequestError(TextualObjectErrorMessage),
 }
-
 
 impl std::error::Error for ToErrors {}
 
@@ -58,13 +55,12 @@ impl fmt::Display for ToErrors {
         }
     }
 }
- impl ToErrors {
-     // when there is no need to provide a specific error message, use this function to get a default error message.
-     pub fn generic_error_message(error: ToErrors) -> String {
-         match error {
-             ToErrors::AddManyRequestError(_) => String::from("Add Many Request DTO Error"),
-                ToErrors::FindRequestError(_) => String::from("Find Request DTO Error"),
-         }
-     }
- }
-
+impl ToErrors {
+    // when there is no need to provide a specific error message, use this function to get a default error message.
+    pub fn generic_error_message(error: ToErrors) -> String {
+        match error {
+            ToErrors::AddManyRequestError(_) => String::from("Add Many Request DTO Error"),
+            ToErrors::FindRequestError(_) => String::from("Find Request DTO Error"),
+        }
+    }
+}

@@ -1,0 +1,5 @@
+# /proto/buf.yaml
+version: v1
+lint:
+  use:
+    - DEFAULT

@@ -25,7 +25,7 @@ pub(crate) async fn scan_text_for_tags(
 ) -> impl IntoResponse {
     // insert your application logic here
 
-    let result  = ToParser::scan_text_for_tags(&_payload.text, ToParserOption::default());
+    let result  = ToParser::scan_text_for_tags(&_payload.text, &ToParserOption::default());
 
 
     (StatusCode::CREATED, Json(ToApiTagScanResult::from(result)))

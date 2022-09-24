@@ -1,17 +1,15 @@
-use std::borrow::Borrow;
-use regex::{escape, Regex};
 use crate::to_dtos::to_scan_dto::ToScanRequestDto;
+use regex::{escape, Regex};
+use std::borrow::Borrow;
 
 use crate::to_parser::parser_option::ToParserOption;
 use crate::to_parser::to_parser_result::ToParserResult;
-use crate::to_tag::to_tag_struct::{ToTag};
+use crate::to_tag::to_tag_struct::ToTag;
 use crate::to_ticket::to_ticket_position::ToTicketPositionInfo;
 use crate::to_ticket::to_ticket_struct::ToTicket;
 
-
 /// Parser to scan text for tickets
 pub struct ToParser {}
-
 
 impl ToParser {
     /// Scans plain texts for TO Tags and returns a list of ToTag
@@ -50,7 +48,10 @@ impl ToParser {
                 // check if tag already exists
                 let mut tag_exists = false;
                 for existing_tag in &tags {
-                    if existing_tag.key == tag.key && existing_tag.value == tag.value && existing_tag.note == tag.note {
+                    if existing_tag.key == tag.key
+                        && existing_tag.value == tag.value
+                        && existing_tag.note == tag.note
+                    {
                         tag_exists = true;
                         break;
                     }
@@ -68,7 +69,7 @@ impl ToParser {
         ToParserResult {
             text_original,
             tos: tags,
-            text_cleaned
+            text_cleaned,
         }
     }
 
@@ -100,7 +101,15 @@ impl ToParser {
     ///
     pub fn scan_text_for_tickets(text: &str, opt: &ToParserOption) -> Vec<ToTicket> {
         let lines: &Vec<String> = &text.lines().map(|s| s.to_string()).collect();
-        let re = Regex::new(format!(r"{}(.*?){}", escape(&opt.to_marker.left_marker), escape(&opt.to_marker.right_marker)).as_str()).unwrap();
+        let re = Regex::new(
+            format!(
+                r"{}(.*?){}",
+                escape(&opt.to_marker.left_marker),
+                escape(&opt.to_marker.right_marker)
+            )
+            .as_str(),
+        )
+        .unwrap();
         let mut result = Vec::new();
         // iterate with line number
         for (line_number, line) in lines.iter().enumerate() {
@@ -135,8 +144,8 @@ impl ToParser {
 // test create default TextualObjectTicket
 #[cfg(test)]
 mod tests {
-    use std::borrow::Borrow;
     use super::*;
+    use std::borrow::Borrow;
 
     #[test]
     fn test_one_mark() {
@@ -192,8 +201,14 @@ mod tests {
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].ticket_id, "1");
         assert_eq!(result[0].to_intext_option.as_ref().unwrap().line, 0);
-        assert_eq!(result[0].to_intext_option.as_ref().unwrap().column, indent.len());
-        assert_eq!(result[0].to_intext_option.as_ref().unwrap().length, text.len());
+        assert_eq!(
+            result[0].to_intext_option.as_ref().unwrap().column,
+            indent.len()
+        );
+        assert_eq!(
+            result[0].to_intext_option.as_ref().unwrap().length,
+            text.len()
+        );
     }
 
     // test one mark position in second line
@@ -207,8 +222,14 @@ mod tests {
         assert_eq!(result.len(), 1);
         assert_eq!(result[0].ticket_id, "1");
         assert_eq!(result[0].to_intext_option.as_ref().unwrap().line, 1);
-        assert_eq!(result[0].to_intext_option.as_ref().unwrap().column, indent.len());
-        assert_eq!(result[0].to_intext_option.as_ref().unwrap().length, text.len());
+        assert_eq!(
+            result[0].to_intext_option.as_ref().unwrap().column,
+            indent.len()
+        );
+        assert_eq!(
+            result[0].to_intext_option.as_ref().unwrap().length,
+            text.len()
+        );
     }
 
     // test tag scanning
@@ -251,12 +272,12 @@ mod tests {
         assert_eq!(cleaned_text, "1\n2\n3\n4");
         assert_eq!(result.tos.len(), 3);
 
-        let raw_text_without_duplicate = "1[[KEY|VALUE|NOTE]]\n2[[KEY2|VALUE2|NOTE2]]\n3[[KEY3|VALUE3|NOTE3]]";
-         let result_without_duplicate = ToParser::scan_text_for_tags(raw_text_without_duplicate, &ToParserOption::default());
+        let raw_text_without_duplicate =
+            "1[[KEY|VALUE|NOTE]]\n2[[KEY2|VALUE2|NOTE2]]\n3[[KEY3|VALUE3|NOTE3]]";
+        let result_without_duplicate =
+            ToParser::scan_text_for_tags(raw_text_without_duplicate, &ToParserOption::default());
         let cleaned_text = result_without_duplicate.text_cleaned;
         assert_eq!(result_without_duplicate.tos.len(), 3);
         assert_eq!(cleaned_text, "1\n2\n3");
-
-
     }
 }

@@ -63,7 +63,6 @@ impl Default for TextualObject {
     }
 }
 
-
 // default with uuid
 impl TextualObject {
     pub fn default_with_uuid(uuid: Uuid) -> Self {
@@ -107,7 +106,6 @@ impl TextualObject {
         let mut to = TextualObject::default();
         to.json = sqlx::types::Json(_json);
         to
-
     }
 }
 
@@ -122,7 +120,7 @@ impl From<TextualObject> for ToTicket {
         }
 
         // if length > 0, then assign the value
-        let store_url = if !textual_object.store_url.is_empty()  {
+        let store_url = if !textual_object.store_url.is_empty() {
             Some(textual_object.store_url.clone())
         } else {
             Some(String::new())
@@ -164,13 +162,20 @@ mod test {
     fn textual_object_from_textual_object_ticket_test() {
         let sample_textual_object = super::TextualObject::get_sample();
         let textual_object_ticket = ToTicket::from(sample_textual_object.clone());
-        assert_eq!(&textual_object_ticket.ticket_id, &sample_textual_object.ticket_id);
-        assert_eq!(textual_object_ticket.to_store_info.as_ref().unwrap(), &sample_textual_object.store_info);
-        assert_eq!(textual_object_ticket.to_store_url.as_ref().unwrap(), &sample_textual_object.store_url);
-
+        assert_eq!(
+            &textual_object_ticket.ticket_id,
+            &sample_textual_object.ticket_id
+        );
+        assert_eq!(
+            textual_object_ticket.to_store_info.as_ref().unwrap(),
+            &sample_textual_object.store_info
+        );
+        assert_eq!(
+            textual_object_ticket.to_store_url.as_ref().unwrap(),
+            &sample_textual_object.store_url
+        );
 
         let ticket = textual_object_ticket.print(None);
         assert!(ticket.len() > 0);
-
     }
 }

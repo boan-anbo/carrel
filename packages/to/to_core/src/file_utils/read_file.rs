@@ -1,4 +1,3 @@
-
 // read plain text files from disk
 
 use std::fs::File;

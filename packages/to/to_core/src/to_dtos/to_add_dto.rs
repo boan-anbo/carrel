@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 
+use crate::error::{TextualObjectErrorMessage, ToErrors};
 use chrono::Utc;
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use utoipa::ToSchema;
 use uuid::Uuid;
-use crate::error::{TextualObjectErrorMessage, ToErrors};
 
 use crate::to::to_struct::TextualObject;
 use crate::to_card::to_card_convert_rule::ToCardConvertRule;
@@ -43,7 +43,6 @@ impl From<ToAddManyDto> for TextualObjectStoredReceipt {
         receipt
     }
 }
-
 
 #[derive(Clone, Debug, Serialize, ToSchema, Deserialize)]
 pub struct ToAddManyDto {
@@ -85,7 +84,7 @@ impl ToAddManyDto {
         };
         for _ in 0..10 {
             sample_dto.tos.push(ToAddDto::sample());
-        };
+        }
         sample_dto
     }
 
@@ -101,7 +100,9 @@ impl ToAddManyDto {
         if self.are_card_map_rules_valid() == false {
             let invalid_fields = self.are_card_map_rules_valid_return_invalid();
             errors.message = "Card map rules are not valid".to_string();
-            errors.suggestion = format!("See card fields specifications and provide correct Textual Object Card fields");
+            errors.suggestion = format!(
+                "See card fields specifications and provide correct Textual Object Card fields"
+            );
             errors.payload_for_user = json!(invalid_fields);
             return Err(ToErrors::AddManyRequestError(errors));
         }
@@ -116,7 +117,6 @@ impl ToAddManyDto {
         }
         false
     }
-
 
     // check if the card_map_rules are valid
     fn are_card_map_rules_valid(&self) -> bool {
@@ -228,26 +228,26 @@ impl From<ToAddDto> for TextualObject {
 // tests
 #[cfg(test)]
 mod test {
-    use tokio_test::assert_err;
     use super::*;
+    use tokio_test::assert_err;
 
     // test from dto to textual object
     #[test]
     fn test_from_dto_to_textual_object() {
         let json_value = serde_json::json!({
+            "test_string": "test_string_value",
+            "test_number": 1,
+            "test_boolean": true,
+            "test_null": null,
+            "test_array": [1, 2, 3],
+            "test_object": {
                 "test_string": "test_string_value",
                 "test_number": 1,
                 "test_boolean": true,
                 "test_null": null,
                 "test_array": [1, 2, 3],
-                "test_object": {
-                    "test_string": "test_string_value",
-                    "test_number": 1,
-                    "test_boolean": true,
-                    "test_null": null,
-                    "test_array": [1, 2, 3],
-                }
-            });
+            }
+        });
 
         let dto = ToAddDto {
             source_id: Some("source_id_value".to_string()),
@@ -269,25 +269,22 @@ mod test {
     fn test_are_textual_objects_valid() {
         let dto = ToAddManyDto {
             tos: vec![],
-          ..Default::default()
+            ..Default::default()
         };
         assert_err!(&dto.is_valid());
         // check error mesasge
         // map error to TextualObjectErrorMessage
         match dto.is_valid() {
-            Err(e) => {
-                match e {
-                    ToErrors::AddManyRequestError(e) => {
-                        assert_eq!(e.message, "No textual objects to add");
-                        assert!(true);
-                    }
-                    _ => {
-                        assert!(false);
-                    }
+            Err(e) => match e {
+                ToErrors::AddManyRequestError(e) => {
+                    assert_eq!(e.message, "No textual objects to add");
+                    assert!(true);
                 }
-            }
+                _ => {
+                    assert!(false);
+                }
+            },
             _ => panic!("Expected error"),
         }
     }
 }
-

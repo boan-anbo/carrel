@@ -21,7 +21,7 @@ impl Default for ToMachineOption {
             use_random_file_name: false,
             store_file_name: None,
             store_info: Some("A TO Store".to_string()),
-            store_type: StoreType::SQLITE
+            store_type: StoreType::SQLITE,
         }
     }
 }

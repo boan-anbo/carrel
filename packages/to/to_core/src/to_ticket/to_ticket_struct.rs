@@ -2,7 +2,6 @@ use chrono::{DateTime, FixedOffset, Local};
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 
-
 use crate::to_ticket::to_ticket_marker::ToMarker;
 use crate::to_ticket::to_ticket_position::ToTicketPositionInfo;
 use crate::utils::id_generator::generate_id;
@@ -37,7 +36,6 @@ pub struct ToTicket {
     pub to_marker: ToMarker,
     #[serde(default)]
     pub to_intext_option: Option<ToTicketPositionInfo>,
-
 }
 
 // create default TextualObjectTicket
@@ -54,11 +52,7 @@ impl Default for ToTicket {
             to_intext_option: None,
         }
     }
-
 }
-
-
-
 
 // test create default TextualObjectTicket
 #[cfg(test)]
@@ -72,13 +66,12 @@ mod tests {
         let ticket = ToTicket::default();
         assert_eq!(ticket.ticket_id.len(), 5);
         assert_eq!(ticket.values.len(), 0);
-        assert_eq!(ticket.to_updated.num_days_from_ce(), Utc::now().num_days_from_ce());
+        assert_eq!(
+            ticket.to_updated.num_days_from_ce(),
+            Utc::now().num_days_from_ce()
+        );
         assert_eq!(ticket.to_store_url, None);
         assert_eq!(ticket.to_store_info, None);
         assert!(ticket.to_marker.left_marker.len() > 0);
     }
-
-
-
-
 }

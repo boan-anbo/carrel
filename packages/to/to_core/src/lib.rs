@@ -1,8 +1,4 @@
-#![allow(
-dead_code,
-unused_imports
-)]
-
+#![allow(dead_code, unused_imports)]
 
 //! Core Library for the Textual Object Ecosystem
 //!
@@ -22,18 +18,16 @@ unused_imports
 //!
 //! - Textual Object Card
 
-pub mod entities;
-pub(crate) mod utils;
-pub mod to_machine;
-pub mod to_ticket;
-pub mod enums;
-pub mod to;
 pub mod db;
-pub mod to_card;
-pub mod to_tag;
+pub mod entities;
+pub mod enums;
 pub mod error;
-pub mod to_parser;
-pub mod to_dtos;
 pub mod file_utils;
-
-
+pub mod to;
+pub mod to_card;
+pub mod to_dtos;
+pub mod to_machine;
+pub mod to_parser;
+pub mod to_tag;
+pub mod to_ticket;
+pub(crate) mod utils;

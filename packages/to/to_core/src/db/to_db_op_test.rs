@@ -1,14 +1,17 @@
 // test groups
 #[cfg(test)]
 mod test {
-    use std::env;
     use std::borrow::BorrowMut;
+    use std::env;
     use std::path::PathBuf;
 
     use uuid::Uuid;
 
     use crate::db::db_op::{connect_to_database, initialize_database};
-    use crate::db::to_db_op::{check_if_ticket_id_exists, delete_to_by_ticket_id, find_to_by_id, find_to_by_ticket_id, insert_to};
+    use crate::db::to_db_op::{
+        check_if_ticket_id_exists, delete_to_by_ticket_id, find_to_by_id, find_to_by_ticket_id,
+        insert_to,
+    };
     use crate::to::to_struct::TextualObject;
     use crate::utils::id_generator::generate_id;
 
@@ -19,10 +22,10 @@ mod test {
         cargo_dir.into_os_string().into_string().unwrap()
     }
 
-
     async fn get_random_database() -> String {
         let random_id = generate_id();
-        let initialized_database_url = initialize_database(&get_random_database_dir(), &random_id).await;
+        let initialized_database_url =
+            initialize_database(&get_random_database_dir(), &random_id).await;
         initialized_database_url.unwrap()
     }
 
@@ -50,13 +53,13 @@ mod test {
         // create textual object
         let uuid = Uuid::new_v4();
         let json = serde_json::json!({
-                    "test_key": "test_value",
-                    "empty_key": "",
-                    "null_key": null,
-                    "array_key": [1, 2, 3],
-            "number_key": 1,
-            "boolean_key": true,
-                });
+                "test_key": "test_value",
+                "empty_key": "",
+                "null_key": null,
+                "array_key": [1, 2, 3],
+        "number_key": 1,
+        "boolean_key": true,
+            });
         let mut textual_object_insert = TextualObject::default_with_uuid(uuid.clone());
         textual_object_insert.json = sqlx::types::Json(json.clone());
         print!("{:?}", &uuid);
@@ -67,18 +70,40 @@ mod test {
 
         let mut conn2 = pool.acquire().await.unwrap();
 
-        let textual_object_read = find_to_by_id(conn2.borrow_mut(), &textual_object_insert.id).await.unwrap();
-
+        let textual_object_read = find_to_by_id(conn2.borrow_mut(), &textual_object_insert.id)
+            .await
+            .unwrap();
 
         // handle textual_object_read Result
         assert_eq!(textual_object_read.id, uuid);
-        assert_eq!(textual_object_read.ticket_id, textual_object_insert.ticket_id);
-        assert_eq!(textual_object_read.source_id, textual_object_insert.source_id);
-        assert_eq!(textual_object_read.source_id_type, textual_object_insert.source_id_type);
-        assert_eq!(textual_object_read.source_path, textual_object_insert.source_path);
-        assert_eq!(textual_object_read.store_info, textual_object_insert.store_info);
-        assert_eq!(textual_object_read.store_url, textual_object_insert.store_url);
-        assert_eq!(textual_object_read.source_name, textual_object_insert.source_name);
+        assert_eq!(
+            textual_object_read.ticket_id,
+            textual_object_insert.ticket_id
+        );
+        assert_eq!(
+            textual_object_read.source_id,
+            textual_object_insert.source_id
+        );
+        assert_eq!(
+            textual_object_read.source_id_type,
+            textual_object_insert.source_id_type
+        );
+        assert_eq!(
+            textual_object_read.source_path,
+            textual_object_insert.source_path
+        );
+        assert_eq!(
+            textual_object_read.store_info,
+            textual_object_insert.store_info
+        );
+        assert_eq!(
+            textual_object_read.store_url,
+            textual_object_insert.store_url
+        );
+        assert_eq!(
+            textual_object_read.source_name,
+            textual_object_insert.source_name
+        );
         assert_eq!(textual_object_read.created, textual_object_insert.created);
         assert_eq!(textual_object_read.updated, textual_object_insert.updated);
         assert_eq!(textual_object_read.json, textual_object_insert.json);
@@ -92,7 +117,6 @@ mod test {
         assert_eq!(json_read["number_key"], json_insert["number_key"]);
         assert_eq!(json_read["boolean_key"], json_insert["boolean_key"]);
     }
-
 
     // test find_by_id
     #[tokio::test]
@@ -143,7 +167,6 @@ mod test {
         assert!(found_to.is_some());
         assert_eq!(&found_to.unwrap().ticket_id, &to_insert.ticket_id);
     }
-
 
     // test check ticket id uniqueness
     #[tokio::test]

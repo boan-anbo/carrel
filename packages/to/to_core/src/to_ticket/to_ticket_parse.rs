@@ -8,12 +8,14 @@ impl ToTicket {
     /// Parse single ticket from text
     /// # Arguments
     /// * `marked_content_only` - raw text to parse
-    pub fn parse(marked_content_only: &str, opt: &ToParserOption, intext_position: Option<ToTicketPositionInfo>) -> Self {
-
+    pub fn parse(
+        marked_content_only: &str,
+        opt: &ToParserOption,
+        intext_position: Option<ToTicketPositionInfo>,
+    ) -> Self {
         // remove left and right markers if they exist
         let mut clean_content = marked_content_only.replace(&opt.to_marker.left_marker, "");
         clean_content = clean_content.replace(&opt.to_marker.right_marker, "");
-
 
         // split strings with separator for once
         let split_content = clean_content.split(&opt.to_marker.value_entry_separator);
@@ -44,10 +46,12 @@ impl ToTicket {
 
             // check if the key is a reserved field, if so, assign it to the corresponding field
             match key.as_ref() {
-                "id" => { to_ticket.ticket_id = value }
+                "id" => to_ticket.ticket_id = value,
                 "updated" => {
-                    let naive_updated = NaiveDateTime::parse_from_str(&value, &opt.date_format).unwrap();
-                    to_ticket.to_updated = DateTime::<FixedOffset>::from_utc(naive_updated, FixedOffset::east(0));
+                    let naive_updated =
+                        NaiveDateTime::parse_from_str(&value, &opt.date_format).unwrap();
+                    to_ticket.to_updated =
+                        DateTime::<FixedOffset>::from_utc(naive_updated, FixedOffset::east(0));
                 }
                 "store_id" => {
                     to_ticket.to_store_url = Some(value);
@@ -64,19 +68,17 @@ impl ToTicket {
         to_ticket
     }
 
-
     fn from_json(json: &str) -> Self {
         serde_json::from_str(json).unwrap()
     }
 }
 
-
 // test create default TextualObjectTicket
 #[cfg(test)]
 mod tests {
     /*
-Parser tests
- */
+    Parser tests
+     */
     use chrono::{Datelike, TimeZone, Utc};
 
     use crate::to_parser::parser_option::ToParserOption;
@@ -95,13 +97,15 @@ Parser tests
     #[test]
     fn test_parse_string_with_markers() {
         let opt = ToParserOption::default();
-        let mark_content = format!("{}key1:value1|key2:value2{}", opt.to_marker.left_marker, opt.to_marker.right_marker);
+        let mark_content = format!(
+            "{}key1:value1|key2:value2{}",
+            opt.to_marker.left_marker, opt.to_marker.right_marker
+        );
         let to_ticket = ToTicket::parse(&mark_content, &opt, None);
         assert_eq!(to_ticket.values.len(), 2);
         assert_eq!(to_ticket.values.get("key1").unwrap(), "value1");
         assert_eq!(to_ticket.values.get("key2").unwrap(), "value2");
     }
-
 
     // test parse with meta-data
     #[test]
@@ -113,7 +117,10 @@ Parser tests
         assert_eq!(to_ticket.values.len(), 2);
         assert_eq!(to_ticket.values.get("key1").unwrap(), "value1");
         assert_eq!(to_ticket.values.get("key2").unwrap(), "value2");
-        assert_eq!(to_ticket.to_updated.num_days_from_ce(), Utc.ymd(2018, 1, 1).num_days_from_ce());
+        assert_eq!(
+            to_ticket.to_updated.num_days_from_ce(),
+            Utc.ymd(2018, 1, 1).num_days_from_ce()
+        );
         assert_eq!(to_ticket.to_store_url, Some("store_id".to_string()));
         assert_eq!(to_ticket.to_store_info, Some("store_info".to_string()));
     }
@@ -121,13 +128,19 @@ Parser tests
     #[test]
     fn test_parse_with_missing_values() {
         let opt = ToParserOption::default();
-        let mark_content = format!("{}id:test_id|key1:|key2|:value1|updated:2018-01-01 00:00:00|store_info:store_info{}", opt.to_marker.left_marker, opt.to_marker.right_marker);
+        let mark_content = format!(
+            "{}id:test_id|key1:|key2|:value1|updated:2018-01-01 00:00:00|store_info:store_info{}",
+            opt.to_marker.left_marker, opt.to_marker.right_marker
+        );
         let to_ticket = ToTicket::parse(&mark_content, &opt, None);
         assert_eq!(to_ticket.ticket_id, "test_id".to_string());
         assert_eq!(to_ticket.values.len(), 3);
         assert_eq!(to_ticket.values.get("key1").unwrap(), "");
         assert_eq!(to_ticket.values.get("key2").unwrap(), "");
-        assert_eq!(to_ticket.to_updated.num_days_from_ce(), Utc.ymd(2018, 1, 1).num_days_from_ce());
+        assert_eq!(
+            to_ticket.to_updated.num_days_from_ce(),
+            Utc.ymd(2018, 1, 1).num_days_from_ce()
+        );
         assert_eq!(to_ticket.to_store_url, None);
         assert_eq!(to_ticket.to_store_info, Some("store_info".to_string()));
     }
@@ -151,8 +164,14 @@ Parser tests
         assert_eq!(to_ticket.values.len(), 2);
         assert_eq!(to_ticket.values.get("key1").unwrap(), "value1");
         assert_eq!(to_ticket.values.get("key2").unwrap(), "value2");
-        assert_eq!(to_ticket.to_updated.num_days_from_ce(), Utc.ymd(2018, 1, 1).num_days_from_ce());
+        assert_eq!(
+            to_ticket.to_updated.num_days_from_ce(),
+            Utc.ymd(2018, 1, 1).num_days_from_ce()
+        );
         assert_eq!(to_ticket.to_store_url, Some("store_url_value".to_string()));
-        assert_eq!(to_ticket.to_store_info, Some("store_info_value".to_string()));
+        assert_eq!(
+            to_ticket.to_store_info,
+            Some("store_info_value".to_string())
+        );
     }
 }

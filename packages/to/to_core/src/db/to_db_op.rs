@@ -1,14 +1,17 @@
 use std::borrow::BorrowMut;
 
-use sqlx::{Error, Pool, Row, Sqlite};
 use sqlx::pool::PoolConnection;
 use sqlx::sqlite::{SqliteQueryResult, SqliteRow};
+use sqlx::{Error, Pool, Row, Sqlite};
 use uuid::Uuid;
 
 use crate::to::to_struct::TextualObject;
 
 // store textual object into database
-pub(crate) async fn insert_to(pool: &mut PoolConnection<Sqlite>, textual_object: &TextualObject) -> Uuid {
+pub(crate) async fn insert_to(
+    pool: &mut PoolConnection<Sqlite>,
+    textual_object: &TextualObject,
+) -> Uuid {
     let _id = textual_object.id.to_string();
     // insert textual object into database
     let insert_query = sqlx::query!(
@@ -48,10 +51,11 @@ pub(crate) async fn insert_to(pool: &mut PoolConnection<Sqlite>, textual_object:
 }
 
 // read textual object from database
-pub(crate) async fn find_to_by_id(conn: &mut PoolConnection<Sqlite>, id: &Uuid) -> Option<TextualObject> {
-    let textual_object_row = sqlx::query(
-        "SELECT * FROM textual_objects WHERE id = $1",
-    )
+pub(crate) async fn find_to_by_id(
+    conn: &mut PoolConnection<Sqlite>,
+    id: &Uuid,
+) -> Option<TextualObject> {
+    let textual_object_row = sqlx::query("SELECT * FROM textual_objects WHERE id = $1")
         .bind(id)
         .fetch_one(conn)
         .await;
@@ -59,10 +63,11 @@ pub(crate) async fn find_to_by_id(conn: &mut PoolConnection<Sqlite>, id: &Uuid) 
 }
 
 // find to by ticket id
-pub(crate) async fn find_to_by_ticket_id(pool: &mut PoolConnection<Sqlite>, ticket_id: &str) -> Option<TextualObject> {
-    let textual_object_rows = sqlx::query(
-        "SELECT * FROM textual_objects WHERE ticket_id = $1",
-    )
+pub(crate) async fn find_to_by_ticket_id(
+    pool: &mut PoolConnection<Sqlite>,
+    ticket_id: &str,
+) -> Option<TextualObject> {
+    let textual_object_rows = sqlx::query("SELECT * FROM textual_objects WHERE ticket_id = $1")
         .bind(ticket_id)
         .fetch_one(pool)
         .await;
@@ -70,10 +75,11 @@ pub(crate) async fn find_to_by_ticket_id(pool: &mut PoolConnection<Sqlite>, tick
 }
 
 // check if there is any row with the given ticket id
-pub(crate) async fn check_if_ticket_id_exists(pool: &mut PoolConnection<Sqlite>, ticket_id: &str) -> bool {
-    let textual_object_rows = sqlx::query(
-        "SELECT * FROM textual_objects WHERE ticket_id = $1",
-    )
+pub(crate) async fn check_if_ticket_id_exists(
+    pool: &mut PoolConnection<Sqlite>,
+    ticket_id: &str,
+) -> bool {
+    let textual_object_rows = sqlx::query("SELECT * FROM textual_objects WHERE ticket_id = $1")
         .bind(ticket_id)
         .fetch_one(pool)
         .await;
@@ -91,7 +97,9 @@ pub(crate) async fn count_textual_objects(mut pool: PoolConnection<Sqlite>) -> i
 }
 
 // load multiple sqlite rows to textual objecs
-fn load_multiple_sqlite_rows_to_textual_objects(textual_object_rows: Result<Vec<SqliteRow>, Error>) -> Vec<TextualObject> {
+fn load_multiple_sqlite_rows_to_textual_objects(
+    textual_object_rows: Result<Vec<SqliteRow>, Error>,
+) -> Vec<TextualObject> {
     let mut textual_objects = Vec::new();
     match textual_object_rows {
         Ok(textual_object_rows) => {
@@ -117,7 +125,9 @@ fn load_multiple_sqlite_rows_to_textual_objects(textual_object_rows: Result<Vec<
 }
 
 // utility function to load sqlite_row results into textual object
-fn load_sqlite_row_to_textual_object(textual_object_row: Result<SqliteRow, Error>) -> Option<TextualObject> {
+fn load_sqlite_row_to_textual_object(
+    textual_object_row: Result<SqliteRow, Error>,
+) -> Option<TextualObject> {
     match textual_object_row {
         Ok(textual_object_row) => {
             let textual_object = TextualObject {
@@ -139,12 +149,9 @@ fn load_sqlite_row_to_textual_object(textual_object_row: Result<SqliteRow, Error
 
             Some(textual_object)
         }
-        Err(_e) => {
-            None
-        }
+        Err(_e) => None,
     }
 }
-
 
 // delete textual object from database by id
 pub(crate) async fn delete_to_by_id(pool: &Pool<Sqlite>, id: &Uuid) -> SqliteQueryResult {
@@ -157,7 +164,10 @@ pub(crate) async fn delete_to_by_id(pool: &Pool<Sqlite>, id: &Uuid) -> SqliteQue
 }
 
 // delete textual object from database by ticket id
-pub(crate) async fn delete_to_by_ticket_id(pool: &mut PoolConnection<Sqlite>, ticket_id: &String) -> SqliteQueryResult {
+pub(crate) async fn delete_to_by_ticket_id(
+    pool: &mut PoolConnection<Sqlite>,
+    ticket_id: &String,
+) -> SqliteQueryResult {
     let delete_query = sqlx::query("DELETE FROM textual_objects WHERE ticket_id = $1")
         .bind(ticket_id)
         .execute(pool)

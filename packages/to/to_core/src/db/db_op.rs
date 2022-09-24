@@ -3,10 +3,10 @@ use std::fs;
 use std::path::PathBuf;
 
 use rand::{distributions::Alphanumeric, Rng};
-use sqlx::{Pool, Row, Sqlite};
 use sqlx::migrate::MigrateDatabase;
 use sqlx::pool::PoolConnection;
 use sqlx::sqlite::SqlitePool;
+use sqlx::{Pool, Row, Sqlite};
 
 use crate::db::to_db_op::insert_to;
 use crate::to::to_struct::TextualObject;
@@ -23,8 +23,11 @@ pub(crate) fn join_db_path(store_directory: &str, store_file_name: &str) -> Stri
 }
 
 // main entry point to initialize database, return the path of the initialized database
-pub(crate) async fn initialize_database(db_root_path: &str, db_file_name: &str) -> Result<String, sqlx::Error> {
-// check if it exists and has the right table structure, if not, create it
+pub(crate) async fn initialize_database(
+    db_root_path: &str,
+    db_file_name: &str,
+) -> Result<String, sqlx::Error> {
+    // check if it exists and has the right table structure, if not, create it
     let db_path = join_db_path(db_root_path, db_file_name);
 
     // check if directory exists, if not, create it
@@ -32,7 +35,7 @@ pub(crate) async fn initialize_database(db_root_path: &str, db_file_name: &str) 
         fs::create_dir_all(db_root_path).unwrap();
     }
 
-// check if db file exists, if not, create it
+    // check if db file exists, if not, create it
     let if_exists = check_if_database_exists(&db_path).await.unwrap();
     if !if_exists {
         create_empty_database_with_path_and_filename(db_root_path, db_file_name).await;
@@ -50,7 +53,7 @@ pub(crate) async fn initialize_database(db_root_path: &str, db_file_name: &str) 
 
 async fn check_if_tables_exist(p0: &Pool<Sqlite>) -> Result<bool, sqlx::Error> {
     let stmt = sqlx::query(
-        "SELECT name FROM sqlite_master WHERE type='table' AND name='textual_objects';"
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='textual_objects';",
     );
     let rows = stmt.fetch_all(p0).await?;
     if rows.len() > 0 {
@@ -59,7 +62,6 @@ async fn check_if_tables_exist(p0: &Pool<Sqlite>) -> Result<bool, sqlx::Error> {
         Ok(false)
     }
 }
-
 
 // create empty database
 pub(crate) async fn create_empty_database(db_path: &str) {
@@ -76,7 +78,7 @@ pub(crate) async fn create_empty_database_with_path_and_filename(root_path: &str
 async fn create_initial_table(pool: &Pool<Sqlite>) {
     // if not exists, create table `textual_objects`, with UUID as primary key, sid as text, source_name as text, and update date and modification date, and json field for JSONB
     sqlx::query!(
-     " CREATE TABLE IF NOT EXISTS textual_objects
+        " CREATE TABLE IF NOT EXISTS textual_objects
 (
     id PRIMARY KEY                    NOT NULL,
     ticket_id      TEXT               NOT NULL,
@@ -98,13 +100,11 @@ async fn create_initial_table(pool: &Pool<Sqlite>) {
     card           JSONB DEFAULT NULL,
     card_map       TEXT  DEFAULT ''   NOT NULL
 )"
-
     )
-        .execute(pool)
-        .await
-        .unwrap();
+    .execute(pool)
+    .await
+    .unwrap();
 }
-
 
 // connect to the database
 pub(crate) async fn connect_to_database(db_path: &str) -> Pool<Sqlite> {
@@ -130,12 +130,11 @@ pub async fn drop_database(db_path: &str) -> Result<(), sqlx::Error> {
     let re = fs::remove_file(db_path);
     match re {
         Ok(_) => Ok(()),
-        Err(e) => Err(e.into())
+        Err(e) => Err(e.into()),
     }
 }
 
 // release database
-
 
 // remove all tables from database
 async fn remove_all_tables(pool: &Pool<Sqlite>) {
@@ -165,25 +164,23 @@ async fn seed_random_data(pool: &mut PoolConnection<Sqlite>) {
 
         let mut textual_object = TextualObject::get_sample();
 
-        textual_object.json = sqlx::types::Json(
-            serde_json::json!({
-                        "test_string": "test_string_value",
-                        "test_number": 1,
-                        "test_boolean": true,
-                        "test_null": null,
-                        "test_array": [1, 2, 3],
-                        "test_object": {
-                            "test_string": "test_string_value",
-                            "test_number": 1,
-                            "test_boolean": true,
-                            "test_null": null,
-                            "test_array": [1, 2, 3],
-                        }
-                    }));
+        textual_object.json = sqlx::types::Json(serde_json::json!({
+            "test_string": "test_string_value",
+            "test_number": 1,
+            "test_boolean": true,
+            "test_null": null,
+            "test_array": [1, 2, 3],
+            "test_object": {
+                "test_string": "test_string_value",
+                "test_number": 1,
+                "test_boolean": true,
+                "test_null": null,
+                "test_array": [1, 2, 3],
+            }
+        }));
         insert_to(pool, &textual_object).await;
     }
 }
-
 
 // reset with seeded database
 async fn reset_database_with_random_data(db_path: &str) {
@@ -218,7 +215,11 @@ mod tests {
         let random_file_name = generate_id();
 
         let full_path = join_db_path(TEST_DB_PATH_WITHOUT_FILE_NAME, random_file_name.as_str());
-        create_empty_database_with_path_and_filename(TEST_DB_PATH_WITHOUT_FILE_NAME, random_file_name.as_str()).await;
+        create_empty_database_with_path_and_filename(
+            TEST_DB_PATH_WITHOUT_FILE_NAME,
+            random_file_name.as_str(),
+        )
+        .await;
         // check if the database exists
         let options = check_if_database_exists(full_path.as_str()).await;
         assert!(options.unwrap());
@@ -255,7 +256,10 @@ mod tests {
             }
         }
         // check a non-existing database
-        let non_existing_db_path = join_db_path(TEST_DB_PATH_WITHOUT_FILE_NAME, uuid::Uuid::new_v4().to_string().as_str());
+        let non_existing_db_path = join_db_path(
+            TEST_DB_PATH_WITHOUT_FILE_NAME,
+            uuid::Uuid::new_v4().to_string().as_str(),
+        );
         let result = check_if_database_exists(non_existing_db_path.as_str()).await;
         match result {
             Ok(exists) => {
@@ -267,7 +271,6 @@ mod tests {
             }
         }
     }
-
 
     // test remove_all_tables
     #[tokio::test]
@@ -312,13 +315,13 @@ mod tests {
         let _pool = connect_to_database(db_path).await;
     }
 
-
     // test initializing database
     #[tokio::test]
     async fn initialize_database_test() {
         let random_file_name = generate_id();
         // initialize database
-        let _intialized_database = initialize_database(TEST_DB_PATH_WITHOUT_FILE_NAME, random_file_name.as_str()).await;
+        let _intialized_database =
+            initialize_database(TEST_DB_PATH_WITHOUT_FILE_NAME, random_file_name.as_str()).await;
     }
 
     #[tokio::test]
@@ -329,6 +332,3 @@ mod tests {
         fs::remove_dir_all(directory).unwrap();
     }
 }
-
-
-

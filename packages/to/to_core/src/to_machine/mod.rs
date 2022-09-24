@@ -1,11 +1,11 @@
 use crate::db::db_op::reset_database;
 use crate::to_machine::to_machine_struct::ToMachine;
 
-pub mod to_machine_struct;
-pub mod to_machine_option;
-pub mod to_machine_op;
 pub mod to_machine_db;
+pub mod to_machine_op;
+pub mod to_machine_option;
 pub mod to_machine_pub_op;
+pub mod to_machine_struct;
 
 // implement db related methods for TextualObjectMachine
 impl ToMachine {
@@ -14,4 +14,3 @@ impl ToMachine {
         reset_database(self.store_url.as_ref()).await;
     }
 }
-

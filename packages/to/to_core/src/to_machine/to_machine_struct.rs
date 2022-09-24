@@ -1,8 +1,7 @@
-
 use std::path::PathBuf;
 
-use sqlx::{Pool, Sqlite};
 use sqlx::pool::PoolConnection;
+use sqlx::{Pool, Sqlite};
 
 use crate::db::db_op::{connect_to_database, initialize_database, join_db_path};
 use crate::enums::store_type::StoreType;
@@ -31,11 +30,14 @@ pub struct ToMachine {
     pub(crate) pool: Option<Pool<Sqlite>>,
 }
 
-
 // default constructor for ToMachine
 impl ToMachine {
     /// default constructor for ToMachine
-    pub async fn new(store_directory: &str, store_type: StoreType, input_opt: Option<ToMachineOption>) -> Self {
+    pub async fn new(
+        store_directory: &str,
+        store_type: StoreType,
+        input_opt: Option<ToMachineOption>,
+    ) -> Self {
         // check if store_directory is a path to a directory, not a path to a file
         let path = PathBuf::from(store_directory);
 
@@ -46,12 +48,13 @@ impl ToMachine {
         }
 
         if !path.is_dir() {
-            panic!("{} is a path to a file, not a path to a directory", store_directory);
+            panic!(
+                "{} is a path to a file, not a path to a directory",
+                store_directory
+            );
         }
 
-
         let to_count = 0;
-
 
         // check if the opt.store_file_name is specified, defaults to _to_store.db
         let mut store_file_name = "_to_store.db".to_string();
@@ -70,7 +73,11 @@ impl ToMachine {
         let mut tom = ToMachine {
             store_type,
             store_url: String::new(),
-            store_info: input_opt.unwrap_or(ToMachineOption::default()).store_info.clone().unwrap_or("".to_string()),
+            store_info: input_opt
+                .unwrap_or(ToMachineOption::default())
+                .store_info
+                .clone()
+                .unwrap_or("".to_string()),
             to_count,
             pool: None,
         };
@@ -89,7 +96,10 @@ impl ToMachine {
                 // check if sqlite file exists, if not, throw an error
                 let re = initialize_database(store_directory, &store_file_name).await;
                 if re.is_err() {
-                    panic!("Check file conflict: cannot initialize database at {}", join_db_path(store_directory, &store_file_name));
+                    panic!(
+                        "Check file conflict: cannot initialize database at {}",
+                        join_db_path(store_directory, &store_file_name)
+                    );
                 } else {
                     tom.store_url = re.unwrap();
                 }
@@ -104,12 +114,17 @@ impl ToMachine {
 
     // initialize ToM from TextualObjectAddManyDto
     pub async fn new_from_add_dto(dto: &ToAddManyDto) -> Self {
-        ToMachine::new(&dto.store_dir, StoreType::SQLITE, Some(ToMachineOption {
-            store_info: dto.store_info.clone(),
-            use_random_file_name: false,
-            store_file_name: dto.store_filename.clone(),
-            ..Default::default()
-        })).await
+        ToMachine::new(
+            &dto.store_dir,
+            StoreType::SQLITE,
+            Some(ToMachineOption {
+                store_info: dto.store_info.clone(),
+                use_random_file_name: false,
+                store_file_name: dto.store_filename.clone(),
+                ..Default::default()
+            }),
+        )
+        .await
     }
 
     // initialize ToM from TextualObjectFindRequestDto
@@ -118,11 +133,16 @@ impl ToMachine {
 
         let (dir, filename) = split_store_path(&dto.store_url);
 
-        ToMachine::new(&dir, StoreType::SQLITE, Some(ToMachineOption {
-            use_random_file_name: false,
-            store_file_name: Some(filename),
-            ..Default::default()
-        })).await
+        ToMachine::new(
+            &dir,
+            StoreType::SQLITE,
+            Some(ToMachineOption {
+                use_random_file_name: false,
+                store_file_name: Some(filename),
+                ..Default::default()
+            }),
+        )
+        .await
     }
 }
 
@@ -162,7 +182,6 @@ impl ToMachine {
     }
 }
 
-
 // tests for TextualObjectMachineRs
 #[cfg(test)]
 mod tests {
@@ -173,17 +192,17 @@ mod tests {
     use crate::to_machine::to_machine_struct::ToMachine;
     use crate::utils::id_generator::generate_id;
 
-// initiate for tests
+    // initiate for tests
 
     pub fn get_test_asset_path(file_name: Option<&str>) -> String {
         let mut cargo_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         cargo_dir.push("resources/test/db");
         if let Some(file_name) = file_name {
             cargo_dir.push(file_name);
-        } else {}
+        } else {
+        }
         cargo_dir.into_os_string().into_string().unwrap()
     }
-
 
     // test new() db with existent sqlite
     #[tokio::test]
@@ -191,13 +210,12 @@ mod tests {
         let test_db_file_name = generate_id();
         let existent_sqlite_file = get_test_asset_path(None);
         // create a new TextualObjectMachineRs with SQLITE store
-        let machine = ToMachine::
-        new(&existent_sqlite_file, StoreType::SQLITE,
-            Some(
-                ToMachineOption::new().set_store_file_name(
-                    Some(test_db_file_name.as_str())
-                )
-            )).await;
+        let machine = ToMachine::new(
+            &existent_sqlite_file,
+            StoreType::SQLITE,
+            Some(ToMachineOption::new().set_store_file_name(Some(test_db_file_name.as_str()))),
+        )
+        .await;
         // check if the machine is created
         assert_eq!(machine.store_type, StoreType::SQLITE);
         assert_eq!(machine.to_count, 0);

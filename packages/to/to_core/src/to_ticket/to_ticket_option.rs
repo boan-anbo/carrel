@@ -1,4 +1,3 @@
-
 pub struct ToTicketPrintOption {
     // whether include updated
     pub include_updated: bool,

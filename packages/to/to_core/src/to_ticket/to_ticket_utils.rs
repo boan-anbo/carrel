@@ -1,6 +1,5 @@
 use crate::to_ticket::to_ticket_marker::ToMarker;
 
-
 pub fn print_minimal_ticket(ticket_id: &str, opt: Option<ToMarker>) -> String {
     // if opt is None, use default
     let to_marker = opt.unwrap_or(ToMarker::default());
@@ -25,5 +24,4 @@ fn test_print_minimal_ticket() {
     let ticket_id = "test_id";
     let print_label = print_minimal_ticket(ticket_id, None);
     assert_eq!(print_label, format!("[[id: test_id]]"));
-
 }

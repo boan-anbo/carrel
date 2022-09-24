@@ -1,8 +1,8 @@
 use chrono::NaiveDateTime;
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 use strum_macros::{Display, EnumIter, EnumString};
+use uuid::Uuid;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Person {
@@ -20,7 +20,6 @@ pub struct Comment {
     pub extra: Vec<String>,
     pub created: NaiveDateTime,
 }
-
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToCard {

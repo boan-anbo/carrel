@@ -1,14 +1,10 @@
-
-
+use crate::to_parser::parser::ToParser;
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
-use crate::to_parser::parser::ToParser;
-
 
 use crate::to_parser::parser_option::ToParserOption;
 use crate::to_ticket::to_ticket_marker::ToMarker;
 use crate::to_ticket::to_ticket_struct::ToTicket;
-
 
 /// This is a
 #[derive(Deserialize, Serialize, Clone)]
@@ -16,9 +12,8 @@ pub struct ToTag {
     pub key: String,
     pub value: Option<String>,
     pub note: Option<String>,
-    pub tag_string: String
+    pub tag_string: String,
 }
-
 
 // implement from TextualObjectTicket
 
@@ -64,15 +59,12 @@ impl From<ToTicket> for ToTag {
             key,
             value,
             note,
-            tag_string
+            tag_string,
         }
     }
 }
 
-
 impl ToTag {
-
-
     // implement print tag
     pub fn print_tag(&self, to_mark: Option<ToMarker>) -> String {
         // create default to_marker if not provided
@@ -100,10 +92,9 @@ impl ToTag {
 mod test {
     use std::borrow::Borrow;
 
-
-    use crate::to_tag::to_tag_struct::ToTag;
-    use crate::to_parser::parser_option::ToParserOption;
     use crate::to_parser::parser::ToParser;
+    use crate::to_parser::parser_option::ToParserOption;
+    use crate::to_tag::to_tag_struct::ToTag;
 
     // test from ticket to tag
     #[test]
@@ -177,21 +168,27 @@ mod test {
     #[test]
     fn test_ticket_to_tag_text() {
         let raw_text_with_only_key = "[[KEY]]";
-        let result_with_only_key = ToParser::scan_text_for_tags(raw_text_with_only_key, &ToParserOption::default());
+        let result_with_only_key =
+            ToParser::scan_text_for_tags(raw_text_with_only_key, &ToParserOption::default());
         let first_tag_with_only_key = result_with_only_key.tos[0].clone();
         assert_eq!(result_with_only_key.tos.len(), 1);
         assert_eq!(&first_tag_with_only_key.tag_string, "[[KEY]]");
 
         let raw_text_with_key_value = "[[KEY|VALUE]]";
-        let result_with_key_value = ToParser::scan_text_for_tags(raw_text_with_key_value, &ToParserOption::default());
+        let result_with_key_value =
+            ToParser::scan_text_for_tags(raw_text_with_key_value, &ToParserOption::default());
         let first_tag_with_key_value = result_with_key_value.tos[0].clone();
         assert_eq!(result_with_key_value.tos.len(), 1);
         assert_eq!(&first_tag_with_key_value.tag_string, "[[KEY|VALUE]]");
 
         let raw_text_with_key_value_note = "[[KEY|VALUE|NOTE]]";
-        let result_with_key_value_note = ToParser::scan_text_for_tags(raw_text_with_key_value_note, &ToParserOption::default());
+        let result_with_key_value_note =
+            ToParser::scan_text_for_tags(raw_text_with_key_value_note, &ToParserOption::default());
         let first_tag_with_key_value_note = result_with_key_value_note.tos[0].clone();
         assert_eq!(result_with_key_value_note.tos.len(), 1);
-        assert_eq!(&first_tag_with_key_value_note.tag_string, "[[KEY|VALUE|NOTE]]");
+        assert_eq!(
+            &first_tag_with_key_value_note.tag_string,
+            "[[KEY|VALUE|NOTE]]"
+        );
     }
 }

@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+
+// a record of storage of a piece of digital information.
+package common.storage_info.v1;
+
+message StorageInfo {
+    // id
+    string uuid = 1;
+    // // storag #[strum(serialize = "store_id")]
+    // StoreId,
+    // #[strum(serialize = "store_ticket_id")]
+    // StoreTicketId,
+    // #[strum(serialize = "store_url")]
+    // StoreUrl,
+    // #[strum(serialize = "store_info")]
+    // StoreInfo,e
+
+    // the unique id of the data in the storage
+    string store_unique_id = 2;
+    // the unique id of the storage if any
+    string store_id = 3;
+    // the url of the storage if any
+    string store_url = 4;
+    // textual infomation about the store
+    string store_info = 5;
+
+
+}

@@ -1,6 +1,6 @@
 use crate::to_card::to_card_struct::ToCardField;
-use strum::IntoEnumIterator;
 use serde::{Deserialize, Serialize};
+use strum::IntoEnumIterator;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToCardConvertRule {
@@ -22,7 +22,6 @@ impl ToCardConvertRule {
         }
         false
     }
-
 }
 
 // test mod

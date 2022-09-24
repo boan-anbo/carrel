@@ -1,17 +1,17 @@
-use std::collections::HashMap;
-use crate::to::to_struct::TextualObject;
-use utoipa::ToSchema;
-use serde::{Deserialize, Serialize};
-use crate::error::{TextualObjectErrorMessage, ToErrors};
 use crate::error::error_message::ToErrorMessage;
+use crate::error::{TextualObjectErrorMessage, ToErrors};
+use crate::to::to_struct::TextualObject;
 use crate::utils::check_if_file_exists::check_if_file_exists;
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use utoipa::ToSchema;
 
 /// Dto for scanning TO from text request.
 #[derive(Clone, Debug, Serialize, ToSchema, Deserialize)]
 pub struct ToScanRequestDto {
     pub store_url: String,
     /// the text to scan from
-    pub text: String
+    pub text: String,
 }
 
 impl ToScanRequestDto {
@@ -19,14 +19,14 @@ impl ToScanRequestDto {
         let mut error_message = TextualObjectErrorMessage::default();
         // check whether ticket ids are provided and whether store_url has file
 
-
         if self.text.is_empty() {
             error_message.message = ToErrorMessage::ScanRequestDtoNoText.to_string();
             return Err(ToErrors::FindRequestError(error_message));
         }
 
         if !check_if_file_exists(&self.store_url) {
-            error_message.message = ToErrorMessage::FindOrScanRequestDtoStoreUrlDoesNotExist.to_string();
+            error_message.message =
+                ToErrorMessage::FindOrScanRequestDtoStoreUrlDoesNotExist.to_string();
             return Err(ToErrors::FindRequestError(error_message));
         }
 
@@ -45,4 +45,3 @@ pub struct ToScanResultDto {
     pub missing_tos_count: usize,
     pub cleaned_text: String,
 }
-
