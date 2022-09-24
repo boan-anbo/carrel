@@ -1,9 +1,14 @@
 target/
 debug/
-.idea
+
+
 
 generated/
 
 Cargo.lock
 
 carrel_proto.iml
+
+package-lock.json
+
+node_modules/

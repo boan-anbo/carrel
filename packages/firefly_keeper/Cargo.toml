@@ -1,0 +1,17 @@
+[package]
+name = "firefly_keeper"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+to_core = { path = "../to/to_core" }
+prost = "0.11.0"
+serde = { version = "1.0.145", features = ["derive"] }
+uuid = "1.1.2"
+carrel_commons = { path = "../carrel_commons" }
+
+[build-dependencies]
+prost-build = { version = "0.11.0" }
+carrel_utils = { path = "../carrel/carrel_utils" }
