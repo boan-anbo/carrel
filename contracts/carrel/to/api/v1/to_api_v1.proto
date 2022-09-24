@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package to.api.v1;
+
+
+
+
+message ToApiScanRequest {
+  string text = 1;
+}
+
+
+message ToApiTagScanResult {
+  string text_original = 1;
+  string text_cleaned = 2;
+  repeated ToApiTag tags = 3;
+}
+
+
+message ToApiTag {
+  string key = 1;
+  string value = 2;
+  string note = 3;
+  string tag_string = 4;
+}

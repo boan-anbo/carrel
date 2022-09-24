@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package distant.api.v1;
+
+import "carrel/common/passage/v1/passage.proto";
+
+message DistantApiSearchRequest {
+  string query = 1;
+  repeated string indices = 2;
+}
+
+message DistantApiSearchResponse {
+
+  repeated carrel.common.passage.v1.Passage passages = 1;
+  /// count
+  sint64 count = 2;
+  /// optional scroll_id
+  optional string scroll_id = 3;
+
+  bool has_more = 4;
+}
+
+message DistantApiScrollRequest {
+  string scroll_id = 1;
+}
+
+message IndexInfo {
+  string health = 1;
+  string status = 2;
+  string index = 3;
+  string uuid = 4;
+  string pri = 5;
+  string rep = 6;
+  string docs_count = 7;
+  string docs_deleted = 8;
+  string store_size = 9;
+  string pri_store_size = 10;
+}
+
+message DistantListIndexResponse {
+  repeated IndexInfo indices = 1;
+  // count sint32
+   int32 count = 2;
+}

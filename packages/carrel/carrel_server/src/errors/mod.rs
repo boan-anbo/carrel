@@ -1,3 +1,3 @@
-
-pub mod carrel_core_error;
+//! CarrelServer Errors
+pub mod carrel_server_error;
 

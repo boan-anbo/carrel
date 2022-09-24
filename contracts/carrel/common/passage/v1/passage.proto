@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+/// import document from document.proto
+import "carrel/common/document/v1/document.proto";
+
+
+package carrel.common.passage.v1;
+
+
+message Passage {
+    // id
+    string uuid = 1;
+    // passage text
+    string text = 2;
+    // passage description
+    string description = 3;
+    // e.g. "book1/chapter1" or page number
+    string location = 4;
+    // passage document
+    carrel.common.document.v1.Document document = 5;
+    // localtion type, describes what the location is, e.g. page number
+    string location_type = 6;
+}

@@ -3,12 +3,9 @@ syntax = "proto3";
 
 package carrel.server.firefly_keeper.v1;
 
-import "generic/api/request_directory/v1/request_directory.proto";
+import "carrel/generic/api/request_directory/v1/request_directory.proto";
 
-import "firefly_keeper/v1/firefly_keeper.proto";
-
-
-
+import "carrel/firefly_keeper/v1/firefly_keeper_v1.proto";
     
 
 service FirefliesService {

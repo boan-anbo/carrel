@@ -10,6 +10,8 @@ edition = "2021"
 carrel_core = { path = "../carrel_core" }
 carrel_commons = { path = "../../carrel_commons" }
 # Other dependencies
+once_cell = "1.15.0"
+config = "0.13.1"
 tonic = "0.8.1"
 prost = "0.11.0"
 tokio = { version = "1.21.1", features = ["macros", "rt-multi-thread"] }

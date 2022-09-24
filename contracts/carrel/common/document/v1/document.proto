@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+/// import source
+import "carrel/common/file/v1/file.proto";
+
+/// import person
+import "carrel/common/person/v1/person.proto";
+
+/// The source is an abstract reference that could contain document info and other metadata that can have multiple.
+///Can be used as source.
+/// Can be used as a reference
+/// Can be used a digital object.
+package carrel.common.document.v1;
+
+
+/// An abstract document.
+message Document {
+    /// Uuid of the source.
+    string uuid = 1;
+    string title = 2;
+    /// description
+    string description = 3;
+    /// citation information
+    string citation = 4;
+    /// publication date
+    string publicationDate = 5;
+    /// creators
+    repeated carrel.common.person.v1.Person creators = 6;
+    /// In the case of a Zotero Item, this is the Zotero URI.
+    string source_id = 7;
+    /// Describes what the unique Id refers to.
+    string source_id_type = 8;
+    /// source url, e.g. a direct link to the source, e.g. the DOI of a book or journal
+    string source_url = 9;
+    /// archive location
+    string archive_location = 10;
+    /// file
+    repeated carrel.common.file.v1.File files = 11;
+    // pages protobuf number type
+    string pages = 12;
+
+
+    /// modified date using Unix timestamp
+    int64 modified = 13;
+
+
+    /// created date
+    int64 created = 14;
+
+    /// content type
+    string content = 15;
+
+
+}

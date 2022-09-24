@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+
+package carrel.common.tag.v1;
+
+import "carrel/common/snippet_location/v1/snippet_location.proto";
+
+/// A common tag for carrel system.
+message Tag {
+    string key = 1;
+    optional string value = 2;
+    optional string note = 3;
+    string tag_marker = 4;
+    optional carrel.common.snippet_location.v1.SnippetLocation snippet_location = 5;
+    string uuid = 6;
+}

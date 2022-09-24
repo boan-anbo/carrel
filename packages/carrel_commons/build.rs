@@ -9,7 +9,7 @@ fn main() {
     ];
 
     let proto_root_folders = vec![
-        "../../../contracts/",
+        "../../contracts/",
     ];
 
     let out_dir = PathBuf::from(

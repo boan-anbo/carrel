@@ -10,9 +10,9 @@ tonic = "0.8.1"
 prost = "0.11.0"
 uuid = "1.1.2"
 serde = { version = "1.0.130", features = ["derive"] }
-to_core = { path = "../../to/to_core" }
+to_core = { path = "../to/to_core" }
 
 [build-dependencies]
 tonic-build = "0.8.0"
-carrel_utils = { path = "../carrel_utils" }
+carrel_utils = { path = "../carrel/carrel_utils" }
 

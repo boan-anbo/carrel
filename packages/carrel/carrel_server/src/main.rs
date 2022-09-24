@@ -1,18 +1,13 @@
 use tonic::codegen::http::Method;
 use tracing::Level;
 
+use crate::launch::launch_server;
 
-// service modules
-mod scaffold;
-mod firefly_keeper;
-mod launch_server;
-mod load_cors;
-mod load_health_reporter;
-mod attach_tracing_subscriber;
-
-
-
-
+pub(crate) mod services;
+pub mod errors;
+pub(crate) mod consts;
+pub(crate) mod utils;
+mod launch;
 
 // main
 #[tokio::main]

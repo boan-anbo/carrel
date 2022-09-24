@@ -14,7 +14,7 @@
 mod implementations;
 
 pub mod carrel {
-    pub(crate) const FILE_DESCRIPTOR_SET: &[u8] = include_bytes!("generated/carrel_descriptor.bin");
+    pub const FILE_DESCRIPTOR_SET: &[u8] = include_bytes!("generated/carrel_descriptor.bin");
 
     pub mod common {
         pub mod tag {
@@ -51,7 +51,7 @@ pub mod carrel {
     }
 }
 
-mod generic {
+pub mod generic {
     pub mod api {
         pub mod request_directory {
             pub mod v1 {

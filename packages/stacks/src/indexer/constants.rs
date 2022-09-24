@@ -1,0 +1,1 @@
+pub const INDEX_MEMBORY_HEAP: u32 = 50_000_000;
