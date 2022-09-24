@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 
-package common.file.v1;
+package carrel.common.file.v1;
 
 message File {
     // id

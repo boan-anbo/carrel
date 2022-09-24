@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 
-package common.importance.v1;
+package carrel.common.importance.v1;
 
 enum Importance {
 NO_IMPORTANCE = 0;

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package common.person.v1;
+package carrel.common.person.v1;
 
 
 /// a unique id in the original place

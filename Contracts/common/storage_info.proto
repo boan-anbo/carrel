@@ -2,7 +2,7 @@ syntax = "proto3";
 
 
 // a record of storage of a piece of digital information.
-package common.storage_info.v1;
+package carrel.common.storage_info.v1;
 
 message StorageInfo {
     // id
