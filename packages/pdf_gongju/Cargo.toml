@@ -1,0 +1,16 @@
+[package]
+name = "pdf_gongju"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+carrel_commons = { path = "../carrel_commons" }
+uuid = { version = "1.1.2", features = ["serde", "v4"] }
+pdfium-render = "0.7.18"
+regex = "1.6.0"
+serde_json = "1.0.85"
+
+[dev-dependencies]
+carrel_utils = { path = "../carrel/carrel_utils" }

@@ -21,3 +21,8 @@ message Passage {
     // localtion type, describes what the location is, e.g. page number
     string location_type = 6;
 }
+
+message DocumentPassages {
+    carrel.common.document.v1.Document document = 2;
+    repeated carrel.common.passage.v1.Passage passages = 3;
+}

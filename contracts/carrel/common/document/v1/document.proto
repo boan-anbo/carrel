@@ -6,6 +6,7 @@ import "carrel/common/file/v1/file.proto";
 /// import person
 import "carrel/common/person/v1/person.proto";
 
+
 /// The source is an abstract reference that could contain document info and other metadata that can have multiple.
 ///Can be used as source.
 /// Can be used as a reference
@@ -40,15 +41,13 @@ message Document {
     string pages = 12;
 
 
-    /// modified date using Unix timestamp
-    int64 modified = 13;
+    /// modified date in UTC
+    string modified = 13;
 
 
-    /// created date
-    int64 created = 14;
+    /// created date in UTC
+    string created = 14;
 
     /// content type
     string content = 15;
-
-
 }

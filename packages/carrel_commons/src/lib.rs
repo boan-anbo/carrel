@@ -78,6 +78,7 @@ pub mod carrel {
         }
     }
 
+    #[cfg(feature = "server")]
     pub mod server {
         pub mod firefly_keeper {
             pub mod v1 {
@@ -92,12 +93,14 @@ pub mod carrel {
         }
     }
 
+    #[cfg(feature = "firefly_keeper")]
     pub mod firefly_keeper {
         pub mod v1 {
             include!("generated/carrel_firefly_keeper_v1.rs");
         }
     }
 
+    #[cfg(feature = "stacks")]
     pub mod stacks {
         pub mod services {
             pub mod v1 {
@@ -114,6 +117,7 @@ pub mod google {
     }
 }
 
+#[cfg(feature = "generic")]
 pub mod generic {
     pub mod api {
         pub mod request_directory {
