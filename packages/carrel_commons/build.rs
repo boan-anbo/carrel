@@ -16,8 +16,13 @@ fn main() {
         "carrel/common/document/v1/document.proto",
         "carrel/common/snippet_location/v1/snippet_location.proto",
         // services and apis
+        //
+        // scaffold
         "carrel/server/scaffold/v1/scaffold.proto",
+        // firefly_keeper
         "carrel/server/firefly_keeper/v1/firefly_keeper.proto",
+        // services
+        "carrel/stacks/services/v1/stacks_services_v1.proto",
 
     ];
 
@@ -35,6 +40,7 @@ fn main() {
     tonic_build::configure()
         .build_server(true)
         .build_client(true)
+        .compile_well_known_types(true)
         .type_attribute(".", "#[derive(serde::Serialize, serde::Deserialize)]")
         .file_descriptor_set_path(out_dir.join("carrel_descriptor.bin"))
         .out_dir("src/generated/")

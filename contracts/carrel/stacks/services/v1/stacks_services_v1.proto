@@ -3,16 +3,31 @@ syntax = "proto3";
 
 package carrel.stacks.services.v1; 
 
+import "carrel/common/document/v1/document.proto";
 
-message ScaffoldNewProjectRequest {
-    string project_name = 1;
-    string project_parent_dir = 2;
+// import float in well known types
+import "google/protobuf/wrappers.proto";
+message DocumentResult {
+    carrel.common.document.v1.Document document = 1;
+    // float type for score
+    google.protobuf.FloatValue score = 2;
+}
+
+message SearchResponse {
+    string index = 1;
+    string query = 2;
+    repeated DocumentResult documents = 3;
+    int32 page = 4;
+    int32 total = 5;
 }
     
-message ScaffoldNewProjectResponse {
-    string project_dir = 1;
+message SearchRequest {
+    string index = 1;
+    string query = 2;
+    int32 page = 3;
+    int32 per_page = 4;
 }
 
-service ScaffoldNewProjectService {
-    rpc ScaffoldNewProject(ScaffoldNewProjectRequest) returns (ScaffoldNewProjectResponse);
+service StrackService {
+    rpc Search(SearchRequest) returns (SearchResponse) {}
 }

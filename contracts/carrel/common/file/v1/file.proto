@@ -13,4 +13,5 @@ message File {
     string file_extension = 11;
     /// file directory
     string file_dir = 12;
+    string file_full_path = 13;
 }
