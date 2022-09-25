@@ -1,10 +1,10 @@
 # This is the monorepo of Carrel eco-system
 
-## Main application
+## 1 Main application
 
 - Carrel Desktop
 
-## Components and applications
+## 2 Components and applications
 
 0 Firefly Keeper
 
@@ -34,30 +34,29 @@
 
 - Manager of research materials.
 
-
-## Gadgets
+## 3 Gadgets
 
 - Paper-timer
 
-## Util apps
+## 4 Util apps
 
 - Project scaffold
 
-## Infrastructure
+## 5 Infrastructure
 
-### Application infrastructure
+### 5.1 Application infrastructure
 
 - Textual-objects
 
-### Utility apps
+### 5.2 Utility apps
 
 - Pdf-gongju
 
-### Db infrastructure
+### 5.3 Db infrastructure
 
 - Relational database (Sqlite).
 
-### Network protocol
+### 5.4 Network protocol
 
 - Proto-buffer
 
