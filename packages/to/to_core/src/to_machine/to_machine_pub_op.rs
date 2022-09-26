@@ -122,7 +122,7 @@ impl ToMachine {
         }
         // use find method to get all tos
         let matched_to_tickets =
-            ToParser::scan_text_for_tickets(&scan_request.text, &ToParserOption::default());
+            ToParser::scan_text_for_tickets(&scan_request.text, &ToParserOption::default(), scan_request.origin_file_path.clone());
 
         let found_tos = self
             .find_by_ticket_ids(

@@ -12,6 +12,7 @@ pub struct ToScanRequestDto {
     pub store_url: String,
     /// the text to scan from
     pub text: String,
+    pub origin_file_path: Option<String>,
 }
 
 impl ToScanRequestDto {
