@@ -1,0 +1,25 @@
+
+syntax = "proto3";
+
+
+package carrel.common.project.v1;
+
+
+message Project {
+  string uuid = 1;
+  // the name of the project
+  string name = 2;
+  // description of the project
+    optional string description = 3;
+    // the working folder of the project
+    optional string working_folder = 4;
+
+    // last time the project was modified in ISO 8601 format
+    string last_modified = 5;
+    // last time the project was opened in ISO 8601 format
+    string last_opened = 6;
+    // the id of the archive associated with the project;
+optional    string archive_uuid = 7;
+}
+
+

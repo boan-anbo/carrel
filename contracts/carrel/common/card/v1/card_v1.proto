@@ -2,15 +2,15 @@ syntax = "proto3";
 
 import "carrel/common/document/v1/document.proto";
 
-import "carrel/common/person/v1/person.proto";
+import "carrel/common/person/v1/person_v1.proto";
 
-import "carrel/common/comment/v1/comment.proto";
+import "carrel/common/comment/v1/comment_v1.proto";
 
-import "carrel/common/storage_info/v1/storage_info.proto";
+import "carrel/common/storage_info/v1/storage_info_v1.proto";
  
-import "carrel/common/tag/v1/tag.proto";
- 
-import "carrel/common/importance/v1/importance.proto";
+import "carrel/common/tag/v1/tag_v1.proto";
+  
+import "carrel/common/importance/v1/importance_v1.proto";
 
 // A key unit of extracted useful information from a document.
 // Compared to Passage, a card is annotated with a selection of key text, and even comments and importance.

@@ -3,7 +3,7 @@ syntax = "proto3";
 
 package carrel.common.tag.v1;
 
-import "carrel/common/snippet_location/v1/snippet_location.proto";
+import "carrel/common/snippet_location/v1/snippet_location_v1.proto";
 
 /// A common tag for carrel system.
 message Tag {

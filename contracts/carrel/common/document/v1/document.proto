@@ -1,10 +1,10 @@
 syntax = "proto3";
 
 /// import source
-import "carrel/common/file/v1/file.proto";
+import "carrel/common/file/v1/file_v1.proto";
 
 /// import person
-import "carrel/common/person/v1/person.proto";
+import "carrel/common/person/v1/person_v1.proto";
 
 
 /// The source is an abstract reference that could contain document info and other metadata that can have multiple.
@@ -24,7 +24,7 @@ message Document {
     /// citation information
     string citation = 4;
     /// publication date
-    string publicationDate = 5;
+    string publication_date = 5;
     /// creators
     repeated carrel.common.person.v1.Person creators = 6;
     /// In the case of a Zotero Item, this is the Zotero URI.

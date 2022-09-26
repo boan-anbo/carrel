@@ -3,7 +3,7 @@ syntax = "proto3";
 
 package carrel.firefly_keeper.v1;
 
-import "carrel/common/tag/v1/tag.proto";
+import "carrel/common/tag/v1/tag_v1.proto";
     
 /// Fireflies capture project-wide (i.e. within the project folder) tags and category them by important types.
 /// Those tags in these types are presumed to be important, even though they are not unlike any other tags.
@@ -101,35 +101,32 @@ message Fireflies {
 }
 
 
-enum FireflyCategories {
-    // all tags
-    ALL_TAGS = 0;
+enum CATEGORY {
+    CATEGORY_TYPE_UNSPECIFIED = 0;
     // notes
-    NOTES = 1;
+    CATEGORY_NOTE = 1;
     // todos
-    TODOS = 2;
+    CATEGORY_TODO = 2;
     // ideas
-    IDEAS = 3;
+    CATEGORY_IDEA = 3;
     // summaries
-    SUMMARIES = 4;
+    CATEGORY_SUMMARY = 4;
     // points
-    POINTS = 5;
+    CATEGORY_POINT = 5;
     // facts
-    FACTS = 6;
+    CATEGORY_FACT = 6;
     // quotes
-    QUOTES = 7;
+    CATEGORY_QUOTE = 7;
     // questions
-    QUESTIONS = 8;
+    CATEGORY_QUESTION = 8;
     // keywords
-    KEYWORDS = 9;
+    CATEGORY_KEYWORD = 9;
     // references
-    REFERENCES = 10;
+    CATEGORY_REFERENCE = 10;
     // others' points
-    OPOINTS = 11;
+    CATEGORY_OPOINT = 11;
     // others' evidences
-    OEVIDENCES = 12;
+    CATEGORY_OEVIDENCE = 12;
     // data
-    DATA = 13;
-    // unclassified
-    UNCLASSIFIED = 14;
+    CATEGORY_DATA = 13;
 }

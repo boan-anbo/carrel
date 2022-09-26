@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+
+package carrel.common.importance.v1;
+
+enum Importance {
+IMPORTANCE_NONE_UNSPECIFIED = 0;
+IMPORTANCE_VERY_LOW = 1;
+IMPORTANCE_LOW = 2;
+IMPORTANCE_MEDIUM = 3;
+IMPORTANCE_HIGH = 4;
+IMPORTANCE_VERY_HIGH = 5;
+IMPORTANCE_TOP_IMPORTANCE = 6;
+}

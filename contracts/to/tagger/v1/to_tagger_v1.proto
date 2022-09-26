@@ -1,16 +1,8 @@
-// #[derive(Deserialize, Serialize, Clone)]
-// pub struct ScanResult {
-//     pub file_path: String,
-//     pub file_name: String,
-//     pub results: ToParserResult<ToTag>,
-// }
-
-
 syntax = "proto3";
 
-package totagger_models;
+package to.tagger.v1;
 
-import "carrel/to/api/v1/to_api_v1.proto";
+import "to/api/v1/to_api_v1.proto";
 
 message ScanResult {
     string file_path = 1;

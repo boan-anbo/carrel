@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+
+package Archive;
+
+import "carrel/common/document/v1/document.proto";
+
+// A collection of materials for certain purposes and associated with certain projects.
+message Archive {
+    string uuid = 1;
+    // the project uuid it is associated with
+    string project_uuid = 2;
+    // the name of the archive
+    string name = 3;
+    // the description of the archive
+    string description = 4;
+    // Documents
+    repeated carrel.common.document.v1.Document documents = 5;
+
+}
+

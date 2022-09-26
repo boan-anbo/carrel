@@ -3,19 +3,19 @@ syntax = "proto3";
 
 package carrel.server.firefly_keeper.v1;
 
-import "carrel/generic/api/request_directory/v1/request_directory.proto";
+import "generic/api/request_directory/v1/request_directory_v1.proto";
 
 import "carrel/firefly_keeper/v1/firefly_keeper_v1.proto";
     
 
 service FirefliesService {
     rpc ScanFolderForFireflies(
-        generic.api.request_directory.v1.DirectoryRequest
+        generic.api.request_directory.v1.GenericDirectoryRequest
     ) returns (
         FireFliesResponse
     );
 }
-
+ 
 message FireFliesResponse {
     carrel.firefly_keeper.v1.Fireflies fireflies = 1;
 }

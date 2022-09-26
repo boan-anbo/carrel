@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+
+package carrel.core.shared.v1;
+
+// core components of carrel
+enum CarrelComponent {
+
+    CARREL_COMPONENT_CARREL_UNSPECIFIED = 0;
+    // Project-wide tag management
+    CARREL_COMPONENT_FIREFLY_KEEPER = 1;
+    // Exploratory research that gives you insight into humanities data. working mostly with Stacks
+    CARREL_COMPONENT_CANDOR = 2;
+    // Notes management and writing companion using TO.
+    CARREL_COMPONENT_CABINET = 3;
+    // A general-purpose DB for storing relational humanities data.
+    CARREL_COMPONENT_INTERACT = 4;
+    // Writing progress tracking and organizer. Also Organizer and planner of points
+    CARREL_COMPONENT_WRITING_PLAN = 5;
+    // Manager of research materials.
+    CARREL_COMPONENT_STACKS = 6;
+}
