@@ -96,7 +96,10 @@ message Fireflies {
     // unclassified count
     int32 unclassified_count = 30;
 
-    
+
+    string directory = 31;
+    uint32 files_count = 32;
+    uint32 text_files_count = 33;  
     
 }
 

@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+
+package carrel.constant.supported_text_file.v1;
+
+enum SupportedTextFile {
+    SUPPORTED_TEXT_FILE_TXT_UNSPECIFIED = 0;
+    SUPPORTED_TEXT_FILE_MARKDOWN = 1;
+}

@@ -12,3 +12,9 @@
 
 - `common`: core messages
 - `generic`: shared helper messages
+
+
+## Note
+
+- Keep TO and Carrel distinct
+- In fact, TO shouldn't need Proto definitions, unless it's its API implementation.

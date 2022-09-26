@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 
-package Archive;
+package carrel.common.archive.v1;
 
 import "carrel/common/document/v1/document.proto";
 

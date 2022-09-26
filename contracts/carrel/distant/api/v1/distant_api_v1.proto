@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package distant.api.v1;
 
-import "carrel/common/passage/v1/passage.proto";
+import "carrel/common/passage/v1/passage_v1.proto";
 
 message DistantApiSearchRequest {
   string query = 1;
