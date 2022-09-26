@@ -1,10 +1,18 @@
 use carrel_commons::carrel::common::tag::v1::Tag;
 use carrel_commons::carrel::firefly_keeper::v1::Fireflies;
 use to_core::to_tag::to_tag_struct::ToTag;
+use crate::firefly_keeper::internal_scan_results::InternalScanResults;
 
 
-pub fn collect_fireflies(tags: Vec<ToTag>) -> Fireflies {
-    let mut fireflies: Fireflies = Fireflies::default();
+pub fn collect_fireflies(scan_result: InternalScanResults) -> Fireflies {
+    let mut fireflies: Fireflies = Fireflies {
+        text_files_count: scan_result.text_files_scaned,
+        files_count: scan_result.all_files_scaned,
+        directory: scan_result.directory,
+        ..Fireflies::default()
+    };
+
+    let tags =  scan_result.tags;
 
     // loop over tags
 
