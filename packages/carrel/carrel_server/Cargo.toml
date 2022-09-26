@@ -8,7 +8,8 @@ edition = "2021"
 [dependencies]
 # Carrel components
 carrel_core = { path = "../carrel_core" }
-carrel_commons = { path = "../../carrel_commons" }
+carrel_commons = { path = "../../carrel_commons", features = ["server", "generic"] }
+carrel_utils = { path = "../carrel_utils" }
 # Other dependencies
 once_cell = "1.15.0"
 config = "0.13.1"

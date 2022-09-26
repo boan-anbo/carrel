@@ -6,7 +6,6 @@ use crate::launch::launch_server;
 pub(crate) mod services;
 pub mod errors;
 pub(crate) mod consts;
-pub(crate) mod utils;
 mod launch;
 
 // main

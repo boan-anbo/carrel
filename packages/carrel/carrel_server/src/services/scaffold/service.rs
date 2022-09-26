@@ -33,10 +33,10 @@ mod test
     use std::path::Path;
 
     use carrel_commons::carrel::server::scaffold::v1::scaffold_new_project_service_client::ScaffoldNewProjectServiceClient;
+    use carrel_utils::test::test_folders::get_unit_test_module_folder;
     use tonic::transport::Channel;
 
     use crate::consts::server_addr::SERVER_ADDR;
-    use crate::utils::tests::setup::setup_tests::get_unit_test_fixture_path;
 
     use super::*;
 
@@ -48,7 +48,7 @@ mod test
     }
 
     fn get_scaffold_fixture_path() -> String {
-        get_unit_test_fixture_path(MODULE_FIXTURE_FOLDER)
+        get_unit_test_module_folder(MODULE_FIXTURE_FOLDER)
     }
 
 
