@@ -5,15 +5,22 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[features]
+default = ["generic"]
+firefly_keeper = ["tonic"]
+stacks = ["tonic"]
+server = ["tonic"]
+generic = []
 
 [dependencies]
-tonic = { version="0.8.1", optional = true }
+tonic = { version="0.8.1", optional = true } # true means tonic is only included when another Cargo.toml which imports this one specified any of the features that "requires" tonic, which is most of the services in our case
 prost = "0.11.0"
 uuid = "1.1.2"
 serde = { version = "1.0.130", features = ["derive"] }
 to_core = { path = "../to/to_core" }
+carrel_utils = { path = "../carrel/carrel_utils" }
 
 [build-dependencies]
 tonic-build = "0.8.0"
-carrel_utils = { path = "../carrel/carrel_utils" }
 
+carrel_utils = { path = "../carrel/carrel_utils" }

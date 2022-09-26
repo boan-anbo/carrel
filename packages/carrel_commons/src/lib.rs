@@ -17,6 +17,11 @@ pub mod carrel {
     pub const FILE_DESCRIPTOR_SET: &[u8] = include_bytes!("generated/carrel_descriptor.bin");
 
     pub mod common {
+        pub mod archive {
+            pub mod v1 {
+                include!("generated/carrel_common_archive_v1.rs");
+            }
+        }
         pub mod tag {
             pub mod v1 {
                 include!("generated/carrel_common_tag_v1.rs");
@@ -71,6 +76,13 @@ pub mod carrel {
             }
         }
 
+        pub mod project {
+            pub mod v1 {
+                include!("generated/carrel_common_project_v1.rs");
+            }
+        }
+
+
         pub mod storage_info {
             pub mod v1 {
                 include!("generated/carrel_common_storage_info_v1.rs");
@@ -78,6 +90,13 @@ pub mod carrel {
         }
     }
 
+    pub mod contant {
+        pub mod supported_text_file {
+            pub mod v1 {
+                include!("generated/carrel_constant_supported_text_file_v1.rs");
+            }
+        }
+    }
     #[cfg(feature = "server")]
     pub mod server {
         pub mod firefly_keeper {
@@ -108,6 +127,7 @@ pub mod carrel {
             }
         }
     }
+
 }
 
 // google::protobuf::FloatValue

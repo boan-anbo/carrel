@@ -5,25 +5,28 @@ use std::path::PathBuf;
 fn main() {
     let proto_files = vec![
         // commons
-        "carrel/common/tag/v1/tag.proto",
-        "carrel/common/file/v1/file.proto",
-        "carrel/common/importance/v1/importance.proto",
-        "carrel/common/person/v1/person.proto",
-        "carrel/common/passage/v1/passage.proto",
-        "carrel/common/storage_info/v1/storage_info.proto",
-        "carrel/common/card/v1/card.proto",
-        "carrel/common/comment/v1/comment.proto",
+        "carrel/common/tag/v1/tag_v1.proto",
+        "carrel/common/file/v1/file_v1.proto",
+        "carrel/common/importance/v1/importance_v1.proto",
+        "carrel/common/person/v1/person_v1.proto",
+        "carrel/common/passage/v1/passage_v1.proto",
+        "carrel/common/storage_info/v1/storage_info_v1.proto",
+        "carrel/common/card/v1/card_v1.proto",
+        "carrel/common/comment/v1/comment_v1.proto",
         "carrel/common/document/v1/document.proto",
-        "carrel/common/snippet_location/v1/snippet_location.proto",
+        "carrel/common/snippet_location/v1/snippet_location_v1.proto",
+        "carrel/common/project/v1/project_v1.proto",
+        "carrel/common/archive/v1/archive_v1.proto",
         // services and apis
         //
         // scaffold
-        "carrel/server/scaffold/v1/scaffold.proto",
+        "carrel/server/scaffold/v1/server_scaffold_v1.proto",
         // firefly_keeper
-        "carrel/server/firefly_keeper/v1/firefly_keeper.proto",
+        "carrel/server/firefly_keeper/v1/server_firefly_keeper_v1.proto",
         // services
         "carrel/stacks/services/v1/stacks_services_v1.proto",
-
+        // Constants
+        "carrel/constant/supported_text_file/v1/supported_text_file_v1.proto",
     ];
 
     let proto_root_folders = vec![
@@ -33,6 +36,11 @@ fn main() {
     let out_dir = PathBuf::from(
         "src/generated/"
     );
+
+    // clear the out_dir if it exists
+    if out_dir.exists() {
+        std::fs::remove_dir_all(&out_dir).unwrap();
+    }
 
     // create  directory if it doesn't exist
     std::fs::create_dir_all(&out_dir).unwrap();
