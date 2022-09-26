@@ -1,1 +1,1 @@
-pub mod use_unit_test_fixture_folder;
+pub mod test_folders;
