@@ -1,0 +1,15 @@
+.tile {
+    height: 100%;
+    width: 100%;
+
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+
+    @apply bg-gray-50;
+}
+
+
+.tile-header {
+    @apply flex flex-row justify-between items-center bg-amber-700 drop-shadow text-white;
+}

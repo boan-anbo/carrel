@@ -1,0 +1,7 @@
+.action-item-container {
+    @apply flex justify-around ;
+}
+
+.action-item-description {
+    @apply text-black;
+}

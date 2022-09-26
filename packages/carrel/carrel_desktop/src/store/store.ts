@@ -1,0 +1,26 @@
+import {configureStore} from '@reduxjs/toolkit';
+import logger from 'redux-logger'
+import appstateReducer from "./slices/appstate/appstate";
+import workingProjectReducer from "./slices/working-project-state/working-project-state";
+import {listenerMiddleware} from "./listners";
+
+const store = configureStore({
+        reducer: {
+            appstate: appstateReducer,
+            workingProject: workingProjectReducer,
+        },
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware().concat(logger).prepend(
+                // listenerMiddleware
+                listenerMiddleware.middleware
+            ),
+        devTools: process.env.NODE_ENV !== 'production',
+    }
+)
+
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+export type AppDispatch = typeof store.dispatch
+
+export default store;

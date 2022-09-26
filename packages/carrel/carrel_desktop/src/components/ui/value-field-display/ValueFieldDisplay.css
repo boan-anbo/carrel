@@ -1,0 +1,11 @@
+/* It's a block taking up a row */
+.field-value-container {
+    @apply flex justify-around;
+}
+.field {
+    @apply text-black text-xs;
+}
+
+.value {
+    @apply text-blue-800 text-xs;
+}

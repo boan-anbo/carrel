@@ -1,0 +1,11 @@
+.page-section {
+    @apply my-4 mx-8 p-4 rounded bg-gray-100 drop-shadow-sm h-fit;
+}
+
+.page-section-title {
+    @apply text-lg font-bold text-gray-800;
+}
+
+.page-section-content {
+    @apply text-gray-800 text-lg p-8 bg-white rounded rounded mt-4;
+}
