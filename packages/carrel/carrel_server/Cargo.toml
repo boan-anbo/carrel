@@ -3,6 +3,11 @@ name = "carrel_server"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "carrel_server"
+path = "src/lib.rs"
+doc = false
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
@@ -16,7 +21,7 @@ config = "0.13.1"
 tonic = "0.8.1"
 prost = "0.11.0"
 tokio = { version = "1.21.1", features = ["macros", "rt-multi-thread"] }
-tonic-health = "0.7.1"
+tokio-stream = "0.1.10"
 tonic-reflection = "0.5.0"
 tonic-web = "0.4.0"
 tower-http = { version = "0.3.4", features = ["cors"] }
@@ -24,3 +29,4 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 dotenv = "0.15.0"
 serde = { version = "1.0.130", features = ["derive"] }
+futures-core = "0.3.24"

@@ -16,7 +16,10 @@ pub fn rename_prost_generated_filenames(dir: &Path) -> Result<(), Error> {
                     .unwrap()
                     .to_str()
                     .unwrap()
-                    .replace(".", "_");
+                    .replace(
+                        '.',
+                        "_"
+                    );
 
                 let ext = path.extension().unwrap().to_str().unwrap();
 

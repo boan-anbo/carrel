@@ -128,8 +128,18 @@ pub mod carrel {
         }
     }
 
+
+
 }
 
+#[cfg(feature = "server_health")]
+pub mod grpc {
+    pub mod health {
+        pub mod v1 {
+            include!("generated/grpc_health_v1.rs");
+        }
+    }
+}
 // google::protobuf::FloatValue
 pub mod google {
     pub mod protobuf {

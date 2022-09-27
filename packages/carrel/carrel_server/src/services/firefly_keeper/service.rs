@@ -1,20 +1,39 @@
+use carrel_commons::carrel::server::firefly_keeper::v1::{ScanFilesForFirefliesRequest, ScanFilesForFirefliesResponse, ScanFolderForFirefliesRequest, ScanFolderForFirefliesResponse};
 use carrel_commons::carrel::server::firefly_keeper::v1::fireflies_service_server::FirefliesService;
-use carrel_commons::carrel::server::firefly_keeper::v1::FireFliesResponse;
-use carrel_commons::generic::api::request_directory::v1::GenericDirectoryRequest;
+use carrel_core::fireflies::procedures::{FireflyKeeperOption, scan_file_for_fireflies};
 use tonic::{Request, Response, Status};
+use tracing::log::Level::Debug;
 
 #[derive(Debug, Default)]
 pub struct FireflyService {}
 
 #[tonic::async_trait]
 impl FirefliesService for FireflyService {
-    async fn scan_folder_for_fireflies(&self, request: Request<GenericDirectoryRequest>) -> Result<Response<FireFliesResponse>, Status> {
+    async fn scan_folder_for_fireflies(&self, request: Request<ScanFolderForFirefliesRequest>) -> Result<Response<ScanFolderForFirefliesResponse>, Status> {
         let req = request.into_inner();
-        let result = carrel_core::fireflies::procedures::scan_folder_for_fireflies(
-            req.directory_path.as_str()
-        ).unwrap();
+        let result = carrel_core::fireflies::procedures::scan_folder_for_fireflies(req.directory.as_str(), FireflyKeeperOption {
+            ignored_directory_names: req.ignore_directories,
+            classified_only: req.classified_only,
+        }).expect("Failed to scan folder for fireflies");
         let res = Response::new(
-            FireFliesResponse {
+            ScanFolderForFirefliesResponse {
+                fireflies: Some(result)
+            });
+        Ok(res)
+    }
+
+    async fn scan_files_for_fireflies(&self, request: Request<ScanFilesForFirefliesRequest>) -> Result<Response<ScanFilesForFirefliesResponse>, Status> {
+        let req = request.into_inner();
+        let files: &[&str] = &req.files.iter().map(|s| s.as_str()).collect::<Vec<&str>>();
+        let result = scan_file_for_fireflies(
+            files,
+            FireflyKeeperOption {
+                classified_only: req.classified_only,
+                ..Default::default()
+            },
+        ).expect("Failed to scan files for fireflies");
+        let res = Response::new(
+            ScanFilesForFirefliesResponse {
                 fireflies: Some(result)
             });
         Ok(res)
@@ -26,11 +45,11 @@ impl FirefliesService for FireflyService {
 mod test
 {
     use std::path::Path;
+
     use carrel_commons::carrel::server::firefly_keeper::v1::fireflies_service_client::FirefliesServiceClient;
     use carrel_utils::test::test_folders::get_unit_test_module_folder;
-
-
     use tonic::transport::{Channel, Error};
+
     use crate::consts::server_addr::SERVER_ADDR;
 
     use super::*;
@@ -50,9 +69,9 @@ mod test
 
     #[tokio::test]
     async fn test_scan_for_fireflies() -> Result<(), Box<dyn std::error::Error>> {
-        let request = GenericDirectoryRequest {
-            directory_path: get_firefly_fixture_path(),
-            note: "firefly_fixture_test".to_string(),
+        let request = ScanFolderForFirefliesRequest {
+            directory: get_firefly_fixture_path(),
+            classified_only: false,
         };
 
         let response = get_client().await.scan_folder_for_fireflies(request).await?;
@@ -60,7 +79,6 @@ mod test
 
         // there should be three tags
         assert_eq!(response_value.fireflies.unwrap().all_tags_count, 2);
-
 
 
         Ok(())

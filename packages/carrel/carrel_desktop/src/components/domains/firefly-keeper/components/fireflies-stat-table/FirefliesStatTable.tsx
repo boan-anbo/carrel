@@ -1,4 +1,4 @@
-import {Fireflies} from "../../../../../generated/carrel/firefly_keeper/v1/firefly_keeper_v1_pb";
+import {Fireflies} from "../../../../../../../carrel_server_client/generated/carrel/firefly_keeper/v1/firefly_keeper_v1_pb";
 import {PageSection} from "../../../../ui/page-section/PageSection";
 import {HTMLTable} from "@blueprintjs/core";
 

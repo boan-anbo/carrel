@@ -247,6 +247,16 @@
     "@babel/helper-validator-identifier" "^7.18.6"
     to-fast-properties "^2.0.0"
 
+"@bufbuild/connect-web@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@bufbuild/connect-web/-/connect-web-0.2.1.tgz#a7ee2914bf1b77d640fc4ee3c3a89d626f3015fa"
+  integrity sha512-L580cL9VZCXcjwXMCvIvdFBqdQofVBQcL+jmSis7m8ZxPj5NQ4p7fUhQRTsZMWHkyWINdlZnr7WsHQL0BT7wPQ==
+
+"@bufbuild/protobuf@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@bufbuild/protobuf/-/protobuf-0.1.1.tgz#163dee03af49e82d300dfa2bf60c8c0f04c80b4c"
+  integrity sha512-HAs82bdlN5aUsoTaJNsPd8driezDenOtAh7dVpO5xKEmyB6ibmRIV08MTlIVudnMYbFc1qw7RxhFHoQy0rSvgg==
+
 "@emotion/babel-plugin@^11.10.0":
   version "11.10.2"
   resolved "https://registry.yarnpkg.com/@emotion/babel-plugin/-/babel-plugin-11.10.2.tgz#879db80ba622b3f6076917a1e6f648b1c7d008c7"

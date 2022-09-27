@@ -1,5 +1,5 @@
 import Page from "../../../../ui/page/Page";
-import {Fireflies} from "../../../../../generated/carrel/firefly_keeper/v1/firefly_keeper_v1_pb";
+import {Fireflies} from "../../../../../../../carrel_server_client/generated/carrel/firefly_keeper/v1/firefly_keeper_v1_pb";
 import {useEffect, useState} from "react";
 import {fireflyKeeperApi} from "../../../../../server-utils/api-clients";
 import {useSelector} from "react-redux";

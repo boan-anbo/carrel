@@ -97,9 +97,10 @@ message Fireflies {
     int32 unclassified_count = 30;
 
 
-    string directory = 31;
+    optional string directory = 31;
     uint32 files_count = 32;
     uint32 text_files_count = 33;  
+    repeated string files = 34;
     
 }
 

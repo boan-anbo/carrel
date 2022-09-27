@@ -1,6 +1,6 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createSlice} from '@reduxjs/toolkit'
-import {Project} from "../../../generated/carrel/common/project/v1/project_v1_pb";
+import {Project} from "../../../../../carrel_server_client/generated/carrel/common/project/v1/project_v1_pb";
 import {newUuid} from "../../../utils/new-uuid";
 import {PartialMessage, Timestamp} from "@bufbuild/protobuf";
 import {setTauriWindow} from "../../../tauri/window/set-tauri-window";

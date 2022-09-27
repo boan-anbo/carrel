@@ -27,6 +27,10 @@ fn main() {
         "carrel/stacks/services/v1/stacks_services_v1.proto",
         // Constants
         "carrel/constant/supported_text_file/v1/supported_text_file_v1.proto",
+        // grpc
+        "grpc/health/v1/grpc_health_v1.proto",
+        // generic
+        "generic/api/request_directory/v1/request_directory_v1.proto",
     ];
 
     let proto_root_folders = vec![

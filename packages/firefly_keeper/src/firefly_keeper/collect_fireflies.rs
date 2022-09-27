@@ -1,18 +1,19 @@
 use carrel_commons::carrel::common::tag::v1::Tag;
 use carrel_commons::carrel::firefly_keeper::v1::Fireflies;
 use to_core::to_tag::to_tag_struct::ToTag;
+use crate::firefly_keeper::firefly_keeper_option::FireflyKeeperOption;
 use crate::firefly_keeper::internal_scan_results::InternalScanResults;
 
 
-pub fn collect_fireflies(scan_result: InternalScanResults) -> Fireflies {
+pub fn collect_fireflies(scan_result: InternalScanResults, directory: Option<String>, opt: &FireflyKeeperOption) -> Fireflies {
     let mut fireflies: Fireflies = Fireflies {
         text_files_count: scan_result.text_files_scaned,
         files_count: scan_result.all_files_scaned,
-        directory: scan_result.directory,
+        directory,
         ..Fireflies::default()
     };
 
-    let tags =  scan_result.tags;
+    let tags = scan_result.tags;
 
     // loop over tags
 
@@ -23,10 +24,6 @@ pub fn collect_fireflies(scan_result: InternalScanResults) -> Fireflies {
 
         let converted_tag = Tag::from(tag);
 
-
-        // add to all tags
-        fireflies.all_tags.push(converted_tag.clone());
-        fireflies.all_tags_count += 1;
 
         if lower_tag_key == "note" || lower_tag_key == "n" {
             fireflies.notes.push(converted_tag.clone());
@@ -67,12 +64,19 @@ pub fn collect_fireflies(scan_result: InternalScanResults) -> Fireflies {
         } else if lower_tag_key == "data" || lower_tag_key == "d" {
             fireflies.data.push(converted_tag.clone());
             fireflies.data_count += 1;
-        } else {
+        } else if !opt.classified_only {
             fireflies.unclassified.push(converted_tag.clone());
             fireflies.unclassified_count += 1;
+        }
+
+        // add to all tags
+        if !opt.classified_only {
+            fireflies.all_tags.push(converted_tag.clone());
+            fireflies.all_tags_count += 1;
         }
     }
 
     // return the fireflies
     fireflies
 }
+

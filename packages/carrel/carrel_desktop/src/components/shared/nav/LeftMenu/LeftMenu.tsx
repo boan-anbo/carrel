@@ -24,7 +24,7 @@ import {ExampleProps} from "@blueprintjs/docs-theme/lib/esm/components/example";
 import {CurrentComponent} from "../../../../store/slices/appstate/current_component";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../../store/store";
-import {CarrelComponent} from "../../../../generated/carrel/core/shared/v1/core_shared_v1_pb";
+import {CarrelComponent} from "../../../../../../carrel_server_client/generated/carrel/core/shared/v1/core_shared_v1_pb";
 
 import {CarrelMenu} from "../../../domains/carrel/menu/CarrelMenu";
 import {StacksMenu} from "../../../domains/stacks/menu/StacksMenu";

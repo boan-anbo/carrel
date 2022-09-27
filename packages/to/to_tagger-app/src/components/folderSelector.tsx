@@ -21,7 +21,9 @@ export function FolderSelector() {
         }) as string[];
 
 
-        setFiles(results);
+        if (results.length > 0) {
+            setFiles(results);
+        }
 
     }
 

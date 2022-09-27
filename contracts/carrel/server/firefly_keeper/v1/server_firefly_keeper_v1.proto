@@ -3,19 +3,37 @@ syntax = "proto3";
 
 package carrel.server.firefly_keeper.v1;
 
-import "generic/api/request_directory/v1/request_directory_v1.proto";
 
 import "carrel/firefly_keeper/v1/firefly_keeper_v1.proto";
     
+message ScanFolderForFirefliesRequest {
+    string directory = 1;
+    bool classified_only = 2;
+    repeated string ignore_directories = 3;
+}
 
 service FirefliesService {
     rpc ScanFolderForFireflies(
-        generic.api.request_directory.v1.GenericDirectoryRequest
+        ScanFolderForFirefliesRequest
     ) returns (
-        FireFliesResponse
+        ScanFolderForFirefliesResponse
+    );
+    rpc ScanFilesForFireflies(
+        ScanFilesForFirefliesRequest
+    ) returns (
+        ScanFilesForFirefliesResponse
     );
 }
  
-message FireFliesResponse {
+message ScanFolderForFirefliesResponse {
+    carrel.firefly_keeper.v1.Fireflies fireflies = 1;
+}
+
+message ScanFilesForFirefliesRequest {
+    repeated string files = 1;
+    bool classified_only = 2;
+}
+
+message ScanFilesForFirefliesResponse {
     carrel.firefly_keeper.v1.Fireflies fireflies = 1;
 }

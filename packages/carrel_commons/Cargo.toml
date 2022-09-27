@@ -9,8 +9,9 @@ edition = "2021"
 default = ["generic"]
 firefly_keeper = ["tonic"]
 stacks = ["tonic"]
-server = ["tonic"]
+server = ["tonic", "server_health"]
 generic = []
+server_health = []
 
 [dependencies]
 tonic = { version="0.8.1", optional = true } # true means tonic is only included when another Cargo.toml which imports this one specified any of the features that "requires" tonic, which is most of the services in our case

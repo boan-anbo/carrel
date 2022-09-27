@@ -1,4 +1,4 @@
-import {CarrelComponent} from "../../../generated/carrel/core/shared/v1/core_shared_v1_pb";
+import {CarrelComponent} from "../../../../../carrel_server_client/generated/carrel/core/shared/v1/core_shared_v1_pb";
 
 export const MainMenuItems: CarrelComponent[] = [
     CarrelComponent.CARREL_UNSPECIFIED,

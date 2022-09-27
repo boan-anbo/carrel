@@ -1,6 +1,6 @@
 import {Alignment, Button, Navbar} from '@blueprintjs/core';
 import React, {ReactElement, useMemo} from 'react';
-import {CarrelComponent} from "../../../../generated/carrel/core/shared/v1/core_shared_v1_pb";
+import {CarrelComponent} from "../../../../../../carrel_server_client/generated/carrel/core/shared/v1/core_shared_v1_pb";
 import {MainMenuItems} from "../../../../store/slices/appstate/main-menu-items";
 import {AiOutlineBuild, BiCabinet, GiEagleHead, GiLaserSparks, GiRead, SiActigraph, SiBookstack} from "react-icons/all";
 import {CurrentComponent} from "../../../../store/slices/appstate/current_component";

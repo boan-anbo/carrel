@@ -3,11 +3,13 @@ use std::net::SocketAddr;
 use carrel_commons::carrel::FILE_DESCRIPTOR_SET;
 use carrel_commons::carrel::server::firefly_keeper::v1::fireflies_service_server::FirefliesServiceServer;
 use carrel_commons::carrel::server::scaffold::v1::scaffold_new_project_service_server::ScaffoldNewProjectServiceServer;
+use carrel_commons::grpc::health::v1::health_server::HealthServer;
 use tonic::transport::Server;
 
 use crate::consts::server_addr::SERVER_ADDR;
 use crate::launch::{attach_tracing_subscriber, load_cors, load_health_reporter};
 use crate::services::firefly_keeper::service::FireflyService;
+use crate::services::health::service::HealthService;
 use crate::services::scaffold::service::ScaffoldService;
 
 pub async fn launch_server() {
@@ -24,8 +26,6 @@ pub async fn launch_server() {
     });
     println!("Ip address: {}", &address.ip());
 
-
-    load_health_reporter::load_health_reporter().await;
 
     attach_tracing_subscriber::attach_tracing_subscriber();
     // Add this
@@ -52,6 +52,11 @@ pub async fn launch_server() {
             tonic_web::config()
                 .allow_all_origins()
                 .enable(FirefliesServiceServer::new(FireflyService::default()))
+        )
+        .add_service(
+            tonic_web::config()
+                .allow_all_origins()
+                .enable(HealthServer::new(HealthService::default()))
         )
         .add_service(reflection_service)
         .serve(address)

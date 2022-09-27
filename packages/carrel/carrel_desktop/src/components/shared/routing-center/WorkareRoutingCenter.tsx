@@ -1,6 +1,6 @@
 import {Route, Routes} from "react-router-dom";
 import {appDomainRoutes} from "../../../routing/app-domain-routes";
-import {CarrelComponent} from "../../../generated/carrel/core/shared/v1/core_shared_v1_pb";
+import {CarrelComponent} from "../../../../../carrel_server_client/generated/carrel/core/shared/v1/core_shared_v1_pb";
 import {ProjectManager} from "../../domains/carrel/pages/project-manage/ProjectManager";
 import {ProjectBoard} from "../../domains/carrel/pages/project-board";
 import {CarrelPageRoutes} from "../../domains/carrel/routes/carrel-page-routes";

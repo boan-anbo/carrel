@@ -11,6 +11,8 @@
     "codegen:proto:win": "protoc -I ../../contracts --ts_proto_opt=snakeToCamel=false --plugin=protoc-gen-ts_proto=.\\node_modules\\.bin\\protoc-gen-ts_proto.cmd --ts_proto_out=src/dtos/ ../../contracts/totagger.models.proto"
   },
   "dependencies": {
+    "@bufbuild/connect-web": "^0.2.1",
+    "@bufbuild/protobuf": "^0.1.1",
     "@emotion/react": "^11.10.4",
     "@mantine/carousel": "^5.4.0",
     "@mantine/core": "^5.4.0",

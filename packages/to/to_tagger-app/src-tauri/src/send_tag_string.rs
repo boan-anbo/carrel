@@ -1,8 +1,7 @@
-use ahk_rs::keyboard::send_input::send_string_enigo;
+use diji::controls::keyboard::send_input_enigo::send_string;
 
 #[tauri::command]
 pub async fn send_tag_string(tag_string: String) {
-    let result = send_string_enigo(&tag_string);
-    // print
-    println!("send_tag_string: {}", tag_string);
+    println!("Sending: {}", &tag_string);
+    send_string(tag_string);
 }
