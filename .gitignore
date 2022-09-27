@@ -10,4 +10,5 @@ target/
 debug/
 generated/
 
+packages/.DS_Store
 
