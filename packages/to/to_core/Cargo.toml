@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+
 
 [dependencies]
 nanoid = "0.4.0"
@@ -26,6 +28,5 @@ utoipa-swagger-ui = { version = "2.0.1", features = ["axum"] }
 proc-macro-error = "1.0"
 strum = "0.24.1"
 strum_macros = "0.24.3"
-
-
-
+[dev-dependencies]
+carrel_utils = { path = "../../carrel/carrel_utils"}

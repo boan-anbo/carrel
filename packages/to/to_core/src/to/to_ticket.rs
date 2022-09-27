@@ -1,5 +1,6 @@
 // implement print minimal ticket for TextualObjectMachine
 
+
 use crate::to::to_struct::TextualObject;
 use crate::to_ticket::to_ticket_struct::ToTicket;
 
@@ -13,7 +14,6 @@ impl TextualObject {
         let ticket = ToTicket::from(self.clone());
         let ticket_minimal = ticket.print_minimal();
         self.ticket_minimal = ticket_minimal;
-        self.ticket_minimal.clone();
         self.to_owned()
     }
 }

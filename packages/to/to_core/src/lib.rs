@@ -17,6 +17,9 @@
 //! - Textual Object Tag
 //!
 //! - Textual Object Card
+//!
+//! # Features
+//!
 
 pub mod db;
 pub mod entities;

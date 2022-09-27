@@ -29,7 +29,7 @@ impl ToParser {
     /// use to_core::to_tag_struct::ToTag;
     /// use to_core::to_parser::parser_option::ToParserOption;
     /// let raw_text = "[[KEY|VALUE|NOTE]]";
-    /// let result = ToParser::scan_text_for_tags(raw_text, &ToParserOption::default(),);
+    /// let result = ToParser::scan_text_for_tags(raw_text, &ToParserOption::default(), None);
     /// assert_eq!(result.tos.len(), 1);
     /// assert_eq!(result.tos.first().unwrap().key, "KEY");
     /// assert_eq!(result.tos.first().unwrap().value, "VALUE");
@@ -144,7 +144,7 @@ impl ToParser {
             // iterate with match
             for m in re.captures_iter(line) {
                 // get the match position
-                let mut position = ToTicketPositionInfo::from_match(&m, line_number, file_path.clone());
+                let position: ToTicketPositionInfo = ToTicketPositionInfo::from_match(&m, line_number, file_path.clone());
 
                 // get first group of match
                 let content = m.get(1).unwrap().as_str();

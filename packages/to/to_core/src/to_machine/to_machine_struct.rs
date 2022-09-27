@@ -108,7 +108,7 @@ impl ToMachine {
         }
 
         // update item count
-        tom.update_to_count();
+        tom.update_to_count().await;
         tom
     }
 
