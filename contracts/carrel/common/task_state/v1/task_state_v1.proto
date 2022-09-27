@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+
+package carrel.common.task_state.v1;
+
+
+/// A common tag for carrel system.
+enum TaskState {
+  TASK_STATE_UNSPECIFIED = 0;
+  // something planed but not on immediate agenda
+  TASK_STATE_PLANNED = 1;
+  // immediate agenda
+  TASK_STATE_TODO = 2;
+  // currently doing
+  TASK_STATE_WORKING = 3;
+  // done
+  TASK_STATE_FINISHED = 4;
+  // failed
+  TASK_STATE_FAILED = 5;
+  // cancelled
+  TASK_STATE_CANCELLED = 6;
+  // to revisite
+TASK_STATE_TO_REVISIT = 7;
+}
+

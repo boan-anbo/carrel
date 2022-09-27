@@ -7,15 +7,6 @@ package carrel.common.storage_info.v1;
 message StorageInfo {
     // id
     string uuid = 1;
-    // // storag #[strum(serialize = "store_id")]
-    // StoreId,
-    // #[strum(serialize = "store_ticket_id")]
-    // StoreTicketId,
-    // #[strum(serialize = "store_url")]
-    // StoreUrl,
-    // #[strum(serialize = "store_info")]
-    // StoreInfo,e
-
     // the unique id of the data in the storage
     string store_unique_id = 2;
     // the unique id of the storage if any

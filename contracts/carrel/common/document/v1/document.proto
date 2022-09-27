@@ -6,6 +6,13 @@ import "carrel/common/file/v1/file_v1.proto";
 /// import person
 import "carrel/common/person/v1/person_v1.proto";
 
+/// import importance
+import "carrel/common/importance/v1/importance_v1.proto";
+
+/// tasks
+import "carrel/common/task/v1/task_v1.proto";
+
+
 
 /// The source is an abstract reference that could contain document info and other metadata that can have multiple.
 ///Can be used as source.
@@ -50,4 +57,9 @@ message Document {
 
     /// content type
     string content = 15;
+
+    carrel.common.importance.v1.Importance  importance = 16;
+
+    repeated carrel.common.task.v1.Task tasks = 17;
+
 }

@@ -1,6 +1,8 @@
 
 syntax = "proto3";
 
+// import archive
+import "carrel/common/archive/v1/archive_v1.proto";
 
 package carrel.common.project.v1;
 
@@ -14,12 +16,18 @@ message Project {
     // the working folder of the project
     optional string working_folder = 4;
 
+
     // last time the project was modified in ISO 8601 format
-    string last_modified = 5;
+    string updated_at = 5;
     // last time the project was opened in ISO 8601 format
-    string last_opened = 6;
+    string opened_at = 6;
+    // created
+    string created_at = 7;
+    // finished at
+  optional string finished_at = 8;
     // the id of the archive associated with the project;
-optional    string archive_uuid = 7;
+    // the archive
+    repeated carrel.common.archive.v1.Archive archives = 9;
 }
 
 

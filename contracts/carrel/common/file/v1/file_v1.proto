@@ -1,12 +1,17 @@
 syntax = "proto3";
 
+import "carrel/common/importance/v1/importance_v1.proto";
+import "carrel/common/task/v1/task_v1.proto";
 
 package carrel.common.file.v1;
 
 message File {
     // id
     string uuid = 1;
-
+    // description
+    string description = 2;
+    // importance
+    carrel.common.importance.v1.Importance importance = 3;
     /// filename, with extension
     string file_name = 10;
     /// file extension
@@ -14,4 +19,6 @@ message File {
     /// file directory
     string file_dir = 12;
     string file_full_path = 13;
+    repeated carrel.common.task.v1.Task tasks = 20;
+
 }

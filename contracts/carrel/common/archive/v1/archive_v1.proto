@@ -9,13 +9,21 @@ import "carrel/common/document/v1/document.proto";
 message Archive {
     string uuid = 1;
     // the project uuid it is associated with
-    string project_uuid = 2;
+    repeated string project_uuids = 2;
     // the name of the archive
     string name = 3;
     // the description of the archive
     string description = 4;
     // Documents
     repeated carrel.common.document.v1.Document documents = 5;
+
+    // removed items
+    repeated carrel.common.document.v1.Document removed_documents = 6;
+
+
+    // time markers
+    string created_at = 7;
+    string updated_at = 8;
 
 }
 

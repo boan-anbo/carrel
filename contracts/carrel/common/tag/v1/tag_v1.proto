@@ -3,14 +3,18 @@ syntax = "proto3";
 
 package carrel.common.tag.v1;
 
-import "carrel/common/snippet_location/v1/snippet_location_v1.proto";
+import "carrel/common/snippet/v1/snippet_v1.proto";
+import "carrel/common/file/v1/file_v1.proto";
+// import passage
+import "carrel/common/passage/v1/passage_v1.proto";
 
 /// A common tag for carrel system.
 message Tag {
     string key = 1;
+    carrel.common.snippet.v1.Snippet snippet = 5;
     optional string value = 2;
     optional string note = 3;
-    string tag_marker = 4;
-    optional carrel.common.snippet_location.v1.SnippetLocation snippet_location = 5;
     string uuid = 6;
+    optional carrel.common.file.v1.File file = 7;
+    optional carrel.common.passage.v1.Passage passage = 8;
 }

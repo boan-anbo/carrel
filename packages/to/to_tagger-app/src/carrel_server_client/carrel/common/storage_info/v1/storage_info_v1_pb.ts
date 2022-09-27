@@ -15,15 +15,6 @@ export class StorageInfo extends Message<StorageInfo> {
   /**
    * id
    *
-   * // storag #[strum(serialize = "store_id")]
-   * StoreId,
-   * #[strum(serialize = "store_ticket_id")]
-   * StoreTicketId,
-   * #[strum(serialize = "store_url")]
-   * StoreUrl,
-   * #[strum(serialize = "store_info")]
-   * StoreInfo,e
-   *
    * @generated from field: string uuid = 1;
    */
   uuid = "";

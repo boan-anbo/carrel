@@ -5,6 +5,7 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
+import {Archive} from "../../archive/v1/archive_v1_pb.js";
 
 /**
  * @generated from message carrel.common.project.v1.Project
@@ -39,23 +40,38 @@ export class Project extends Message<Project> {
   /**
    * last time the project was modified in ISO 8601 format
    *
-   * @generated from field: string last_modified = 5;
+   * @generated from field: string updated_at = 5;
    */
-  lastModified = "";
+  updatedAt = "";
 
   /**
    * last time the project was opened in ISO 8601 format
    *
-   * @generated from field: string last_opened = 6;
+   * @generated from field: string opened_at = 6;
    */
-  lastOpened = "";
+  openedAt = "";
+
+  /**
+   * created
+   *
+   * @generated from field: string created_at = 7;
+   */
+  createdAt = "";
+
+  /**
+   * finished at
+   *
+   * @generated from field: optional string finished_at = 8;
+   */
+  finishedAt?: string;
 
   /**
    * the id of the archive associated with the project;
+   * the archive
    *
-   * @generated from field: optional string archive_uuid = 7;
+   * @generated from field: repeated carrel.common.archive.v1.Archive archives = 9;
    */
-  archiveUuid?: string;
+  archives: Archive[] = [];
 
   constructor(data?: PartialMessage<Project>) {
     super();
@@ -69,9 +85,11 @@ export class Project extends Message<Project> {
     { no: 2, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 3, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
     { no: 4, name: "working_folder", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
-    { no: 5, name: "last_modified", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 6, name: "last_opened", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 7, name: "archive_uuid", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 5, name: "updated_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: "opened_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: "created_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 8, name: "finished_at", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 9, name: "archives", kind: "message", T: Archive, repeated: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Project {

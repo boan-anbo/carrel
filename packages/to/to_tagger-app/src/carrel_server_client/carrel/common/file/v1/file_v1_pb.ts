@@ -5,6 +5,8 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
+import {Importance} from "../../importance/v1/importance_v1_pb.js";
+import {Task} from "../../task/v1/task_v1_pb.js";
 
 /**
  * @generated from message carrel.common.file.v1.File
@@ -16,6 +18,20 @@ export class File extends Message<File> {
    * @generated from field: string uuid = 1;
    */
   uuid = "";
+
+  /**
+   * description
+   *
+   * @generated from field: string description = 2;
+   */
+  description = "";
+
+  /**
+   * importance
+   *
+   * @generated from field: carrel.common.importance.v1.Importance importance = 3;
+   */
+  importance = Importance.NONE_UNSPECIFIED;
 
   /**
    * / filename, with extension
@@ -43,6 +59,11 @@ export class File extends Message<File> {
    */
   fileFullPath = "";
 
+  /**
+   * @generated from field: repeated carrel.common.task.v1.Task tasks = 20;
+   */
+  tasks: Task[] = [];
+
   constructor(data?: PartialMessage<File>) {
     super();
     proto3.util.initPartial(data, this);
@@ -52,10 +73,13 @@ export class File extends Message<File> {
   static readonly typeName = "carrel.common.file.v1.File";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "importance", kind: "enum", T: proto3.getEnumType(Importance) },
     { no: 10, name: "file_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 11, name: "file_extension", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 12, name: "file_dir", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 13, name: "file_full_path", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 20, name: "tasks", kind: "message", T: Task, repeated: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): File {

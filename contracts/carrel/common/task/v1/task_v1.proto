@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+
+package carrel.common.task.v1;
+
+import "carrel/common/task_state/v1/task_state_v1.proto";
+
+/// A common tag for carrel system.
+message Task {
+  string uuid = 1;
+  string title = 2;
+  string description = 3;
+  carrel.common.task_state.v1.TaskState state = 4;
+  string deadline = 5;
+  string started_at = 6;
+  string finished_at = 7;
+  string created_at = 8;
+}

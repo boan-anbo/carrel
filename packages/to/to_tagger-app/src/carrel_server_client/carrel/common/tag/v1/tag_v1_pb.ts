@@ -5,7 +5,9 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
-import {SnippetLocation} from "../../snippet_location/v1/snippet_location_v1_pb.js";
+import {Snippet} from "../../snippet/v1/snippet_v1_pb.js";
+import {File} from "../../file/v1/file_v1_pb.js";
+import {Passage} from "../../passage/v1/passage_v1_pb.js";
 
 /**
  * / A common tag for carrel system.
@@ -19,6 +21,11 @@ export class Tag extends Message<Tag> {
   key = "";
 
   /**
+   * @generated from field: carrel.common.snippet.v1.Snippet snippet = 5;
+   */
+  snippet?: Snippet;
+
+  /**
    * @generated from field: optional string value = 2;
    */
   value?: string;
@@ -29,19 +36,19 @@ export class Tag extends Message<Tag> {
   note?: string;
 
   /**
-   * @generated from field: string tag_marker = 4;
-   */
-  tagMarker = "";
-
-  /**
-   * @generated from field: optional carrel.common.snippet_location.v1.SnippetLocation snippet_location = 5;
-   */
-  snippetLocation?: SnippetLocation;
-
-  /**
    * @generated from field: string uuid = 6;
    */
   uuid = "";
+
+  /**
+   * @generated from field: optional carrel.common.file.v1.File file = 7;
+   */
+  file?: File;
+
+  /**
+   * @generated from field: optional carrel.common.passage.v1.Passage passage = 8;
+   */
+  passage?: Passage;
 
   constructor(data?: PartialMessage<Tag>) {
     super();
@@ -52,11 +59,12 @@ export class Tag extends Message<Tag> {
   static readonly typeName = "carrel.common.tag.v1.Tag";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "snippet", kind: "message", T: Snippet },
     { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
     { no: 3, name: "note", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
-    { no: 4, name: "tag_marker", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "snippet_location", kind: "message", T: SnippetLocation, opt: true },
     { no: 6, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: "file", kind: "message", T: File, opt: true },
+    { no: 8, name: "passage", kind: "message", T: Passage, opt: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Tag {

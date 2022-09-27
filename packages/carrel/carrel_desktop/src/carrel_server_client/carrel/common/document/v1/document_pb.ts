@@ -12,6 +12,8 @@ import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMe
 import {Message, proto3} from "@bufbuild/protobuf";
 import {Person} from "../../person/v1/person_v1_pb.js";
 import {File} from "../../file/v1/file_v1_pb.js";
+import {Importance} from "../../importance/v1/importance_v1_pb.js";
+import {Task} from "../../task/v1/task_v1_pb.js";
 
 /**
  * / An abstract document.
@@ -122,6 +124,16 @@ export class Document extends Message<Document> {
    */
   content = "";
 
+  /**
+   * @generated from field: carrel.common.importance.v1.Importance importance = 16;
+   */
+  importance = Importance.NONE_UNSPECIFIED;
+
+  /**
+   * @generated from field: repeated carrel.common.task.v1.Task tasks = 17;
+   */
+  tasks: Task[] = [];
+
   constructor(data?: PartialMessage<Document>) {
     super();
     proto3.util.initPartial(data, this);
@@ -145,6 +157,8 @@ export class Document extends Message<Document> {
     { no: 13, name: "modified", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 14, name: "created", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 15, name: "content", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 16, name: "importance", kind: "enum", T: proto3.getEnumType(Importance) },
+    { no: 17, name: "tasks", kind: "message", T: Task, repeated: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Document {

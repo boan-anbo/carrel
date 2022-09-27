@@ -34,7 +34,7 @@ export class Tag extends Message<Tag> {
   tagMarker = "";
 
   /**
-   * @generated from field: optional carrel.common.snippet_location.v1.SnippetLocation snippet_location = 5;
+   * @generated from field: optional carrel.common.snippet.v1.SnippetLocation snippet = 5;
    */
   snippetLocation?: SnippetLocation;
 
@@ -55,7 +55,7 @@ export class Tag extends Message<Tag> {
     { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
     { no: 3, name: "note", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
     { no: 4, name: "tag_marker", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "snippet_location", kind: "message", T: SnippetLocation, opt: true },
+    { no: 5, name: "snippet", kind: "message", T: SnippetLocation, opt: true },
     { no: 6, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 

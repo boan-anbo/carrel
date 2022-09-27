@@ -1,11 +1,11 @@
 syntax = "proto3";
 
 
-package carrel.common.snippet_location.v1;
+package carrel.common.snippet.v1;
 
 
 // describes the location of a snippet of string in a plaintext file.
-message SnippetLocation {
+message Snippet {
     //
   string snippet = 1;
     // the line number of the snippet in the file
@@ -14,10 +14,4 @@ message SnippetLocation {
     int32 column_number = 3;
     // the length of the snippet
     int32 length = 4;
-    // the file path of the snippet
-    string file_path = 5;
-    // the file name of the snippet
-    string file_name = 6;
-    // the file extension of the snippet
-    string file_extension = 7;
 }

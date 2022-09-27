@@ -21,9 +21,9 @@ export class Archive extends Message<Archive> {
   /**
    * the project uuid it is associated with
    *
-   * @generated from field: string project_uuid = 2;
+   * @generated from field: repeated string project_uuids = 2;
    */
-  projectUuid = "";
+  projectUuids: string[] = [];
 
   /**
    * the name of the archive
@@ -46,6 +46,25 @@ export class Archive extends Message<Archive> {
    */
   documents: Document[] = [];
 
+  /**
+   * removed items
+   *
+   * @generated from field: repeated carrel.common.document.v1.Document removed_documents = 6;
+   */
+  removedDocuments: Document[] = [];
+
+  /**
+   * time markers
+   *
+   * @generated from field: string created_at = 7;
+   */
+  createdAt = "";
+
+  /**
+   * @generated from field: string updated_at = 8;
+   */
+  updatedAt = "";
+
   constructor(data?: PartialMessage<Archive>) {
     super();
     proto3.util.initPartial(data, this);
@@ -55,10 +74,13 @@ export class Archive extends Message<Archive> {
   static readonly typeName = "carrel.common.archive.v1.Archive";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "project_uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "project_uuids", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
     { no: 3, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 4, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 5, name: "documents", kind: "message", T: Document, repeated: true },
+    { no: 6, name: "removed_documents", kind: "message", T: Document, repeated: true },
+    { no: 7, name: "created_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 8, name: "updated_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Archive {

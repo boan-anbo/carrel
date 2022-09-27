@@ -18,3 +18,5 @@
 
 - Keep TO and Carrel distinct
 - In fact, TO shouldn't need Proto definitions, unless it's its API implementation.
+- Prefer componsition over inheritance. Inherit only for deeply connected entity types such as passages and documents, otherwise use composition.
+  - E.g. you want to have `Snippet` and `Document` on `Tag`, do not add `Document` to `Snippet` first and then add `Snippet` to `Tag`. Instead, add `Document` and `Snippet` to `Tag` directly as peersz.
