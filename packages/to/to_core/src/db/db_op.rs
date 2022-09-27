@@ -196,6 +196,7 @@ async fn reset_database_with_random_data(db_path: &str) {
 // unit tests
 #[cfg(test)]
 mod tests {
+    use sqlx::Error;
     use crate::utils::id_generator::generate_id;
 
     use super::*;
@@ -224,7 +225,9 @@ mod tests {
         let options = check_if_database_exists(full_path.as_str()).await;
         assert!(options.unwrap());
         // remove the database
-        drop_database(full_path.as_str()).await;
+        let drop_result = drop_database(full_path.as_str()).await;
+        if let Ok(_d) = drop_result { assert!(true) };
+
     }
 
     // test connect_to_database

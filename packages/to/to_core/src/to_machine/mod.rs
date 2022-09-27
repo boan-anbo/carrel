@@ -6,6 +6,7 @@ pub mod to_machine_op;
 pub mod to_machine_option;
 pub mod to_machine_pub_op;
 pub mod to_machine_struct;
+pub mod crud;
 
 // implement db related methods for TextualObjectMachine
 impl ToMachine {

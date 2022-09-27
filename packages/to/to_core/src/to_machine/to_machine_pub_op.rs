@@ -10,11 +10,9 @@ use crate::to_parser::parser::ToParser;
 use crate::to_parser::parser_option::ToParserOption;
 use crate::to_ticket::to_ticket_struct::ToTicket;
 
-/// These are methods mostly exposed to the ToApi, such batch adding dtos etc--why it's called public operation methods
-///
 impl ToMachine {
     /// add from TextualObjectAddManyDto, main method for adding from dto
-    pub async fn add_tos(
+    async fn add_tos(
         &mut self,
         add_tos_dto: ToAddManyDto,
     ) -> Result<TextualObjectStoredReceipt, ToErrors> {
@@ -26,13 +24,10 @@ impl ToMachine {
                 return Err(e);
             }
         }
-
         // get pool
         let _pool = self.get_pool().await;
-
         // create receipt
         let mut receipt = TextualObjectStoredReceipt::from(add_tos_dto.clone());
-
         // iterate over tos IndexMap
         // interate over tos IndexMap asynchronously
         for to_to_add in add_tos_dto.tos.iter() {
@@ -58,9 +53,8 @@ impl ToMachine {
         receipt.store_url = self.store_url.clone();
         Ok(receipt)
     }
-
     /// find TOs by ticket ids
-    pub async fn find_tos_by_ticket_ids(
+    async fn find_tos_by_ticket_ids(
         &mut self,
         find_request_dto: &ToFindRequestDto,
     ) -> Result<ToFindResultDto, ToErrors> {
@@ -84,9 +78,7 @@ impl ToMachine {
         };
         Ok(result)
     }
-
     /// This is higher level than find_tos_by_ticket_ids, for it classify the results into found and missing
-    ///
     async fn find_by_ticket_ids(
         &mut self,
         ticket_ids: &Vec<String>,
@@ -107,9 +99,8 @@ impl ToMachine {
         }
         (found_tos, missing_to_ids)
     }
-
     // find TOs by text
-    pub async fn find_tos_by_text(
+    async fn find_tos_by_text(
         &mut self,
         scan_request: &ToScanRequestDto,
     ) -> Result<ToScanResultDto, ToErrors> {
@@ -250,7 +241,7 @@ mod test {
 
         let add_error = match error {
             ToErrors::AddManyRequestError(add_error) => add_error,
-            e => {
+            _e => {
                 panic!("Expected invalid request error");
             }
         };
@@ -382,7 +373,4 @@ mod test {
         }
     }
 
-    // Todo, write test for scan request
-    #[tokio::test]
-    async fn test_scan_request() {}
 }
