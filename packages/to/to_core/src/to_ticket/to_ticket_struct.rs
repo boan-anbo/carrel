@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::to_ticket::to_ticket_marker::ToMarker;
 use crate::to_ticket::to_ticket_position::ToTicketPositionInfo;
+use crate::util_entities::to_context::ToContext;
 use crate::utils::id_generator::generate_id;
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -36,6 +37,8 @@ pub struct ToTicket {
     pub to_marker: ToMarker,
     #[serde(default)]
     pub to_intext_option: Option<ToTicketPositionInfo>,
+    #[serde(default)]
+    pub to_context: Option<ToContext>,
 }
 
 // create default TextualObjectTicket
@@ -50,6 +53,7 @@ impl Default for ToTicket {
             to_store_info: None,
             to_marker: ToMarker::default(),
             to_intext_option: None,
+            to_context: None,
         }
     }
 }

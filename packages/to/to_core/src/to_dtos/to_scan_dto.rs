@@ -4,10 +4,9 @@ use crate::to::to_struct::TextualObject;
 use crate::utils::check_if_file_exists::check_if_file_exists;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use utoipa::ToSchema;
 
 /// Dto for scanning TO from text request.
-#[derive(Clone, Debug, Serialize, ToSchema, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToScanRequestDto {
     pub store_url: String,
     /// the text to scan from
@@ -36,7 +35,7 @@ impl ToScanRequestDto {
 }
 
 // look up dto
-#[derive(Clone, Debug, Serialize, ToSchema, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToScanResultDto {
     pub store_url: String,
     // HashMap<ticket_id, TextualObject>

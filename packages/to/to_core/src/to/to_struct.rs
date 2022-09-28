@@ -38,6 +38,10 @@ pub struct TextualObject {
 
     // map of string to string, format: "to_key1, card_key1; to_key2, card_key2;" etc.
     pub card_map: String,
+
+    pub context: String,
+
+    pub ticket_index_in_context: i32,
 }
 
 // implement default values for textual object
@@ -59,6 +63,8 @@ impl Default for TextualObject {
             json: sqlx::types::Json(serde_json::Value::Null),
             card: sqlx::types::Json(ToCard::default()),
             card_map: String::new(),
+            context: "".to_string(),
+            ticket_index_in_context: 0
         }
     }
 }
@@ -82,6 +88,8 @@ impl TextualObject {
             json: sqlx::types::Json(serde_json::Value::Null),
             card: sqlx::types::Json(ToCard::default()),
             card_map: String::new(),
+            context: "".to_string(),
+            ticket_index_in_context: 0
         }
     }
 }
@@ -139,6 +147,7 @@ impl From<TextualObject> for ToTicket {
             to_store_info: store_info,
             to_marker: Default::default(),
             to_intext_option: None,
+            to_context: None
         }
     }
 }
@@ -154,7 +163,7 @@ mod test {
     #[test]
     fn get_sample_test() {
         let textual_object = super::TextualObject::get_sample();
-        assert!(textual_object.id != Uuid::new_v4());
+        assert_ne!(textual_object.id, Uuid::new_v4());
     }
 
     // test textual_object to textual_object_ticket

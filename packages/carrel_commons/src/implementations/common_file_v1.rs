@@ -9,11 +9,15 @@ impl From<&str> for File {
         let path = PathBuf::from(path_url);
         File {
             uuid: Uuid::new_v4().to_string(),
+            description: "".to_string(),
+            importance: 0,
             file_name: path.file_name().unwrap_or( OsStr::new("")).to_str().unwrap_or("").to_string(),
             file_extension: path.extension().unwrap_or( OsStr::new("")).to_str().unwrap_or("").to_string(),
             file_dir: path.parent().unwrap_or( Path::new("")).to_str().unwrap_or("").to_string(),
             // get absolute path for file_full_path
             file_full_path: path.canonicalize().unwrap_or( PathBuf::from("")).to_str().unwrap_or("").to_string(),
+            tasks: vec![]
         }
     }
 }
+

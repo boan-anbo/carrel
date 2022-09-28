@@ -22,7 +22,7 @@
 //!
 
 pub mod db;
-pub mod entities;
+pub mod util_entities;
 pub mod enums;
 pub mod error;
 pub mod file_utils;

@@ -3,6 +3,7 @@ use chrono::{DateTime, FixedOffset, NaiveDateTime};
 use crate::to_parser::parser_option::ToParserOption;
 use crate::to_ticket::to_ticket_position::ToTicketPositionInfo;
 use crate::to_ticket::to_ticket_struct::ToTicket;
+use crate::util_entities::to_context::ToContext;
 
 impl ToTicket {
     /// Parse single ticket from text
@@ -12,6 +13,7 @@ impl ToTicket {
         marked_content_only: &str,
         opt: &ToParserOption,
         intext_position: Option<ToTicketPositionInfo>,
+        context: Option<ToContext>,
     ) -> Self {
         // remove left and right markers if they exist
         let mut clean_content = marked_content_only.replace(&opt.to_marker.left_marker, "");
@@ -23,6 +25,8 @@ impl ToTicket {
         let mut to_ticket = ToTicket::default();
         // load position if exists
         to_ticket.to_intext_option = intext_position;
+        // load context if exists
+        to_ticket.to_context = context;
         for content in split_content {
             // split the string with separator for once, ignoring the value separator if it comes after the key separator
             let mut split_content = content.splitn(2, &opt.to_marker.value_separator);
@@ -88,7 +92,7 @@ mod tests {
     fn test_parse() {
         let mark_content = "key1:value1|key2:value2";
         let p1 = ToParserOption::default();
-        let to_ticket = ToTicket::parse(mark_content, &p1, None);
+        let to_ticket = ToTicket::parse(mark_content, &p1, None,None );
         assert_eq!(to_ticket.values.len(), 2);
         assert_eq!(to_ticket.values.get("key1").unwrap(), "value1");
         assert_eq!(to_ticket.values.get("key2").unwrap(), "value2");
@@ -101,7 +105,7 @@ mod tests {
             "{}key1:value1|key2:value2{}",
             opt.to_marker.left_marker, opt.to_marker.right_marker
         );
-        let to_ticket = ToTicket::parse(&mark_content, &opt, None);
+        let to_ticket = ToTicket::parse(&mark_content, &opt, None, None);
         assert_eq!(to_ticket.values.len(), 2);
         assert_eq!(to_ticket.values.get("key1").unwrap(), "value1");
         assert_eq!(to_ticket.values.get("key2").unwrap(), "value2");
@@ -112,7 +116,7 @@ mod tests {
     fn test_parse_with_meta_data() {
         let opt = ToParserOption::default();
         let mark_content = format!("{}id:test_id|key1:value1|key2:value2|updated:2018-01-01 00:00:00|store_info:store_info|store_id:store_id{}", opt.to_marker.left_marker, opt.to_marker.right_marker);
-        let to_ticket = ToTicket::parse(&mark_content, &opt, None);
+        let to_ticket = ToTicket::parse(&mark_content, &opt, None, None);
         assert_eq!(to_ticket.ticket_id, "test_id".to_string());
         assert_eq!(to_ticket.values.len(), 2);
         assert_eq!(to_ticket.values.get("key1").unwrap(), "value1");
@@ -132,7 +136,7 @@ mod tests {
             "{}id:test_id|key1:|key2|:value1|updated:2018-01-01 00:00:00|store_info:store_info{}",
             opt.to_marker.left_marker, opt.to_marker.right_marker
         );
-        let to_ticket = ToTicket::parse(&mark_content, &opt, None);
+        let to_ticket = ToTicket::parse(&mark_content, &opt, None, None);
         assert_eq!(to_ticket.ticket_id, "test_id".to_string());
         assert_eq!(to_ticket.values.len(), 3);
         assert_eq!(to_ticket.values.get("key1").unwrap(), "");

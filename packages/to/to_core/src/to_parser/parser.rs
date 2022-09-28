@@ -9,6 +9,7 @@ use crate::to_parser::to_parser_result::ToParserResult;
 use crate::to_tag::to_tag_struct::ToTag;
 use crate::to_ticket::to_ticket_position::ToTicketPositionInfo;
 use crate::to_ticket::to_ticket_struct::ToTicket;
+use crate::util_entities::to_context::{extract_context, extract_context_by_position, ToContext, ToContextExtractOption};
 
 /// Parser to scan text for tickets
 pub struct ToParser {}
@@ -146,10 +147,14 @@ impl ToParser {
                 // get the match position
                 let position: ToTicketPositionInfo = ToTicketPositionInfo::from_match(&m, line_number, file_path.clone());
 
+
+                // get to context
+                let to_context = extract_context_by_position(&position, text, ToContextExtractOption::from(opt));
+
                 // get first group of match
                 let content = m.get(1).unwrap().as_str();
                 // parse the match
-                let to_ticket = ToTicket::parse(content, &opt, Some(position));
+                let to_ticket = ToTicket::parse(content, &opt, Some(position), Some(to_context));
                 // add the match to the result
                 result.push(to_ticket);
             }
@@ -332,18 +337,60 @@ mod tests {
         // should not panic
         let result = result.unwrap();
         let first_tag = result.tos.first().unwrap();
-        let first_snippet = first_tag.snippet_location.as_ref().unwrap();
-        assert_eq!(first_snippet.file_path, file_path);
+        let first_snippet = first_tag.snippet.as_ref().unwrap();
         assert_eq!(first_snippet.line_number, 0);
         assert_eq!(first_snippet.column_number, 0);
         assert_eq!(first_snippet.length, 9);
         let second_tag = result.tos.last().unwrap();
-        let second_snippet = second_tag.snippet_location.as_ref().unwrap();
-        assert_eq!(second_snippet.file_path, file_path);
+        let second_snippet = second_tag.snippet.as_ref().unwrap();
         assert_eq!(second_snippet.line_number, 9);
         assert_eq!(second_snippet.column_number, 0);
         assert_eq!(second_snippet.length, 9);
+    }
 
+    // test if context information is passed to tag
+    #[test]
+    fn test_scan_text_for_tags_context_information() {
+        // long text with random contenxt
+        let raw_text = "Long context text with 21[[KEY|VALUE|NOTE]]12 and some more context";
+
+        let parse_result = ToParser::scan_text_for_tags(raw_text, &ToParserOption{
+            context_chars_after: 1,
+            context_chars_before: 1,
+            ..ToParserOption::default()
+        }, None);
+
+        let first_tag = parse_result.tos.first().unwrap();
+        // has context
+        assert!(first_tag.context.is_some());
+        let context_string = &first_tag.context.as_ref().unwrap().context;
+        assert_eq!(context_string, "1[[KEY|VALUE|NOTE]]1");
+
+        // add one more character to context
+        let parse_result = ToParser::scan_text_for_tags(raw_text, &ToParserOption{
+            context_chars_after: 2,
+            context_chars_before: 2,
+            ..ToParserOption::default()
+        }, None);
+
+        let first_tag = parse_result.tos.first().unwrap();
+        // has context
+        assert!(first_tag.context.is_some());
+        let context_string = &first_tag.context.as_ref().unwrap().context;
+        assert_eq!(context_string, "21[[KEY|VALUE|NOTE]]12");
+
+        // try out of bounds context
+        let parse_result = ToParser::scan_text_for_tags(raw_text, &ToParserOption{
+            context_chars_after: 100,
+            context_chars_before: 100,
+            ..ToParserOption::default()
+        }, None);
+
+        let first_tag = parse_result.tos.first().unwrap();
+        // has context
+        assert!(first_tag.context.is_some());
+        let context_string = &first_tag.context.as_ref().unwrap().context;
+        assert_eq!(context_string, "Long context text with 21[[KEY|VALUE|NOTE]]12 and some more context");
 
 
 

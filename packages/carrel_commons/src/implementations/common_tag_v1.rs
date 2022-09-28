@@ -3,7 +3,8 @@ use crate::carrel::common::tag::v1::Tag;
 use to_core::to_tag::to_tag_struct::ToTag;
 use to_core::entities::to_snippet_location::ToSnippetLocation;
 use uuid::Uuid;
-use crate::carrel::common::snippet_location::v1::SnippetLocation;
+use crate::carrel::common::file::v1::File;
+use crate::carrel::common::snippet::v1::Snippet;
 
 /// The reason I do not use Tag internally in TO is to keep carrel systems and TO system separate.
 ///
@@ -16,36 +17,37 @@ use crate::carrel::common::snippet_location::v1::SnippetLocation;
 /// What is NOT done here are domain-specific conversions, such as converting ToTag to Fireflies which should be handled by the carrel-ecosystem components, Firefly_keeper, for example.
 impl From<ToTag> for Tag {
     fn from(tag: ToTag) -> Self {
-        let mut snippet_location: Option<SnippetLocation> = None;
+        let mut snippet: Option<Snippet> = None;
+        let mut file = None;
         if tag.snippet_location.is_some() {
             let to_snippet_location = tag.snippet_location.unwrap();
-            snippet_location = Some(SnippetLocation::from(to_snippet_location));
+            file = Some(File::from(to_snippet_location.file_path.as_str()));
+            snippet = Some(Snippet::from(to_snippet_location));
         }
+
         Tag {
             key: tag.key,
             value: tag.value,
             note: tag.note,
-            tag_marker: tag.tag_string,
             uuid: Uuid::new_v4().to_string(),
-            snippet_location,
+            file,
+            snippet,
+            passage: None
         }
     }
 }
 
-impl From<ToSnippetLocation> for SnippetLocation {
+impl From<ToSnippetLocation> for Snippet {
     fn from(to_snippet_location: ToSnippetLocation) -> Self {
+
         let file_path = to_snippet_location.file_path.clone();
         let path = PathBuf::from(file_path);
-        let filename = path.file_name().unwrap_or(std::ffi::OsStr::new("")).to_str().unwrap_or("").to_string();
-        let extension = path.extension().unwrap_or(std::ffi::OsStr::new("")).to_str().unwrap_or("").to_string();
-        SnippetLocation {
+
+        Snippet {
             snippet: to_snippet_location.snippet,
             line_number: to_snippet_location.line_number,
             column_number: to_snippet_location.column_number,
             length: to_snippet_location.length,
-            file_path: path.canonicalize().unwrap_or(PathBuf::from("")).to_str().unwrap_or("").to_string(),
-            file_name: filename,
-            file_extension: extension,
         }
     }
 }

@@ -34,9 +34,9 @@ pub mod carrel {
             }
         }
 
-        pub mod snippet_location {
+        pub mod snippet {
             pub mod v1 {
-                include!("generated/carrel_common_snippet_location_v1.rs");
+                include!("generated/carrel_common_snippet_v1.rs");
             }
         }
 
@@ -46,9 +46,9 @@ pub mod carrel {
             }
         }
 
-        pub mod card {
+        pub mod firefly {
             pub mod v1 {
-                include!("generated/carrel_common_card_v1.rs");
+                include!("generated/carrel_common_firefly_v1.rs");
             }
         }
 
@@ -86,6 +86,20 @@ pub mod carrel {
         pub mod storage_info {
             pub mod v1 {
                 include!("generated/carrel_common_storage_info_v1.rs");
+            }
+        }
+
+        // tasks
+        pub mod task {
+            pub mod v1 {
+                include!("generated/carrel_common_task_v1.rs");
+            }
+        }
+
+        // task_state
+        pub mod task_state {
+            pub mod v1 {
+                include!("generated/carrel_common_task_state_v1.rs");
             }
         }
     }

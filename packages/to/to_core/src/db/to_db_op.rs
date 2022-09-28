@@ -145,6 +145,9 @@ fn load_sqlite_row_to_textual_object(
                 json: textual_object_row.get("json"),
                 card: textual_object_row.get("card"),
                 card_map: textual_object_row.get("card_map"),
+
+                context: textual_object_row.get("context"),
+                ticket_index_in_context: textual_object_row.get("ticket_index_in_context"),
             };
 
             Some(textual_object)

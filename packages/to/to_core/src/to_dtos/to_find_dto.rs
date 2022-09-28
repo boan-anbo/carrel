@@ -4,10 +4,9 @@ use crate::to::to_struct::TextualObject;
 use crate::utils::check_if_file_exists::check_if_file_exists;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use utoipa::ToSchema;
 
 // look up dto
-#[derive(Clone, Debug, Serialize, ToSchema, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToFindRequestDto {
     pub store_url: String,
     // if this is provided, the store_filename and directory will be ignored.
@@ -35,7 +34,7 @@ impl ToFindRequestDto {
 }
 
 // look up dto
-#[derive(Clone, Debug, Serialize, ToSchema, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToFindResultDto {
     pub store_url: String,
     // HashMap<ticket_id, TextualObject>

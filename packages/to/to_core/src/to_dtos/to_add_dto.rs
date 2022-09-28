@@ -5,7 +5,6 @@ use chrono::Utc;
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use utoipa::ToSchema;
 use uuid::Uuid;
 
 use crate::to::to_struct::TextualObject;
@@ -15,7 +14,7 @@ use crate::to_ticket::to_ticket_utils::print_minimal_ticket;
 use crate::utils::get_random_test_database_dir::get_random_test_database_dir;
 use crate::utils::id_generator::generate_id;
 
-#[derive(Clone, Debug, Serialize, ToSchema, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct TextualObjectStoredReceipt {
     // <Unique_Store_Id, Stored_Textual_Object>
     pub tos_stored: IndexMap<String, TextualObject>,
@@ -44,7 +43,7 @@ impl From<ToAddManyDto> for TextualObjectStoredReceipt {
     }
 }
 
-#[derive(Clone, Debug, Serialize, ToSchema, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToAddManyDto {
     // list of textual objects to add, String is the unique source id.
     // this is so that the recept will provide a list of unique ids with stored textual objects.
@@ -140,7 +139,7 @@ impl ToAddManyDto {
     }
 }
 
-#[derive(Clone, Debug, Serialize, ToSchema, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToAddDto {
     // unique ID of the item in the source
     pub source_id: Option<String>,
@@ -217,9 +216,12 @@ impl From<ToAddDto> for TextualObject {
             updated: Utc::now().naive_utc(),
 
             card_map: String::new(),
+            context: "".to_string(),
             card: sqlx::types::Json(ToCard::default()),
 
             json: sqlx::types::Json(dto.json),
+
+            ticket_index_in_context: 0,
         };
         to.update_minimal_ticket()
     }

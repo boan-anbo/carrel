@@ -11,12 +11,17 @@ fn main() {
         "carrel/common/person/v1/person_v1.proto",
         "carrel/common/passage/v1/passage_v1.proto",
         "carrel/common/storage_info/v1/storage_info_v1.proto",
-        "carrel/common/card/v1/card_v1.proto",
+        "carrel/common/firefly/v1/firefly_v1.proto",
         "carrel/common/comment/v1/comment_v1.proto",
         "carrel/common/document/v1/document.proto",
-        "carrel/common/snippet_location/v1/snippet_location_v1.proto",
+        "carrel/common/snippet/v1/snippet_v1.proto",
         "carrel/common/project/v1/project_v1.proto",
         "carrel/common/archive/v1/archive_v1.proto",
+        // tasks
+        "carrel/common/task/v1/task_v1.proto",
+        // task_state
+        "carrel/common/task_state/v1/task_state_v1.proto",
+        //
         // services and apis
         //
         // scaffold

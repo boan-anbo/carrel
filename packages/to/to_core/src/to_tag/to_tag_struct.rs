@@ -1,11 +1,12 @@
 use crate::to_parser::parser::ToParser;
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
-use crate::entities::to_snippet_location::ToSnippetLocation;
+use crate::util_entities::to_snippet::ToSnippet;
 
 use crate::to_parser::parser_option::ToParserOption;
 use crate::to_ticket::to_ticket_marker::ToMarker;
 use crate::to_ticket::to_ticket_struct::ToTicket;
+use crate::util_entities::to_context::ToContext;
 
 /// This is a
 #[derive(Deserialize, Serialize, Clone)]
@@ -14,7 +15,8 @@ pub struct ToTag {
     pub value: Option<String>,
     pub note: Option<String>,
     pub tag_string: String,
-    pub snippet_location: Option<ToSnippetLocation>
+    pub snippet: Option<ToSnippet>,
+    pub context: Option<ToContext>,
 }
 
 // implement from TextualObjectTicket
@@ -23,8 +25,8 @@ impl From<ToTicket> for ToTag {
     fn from(to_ticket: ToTicket) -> ToTag {
         let values: IndexMap<String, String> = to_ticket.values;
         let mut key = String::new();
-        if values.len() >= 1 {
-            key = values.keys().nth(0).unwrap().to_string();
+        if !values.is_empty() {
+            key = values.keys().next().unwrap().to_string();
         }
         let mut value: Option<String> = None;
         if values.len() >= 2 {
@@ -42,18 +44,18 @@ impl From<ToTicket> for ToTag {
             }
         }
 
-        // use the format to represent the string of the tag: leftMarker +[key|value|note]+ rightMarker
+// use the format to represent the string of the tag: leftMarker +[key|value|note]+ rightMarker
         // use string builder
         let mut tag_string = String::new();
         tag_string.push_str(&to_ticket.to_marker.left_marker);
-        tag_string.push_str(&key.as_str());
+        tag_string.push_str(key.as_str());
         if value.as_ref().is_some() {
-            tag_string.push_str("|");
-            tag_string.push_str(&value.as_ref().unwrap().as_str());
+            tag_string.push('|');
+            tag_string.push_str(value.as_ref().unwrap().as_str());
         }
         if note.as_ref().is_some() {
-            tag_string.push_str("|");
-            tag_string.push_str(&note.as_ref().unwrap().as_str());
+            tag_string.push('|');
+            tag_string.push_str(note.as_ref().unwrap().as_str());
         }
         tag_string.push_str(&to_ticket.to_marker.right_marker);
 
@@ -63,7 +65,7 @@ impl From<ToTicket> for ToTag {
 
         if ticket_position.is_some() {
             let ticket_position = ticket_position.unwrap();
-            snippet_location = Some(ToSnippetLocation::from_to_ticket_position_and_file_path(&ticket_position));
+            snippet_location = Some(ToSnippet::from_to_ticket_position_and_file_path(&tag_string,  &ticket_position));
 
             // give the ticket string to the snippet location as duplicate information that is useful when snippet_location is used alone.
             snippet_location.as_mut().unwrap().snippet = tag_string.clone();
@@ -74,7 +76,8 @@ impl From<ToTicket> for ToTag {
             value,
             note,
             tag_string,
-            snippet_location
+            snippet: snippet_location,
+            context: to_ticket.to_context,
         }
     }
 }
@@ -84,7 +87,7 @@ impl ToTag {
     pub fn print_tag(&self, to_mark: Option<ToMarker>) -> String {
         // create default to_marker if not provided
         let mut to_marker = ToMarker::default();
-        if to_mark.is_some() {
+        if let Some(..) = to_mark {
             to_marker = to_mark.unwrap();
         }
         let mut tag = vec![self.key.clone()];
@@ -100,6 +103,7 @@ impl ToTag {
 
         // add value if it exists with separator
     }
+
 }
 
 // tests
