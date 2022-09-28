@@ -182,6 +182,21 @@ mod tests {
         assert_eq!(text_files_scaned, 3);
     }
 
+    #[test]
+    fn second_tag_should_have_context() {
+        // get rust environment variable for root directory of project
+        let root_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
+        // use its test folder as directory to scan
+        let test_directory = format!("{}/tests", root_dir);
+        let first_file_txt = format!("{}/first_file.md", test_directory);
 
-
+        let result = ToParser::scan_file_for_tags(&first_file_txt, &ToParserOption{
+            context_chars_after: 7,
+            context_chars_before: 7,
+            ..Default::default()
+        }).unwrap();
+        let second_tag = result.tos[1].clone();
+        let snippet = second_tag.snippet.unwrap();
+        assert_eq!(&snippet.context.unwrap().context.as_str(), &"context");
+    }
 }

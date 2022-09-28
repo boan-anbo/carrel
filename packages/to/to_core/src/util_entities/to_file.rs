@@ -1,6 +1,9 @@
 use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
+use serde::{Deserialize, Serialize};
 
+
+#[derive(Deserialize, Serialize, Clone)]
 pub struct ToFile {
     pub file_path: String,
     pub file_name: String,
@@ -14,9 +17,9 @@ impl From<&str> for ToFile {
         let path = PathBuf::from(file_path_str);
         ToFile {
             file_path: file_path_str.to_string(),
-            file_name: path.file_name().unwrap_or(OsStr::new("")).to_str().unwrap_or("").to_string(),
-            file_extension: path.extension().unwrap_or(OsStr::new("")).to_str().unwrap_or("").to_string(),
-            file_dir: path.parent().unwrap_or(Path::new("")).to_str().unwrap_or("").to_string(),
+            file_name: path.file_name().unwrap_or_else(|| OsStr::new("")).to_str().unwrap_or("").to_string(),
+            file_extension: path.extension().unwrap_or_else(|| OsStr::new("")).to_str().unwrap_or("").to_string(),
+            file_dir: path.parent().unwrap_or_else(|| Path::new("")).to_str().unwrap_or("").to_string(),
         }
     }
 }

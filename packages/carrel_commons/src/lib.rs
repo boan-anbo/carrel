@@ -28,6 +28,13 @@ pub mod carrel {
             }
         }
 
+        // context
+        pub mod context {
+            pub mod v1 {
+                include!("generated/carrel_common_context_v1.rs");
+            }
+        }
+
         pub mod document {
             pub mod v1 {
                 include!("generated/carrel_common_document_v1.rs");

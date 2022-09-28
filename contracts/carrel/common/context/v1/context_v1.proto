@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+
+package carrel.common.context.v1;
+
+message Context {
+
+    // the context string
+    string context = 1;
+    // // the beginning column of the snippet in context
+    int32 snippet_in_context_column_number = 2;
+    // the snippet string
+    string snippet_string = 3;
+
+}

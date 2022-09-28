@@ -29,7 +29,11 @@ pub struct ToTicket {
     // Optional unique ID of the storage field
     #[serde(default)]
     pub to_store_info: Option<String>,
-
+    // // this is used for two purposes:
+    // // 1. when extracted from a file, it is actual raw text of the ticket, even though the ticket is capable of being re-constructed from the other fields. This is also used to pass the ticket to tag, as the tag raw string.
+    // // 2. When the ticket has no use in actual texts, this is a demo ticket.
+    // #[serde(default)]
+    // pub sample_string: Option<String>,
     /*
     Private meta-data, not be printed
      */

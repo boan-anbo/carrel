@@ -15,6 +15,8 @@ import "carrel/common/snippet/v1/snippet_v1.proto";
 
 import "carrel/common/passage/v1/passage_v1.proto";
 
+
+    // context
 // A key unit of extracted useful information from a document.
 // Compared to Passage, a card is annotated with a selection of key text, and even comments and importance.
 package carrel.common.firefly.v1;
@@ -27,30 +29,30 @@ message Firefly {
     string description = 3;
     /// main content of the card, usually the key information the card contains, e.g. highlighted text.
     carrel.common.snippet.v1.Snippet snippet = 4;
-    /// the context content of the card, usually needed to make sense of the content, e.g. full text.
-    carrel.common.passage.v1.Passage passage = 5;
+    /// the full text context of the firefly, usually needed to make sense of the context, e.g. full text.
+    carrel.common.passage.v1.Passage passage = 6;
     // comments
-    repeated carrel.common.comment.v1.Comment comments = 6;
+    repeated carrel.common.comment.v1.Comment comments = 7;
     // creators of the card
-    repeated carrel.common.person.v1.Person creators = 7;
+    repeated carrel.common.person.v1.Person creators = 8;
     /// the document this card is extracted from, only used when there is no full-text, i.e. Passage because passage already have document. Duplication is also welcomed.
-    optional carrel.common.document.v1.Document document = 8;
+    optional carrel.common.document.v1.Document document = 9;
     /// the location of the card in Textual Object storage
-   carrel.common.storage_info.v1.StorageInfo storage_info = 9;
+   carrel.common.storage_info.v1.StorageInfo storage_info = 10;
 
     /// tags
-    repeated carrel.common.tag.v1.Tag tags = 10;
+    repeated carrel.common.tag.v1.Tag tags = 11;
 
     /// importance
-    carrel.common.importance.v1.Importance importance = 11;
+    carrel.common.importance.v1.Importance importance = 12;
 
     /// extra field for any information that is not covered by the above fields
-    repeated string extra = 12;
+    repeated string extra = 13;
 
     // created time
-    string create_at = 13;
+    string create_at = 14;
 
     // updated time
-    string modified_at = 14;
+    string modified_at = 15;
 
 }

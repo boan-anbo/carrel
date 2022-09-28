@@ -1,5 +1,6 @@
 use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
+use to_core::util_entities::to_file::ToFile;
 use uuid::Uuid;
 use crate::carrel::common::file::v1::File;
 
@@ -18,6 +19,13 @@ impl From<&str> for File {
             file_full_path: path.canonicalize().unwrap_or( PathBuf::from("")).to_str().unwrap_or("").to_string(),
             tasks: vec![]
         }
+    }
+}
+
+// from to_file
+impl From<ToFile> for File {
+    fn from(to_file: ToFile) -> Self {
+        File::from(to_file.file_path.as_str())
     }
 }
 

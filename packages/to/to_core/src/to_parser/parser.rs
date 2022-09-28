@@ -361,10 +361,12 @@ mod tests {
         }, None);
 
         let first_tag = parse_result.tos.first().unwrap();
+
+        let snippet = first_tag.snippet.as_ref().unwrap();
+
+        let context = snippet.context.as_ref().unwrap();
         // has context
-        assert!(first_tag.context.is_some());
-        let context_string = &first_tag.context.as_ref().unwrap().context;
-        assert_eq!(context_string, "1[[KEY|VALUE|NOTE]]1");
+        assert_eq!(context.context, "1[[KEY|VALUE|NOTE]]1");
 
         // add one more character to context
         let parse_result = ToParser::scan_text_for_tags(raw_text, &ToParserOption{
@@ -374,10 +376,12 @@ mod tests {
         }, None);
 
         let first_tag = parse_result.tos.first().unwrap();
+
+        let snippet = first_tag.snippet.as_ref().unwrap();
+
+        let context = snippet.context.as_ref().unwrap();
         // has context
-        assert!(first_tag.context.is_some());
-        let context_string = &first_tag.context.as_ref().unwrap().context;
-        assert_eq!(context_string, "21[[KEY|VALUE|NOTE]]12");
+        assert_eq!(context.context, "21[[KEY|VALUE|NOTE]]12");
 
         // try out of bounds context
         let parse_result = ToParser::scan_text_for_tags(raw_text, &ToParserOption{
@@ -388,11 +392,33 @@ mod tests {
 
         let first_tag = parse_result.tos.first().unwrap();
         // has context
-        assert!(first_tag.context.is_some());
-        let context_string = &first_tag.context.as_ref().unwrap().context;
-        assert_eq!(context_string, "Long context text with 21[[KEY|VALUE|NOTE]]12 and some more context");
+        let snippet = first_tag.snippet.as_ref().unwrap();
+        let context = snippet.context.as_ref().unwrap();
 
+        assert_eq!(context.context, "Long context text with 21[[KEY|VALUE|NOTE]]12 and some more context");
+    }
 
+    // test if context can handle Context[[N|SOME NOTE]]Context
+    #[test]
+    fn test_scan_text_for_tags_context_information_with_note() {
+        // long text with random contenxt
+        let raw_text = "First line\ntest\nLong context text with 21[[N|SOME NOTE]]12 and some more context";
+
+        let parse_result = ToParser::scan_text_for_tags(raw_text, &ToParserOption{
+            context_chars_after: 1,
+            context_chars_before: 1,
+            ..ToParserOption::default()
+        }, None);
+
+        let first_tag = parse_result.tos.first().unwrap();
+
+        let snippet = first_tag.snippet.as_ref().unwrap();
+
+        let context = snippet.context.as_ref().unwrap();
+
+        // has context
+
+        assert_eq!(context.context, "1[[N|SOME NOTE]]1");
 
     }
 }

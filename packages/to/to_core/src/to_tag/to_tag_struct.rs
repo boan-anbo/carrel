@@ -16,7 +16,6 @@ pub struct ToTag {
     pub note: Option<String>,
     pub tag_string: String,
     pub snippet: Option<ToSnippet>,
-    pub context: Option<ToContext>,
 }
 
 // implement from TextualObjectTicket
@@ -59,16 +58,16 @@ impl From<ToTicket> for ToTag {
         }
         tag_string.push_str(&to_ticket.to_marker.right_marker);
 
-        let mut snippet_location = None;
+        let mut snippet = None;
         // convert ToPositionInfo to SnippetLocation
         let ticket_position = to_ticket.to_intext_option;
 
         if ticket_position.is_some() {
             let ticket_position = ticket_position.unwrap();
-            snippet_location = Some(ToSnippet::from_to_ticket_position_and_file_path(&tag_string,  &ticket_position));
+            snippet = Some(ToSnippet::from_to_ticket_position_and_file_path(&tag_string, &ticket_position, to_ticket.to_context));
 
             // give the ticket string to the snippet location as duplicate information that is useful when snippet_location is used alone.
-            snippet_location.as_mut().unwrap().snippet = tag_string.clone();
+            snippet.as_mut().unwrap().snippet = tag_string.clone();
         }
 
         ToTag {
@@ -76,8 +75,7 @@ impl From<ToTicket> for ToTag {
             value,
             note,
             tag_string,
-            snippet: snippet_location,
-            context: to_ticket.to_context,
+            snippet,
         }
     }
 }
@@ -103,7 +101,6 @@ impl ToTag {
 
         // add value if it exists with separator
     }
-
 }
 
 // tests

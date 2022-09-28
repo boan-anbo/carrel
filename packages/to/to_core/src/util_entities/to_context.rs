@@ -35,8 +35,8 @@ impl From<&ToParserOption> for ToContextExtractOption {
         ToContextExtractOption {
             chars_before: to_parser_option.context_chars_before,
             chars_after: to_parser_option.context_chars_after,
-            whole_line: false,
-            whole_text: false,
+            whole_line: to_parser_option.context_whole_line,
+            whole_text: to_parser_option.context_whole_text,
         }
     }
 }
@@ -116,8 +116,11 @@ pub fn extract_context_by_position(position: &ToTicketPositionInfo, text: &str, 
 
     let snippet_string = position.raw_text.clone();
     let snippet_line = position.line as usize;
-    let column = position.column as usize;
+    // calculate all the characters before the position accounting before the snippet line
+    let lines_before_snippet_line = text.lines().take(snippet_line).collect::<Vec<&str>>().join("\n");
+    let column = lines_before_snippet_line.len() + position.column;
     let length = position.length as usize;
+
 
     extract_context(snippet_string, snippet_line, column, length, text, opt)
 }
@@ -139,6 +142,8 @@ mod test {
             line_number: 1,
             column_number: 1,
             length: 1,
+            file:None,
+            context:None,
         };
 
         // test whole text
@@ -161,6 +166,8 @@ mod test {
             line_number: 1,
             column_number: 1,
             length: 1,
+            file:None,
+            context:None,
         };
 
         let option_whole_line = ToContextExtractOption {
@@ -182,6 +189,8 @@ mod test {
             line_number: 1,
             column_number: 10,
             length: 20,
+            file:None,
+            context:None,
         };
 
         let option_chars_before_and_after = ToContextExtractOption {
@@ -205,6 +214,9 @@ mod test {
             line_number: 1,
             column_number: 10,
             length: 20,
+            file:None,
+            context:None,
+
         };
 
         let option_chars_before_and_after = ToContextExtractOption {
@@ -230,6 +242,8 @@ mod test {
             line_number: 1,
             column_number: 10,
             length: 20,
+            file:None,
+            context:None,
         };
 
         let option_chars_before_and_after = ToContextExtractOption {

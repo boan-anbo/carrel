@@ -9,6 +9,10 @@ pub struct ToParserOption {
     pub context_chars_before: usize,
     // how many chars after the context
     pub context_chars_after: usize,
+    // whether extract the whole line, if so, the chars_before and chars_after will be ignored
+    pub context_whole_line: bool,
+    // context whole text
+    pub context_whole_text: bool,
 }
 
 impl Default for ToParserOption {
@@ -19,6 +23,8 @@ impl Default for ToParserOption {
             return_duplicate_tags: false,
             context_chars_before: 500,
             context_chars_after: 500,
+            context_whole_line: false,
+            context_whole_text: false,
         }
     }
 }

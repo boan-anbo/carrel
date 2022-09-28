@@ -3,6 +3,9 @@ syntax = "proto3";
 
 package carrel.common.snippet.v1;
 
+import "carrel/common/context/v1/context_v1.proto";
+
+import "carrel/common/file/v1/file_v1.proto";
 
 // describes the location of a snippet of string in a plaintext file.
 message Snippet {
@@ -14,4 +17,11 @@ message Snippet {
     int32 column_number = 3;
     // the length of the snippet
     int32 length = 4;
+
+    // the file that contains the snippet
+    carrel.common.file.v1.File file = 5;
+
+    // the context of the snippet
+    carrel.common.context.v1.Context context = 6;
+    
 }

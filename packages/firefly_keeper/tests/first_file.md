@@ -1,4 +1,4 @@
 [[IDEA|Some Idea]]
 
-[[N|SOME NOTE]]
-prot
+Context[[N|SOME NOTE]]Context
+

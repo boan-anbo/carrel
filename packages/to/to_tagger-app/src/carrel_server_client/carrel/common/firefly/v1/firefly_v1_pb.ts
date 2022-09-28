@@ -3,12 +3,14 @@
 /* eslint-disable */
 /* @ts-nocheck */
 
+// context
 // A key unit of extracted useful information from a document.
 // Compared to Passage, a card is annotated with a selection of key text, and even comments and importance.
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
 import {Snippet} from "../../snippet/v1/snippet_v1_pb.js";
+import {Context} from "../../context/v1/context_v1_pb.js";
 import {Passage} from "../../passage/v1/passage_v1_pb.js";
 import {Comment} from "../../comment/v1/comment_v1_pb.js";
 import {Person} from "../../person/v1/person_v1_pb.js";
@@ -48,72 +50,79 @@ export class Firefly extends Message<Firefly> {
   snippet?: Snippet;
 
   /**
-   * / the context content of the card, usually needed to make sense of the content, e.g. full text.
+   * the relevent context
    *
-   * @generated from field: carrel.common.passage.v1.Passage passage = 5;
+   * @generated from field: carrel.common.context.v1.Context context = 5;
+   */
+  context?: Context;
+
+  /**
+   * / the full text context of the firefly, usually needed to make sense of the context, e.g. full text.
+   *
+   * @generated from field: carrel.common.passage.v1.Passage passage = 6;
    */
   passage?: Passage;
 
   /**
    * comments
    *
-   * @generated from field: repeated carrel.common.comment.v1.Comment comments = 6;
+   * @generated from field: repeated carrel.common.comment.v1.Comment comments = 7;
    */
   comments: Comment[] = [];
 
   /**
    * creators of the card
    *
-   * @generated from field: repeated carrel.common.person.v1.Person creators = 7;
+   * @generated from field: repeated carrel.common.person.v1.Person creators = 8;
    */
   creators: Person[] = [];
 
   /**
    * / the document this card is extracted from, only used when there is no full-text, i.e. Passage because passage already have document. Duplication is also welcomed.
    *
-   * @generated from field: optional carrel.common.document.v1.Document document = 8;
+   * @generated from field: optional carrel.common.document.v1.Document document = 9;
    */
   document?: Document;
 
   /**
    * / the location of the card in Textual Object storage
    *
-   * @generated from field: carrel.common.storage_info.v1.StorageInfo storage_info = 9;
+   * @generated from field: carrel.common.storage_info.v1.StorageInfo storage_info = 10;
    */
   storageInfo?: StorageInfo;
 
   /**
    * / tags
    *
-   * @generated from field: repeated carrel.common.tag.v1.Tag tags = 10;
+   * @generated from field: repeated carrel.common.tag.v1.Tag tags = 11;
    */
   tags: Tag[] = [];
 
   /**
    * / importance
    *
-   * @generated from field: carrel.common.importance.v1.Importance importance = 11;
+   * @generated from field: carrel.common.importance.v1.Importance importance = 12;
    */
   importance = Importance.NONE_UNSPECIFIED;
 
   /**
    * / extra field for any information that is not covered by the above fields
    *
-   * @generated from field: repeated string extra = 12;
+   * @generated from field: repeated string extra = 13;
    */
   extra: string[] = [];
 
   /**
    * created time
    *
-   * @generated from field: string create_at = 13;
+   * @generated from field: string create_at = 14;
    */
   createAt = "";
 
   /**
    * updated time
    *
-   * @generated from field: string modified_at = 14;
+   * @generated from field: string modified_at = 15;
    */
   modifiedAt = "";
 
@@ -129,16 +138,17 @@ export class Firefly extends Message<Firefly> {
     { no: 2, name: "title", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 3, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 4, name: "snippet", kind: "message", T: Snippet },
-    { no: 5, name: "passage", kind: "message", T: Passage },
-    { no: 6, name: "comments", kind: "message", T: Comment, repeated: true },
-    { no: 7, name: "creators", kind: "message", T: Person, repeated: true },
-    { no: 8, name: "document", kind: "message", T: Document, opt: true },
-    { no: 9, name: "storage_info", kind: "message", T: StorageInfo },
-    { no: 10, name: "tags", kind: "message", T: Tag, repeated: true },
-    { no: 11, name: "importance", kind: "enum", T: proto3.getEnumType(Importance) },
-    { no: 12, name: "extra", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-    { no: 13, name: "create_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 14, name: "modified_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "context", kind: "message", T: Context },
+    { no: 6, name: "passage", kind: "message", T: Passage },
+    { no: 7, name: "comments", kind: "message", T: Comment, repeated: true },
+    { no: 8, name: "creators", kind: "message", T: Person, repeated: true },
+    { no: 9, name: "document", kind: "message", T: Document, opt: true },
+    { no: 10, name: "storage_info", kind: "message", T: StorageInfo },
+    { no: 11, name: "tags", kind: "message", T: Tag, repeated: true },
+    { no: 12, name: "importance", kind: "enum", T: proto3.getEnumType(Importance) },
+    { no: 13, name: "extra", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+    { no: 14, name: "create_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 15, name: "modified_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Firefly {
