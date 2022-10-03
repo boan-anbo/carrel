@@ -12,7 +12,8 @@ firefly_keeper = { path = "../../firefly_keeper" }
 serde = { version = "1.0.145", features = ["derive"] }
 prost = "0.11.0"
 carrel_commons = { path = "../../carrel_commons" }
+config = "0.13.1"
+carrel_db = {path = "../carrel_db"}
 
 [build-dependencies]
-prost-build = "0.11.1"
 carrel_utils = { path = "../carrel_utils" }
