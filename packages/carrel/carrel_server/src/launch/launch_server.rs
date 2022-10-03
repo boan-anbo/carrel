@@ -7,7 +7,7 @@ use carrel_commons::grpc::health::v1::health_server::HealthServer;
 use tonic::transport::Server;
 
 use crate::consts::server_addr::SERVER_ADDR;
-use crate::launch::{attach_tracing_subscriber, load_cors, load_health_reporter};
+use crate::launch::{attach_tracing_subscriber, load_cors};
 use crate::services::firefly_keeper::service::FireflyService;
 use crate::services::health::service::HealthService;
 use crate::services::scaffold::service::ScaffoldService;

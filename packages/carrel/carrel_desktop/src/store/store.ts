@@ -3,11 +3,13 @@ import logger from 'redux-logger'
 import appstateReducer from "./slices/appstate/appstate";
 import workingProjectReducer from "./slices/working-project-state/working-project-state";
 import {listenerMiddleware} from "./listners";
+import {fireflyKeeperStore} from "./slices/firefly-keeper-state/firefly-keeper-store";
 
 const store = configureStore({
         reducer: {
             appstate: appstateReducer,
             workingProject: workingProjectReducer,
+            fireflyKeeper: fireflyKeeperStore.reducer
         },
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware().concat(logger).prepend(

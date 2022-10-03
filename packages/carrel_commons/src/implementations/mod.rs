@@ -4,3 +4,5 @@
 pub mod common_tag_v1;
 pub mod common_file_v1;
 pub mod common_context_v1;
+pub mod common_firefly_v1;
+pub mod common_document_v1;

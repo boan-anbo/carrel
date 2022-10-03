@@ -2,7 +2,7 @@ use carrel_commons::carrel::server::firefly_keeper::v1::{ScanFilesForFirefliesRe
 use carrel_commons::carrel::server::firefly_keeper::v1::fireflies_service_server::FirefliesService;
 use carrel_core::fireflies::procedures::{FireflyKeeperOption, scan_file_for_fireflies};
 use tonic::{Request, Response, Status};
-use tracing::log::Level::Debug;
+
 
 #[derive(Debug, Default)]
 pub struct FireflyService {}
@@ -44,13 +44,10 @@ impl FirefliesService for FireflyService {
 #[cfg(test)]
 mod test
 {
-    use std::path::Path;
-
-    use carrel_commons::carrel::server::firefly_keeper::v1::fireflies_service_client::FirefliesServiceClient;
     use carrel_utils::test::test_folders::get_unit_test_module_folder;
-    use tonic::transport::{Channel, Error};
-
+    use tonic::transport::Channel;
     use crate::consts::server_addr::SERVER_ADDR;
+    use carrel_commons::carrel::server::firefly_keeper::v1::fireflies_service_client::FirefliesServiceClient;
 
     use super::*;
 
@@ -58,7 +55,7 @@ mod test
 
 
     async fn get_client() -> FirefliesServiceClient<Channel> {
-        let mut client = FirefliesServiceClient::connect(SERVER_ADDR.http_server_addr.as_str()).await;
+        let client = FirefliesServiceClient::connect(SERVER_ADDR.http_server_addr.as_str()).await;
         client.expect("Failed to build firefly service client and connect to server")
     }
 
@@ -72,6 +69,7 @@ mod test
         let request = ScanFolderForFirefliesRequest {
             directory: get_firefly_fixture_path(),
             classified_only: false,
+            ..Default::default()
         };
 
         let response = get_client().await.scan_folder_for_fireflies(request).await?;

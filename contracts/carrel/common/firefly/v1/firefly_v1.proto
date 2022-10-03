@@ -40,19 +40,21 @@ message Firefly {
     /// the location of the card in Textual Object storage
    carrel.common.storage_info.v1.StorageInfo storage_info = 10;
 
+   // the tag used to select this fly
+     carrel.common.tag.v1.Tag select_tag = 11;
     /// tags
-    repeated carrel.common.tag.v1.Tag tags = 11;
+    repeated carrel.common.tag.v1.Tag tags = 12;
 
     /// importance
-    carrel.common.importance.v1.Importance importance = 12;
+    carrel.common.importance.v1.Importance importance = 13;
 
     /// extra field for any information that is not covered by the above fields
-    repeated string extra = 13;
+    repeated string extra = 14;
 
     // created time
-    string create_at = 14;
+    string create_at = 15;
 
     // updated time
-    string modified_at = 15;
+    string modified_at = 16;
 
 }

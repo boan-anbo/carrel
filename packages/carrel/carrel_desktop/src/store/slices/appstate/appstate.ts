@@ -1,7 +1,7 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createSlice} from '@reduxjs/toolkit'
-import {CarrelComponent} from "../../../../../carrel_server_client/generated/carrel/core/shared/v1/core_shared_v1_pb";
 import {CurrentComponentUtils, CurrentComponent} from "./current_component";
+import {CarrelComponent} from "../../../carrel_server_client/carrel/core/shared/v1/core_shared_v1_pb";
 
 export interface AppState {
     currentComponent: CurrentComponent

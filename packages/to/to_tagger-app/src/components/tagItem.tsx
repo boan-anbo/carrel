@@ -16,7 +16,7 @@ export function TagItem(props: { tag: Tag, index: number }) {
             width: '120px',
         }
         }
-        className='bg-amber-200 space-y-2 h-full rounded-lg p-4 drop-shadow p-2 text-centerj'
+        className='bg-amber-200 space-y-2 h-full rounded-lg p-4 drop-shadow p-2 text-center m-4'
         onClick={notifySendTag}>
         <div className={'h-3/12 text-center font-bold text-opacity-40'}>
             {props.tag.key}
@@ -25,7 +25,7 @@ export function TagItem(props: { tag: Tag, index: number }) {
             {props.tag.value ?? 'No value'}
         </div>
         <div className={'h-3/12 text-xs truncate text-center'}>
-            {props.tag.tagMarker}
+            {props.tag.snippet?.context?.context ?? 'No context'}
         </div>
         <div className={'flex h-3/12 space-x-1 justify-center'}>
             <Kbd>⌃⇧⌥ </Kbd>

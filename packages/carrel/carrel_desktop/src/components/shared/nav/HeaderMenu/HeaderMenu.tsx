@@ -1,12 +1,12 @@
 import {Alignment, Button, Navbar} from '@blueprintjs/core';
 import React, {ReactElement, useMemo} from 'react';
-import {CarrelComponent} from "../../../../../../carrel_server_client/generated/carrel/core/shared/v1/core_shared_v1_pb";
 import {MainMenuItems} from "../../../../store/slices/appstate/main-menu-items";
 import {AiOutlineBuild, BiCabinet, GiEagleHead, GiLaserSparks, GiRead, SiActigraph, SiBookstack} from "react-icons/all";
 import {CurrentComponent} from "../../../../store/slices/appstate/current_component";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../store/store";
 import {setCurrentComponent} from "../../../../store/slices/appstate/appstate";
+import {CarrelComponent} from "../../../../carrel_server_client/carrel/core/shared/v1/core_shared_v1_pb";
 
 function HeaderMenu() {
 

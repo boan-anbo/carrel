@@ -1,0 +1,23 @@
+[package]
+name = "carrel_desktop_db"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[workspace]
+members = ["","entity","migration"]
+
+
+[dependencies]
+migration = { path = "migration" }
+entity = { path = "entity" }
+tokio = { version = "^1", features = ["full"] }
+carrel_utils = { path = "../carrel_utils" }
+sea-orm={version = "0.9.2", features = [
+    "sqlx-sqlite",
+   "runtime-tokio-rustls",
+    "mock",
+    "macros",
+    "debug-print",
+    "uuid"
+]}

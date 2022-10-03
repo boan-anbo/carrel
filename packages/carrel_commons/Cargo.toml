@@ -23,5 +23,4 @@ carrel_utils = { path = "../carrel/carrel_utils" }
 
 [build-dependencies]
 tonic-build = "0.8.0"
-
 carrel_utils = { path = "../carrel/carrel_utils" }

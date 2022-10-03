@@ -1,15 +1,19 @@
 .firefly-container {
-    @apply bg-teal-100 rounded drop-shadow m-4;
+    @apply bg-gray-50 rounded drop-shadow m-4 pt-0 w-80 justify-center;
 }
 
 .firefly-header {
-    @apply flex flex-row items-center justify-between;
+    @apply flex justify-center border-b-2 border-gray-100;
 }
 
 .firefly-body {
-    @apply flex flex-col items-center;
+    @apply p-4 italic text-xs ;
+}
+
+.firefly-context {
+
 }
 
 .firefly-footer {
-    @apply flex flex-row items-center justify-between;
+    @apply justify-center flex flex-wrap border-t-2 border-gray-100;
 }

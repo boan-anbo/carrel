@@ -111,7 +111,7 @@ pub mod carrel {
         }
     }
 
-    pub mod contant {
+    pub mod constant {
         pub mod supported_text_file {
             pub mod v1 {
                 include!("generated/carrel_constant_supported_text_file_v1.rs");

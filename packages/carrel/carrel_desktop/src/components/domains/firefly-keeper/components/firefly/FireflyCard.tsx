@@ -1,19 +1,24 @@
-import {Tag} from "../../../../../carrel_server_client/carrel/common/tag/v1/tag_v1_pb";
 import {Firefly} from "../../../../../carrel_server_client/carrel/common/firefly/v1/firefly_v1_pb";
+import './FireflyCard.css';
 
-export const Firefly = (props: { firefly: Firefly}) => {
+export const FireflyCard = (props: { firefly: Firefly }) => {
 
     return (
-        <div className={'firefly-container'}>
-            <div className={'firefly-header'}>
-                {props.tag.key}
+        <>
+            <div className={'firefly-container'}>
+                <div className={'firefly-header'}>
+                    {props.firefly.title}
+                </div>
+                <div className={'firefly-body'}>
+                    <div className={'firefly-context'}>
+                        {props.firefly.snippet?.context?.context}
+                    </div>
+                </div>
+                <div className={'firefly-footer'}>
+
+                    {props.firefly.snippet?.file?.fileFullPath}
+                </div>
             </div>
-            <div className={'firefly-body'}>
-                {props.tag.value}
-            </div>
-            <div className={'firefly-footer'}>
-                {props.tag.snippet?.snippet}
-            </div>
-        </div>
+        </>
     )
 }

@@ -30,3 +30,9 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 dotenv = "0.15.0"
 serde = { version = "1.0.130", features = ["derive"] }
 futures-core = "0.3.24"
+
+[profile.release]
+strip = true
+opt-level = "s"
+lto = true
+codegen-units = 1

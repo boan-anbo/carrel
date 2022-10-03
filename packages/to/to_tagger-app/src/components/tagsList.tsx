@@ -5,7 +5,8 @@ export function TagsList(props: { tags: Tag[] | undefined }) {
     const tagItems = props.tags?.map((tag, index) => {
         return <TagItem index={index} key={index} tag={tag}/>
     });
-    return <div className={'flex space-x-4 p-4'}>
+    return <div className={'flex flex-wrap space-y-4 space-x-4 p-4'}>
+
         {tagItems}
 
     </div>;

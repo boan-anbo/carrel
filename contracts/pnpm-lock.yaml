@@ -9,8 +9,6 @@ specifiers:
 dependencies:
   '@bufbuild/connect-web': 0.2.1_@bufbuild+protobuf@0.1.1
   '@bufbuild/protobuf': 0.1.1
-
-devDependencies:
   '@bufbuild/protoc-gen-connect-web': 0.2.1_6uh7tdzbudblw4f6acep4gqoku
   '@bufbuild/protoc-gen-es': 0.1.1_@bufbuild+protobuf@0.1.1
 
@@ -22,9 +20,11 @@ packages:
       '@bufbuild/protobuf': 0.1.1
     dependencies:
       '@bufbuild/protobuf': 0.1.1
+    dev: false
 
   /@bufbuild/protobuf/0.1.1:
     resolution: {integrity: sha512-HAs82bdlN5aUsoTaJNsPd8driezDenOtAh7dVpO5xKEmyB6ibmRIV08MTlIVudnMYbFc1qw7RxhFHoQy0rSvgg==}
+    dev: false
 
   /@bufbuild/protoc-gen-connect-web/0.2.1_6uh7tdzbudblw4f6acep4gqoku:
     resolution: {integrity: sha512-A/M/tXRe5LsdD8xeUBEBxhe8TCqzD6eqKbld9j0KNgsRbrRlYQEMtIBarXXb+dADg+dwcTGS9W/DcfdO9R+Icg==}
@@ -42,7 +42,7 @@ packages:
       '@bufbuild/connect-web': 0.2.1_@bufbuild+protobuf@0.1.1
       '@bufbuild/protoc-gen-es': 0.1.1_@bufbuild+protobuf@0.1.1
       '@bufbuild/protoplugin': 0.1.1
-    dev: true
+    dev: false
 
   /@bufbuild/protoc-gen-es/0.1.1_@bufbuild+protobuf@0.1.1:
     resolution: {integrity: sha512-FFY8GfbMgcgN/nt4DtB+IiLvLmfGjQ7dKYVb6ciKCMymXx5MsRxs4xnJXHtpEv2rDVpDYCOhPkjri8o4AYeSPQ==}
@@ -56,10 +56,10 @@ packages:
     dependencies:
       '@bufbuild/protobuf': 0.1.1
       '@bufbuild/protoplugin': 0.1.1
-    dev: true
+    dev: false
 
   /@bufbuild/protoplugin/0.1.1:
     resolution: {integrity: sha512-+zCwqiq6xbeM6OG02+eNCd4Rinu1Mtn+HsjMF8U8h5FazOj1fEP9SnXEabOfImOR83vHfk2jocqzrB4IkSZV2Q==}
     dependencies:
       '@bufbuild/protobuf': 0.1.1
-    dev: true
+    dev: false

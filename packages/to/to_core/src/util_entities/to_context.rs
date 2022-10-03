@@ -1,3 +1,4 @@
+use std::iter;
 use std::ops::Sub;
 use std::str::Lines;
 use crate::util_entities::to_snippet::ToSnippet;
@@ -53,13 +54,14 @@ pub struct ToContext {
 
 
 // implement method for ToContext with takes in a ToSnippet with location information and a original text
-pub fn extract_context(snippet_string: String, snippet_line: usize, column: usize, length: usize, text: &str, opt: ToContextExtractOption) -> ToContext { let line_number = snippet_line;
+pub fn extract_context(snippet_string: String, snippet_line: usize, snippet_start_index: usize, snippet_lenth: usize, text: &str, opt: ToContextExtractOption) -> ToContext {
+    let line_number = snippet_line;
     // characters before the context index
     let chars_before = opt.chars_before;
     // characters after the context index
     let chars_after = opt.chars_after;
 
-    let snippet_in_context_column_number= chars_before as i32;
+    let snippet_in_context_column_number = chars_before as i32;
 
     // whether extract the whole text, all the rest will be ignored
     if opt.whole_text {
@@ -81,19 +83,7 @@ pub fn extract_context(snippet_string: String, snippet_line: usize, column: usiz
         };
     }
 
-
-    let initial_start_index = column;
-    let initial_end_index = initial_start_index + length;
-
-    let start_index = initial_start_index.saturating_sub(chars_before);
-
-    let mut end_index = initial_end_index + chars_after;
-
-    if end_index > text.len() {
-        end_index = text.len();
-    }
-
-    let context = text[start_index..end_index].to_string();
+    let context = extract_context_by_indices(snippet_start_index, snippet_lenth, text, chars_before, chars_after);
 
     ToContext {
         context,
@@ -102,27 +92,84 @@ pub fn extract_context(snippet_string: String, snippet_line: usize, column: usiz
     }
 }
 
-pub fn extract_context_by_snippet(snippet: &ToSnippet, text: &str, opt: ToContextExtractOption) -> ToContext {
+fn extract_context_by_indices(snipper_start_index: usize, length: usize, text: &str, chars_before_snippet: usize, chars_after_snippet: usize) -> String {
+    let initial_end_index = snipper_start_index + length;
 
+    // find the context_start_index by going backwards from the start_index by chars_before_snippet, chars_before_snippet by unicode or ascii
+    // loop
+    // check if the start_index is the beginning of a char boundary
+    let context_start_index_starting_point = snipper_start_index.saturating_sub(chars_before_snippet);
+    let context_start_index = if  context_start_index_starting_point > 0 {
+        let mut current_context_start_index = context_start_index_starting_point;
+        while !text.is_char_boundary(current_context_start_index) {
+            current_context_start_index -= 1;
+        }
+        current_context_start_index
+    } else {
+        0
+    };
+    // find the context_end_index by going forward from the end_index by chars_after_snippet, chars_after_snippet by unicode or ascii
+    // loop
+    // check if the end_index is the end of a char boundary
+    let mut context_end_index_starting_point = initial_end_index + 1;
+
+    // iter the number of times of chars_after_snippet
+
+    let context_end_index = iter::repeat(0).take(chars_after_snippet).fold(context_end_index_starting_point, |current_context_end_index, _| {
+        if current_context_end_index <= text.len() {
+            let mut current_context_end_index = context_end_index_starting_point;
+            while !text.is_char_boundary(current_context_end_index) {
+                current_context_end_index += 1;
+                context_end_index_starting_point += 1;
+            }
+            current_context_end_index
+        } else {
+            text.len()
+        }
+    });
+    // let context_end_index = if  context_end_index_starting_point <= text.len() {
+    //     let mut current_context_end_index = context_end_index_starting_point;
+    //     while !text.is_char_boundary(current_context_end_index) {
+    //         current_context_end_index += 1;
+    //     }
+    //     current_context_end_index
+    // } else {
+    //     text.len()
+    // };
+
+    // use the context_start_index and context_end_index to get the context according for unicode or ascii
+    let context = text.get(context_start_index..context_end_index).unwrap_or(text).to_string();
+    context
+}
+
+
+
+pub fn extract_context_by_snippet(snippet: &ToSnippet, text: &str, opt: ToContextExtractOption) -> ToContext {
     let snippet_string = snippet.snippet.clone();
     let snippet_line = snippet.line_number as usize;
-    let column = snippet.column_number as usize;
-    let length = snippet.length as usize;
+    let snippet_start_index = snippet.column_number as usize;
+    let snippet_length = snippet.length as usize;
 
-    extract_context(snippet_string, snippet_line, column, length, text, opt)
+    extract_context(snippet_string, snippet_line, snippet_start_index, snippet_length, text, opt)
 }
 
 pub fn extract_context_by_position(position: &ToTicketPositionInfo, text: &str, opt: ToContextExtractOption) -> ToContext {
-
     let snippet_string = position.raw_text.clone();
     let snippet_line = position.line as usize;
-    // calculate all the characters before the position accounting before the snippet line
-    let lines_before_snippet_line = text.lines().take(snippet_line).collect::<Vec<&str>>().join("\n");
-    let column = lines_before_snippet_line.len() + position.column;
-    let length = position.length as usize;
 
+    let snippet_start_index = calculate_starting_column_from_position(position, text);
+    let snippet_length = position.length as usize;
 
-    extract_context(snippet_string, snippet_line, column, length, text, opt)
+    extract_context(snippet_string, snippet_line, snippet_start_index, snippet_length, text, opt)
+}
+
+/// IMPORTANT: ToTicketPositionInfo is based on regex match index, which are based on bytes, not chars (especially not unicode chars). For example, starting index 12 is only the fifth char (啊) in the string "你好世界啊" (which is 5 unicode chars long). So we need to convert the byte index to char index.
+fn calculate_starting_column_from_position(position: &ToTicketPositionInfo, text: &str) -> usize {
+    ///
+    /// We need not to worry about the starting index, because it's gurantteed to be the beginning of a char boundary. But we need to worry about the ending index, because it's not gurantteed to be the end of a char boundary. So we need to find the next char boundary or the one before.
+    let all_lines_before = text.lines().take(position.line).collect::<Vec<&str>>();
+    let all_bytes_index_count_before = all_lines_before.iter().map(|s| s.len()).sum::<usize>();
+    all_bytes_index_count_before + position.column
 }
 
 
@@ -142,8 +189,8 @@ mod test {
             line_number: 1,
             column_number: 1,
             length: 1,
-            file:None,
-            context:None,
+            file: None,
+            context: None,
         };
 
         // test whole text
@@ -166,8 +213,8 @@ mod test {
             line_number: 1,
             column_number: 1,
             length: 1,
-            file:None,
-            context:None,
+            file: None,
+            context: None,
         };
 
         let option_whole_line = ToContextExtractOption {
@@ -189,8 +236,8 @@ mod test {
             line_number: 1,
             column_number: 10,
             length: 20,
-            file:None,
-            context:None,
+            file: None,
+            context: None,
         };
 
         let option_chars_before_and_after = ToContextExtractOption {
@@ -214,8 +261,8 @@ mod test {
             line_number: 1,
             column_number: 10,
             length: 20,
-            file:None,
-            context:None,
+            file: None,
+            context: None,
 
         };
 
@@ -230,7 +277,6 @@ mod test {
 
         println!("context: {}", context.context);
         assert_eq!(context.snippet_in_context_column_number, 5);
-
     }
 
     // try out of bound index
@@ -242,8 +288,8 @@ mod test {
             line_number: 1,
             column_number: 10,
             length: 20,
-            file:None,
-            context:None,
+            file: None,
+            context: None,
         };
 
         let option_chars_before_and_after = ToContextExtractOption {
@@ -256,5 +302,210 @@ mod test {
         let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
 
         assert_eq!(context.context, "This is the first line\nThis is the second line\nThis is the third line\nThis is the fourth line");
+    }
+
+    // try extract unicode characters
+    #[test]
+    fn test_extract_context_unicode() {
+        let sample_text = "这是中文[[Note]]这是中文";
+        let snippet = ToSnippet {
+            snippet: "[[Note]]".to_string(),
+            line_number: 0,
+            column_number: "这是中文".len() as i32,
+            length: "[[Note]]".len() as i32,
+            file: None,
+            context: None,
+        };
+
+        let option_chars_before_and_after = ToContextExtractOption {
+            chars_before: 1,
+            chars_after: 1,
+            whole_line: false,
+            ..Default::default()
+        };
+
+        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+
+        assert_eq!(context.context, "文[[Note]]这");
+    }
+
+    // try extract unicode characters on second line
+    #[test]
+        fn test_extract_context_unicode_second_line() {
+        let sample_text = "这是中文\n这是中文[[Note]]这是中文";
+        let snippet = ToSnippet {
+            snippet: "[[Note]]".to_string(),
+            line_number: 1,
+            column_number: "这是中文\n这是中文".len() as i32,
+            length: "[[Note]]".len() as i32,
+            file: None,
+            context: None,
+        };
+
+        let option_chars_before_and_after = ToContextExtractOption {
+            chars_before: 1,
+            chars_after: 1,
+            whole_line: false,
+            ..Default::default()
+        };
+
+        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+
+        assert_eq!(context.context, "文[[Note]]这");
+
+
+    }
+
+    // try extract unicode characters on third line between line breaks
+        #[test]
+        fn test_extract_context_unicode_third_line() {
+        let sample_text = "这是中文\n这是中文\n这是中文[[Note]]这是中文";
+        let snippet = ToSnippet {
+            snippet: "[[Note]]".to_string(),
+            line_number: 2,
+            column_number: "这是中文\n这是中文\n这是中文".len() as i32,
+            length: "[[Note]]".len() as i32,
+            file: None,
+            context: None,
+        };
+
+        let option_chars_before_and_after = ToContextExtractOption {
+            chars_before: 1,
+            chars_after: 1,
+            whole_line: false,
+            ..Default::default()
+        };
+
+        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+
+        assert_eq!(context.context, "文[[Note]]这");
+    }
+
+    // try extract unicode characters on third line around line breaks
+    #[test]
+    fn test_extract_context_unicode_third_line_around_line_breaks() {
+        let sample_text = "这是中文\n这是中文这是中文\n[[Note]]这是中文";
+        let snippet = ToSnippet {
+            snippet: "[[Note]]".to_string(),
+            line_number: 2,
+            column_number: "这是中文\n这是中文这是中文\n".len() as i32,
+            length: "[[Note]]".len() as i32,
+            file: None,
+            context: None,
+        };
+
+        let option_chars_before_and_after = ToContextExtractOption {
+            chars_before: 2,
+            chars_after: 1, // include a line break
+            whole_line: false,
+            ..Default::default()
+        };
+
+        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+
+        assert_eq!(context.context, "文\n[[Note]]这");
+    }
+
+    // can extract two characters even for unicode characters
+    #[test]
+    fn test_extract_context_unicode_two_chars() {
+        let sample_text = "这是中文[[Note]]这是中文";
+        let snippet = ToSnippet {
+            snippet: "[[Note]]".to_string(),
+            line_number: 0,
+            column_number: "这是中文".len() as i32,
+            length: "[[Note]]".len() as i32,
+            file: None,
+            context: None,
+        };
+
+        let option_chars_before_and_after = ToContextExtractOption {
+            chars_before: 2,
+            chars_after: 2,
+            whole_line: false,
+            ..Default::default()
+        };
+
+        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+
+        assert_eq!(context.context, "中文[[Note]]这是");
+    }
+
+
+
+    #[test]
+    fn test_extract_context_ascii() {
+        let sample_text = "This is ascii[[Note]]This is ascii";
+        let snippet = ToSnippet {
+            snippet: "".to_string(),
+            line_number: 1,
+            column_number: "This is ascii".len() as i32,
+            length: "[[Note]]".len() as i32,
+            file: None,
+            context: None,
+        };
+
+        let option_chars_before_and_after = ToContextExtractOption {
+            chars_before: 1,
+            chars_after: 1,
+            whole_line: false,
+            ..Default::default()
+        };
+
+        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+
+        assert_eq!(context.context, "i[[Note]]T");
+    }
+
+    // calculate_starting_column_from_position
+    #[test]
+    fn test_calculate_starting_column_from_position() {
+        let sample_text = "这是中文[[Note]]这是中文";
+        let position = ToTicketPositionInfo {
+            line: 0,
+            column: 12,
+            length: 0,
+            raw_text: "".to_string(),
+            file_path: None,
+        };
+
+        let starting_column = calculate_starting_column_from_position(&position, sample_text);
+
+        assert_eq!(starting_column, 12);
+
+        // two lines, the second line is the starting line, the first line is empty
+        let sample_text_2nd = "\n这是中文[[Note]]这是中文";
+        let position_2nd = ToTicketPositionInfo {
+            line: 1,
+            column: 12,
+            length: 0,
+            raw_text: "".to_string(),
+            file_path: None,
+        };
+
+        let starting_column_2nd = calculate_starting_column_from_position(&position_2nd, sample_text_2nd);
+
+        assert_eq!(starting_column_2nd, 12);
+
+
+    }
+
+    #[test]
+    fn test_calculate_starting_column_from_position_unicode() {
+
+        // two lines, the second line is the starting line, the first line is not empty
+        let sample_text_2nd = "这是第一行\n这是中文[[Note]]这是中文";
+
+        let position_2nd = ToTicketPositionInfo {
+            line: 1,
+            column: 12,
+            length: 0,
+            raw_text: "".to_string(),
+            file_path: None,
+        };
+
+        let starting_column_2nd = calculate_starting_column_from_position(&position_2nd, sample_text_2nd);
+
+        assert_eq!(starting_column_2nd, 15 + 12);
     }
 }

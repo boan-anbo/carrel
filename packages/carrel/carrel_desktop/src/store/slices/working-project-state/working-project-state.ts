@@ -1,11 +1,11 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createSlice} from '@reduxjs/toolkit'
-import {Project} from "../../../../../carrel_server_client/generated/carrel/common/project/v1/project_v1_pb";
 import {newUuid} from "../../../utils/new-uuid";
 import {PartialMessage, Timestamp} from "@bufbuild/protobuf";
 import {setTauriWindow} from "../../../tauri/window/set-tauri-window";
 import {getNowISO} from "../../../utils/format-iso";
 import {getDirectoryName} from "../../../utils/get-directory-name";
+import {Project} from "../../../carrel_server_client/carrel/common/project/v1/project_v1_pb";
 
 export interface WorkingProjectState {
     workingProject: PartialMessage<Project>
@@ -17,10 +17,11 @@ const initialState: WorkingProjectState = {
         name: "New Project",
         description: undefined,
         workingFolder: undefined,
-        lastModified: getNowISO(),
-        lastOpened: getNowISO(),
+
+        updatedAt: getNowISO(),
+        openedAt: getNowISO(),
         archiveUuid: undefined
-    }
+    } as PartialMessage<Project>
 }
 
 export const workingProjectStateSlice = createSlice({
@@ -38,10 +39,10 @@ export const workingProjectStateSlice = createSlice({
                 name: getDirectoryName(action.payload),
                 description: undefined,
                 workingFolder: action.payload,
-                lastModified: getNowISO(),
-                lastOpened: getNowISO(),
+                updatedAt: getNowISO(),
+                openedAt: getNowISO(),
                 archiveUuid: undefined
-            }
+            } as PartialMessage<Project>
         },
 
     },

@@ -1,7 +1,7 @@
-import {CarrelComponent} from "../../../carrel_server_client/generated/carrel/core/shared/v1/core_shared_v1_pb";
 import {CarrelPageRoutes} from "../components/domains/carrel/routes/carrel-page-routes";
 import {FireflyKeeperPageRoutes} from "../components/domains/firefly-keeper/routes/firefly-keeper-page-routes";
 import {TDomainPageRoutes} from "./t-domain-routes";
+import {CarrelComponent} from "../carrel_server_client/carrel/core/shared/v1/core_shared_v1_pb";
 
 
 

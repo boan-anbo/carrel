@@ -3,15 +3,20 @@ import {Link} from "react-router-dom";
 import {CgBoard, FcManager, GiBee} from "react-icons/all";
 import {MenuItem} from "@blueprintjs/core";
 import {AppPageRoutes} from "../../../../routing/app-page-routes";
-import {CarrelComponent} from "../../../../../../carrel_server_client/generated/carrel/core/shared/v1/core_shared_v1_pb";
+import {CarrelComponent} from "../../../../carrel_server_client/carrel/core/shared/v1/core_shared_v1_pb";
+import {FireflyKeeperPageRoutes} from "../routes/firefly-keeper-page-routes";
 
 
 export function FireflyKeeperMenu() {
 
 
     return <>
-        <Link to={AppPageRoutes[CarrelComponent.FIREFLY_KEEPER].home.absolutePath}>
+        <Link to={FireflyKeeperPageRoutes.home.absolutePath}>
             <MenuItem icon={<GiBee/>} text={`Keeper's house`}/>
+        </Link>
+
+        <Link to={FireflyKeeperPageRoutes.fireflies.absolutePath}>
+            <MenuItem icon={<GiBee/>} text={`Fireflies`}/>
         </Link>
 
 

@@ -1,6 +1,6 @@
-import {Fireflies} from "../../../../../../../carrel_server_client/generated/carrel/firefly_keeper/v1/firefly_keeper_v1_pb";
 import {PageSection} from "../../../../ui/page-section/PageSection";
 import {HTMLTable} from "@blueprintjs/core";
+import {Fireflies} from "../../../../../carrel_server_client/carrel/firefly_keeper/v1/firefly_keeper_v1_pb";
 
 export function FirefliesStatTable(props: {
     fireflies: Fireflies

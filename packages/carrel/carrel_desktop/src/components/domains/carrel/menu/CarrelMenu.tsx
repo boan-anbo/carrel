@@ -2,8 +2,6 @@ import * as React from "react";
 import {Link} from "react-router-dom";
 import {CgBoard, FcManager} from "react-icons/all";
 import {MenuItem} from "@blueprintjs/core";
-import {AppPageRoutes} from "../../../../routing/app-page-routes";
-import {CarrelComponent} from "../../../../../../carrel_server_client/generated/carrel/core/shared/v1/core_shared_v1_pb";
 import {CarrelPageRoutes} from "../routes/carrel-page-routes";
 
 
