@@ -1,0 +1,15 @@
+.firefly-container {
+    @apply bg-teal-100 rounded drop-shadow m-4;
+}
+
+.firefly-header {
+    @apply flex flex-row items-center justify-between;
+}
+
+.firefly-body {
+    @apply flex flex-col items-center;
+}
+
+.firefly-footer {
+    @apply flex flex-row items-center justify-between;
+}
