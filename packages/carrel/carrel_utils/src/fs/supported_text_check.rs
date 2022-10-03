@@ -44,7 +44,7 @@ pub fn filter_out_supported_files_by_extensions(supported_files_extensions: &[&s
 
 #[cfg(test)]
 mod tests {
-    use crate::test::test_folders::{get_test_fixture_path, get_unit_test_module_folder};
+    use crate::test::test_folders::{get_test_fixture_path, get_test_module_folder};
     use super::*;
 
     #[test]
@@ -71,7 +71,7 @@ mod tests {
     #[test]
     fn should_return_false_instead_of_panic_when_is_directory() {
         let supported_files_extensions = ["txt", "md"];
-        let file_path = get_unit_test_module_folder("test_folder");
+        let file_path = get_test_module_folder("test_folder");
         let result = has_extensions(&supported_files_extensions, &file_path);
         assert_eq!(result, false);
         // clear
@@ -81,7 +81,7 @@ mod tests {
     #[test]
     fn should_return_false_instead_of_panic_when_no_extension() {
         let supported_files_extensions = ["txt", "md"];
-        let test_folder_path = get_unit_test_module_folder("test");
+        let test_folder_path = get_test_module_folder("test");
         let file_path = format!("{}\\test", test_folder_path);
         // create file
         std::fs::write(&file_path, "test").unwrap();

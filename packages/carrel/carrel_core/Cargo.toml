@@ -14,6 +14,7 @@ prost = "0.11.0"
 carrel_commons = { path = "../../carrel_commons" }
 config = "0.13.1"
 carrel_db = {path = "../carrel_db"}
+carrel_utils = { path = "../carrel_utils" }
 
 [build-dependencies]
 carrel_utils = { path = "../carrel_utils" }
