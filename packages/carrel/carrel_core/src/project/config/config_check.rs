@@ -1,4 +1,4 @@
-use crate::project::config1::project_config::ProjectConfig;
+use crate::project::config::project_config::ProjectConfig;
 
 pub trait ConfigCheck {
     // check if db exists

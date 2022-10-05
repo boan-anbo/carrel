@@ -1,3 +1,4 @@
+use std::path::PathBuf;
 use carrel_commons::carrel::core::project_manager::v1::{
     AddArchiveRequest, CreateProjectRequest,
 };
@@ -34,6 +35,24 @@ impl From<CreateProjectRequest> for project::ActiveModel {
     }
 }
 
+
 impl From<&str> for file::ActiveModel {
-     
+    fn from(file_path: &str) -> Self {
+        let file_path_buf = PathBuf::from(file_path);
+        let file_name = file_path_buf.file_name().unwrap().to_str().unwrap();
+        let file_extension = file_path_buf.extension().unwrap().to_str().unwrap();
+        let dir = file_path_buf.parent().unwrap().to_str().unwrap();
+
+        file::ActiveModel {
+            description: Set("".to_string()),
+            file_name: Set(file_name.to_string()),
+            extension: Set(file_extension.to_string()),
+            directory: Set(dir.to_string()),
+            full_path: Set(file_path.to_string()),
+            importance: Set(0),
+            task_state: Set(0),
+            archive_id: Set(0),
+            ..Default::default()
+        }
+    }
 }

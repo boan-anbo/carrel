@@ -1,10 +1,8 @@
 use crate::carrel::common::document::v1::Document;
-use crate::carrel::common::file::v1::File;
 use crate::carrel::common::firefly::v1::Firefly;
-use crate::carrel::common::snippet::v1::Snippet;
 use crate::carrel::common::tag::v1::Tag;
 
-use carrel_utils::datetime::get_iso_string::{get_iso_string, get_now_iso_string, Utc};
+use carrel_utils::datetime::get_iso_string::{get_now_iso_string};
 
 // impl firefly from tag
 impl From<Tag> for Firefly {

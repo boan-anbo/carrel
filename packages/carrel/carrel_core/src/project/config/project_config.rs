@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use carrel_commons::carrel::core::project_manager::v1::CarrelDbType;
 use figment::{Figment};
 use figment::providers::{Format, Serialized, Yaml};
-use crate::project::config1::const_config_file_name::{CONFIG_DEFAULT_CARREL_DB_NAME, CONFIG_DEFAULT_CARREL_DB_TYPE, CONFIG_DEFAULT_CARREL_TO_NAME, CONFIG_DEFAULT_FILE_NAME};
+use crate::project::config::const_config_file_name::{CONFIG_DEFAULT_CARREL_DB_NAME, CONFIG_DEFAULT_CARREL_DB_TYPE, CONFIG_DEFAULT_CARREL_TO_NAME, CONFIG_DEFAULT_FILE_NAME};
 use crate::project::error::project_config_error::ProjectConfigError;
 
 
@@ -64,6 +64,7 @@ impl ProjectConfig {
         std::fs::write(config_path, config_str).map_err(|_| ProjectConfigError::ConfigWriteError(path.to_string()))
     }
 
+    // create a default config file and write to the path
     pub fn create_default_config_file(dir_path: &str) -> Result<PathBuf, ProjectConfigError> {
         let config = ProjectConfig::default();
         let config_path = PathBuf::from(dir_path).join(CONFIG_DEFAULT_FILE_NAME);
@@ -80,6 +81,7 @@ impl ProjectConfig {
 #[cfg(test)]
 mod tests {
     use uuid::Uuid;
+    use crate::project::config::const_config_file_name::CONFIG_DEFAULT_FILE_NAME;
     use super::*;
 
     #[test]

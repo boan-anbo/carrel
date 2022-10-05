@@ -1,4 +1,3 @@
-use std::path::PathBuf;
 use crate::carrel::common::tag::v1::Tag;
 use to_core::to_tag::to_tag_struct::ToTag;
 use to_core::util_entities::to_snippet::ToSnippet;

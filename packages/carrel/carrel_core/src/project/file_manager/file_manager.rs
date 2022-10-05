@@ -22,6 +22,9 @@ pub trait ManageFileTrait {
 
     // remove files from the archive
     async fn archive_remove_files(&self, archive_id: i32, files: Vec<i32>) -> Result<(), SeaOrmDatabaseError>;
+
+    // list all files
+    async fn file_list_all_files(&self) -> Result<Vec<file::Model>, SeaOrmDatabaseError>;
 }
 
 
@@ -77,6 +80,15 @@ impl ManageFileTrait for CarrelDbManager {
             .map_err(SeaOrmDatabaseError::DatabaseDeleteError)?;
         Ok(())
     }
+
+    async fn file_list_all_files(&self) -> Result<Vec<file::Model>, SeaOrmDatabaseError> {
+        let db = self.get_connection().await;
+        let files = File::find()
+            .all(&db)
+            .await.map_err(SeaOrmDatabaseError::DatabaseQueryError)?;
+        Ok(files)
+    }
+
 }
 
 #[cfg(test)]
@@ -85,12 +97,12 @@ mod tests {
     use sea_orm::ColumnTrait;
     use crate::project::file_manager::file_manager::ManageFileTrait;
     use crate::project::project_manager::project_manager::ProjectManager;
-    use crate::test_utils::test_entities::{EntityTester, TestEntities};
+    use crate::test_utils::test_entities::{CarrelTester, TestEntities};
 
     #[tokio::test]
     async fn test_archive_list_files(){
         // get seeded db
-        let db = EntityTester::get_seeded_db().await;
+        let db = CarrelTester::get_seeded_db().await;
         let project_manager = ProjectManager{
             db_manager: db,
             ..Default::default()
@@ -107,7 +119,7 @@ mod tests {
     #[tokio::test]
     async fn test_archive_filter_files(){
         // get seeded db
-        let db = EntityTester::get_seeded_db().await;
+        let db = CarrelTester::get_seeded_db().await;
         let project_manager = ProjectManager{
             db_manager: db,
             ..Default::default()

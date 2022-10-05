@@ -165,8 +165,8 @@ pub fn extract_context_by_position(position: &ToTicketPositionInfo, text: &str, 
 
 /// IMPORTANT: ToTicketPositionInfo is based on regex match index, which are based on bytes, not chars (especially not unicode chars). For example, starting index 12 is only the fifth char (啊) in the string "你好世界啊" (which is 5 unicode chars long). So we need to convert the byte index to char index.
 fn calculate_starting_column_from_position(position: &ToTicketPositionInfo, text: &str) -> usize {
-    ///
-    /// We need not to worry about the starting index, because it's gurantteed to be the beginning of a char boundary. But we need to worry about the ending index, because it's not gurantteed to be the end of a char boundary. So we need to find the next char boundary or the one before.
+
+    // We need not to worry about the starting index, because it's gurantteed to be the beginning of a char boundary. But we need to worry about the ending index, because it's not gurantteed to be the end of a char boundary. So we need to find the next char boundary or the one before.
     let all_lines_before = text.lines().take(position.line).collect::<Vec<&str>>();
     let all_bytes_index_count_before = all_lines_before.iter().map(|s| s.len()).sum::<usize>();
     all_bytes_index_count_before + position.column

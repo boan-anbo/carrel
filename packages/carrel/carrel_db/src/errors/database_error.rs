@@ -3,14 +3,18 @@ use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum SeaOrmDatabaseError {
-    #[error("Database connection error: {0}")]
-    DatabaseConnectionError(#[from] sea_orm::DatabaseConnectionError),
     #[error("Database error: {0}")]
-    DatabaseError(#[from] sea_orm::DatabaseError),
-    #[error("Database migration error: {0}")]
-    DatabaseMigrationError(#[from] sea_orm::DatabaseMigrationError),
-    #[error("Database pool error: {0}")]
-    DatabasePoolError(#[from] sea_orm::DatabasePoolError),
-    #[error("Database transaction error: {0}")]
-    DatabaseTransactionError(#[from] sea_orm::DatabaseTransactionError),
+    DatabaseConnectionError(#[source] sea_orm::DbErr),
+    #[error("Database initialization error: {0}")]
+    DatabaseInitializationError(#[source] sea_orm::DbErr),
+    #[error("Database file creation error: {0}")]
+    DatabaseFileCreationError(#[source] std::io::Error),
+    #[error("Database file {0} already exist")]
+    DatabaseFileAlreadyExistError(String),
+    #[error("Database insert error: {0}")]
+    DatabaseInsertError(#[source] sea_orm::DbErr),
+    #[error("Database delete error: {0}")]
+    DatabaseDeleteError(#[source] sea_orm::DbErr),
+    #[error("Database query error: {0}")]
+    DatabaseQueryError(#[source] sea_orm::DbErr),
 }

@@ -149,6 +149,13 @@ pub mod carrel {
         }
     }
 
+    pub mod core {
+        pub mod project_manager {
+            pub mod v1 {
+                include!("generated/carrel_core_project_manager_v1.rs");
+            }
+        }
+    }
 
 
 }

@@ -1,4 +1,3 @@
-use std::env;
 use std::path::PathBuf;
 
 ///! Generate the proto files for Carrel Server.
@@ -36,6 +35,8 @@ fn main() {
         "grpc/health/v1/grpc_health_v1.proto",
         // generic
         "generic/api/request_directory/v1/request_directory_v1.proto",
+        // core
+        "carrel/core/project_manager/v1/project_manager_v1.proto",
     ];
 
     let proto_root_folders = vec![

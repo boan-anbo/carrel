@@ -1,15 +1,58 @@
 use sea_orm_migration::prelude::*;
-use crate::ColumnSpec::PrimaryKey;
+use crate::seed_database::seed_database;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
+
+#[derive(Iden)]
+pub enum Project {
+    Table,
+    Id,
+    Name,
+    Description,
+    Directory,
+    DbName,
+    ToName,
+    CreateAt,
+    UpdatedAt,
+
+}
+
+/// Learn more at https://docs.rs/sea-query#iden
+#[derive(Iden)]
+pub(crate) enum Archive {
+    Table,
+    Id,
+    ProjectId,
+    Uuid,
+    Name,
+    Description,
+    CreatedAt,
+    UpdatedAt,
+}
+
+#[derive(Iden)]
+pub(crate) enum File {
+    Table,
+    Id,
+    Description,
+    FileName,
+    Extension,
+    Directory,
+    FullPath,
+    Importance,
+    TaskState,
+    ArchiveId,
+    CreatedAt,
+    ModifiedAt,
+}
 
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
 
-        manager
+        let _ = manager
             .create_table(
                 Table::create()
                     .table(Project::Table)
@@ -26,43 +69,11 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Project::Directory).string().null())
                     .col(ColumnDef::new(Project::DbName).string().null())
                     .col(ColumnDef::new(Project::ToName).string().null())
-                    .to_owned(),
+                    .col(ColumnDef::new(Project::CreateAt).string().null())
+                    .col(ColumnDef::new(Project::UpdatedAt).string().null())
+                .to_owned(),
             )
-            .await
-    }
-
-    async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        // Replace the sample below with your own migration scripts
-
-        manager
-            .drop_table(Table::drop().table(Project::Table).to_owned())
-            .await
-    }
-}
-
-/// Learn more at https://docs.rs/sea-query#iden
-#[derive(Iden)]
-pub enum Project {
-    Table,
-    Id,
-    Name,
-    Description,
-    Directory,
-    DbName,
-    ToName,
-
-}
-use sea_orm_migration::prelude::*;
-use crate::m20220929_111159_create_project::Project;
-
-
-#[derive(DeriveMigrationName)]
-pub struct Migration;
-
-#[async_trait::async_trait]
-impl MigrationTrait for Migration {
-    async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        // Replace the sample below with your own migration scripts
+            .await.unwrap();
 
         manager
             .create_table(
@@ -78,17 +89,19 @@ impl MigrationTrait for Migration {
                         ,
                     )
                     .col(
+                        ColumnDef::new(Archive::ProjectId)
+                            .integer()
+                            .not_null()
+                    )
+                    .col(
                         ColumnDef::new(Archive::Uuid)
                             .uuid()
                             .not_null()
                     )
-                    // .col(
-                    //     ColumnDef::new(Archive::ProjectId)
-                    //
-                    //         .integer()
-                    //
-                    //         .not_null()
-                    // )
+                    .col(ColumnDef::new(Archive::Name).string().not_null())
+                    .col(ColumnDef::new(Archive::Description).string().not_null())
+                    .col(ColumnDef::new(Archive::CreatedAt).string().not_null())
+                    .col(ColumnDef::new(Archive::UpdatedAt).string().not_null())
                     .foreign_key(
                         ForeignKey::create()
                             .name("fk_archive_project")
@@ -96,60 +109,11 @@ impl MigrationTrait for Migration {
                             .to(Project::Table, Project::Id)
                             .on_delete(ForeignKeyAction::Cascade)
                             .on_update(ForeignKeyAction::Cascade)
-
                     )
-                    .col(ColumnDef::new(Archive::Name).string().not_null())
-                    .col(ColumnDef::new(Archive::Description).string().not_null())
-                    .col(ColumnDef::new(Archive::CreatedAt).timestamp_with_time_zone().not_null())
-                    .col(ColumnDef::new(Archive::UpdatedAt).timestamp_with_time_zone().not_null())
                     .to_owned(),
             )
-            .await
-    }
+            .await.unwrap();
 
-    async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        // Replace the sample below with your own migration scripts
-        manager
-            .drop_table(Table::drop().table(Archive::Table).to_owned())
-            .await
-    }
-}
-
-/// Learn more at https://docs.rs/sea-query#iden
-#[derive(Iden)]
-enum Archive {
-    Table,
-    Id,
-    ProjectId,
-    Uuid,
-    Name,
-    Description,
-    CreatedAt,
-    UpdatedAt,
-}
-use sea_orm_migration::prelude::*;
-
-#[derive(DeriveMigrationName)]
-pub struct Migration;
-
-/// Learn more at https://docs.rs/sea-query#iden
-#[derive(Iden)]
-enum File {
-    Table,
-    Id,
-    Description,
-    FileName,
-    Extension,
-    Directory,
-    FullPath,
-    Importance,
-    TaskState,
-    ArchiveId,
-}
-
-#[async_trait::async_trait]
-impl MigrationTrait for Migration {
-    async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
             .create_table(
                 Table::create()
@@ -169,14 +133,31 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(File::FullPath).string().not_null())
                     .col(ColumnDef::new(File::Importance).integer().not_null())
                     .col(ColumnDef::new(File::TaskState).integer().not_null())
+                    .col(ColumnDef::new(File::CreatedAt).string().not_null())
+                    .col(ColumnDef::new(File::ModifiedAt).string().not_null())
                     .col(
                         ColumnDef::new(File::ArchiveId)
                             .integer()
                             .not_null()
                     )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("fk_file_archive")
+                            .from(File::Table, File::ArchiveId)
+                            .to(Archive::Table, Archive::Id)
+                            .on_delete(ForeignKeyAction::Cascade)
+                            .on_update(ForeignKeyAction::Cascade)
+                    )
                     .to_owned(),
             )
-            .await
+            .await.unwrap();
+
+
+        seed_database(manager).await;
+
+
+
+        Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
@@ -184,7 +165,18 @@ impl MigrationTrait for Migration {
 
         manager
             .drop_table(Table::drop().table(File::Table).to_owned())
+            .await.unwrap();
+
+
+        manager
+            .drop_table(Table::drop().table(Archive::Table).to_owned())
+            .await.unwrap();
+
+
+        manager
+            .drop_table(Table::drop().table(Project::Table).to_owned())
             .await
     }
 }
+
 

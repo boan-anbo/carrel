@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+
+package carrel.core.project_manager.v1;
+
+// // The greeting service definition.
+// service Greeter {
+//   // Sends a greeting
+//   rpc SayHello (HelloRequest) returns (HelloReply);
+// }
+
+
+enum CarrelDbType {
+    // sqlite default
+    CARREL_DB_TYPE_SQLITE_UNSPECIFIED = 0;
+    // postgresql
+    CARREL_DB_TYPE_POSTGRESQL = 1;
+
+}
+
+// message to add new archive to a project
+message AddArchiveRequest {
+    // the name of the archive
+  string name = 1;
+  // describe the purpose of the archive
+  string description = 2;
+  // the source of the archive, could be empty, if used, it's usually a synced folder or a Zotero collection etc.
+  string source_url = 3;
+  // the type of the source url, could be Directory, Zotero, etc.
+  ArchiveSourceType archive_source_type = 4;
+  // the id of the project that the new archive will be associated with
+  int32 project_id = 5;
+}
+
+//  the message to create a new project
+message CreateProjectRequest {
+  // the name of the project
+  string name = 1;
+  // the description of the project
+  string description = 2;
+  // project folder
+    string directory = 3;
+    // Carrel db name
+    string db_name = 4;
+    // To db name
+    string to_name = 5;
+}
+
+// enum ArchiveSourceType 
+enum ArchiveSourceType {
+    ARCHIVE_SOURCE_TYPE_UNSPECIFIED = 0;
+    ARCHIVE_SOURCE_TYPE_DIRECTORY = 1;
+    ARCHIVE_SOURCE_TYPE_ZOTERO = 2;
+}
+
+// // The response message containing the greetings.
+// message HelloReply {
+//   string message = 1;
+// }

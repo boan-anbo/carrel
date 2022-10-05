@@ -10,9 +10,11 @@ members = ["", "entity","migration"]
 
 [dependencies]
 migration = { path = "migration" }
+carrel_commons = { path = "../../carrel_commons" }
 entity = { path = "entity" }
 tokio = { version = "^1", features = ["full"] }
 carrel_utils = { path = "../carrel_utils" }
+thiserror = "1.0.26"
 sea-orm={version = "0.9.2", features = [
     "sqlx-sqlite",
    "runtime-tokio-rustls",
