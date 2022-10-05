@@ -1,11 +1,9 @@
 use async_trait::async_trait;
-use carrel_commons::carrel::core::project_manager::v1::AddArchiveRequest;
+use carrel_commons::carrel::core::project_manager::v1::{AddArchiveDto};
 use carrel_db::entities::archive;
 use carrel_db::entities::prelude::Archive;
 use carrel_db::errors::database_error::SeaOrmDatabaseError;
-use sea_orm::{ActiveModelBehavior, ActiveModelTrait,QueryFilter, EntityTrait};
-use sea_orm::ActiveValue::Set;
-use sea_orm::sea_query::SimpleExpr;
+use sea_orm::{ActiveModelTrait, QueryFilter, EntityTrait, PaginatorTrait};
 use crate::project::db_manager::carrel_db_manager::{CarrelDbManager, CarrelDbManagerTrait};
 use sea_orm::{ColumnTrait};
 
@@ -14,7 +12,7 @@ use sea_orm::{ColumnTrait};
 #[async_trait]
 pub trait Archivist {
     // add archive to the project
-    async fn project_add_archive(&self, add_archive: AddArchiveRequest) -> Result<i32, SeaOrmDatabaseError>;
+    async fn project_add_archive(&self, add_archive: AddArchiveDto) -> Result<i32, SeaOrmDatabaseError>;
 
     // list all archives in the project
     async fn project_list_archives(&self) -> Result<Vec<archive::Model>, SeaOrmDatabaseError>;
@@ -22,13 +20,16 @@ pub trait Archivist {
     // remove archive from the project
     async fn project_remove_archive(&self, archive_id: i32) -> Result<(), SeaOrmDatabaseError>;
 
+    // count number of archives in the project
+    async fn project_count_archives(&self) -> Result<i64, SeaOrmDatabaseError>;
+
 }
 
 #[async_trait]
 impl Archivist for CarrelDbManager {
-    async fn project_add_archive(&self, add_archive: AddArchiveRequest) -> Result<i32, SeaOrmDatabaseError> {
+    async fn project_add_archive(&self, add_archive: AddArchiveDto) -> Result<i32, SeaOrmDatabaseError> {
         let db = self.get_connection().await;
-        let mut archive = archive::ActiveModel::from(add_archive);
+        let archive = archive::ActiveModel::from(add_archive);
         let inserted = archive.insert(&db).await.map_err(SeaOrmDatabaseError::DatabaseInsertError)?;
         Ok(inserted.id)
     }
@@ -53,12 +54,20 @@ impl Archivist for CarrelDbManager {
             .map_err(SeaOrmDatabaseError::DatabaseDeleteError)?;
         Ok(())
     }
+
+    async fn project_count_archives(&self) -> Result<i64, SeaOrmDatabaseError> {
+        let db = self.get_connection().await;
+        let count = Archive::find()
+            .count(&db)
+            .await
+            .map_err(SeaOrmDatabaseError::DatabaseQueryError)?;
+        Ok(count as i64)
+    }
 }
 
 
 #[cfg(test)]
 mod test {
-    use std::fs;
     use crate::project::file_manager::file_manager::ManageFileTrait;
     use crate::test_utils::test_entities::{CarrelTester, TestEntities};
     use super::*;

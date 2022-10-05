@@ -54,7 +54,7 @@ impl InitProject for ProjectManager {
 mod tests {
     use carrel_commons::carrel::core::project_manager::v1::CarrelDbType;
     use carrel_utils::test::test_folders::{get_random_test_temp_folder_path_buf};
-    use crate::project::project_manager::project_manager::InitProject;
+    use crate::project::project_manager::InitProject;
     use super::*;
 
 

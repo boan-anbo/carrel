@@ -7,7 +7,7 @@ pub trait ConfigCheck {
 
 impl ConfigCheck for ProjectConfig {
     fn check_db(&self) -> bool {
-        self.db_path.exists()
+        self.carrel_db_file_name.exists()
     }
 }
 
@@ -27,13 +27,13 @@ mod tests {
         let carrel_db_path = PathBuf::from(format!("{}/carrel.db", test_folder));
         // use tests_db
         let config = ProjectConfig {
-            db_path: carrel_db_path,
+            carrel_db_file_name: carrel_db_path,
             ..Default::default()
         };
 
         assert_eq!(config.check_db(), false);
         // write a db file
-        fs::File::create(&config.db_path).unwrap();
+        fs::File::create(&config.carrel_db_file_name).unwrap();
         assert!(config.check_db());
         // remove the folder using fs
         fs::remove_dir_all(test_folder).unwrap();

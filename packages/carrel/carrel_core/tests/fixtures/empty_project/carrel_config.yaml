@@ -1,4 +1,0 @@
-project_directory: ''
-db_path: carrel_db.db
-to_path: carrel_to.db
-db_type: SqliteUnspecified

@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+
+package carrel.server.project_manager.v1;
+
+
+import "carrel/core/project_manager/v1/project_manager_v1.proto";
+
+
+// services
+service ProjectManagerService {
+  // open project, return empty response if success
+  rpc OpenProject (OpenProjectRequest) returns (OpenProjectResponse) {}
+  // get project information
+  rpc GetProjectInfo (GetProjectInfoRequest) returns (GetProjectInfoResponse) {}
+
+  // add archive
+  rpc AddArchive (AddArchiveRequest) returns (AddArchiveResponse) {}
+}
+
+// message to open a project
+message OpenProjectRequest {
+  // the id of the project
+  int32 project_id = 1;
+}
+
+// message to open a project
+message OpenProjectResponse {
+  // the id of the project
+  int32 project_id = 1;
+}
+
+// message to get project information
+message GetProjectInfoRequest {
+  // the id of the project
+  int32 project_id = 1;
+}
+
+// message to get project information
+message GetProjectInfoResponse {
+  // the id of the project
+  carrel.core.project_manager.v1.ProjectInfo project_info = 1;
+}
+
+// message to add archive
+message AddArchiveRequest {
+  // the folder of the project
+  string project_directory = 1;
+  // the id of the project
+  int32 project_id = 2;
+  carrel.core.project_manager.v1.AddArchiveDto add_archive_dto = 3;
+}
+
+// message to add archive
+message AddArchiveResponse {
+  // the folder of the archive
+  string project_directory = 1;
+  // db file name
+  string db_file_name = 2;
+  // the id of the project
+  int32 project_id = 3;
+// the id of the archive
+  int32 archive_id = 4;
+}

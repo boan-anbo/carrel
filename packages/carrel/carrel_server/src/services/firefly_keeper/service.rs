@@ -44,10 +44,10 @@ impl FirefliesService for FireflyService {
 #[cfg(test)]
 mod test
 {
-    use carrel_utils::test::test_folders::get_unit_test_module_folder;
     use tonic::transport::Channel;
     use crate::consts::server_addr::SERVER_ADDR;
     use carrel_commons::carrel::server::firefly_keeper::v1::fireflies_service_client::FirefliesServiceClient;
+    use carrel_utils::test::test_folders::get_test_fixture_module_folder_path;
 
     use super::*;
 
@@ -60,7 +60,7 @@ mod test
     }
 
     fn get_firefly_fixture_path() -> String {
-        get_unit_test_module_folder(MODULE_FIXTURE_FOLDER)
+        get_test_fixture_module_folder_path(MODULE_FIXTURE_FOLDER)
     }
 
 
@@ -76,7 +76,7 @@ mod test
         let response_value = response.into_inner();
 
         // there should be three tags
-        assert_eq!(response_value.fireflies.unwrap().all_tags_count, 2);
+        assert_eq!(response_value.fireflies.unwrap().all_fireflies_count, 2);
 
 
         Ok(())

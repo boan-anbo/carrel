@@ -27,6 +27,9 @@ fn main() {
         "carrel/server/scaffold/v1/server_scaffold_v1.proto",
         // firefly_keeper
         "carrel/server/firefly_keeper/v1/server_firefly_keeper_v1.proto",
+        // project_manager
+        "carrel/server/project_manager/v1/server_project_manager_v1.proto",
+
         // services
         "carrel/stacks/services/v1/stacks_services_v1.proto",
         // Constants

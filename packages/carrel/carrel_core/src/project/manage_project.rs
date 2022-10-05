@@ -1,14 +1,14 @@
 use std::path::PathBuf;
 use carrel_commons::carrel::core::project_manager::v1::{ProjectInfo};
-use crate::project::archivist::archivist::Archivist;
+use crate::project::archivist::archivist::{Archivist};
 use crate::project::config::const_config_file_name::CONFIG_DEFAULT_FILE_NAME;
 use crate::project::config::project_config::ProjectConfig;
-use crate::project::db_manager::project_db_manager::MangageProjects;
+use crate::project::db_manager::project_db_manager::{MangageProjects};
 use crate::project::error::project_config_error::ProjectConfigError;
 use crate::project::error::project_error::ProjectError;
 use crate::project::error::project_error::ProjectError::ProjectFolderDoesNotExit;
-use crate::project::file_manager::file_manager::ManageFileTrait;
-use crate::project::project_manager::project_manager::{InitProject, ProjectManager};
+use crate::project::file_manager::file_manager::{ManageFileTrait};
+use crate::project::project_manager::{InitProject, ProjectManager};
 
 /// Methods for managing a project that is already initialized.
 #[async_trait::async_trait]
@@ -123,7 +123,6 @@ impl ManageProjectTrait for ProjectManager {
 mod tests {
     use std::fs;
     use crate::project::config::const_config_file_name::{CONFIG_DEFAULT_CARREL_DB_NAME, CONFIG_DEFAULT_CARREL_TO_NAME};
-    use crate::project::project_manager::project_manager::ProjectManager;
     use crate::test_utils::test_entities::{CarrelTester, TestEntities};
     use super::*;
 

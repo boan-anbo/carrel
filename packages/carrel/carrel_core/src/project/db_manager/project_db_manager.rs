@@ -12,6 +12,7 @@ use crate::project::db_manager::carrel_db_manager::CarrelDbManager;
 pub trait MangageProjects {
     async fn add_project(&self, add_project: CreateProjectRequest) -> Result<i32, SeaOrmDatabaseError>;
     async fn remove_project(&self, project_id: &i32) -> Result<(), SeaOrmDatabaseError>;
+    async fn get_project(&self, project_id: &i32) -> Result<project::Model, SeaOrmDatabaseError>;
 }
 
 
@@ -20,16 +21,22 @@ impl MangageProjects for CarrelDbManager {
     async fn add_project(&self, add_project: CreateProjectRequest) -> Result<i32, SeaOrmDatabaseError> {
 
         let project_model = project::ActiveModel::from(add_project);
-        let db = get_connection(self.db_path.as_str()).await?;
+        let db = get_connection(self.carrel_db_path.as_str()).await?;
         let created_project = project_model.insert(&db).await.map_err(SeaOrmDatabaseError::DatabaseInsertError)?;
         Ok(created_project.id)
 
     }
     async fn remove_project(&self, project_id: &i32) -> Result<(), SeaOrmDatabaseError> {
-        let db = get_connection(self.db_path.as_str()).await?;
+        let db = get_connection(self.carrel_db_path.as_str()).await?;
         let project = Project::find_by_id(*project_id).one(&db).await.map_err(SeaOrmDatabaseError::DatabaseDeleteError).unwrap().unwrap();
         project.delete(&db).await.map_err(SeaOrmDatabaseError::DatabaseDeleteError)?;
         Ok(())
+    }
+
+    async fn get_project(&self, project_id: &i32) -> Result<project::Model, SeaOrmDatabaseError> {
+        let db = get_connection(self.carrel_db_path.as_str()).await?;
+        let project = Project::find_by_id(*project_id).one(&db).await.map_err(SeaOrmDatabaseError::DatabaseQueryError).unwrap().unwrap();
+        Ok(project)
     }
 }
 

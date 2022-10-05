@@ -131,6 +131,12 @@ pub mod carrel {
                 include!("generated/carrel_server_scaffold_v1.rs");
             }
         }
+
+        pub mod project_manager {
+            pub mod v1 {
+                include!("generated/carrel_server_project_manager_v1.rs");
+            }
+        }
     }
 
     #[cfg(feature = "firefly_keeper")]

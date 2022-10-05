@@ -10,35 +10,24 @@ use crate::project::error::project_config_error::ProjectConfigError;
 /// The single source of truth for Project.
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ProjectConfig {
-    // directory
-    pub project_directory: PathBuf,
     // the path to the carrel db
-    pub db_path: PathBuf,
+    pub carrel_db_file_name: PathBuf,
     // the path to the carrel textual object db
-    pub to_path: PathBuf,
+    pub to_db_file_name: PathBuf,
     // the type of the db
-    pub db_type: CarrelDbType,
+    pub carrel_db_type: CarrelDbType,
 }
 
 impl Default for ProjectConfig {
     fn default() -> Self {
         ProjectConfig {
-            project_directory: PathBuf::new(),
-            db_path: PathBuf::from(CONFIG_DEFAULT_CARREL_DB_NAME),
-            to_path: PathBuf::from(CONFIG_DEFAULT_CARREL_TO_NAME),
-            db_type: CONFIG_DEFAULT_CARREL_DB_TYPE,
+            carrel_db_file_name: PathBuf::from(CONFIG_DEFAULT_CARREL_DB_NAME),
+            to_db_file_name: PathBuf::from(CONFIG_DEFAULT_CARREL_TO_NAME),
+            carrel_db_type: CONFIG_DEFAULT_CARREL_DB_TYPE,
         }
     }
 }
 
-impl ProjectConfig {
-    pub fn new(project_directory: PathBuf) -> Self {
-        ProjectConfig {
-            project_directory,
-            ..Default::default()
-        }
-    }
-}
 
 
 // impl from for ProjectConfig
@@ -48,11 +37,7 @@ impl ProjectConfig {
         ProjectConfig,
         ProjectConfigError
     > {
-        let config_path_dir = PathBuf::from(config_path);
-
-        Figment::from(Serialized::defaults(ProjectConfig::new(
-            config_path_dir.parent().unwrap().to_path_buf()
-        )))
+        Figment::from(Serialized::defaults(ProjectConfig::default()))
             .merge(Yaml::file(config_path))
             .extract()
             .map_err(|_| ProjectConfigError::ConfigParseError(config_path.to_string()))
@@ -66,9 +51,11 @@ impl ProjectConfig {
 
     // create a default config file and write to the path
     pub fn create_default_config_file(dir_path: &str) -> Result<PathBuf, ProjectConfigError> {
+
         let config = ProjectConfig::default();
         let config_path = PathBuf::from(dir_path).join(CONFIG_DEFAULT_FILE_NAME);
         let config_str = serde_yaml::to_string(&config).unwrap();
+        // create the config file if not exist
         let write_result = std::fs::write(config_path.clone(), config_str).map_err(|_| ProjectConfigError::ConfigWriteError(dir_path.to_string()));
         match write_result {
             Ok(_) => Ok(config_path),
@@ -90,15 +77,15 @@ mod tests {
         let config_path = fixture_folder.join(CONFIG_DEFAULT_FILE_NAME);
         assert!(config_path.exists());
         let config = ProjectConfig::from_config_file(config_path.to_str().unwrap()).unwrap();
-        assert_eq!(config.db_path.file_name().unwrap(), "test_db.db");
-        assert_eq!(config.to_path.file_name().unwrap(), "test_to.db");
+        assert_eq!(config.carrel_db_file_name.file_name().unwrap(), CONFIG_DEFAULT_CARREL_DB_NAME);
+        assert_eq!(config.to_db_file_name.file_name().unwrap(), CONFIG_DEFAULT_CARREL_TO_NAME);
     }
 
     #[test]
     fn test_from_default_config_file() {
         let config = ProjectConfig::from_config_file(Uuid::new_v4().to_string().as_str()).unwrap();
-        assert_eq!(config.db_path.file_name().unwrap(), CONFIG_DEFAULT_CARREL_DB_NAME);
-        assert_eq!(config.to_path.file_name().unwrap(), CONFIG_DEFAULT_CARREL_TO_NAME);
+        assert_eq!(config.carrel_db_file_name.file_name().unwrap(), CONFIG_DEFAULT_CARREL_DB_NAME);
+        assert_eq!(config.to_db_file_name.file_name().unwrap(), CONFIG_DEFAULT_CARREL_TO_NAME);
     }
 
     #[test]
@@ -109,8 +96,8 @@ mod tests {
         let config_path = PathBuf::from(random_test_temp_folder.as_str()).join(CONFIG_DEFAULT_FILE_NAME);
         assert!(config_path.exists());
         let config = ProjectConfig::from_config_file(config_path.to_str().unwrap()).unwrap();
-        assert_eq!(config.db_path.file_name().unwrap(), CONFIG_DEFAULT_CARREL_DB_NAME);
-        assert_eq!(config.to_path.file_name().unwrap(), CONFIG_DEFAULT_CARREL_TO_NAME);
+        assert_eq!(config.carrel_db_file_name.file_name().unwrap(), CONFIG_DEFAULT_CARREL_DB_NAME);
+        assert_eq!(config.to_db_file_name.file_name().unwrap(), CONFIG_DEFAULT_CARREL_TO_NAME);
         // remove the folder using fs
         std::fs::remove_dir_all(random_test_temp_folder).unwrap();
     }
@@ -122,9 +109,11 @@ mod tests {
         let config_path = PathBuf::from(random_test_temp_folder.as_str()).join(CONFIG_DEFAULT_FILE_NAME);
         assert!(config_path.exists());
         let config = ProjectConfig::from_config_file(config_path.to_str().unwrap()).unwrap();
-        assert_eq!(config.db_path.file_name().unwrap(), CONFIG_DEFAULT_CARREL_DB_NAME);
-        assert_eq!(config.to_path.file_name().unwrap(), CONFIG_DEFAULT_CARREL_TO_NAME);
+        assert_eq!(config.carrel_db_file_name.file_name().unwrap(), CONFIG_DEFAULT_CARREL_DB_NAME);
+        assert_eq!(config.to_db_file_name.file_name().unwrap(), CONFIG_DEFAULT_CARREL_TO_NAME);
         // remove the folder using fs
         std::fs::remove_dir_all(random_test_temp_folder).unwrap();
     }
+
+
 }

@@ -6,7 +6,10 @@ pub mod fireflies;
 pub mod errors;
 pub mod scaffold;
 pub mod project;
-pub(crate) mod test_utils;
+
+#[cfg(feature = "test_helper")]
+pub mod test_utils;
+pub use carrel_db::errors::database_error::SeaOrmDatabaseError;
 
 
 

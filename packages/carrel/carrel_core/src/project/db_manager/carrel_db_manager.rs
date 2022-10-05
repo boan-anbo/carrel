@@ -8,15 +8,15 @@ use crate::project::config::const_config_file_name::{CONFIG_DEFAULT_CARREL_DB_NA
 
 
 pub struct CarrelDbManager {
-    pub db_path: String,
-    pub db_type: CarrelDbType,
+    pub carrel_db_path: String,
+    pub carrel_db_type: CarrelDbType,
 }
 
 impl Default for CarrelDbManager {
     fn default() -> Self {
         CarrelDbManager {
-            db_path: CONFIG_DEFAULT_CARREL_DB_NAME.to_string(),
-            db_type: CONFIG_DEFAULT_CARREL_DB_TYPE,
+            carrel_db_path: CONFIG_DEFAULT_CARREL_DB_NAME.to_string(),
+            carrel_db_type: CONFIG_DEFAULT_CARREL_DB_TYPE,
         }
     }
 }
@@ -24,13 +24,13 @@ impl Default for CarrelDbManager {
 impl CarrelDbManager {
     pub fn new(db_path: &str, db_type: CarrelDbType) -> Self {
         CarrelDbManager {
-            db_path: db_path.to_string(),
-            db_type,
+            carrel_db_path: db_path.to_string(),
+            carrel_db_type: db_type,
         }
     }
 
     pub fn get_db_directory(&self) -> String {
-        let db_path = PathBuf::from(self.db_path.as_str());
+        let db_path = PathBuf::from(self.carrel_db_path.as_str());
         let db_directory = db_path.parent().unwrap().to_str().unwrap().to_string();
         db_directory
     }
@@ -47,19 +47,19 @@ pub trait CarrelDbManagerTrait {
 #[async_trait]
 impl CarrelDbManagerTrait for CarrelDbManager {
     async fn init_db(&self) -> Result<String, SeaOrmDatabaseError> {
-        let db_path = match self.db_type {
+        let db_path = match self.carrel_db_type {
             CarrelDbType::Postgresql => {
                 unimplemented!("Postgres is not implemented yet")
             }
             CarrelDbType::SqliteUnspecified => {
                 let create_db_result = carrel_db::db::migrate::init_db(
-                    self.db_path.as_str()
+                    self.carrel_db_path.as_str()
                 ).await;
 
                 // if already exist, do nothing
                 match create_db_result {
                     Ok(created_db_path) => created_db_path,
-                    Err(SeaOrmDatabaseError::DatabaseFileAlreadyExistError(_)) => self.db_path.clone(),
+                    Err(SeaOrmDatabaseError::DatabaseFileAlreadyExistError(_)) => self.carrel_db_path.clone(),
                     Err(err) => return Err(err)
                 }
             }
@@ -68,7 +68,7 @@ impl CarrelDbManagerTrait for CarrelDbManager {
     }
 
     async fn get_connection(&self) -> DatabaseConnection {
-        get_connection(self.db_path.as_str()).await.unwrap()
+        get_connection(self.carrel_db_path.as_str()).await.unwrap()
     }
 }
 

@@ -1,35 +1,21 @@
-use std::{fmt, io};
-use std::fmt::{Display, Formatter};
+use std::{io};
+use thiserror::Error;
 use carrel_core::errors::carrel_core_error::CarrelCoreError;
+use carrel_core::SeaOrmDatabaseError;
 
 // create a custom error for carrel_core
-#[derive(Debug)]
+#[derive(Debug, Error)]
 pub enum CarrelServerError {
     // a custom error for the carrel_core
+    #[error("CarrelServerError: Io Error: {0}")]
     IoError(io::Error),
-    CarrelCoreError(CarrelCoreError)
+    #[error("CarrelServerError: CarrelCoreError: {0}")]
+    CarrelCoreError(CarrelCoreError),
+    #[error("CarrelServerError: Project Operation failed {0}")]
+    ProjectOperationFailed(#[source] SeaOrmDatabaseError),
+    #[error("CarrelServerError: Invalid Request payload: {0}")]
+    InvalidRequestPayload(String),
+
 }
 
-// impl display for the error
-impl Display for CarrelServerError {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        match self {
-            CarrelServerError::IoError(e) => write!(f, "IO Error: {}", e),
-            CarrelServerError::CarrelCoreError(e) => write!(f, "Carrel Core Error: {}", e)
-        }
-    }
-}
 
-// impl from io::Error for the error
-impl From<std::io::Error> for CarrelServerError {
-    fn from(err: std::io::Error) -> CarrelServerError {
-        CarrelServerError::IoError(err)
-    }
-}
-
-// impl from std::error::Error for CarrelCoreError
-impl From<CarrelCoreError> for CarrelServerError {
-    fn from(err: CarrelCoreError) -> CarrelServerError {
-        CarrelServerError::CarrelCoreError(err)
-    }
-}

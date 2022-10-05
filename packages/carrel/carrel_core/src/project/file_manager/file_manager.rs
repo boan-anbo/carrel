@@ -5,7 +5,7 @@ use sea_orm::{ColumnTrait};
 use carrel_db::entities::prelude::*;
 use carrel_db::errors::database_error::SeaOrmDatabaseError;
 use sea_orm::ActiveValue::Set;
-use sea_orm::{EntityTrait, QueryFilter};
+use sea_orm::{EntityTrait, PaginatorTrait, QueryFilter};
 use sea_orm::sea_query::{SimpleExpr};
 use crate::project::db_manager::carrel_db_manager::{CarrelDbManager, CarrelDbManagerTrait};
 
@@ -25,6 +25,9 @@ pub trait ManageFileTrait {
 
     // list all files
     async fn file_list_all_files(&self) -> Result<Vec<file::Model>, SeaOrmDatabaseError>;
+
+    // count all files
+    async fn file_count_all_files(&self) -> Result<i64, SeaOrmDatabaseError>;
 }
 
 
@@ -89,6 +92,14 @@ impl ManageFileTrait for CarrelDbManager {
         Ok(files)
     }
 
+    async fn file_count_all_files(&self) -> Result<i64, SeaOrmDatabaseError> {
+        let db = self.get_connection().await;
+        let count = File::find()
+            .count(&db)
+            .await
+            .map_err(SeaOrmDatabaseError::DatabaseQueryError)?;
+        Ok(count as i64)
+    }
 }
 
 #[cfg(test)]
@@ -96,7 +107,7 @@ mod tests {
     use carrel_db::entities::file;
     use sea_orm::ColumnTrait;
     use crate::project::file_manager::file_manager::ManageFileTrait;
-    use crate::project::project_manager::project_manager::ProjectManager;
+    use crate::project::project_manager::ProjectManager;
     use crate::test_utils::test_entities::{CarrelTester, TestEntities};
 
     #[tokio::test]
@@ -104,14 +115,14 @@ mod tests {
         // get seeded db
         let db = CarrelTester::get_seeded_db().await;
         let project_manager = ProjectManager{
-            db_manager: db,
+            db: db,
             ..Default::default()
         };
 
-        let files_in_archive_1 = project_manager.db_manager.archive_list_files(1).await.unwrap();
+        let files_in_archive_1 = project_manager.db.archive_list_files(1).await.unwrap();
         // one file is seeded
         assert_eq!(files_in_archive_1.len(), 1);
-        let files_in_archive_2 = project_manager.db_manager.archive_list_files(2).await.unwrap();
+        let files_in_archive_2 = project_manager.db.archive_list_files(2).await.unwrap();
         // three files are seeded
         assert_eq!(files_in_archive_2.len(), 3);
     }
@@ -121,21 +132,21 @@ mod tests {
         // get seeded db
         let db = CarrelTester::get_seeded_db().await;
         let project_manager = ProjectManager{
-            db_manager: db,
+            db: db,
             ..Default::default()
         };
 
-        let pdf_files_in_archive_2 = project_manager.db_manager.archive_filter_files(2, file::Column::Extension.like("pdf")).await.unwrap();
+        let pdf_files_in_archive_2 = project_manager.db.archive_filter_files(2, file::Column::Extension.like("pdf")).await.unwrap();
         // two archived pdf files are seeded
         assert_eq!(pdf_files_in_archive_2.len(), 2);
 
-        let md_files_in_archive_2 = project_manager.db_manager.archive_filter_files(2, file::Column::Extension.like("md")).await.unwrap();
+        let md_files_in_archive_2 = project_manager.db.archive_filter_files(2, file::Column::Extension.like("md")).await.unwrap();
         // one archived md file is seeded
         assert_eq!(md_files_in_archive_2.len(), 1);
 
         let pdf_file_with_name_1
-               = project_manager.db_manager.archive_filter_files(2,
-                                                      file::Column::Extension.like("pdf")
+               = project_manager.db.archive_filter_files(2,
+                                                         file::Column::Extension.like("pdf")
                                                           .and(file::Column::FileName.like("seed_file_name_2_1")
                                                       )
         ).await.unwrap();
@@ -143,8 +154,8 @@ mod tests {
         // one archived pdf file with name seed_file_name_2_1 is seeded
         assert_eq!(pdf_file_with_name_1.len(), 1);
         let non_existing_file
-               = project_manager.db_manager.archive_filter_files(2,
-                                                      file::Column::Extension.like("pdf")
+               = project_manager.db.archive_filter_files(2,
+                                                         file::Column::Extension.like("pdf")
                                                           .and(file::Column::FileName.like("non_existing_file")
                                                       )
         ).await.unwrap();

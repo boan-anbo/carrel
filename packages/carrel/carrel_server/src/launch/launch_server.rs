@@ -2,6 +2,7 @@ use std::net::SocketAddr;
 
 use carrel_commons::carrel::FILE_DESCRIPTOR_SET;
 use carrel_commons::carrel::server::firefly_keeper::v1::fireflies_service_server::FirefliesServiceServer;
+use carrel_commons::carrel::server::project_manager::v1::project_manager_service_server::ProjectManagerServiceServer;
 use carrel_commons::carrel::server::scaffold::v1::scaffold_new_project_service_server::ScaffoldNewProjectServiceServer;
 use carrel_commons::grpc::health::v1::health_server::HealthServer;
 use tonic::transport::Server;
@@ -10,6 +11,7 @@ use crate::consts::server_addr::SERVER_ADDR;
 use crate::launch::{attach_tracing_subscriber, load_cors};
 use crate::services::firefly_keeper::service::FireflyService;
 use crate::services::health::service::HealthService;
+use crate::services::project_manager::service::ProjectService;
 use crate::services::scaffold::service::ScaffoldService;
 
 pub async fn launch_server() {
@@ -52,6 +54,11 @@ pub async fn launch_server() {
             tonic_web::config()
                 .allow_all_origins()
                 .enable(FirefliesServiceServer::new(FireflyService::default()))
+        )
+        .add_service(
+            tonic_web::config()
+                .allow_all_origins()
+                .enable(ProjectManagerServiceServer::new(ProjectService::default()))
         )
         .add_service(
             tonic_web::config()

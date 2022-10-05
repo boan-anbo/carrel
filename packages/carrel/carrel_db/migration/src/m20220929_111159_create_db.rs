@@ -69,8 +69,8 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Project::Directory).string().null())
                     .col(ColumnDef::new(Project::DbName).string().null())
                     .col(ColumnDef::new(Project::ToName).string().null())
-                    .col(ColumnDef::new(Project::CreateAt).string().null())
-                    .col(ColumnDef::new(Project::UpdatedAt).string().null())
+                    .col(ColumnDef::new(Project::CreateAt).string().not_null())
+                    .col(ColumnDef::new(Project::UpdatedAt).string().not_null())
                 .to_owned(),
             )
             .await.unwrap();

@@ -3,11 +3,6 @@ syntax = "proto3";
 
 package carrel.core.project_manager.v1;
 
-// // The greeting service definition.
-// service Greeter {
-//   // Sends a greeting
-//   rpc SayHello (HelloRequest) returns (HelloReply);
-// }
 
 
 enum CarrelDbType {
@@ -19,7 +14,7 @@ enum CarrelDbType {
 }
 
 // message to add new archive to a project
-message AddArchiveRequest {
+message AddArchiveDto {
     // the name of the archive
   string name = 1;
   // describe the purpose of the archive
@@ -46,14 +41,35 @@ message CreateProjectRequest {
     string to_name = 5;
 }
 
-// enum ArchiveSourceType 
+// enum ArchiveSourceType
 enum ArchiveSourceType {
     ARCHIVE_SOURCE_TYPE_UNSPECIFIED = 0;
     ARCHIVE_SOURCE_TYPE_DIRECTORY = 1;
     ARCHIVE_SOURCE_TYPE_ZOTERO = 2;
 }
 
-// // The response message containing the greetings.
-// message HelloReply {
-//   string message = 1;
-// }
+message ProjectInfo {
+  // the id of the project
+  int32 project_id = 1;
+  // the name of the project
+  string name = 2;
+  // the description of the project
+  string description = 3;
+  // project folder
+  string directory = 4;
+  // Carrel db name
+  string db_name = 5;
+  // To db name
+  string to_name = 6;
+  // Carrel db type
+  CarrelDbType db_type = 7;
+  // number of archives
+  int64 archive_count = 8;
+  // number of documents
+  int64 file_count = 9;
+  // created at
+  string created_at = 10;
+  // updated at
+  string updated_at = 11;
+}
+

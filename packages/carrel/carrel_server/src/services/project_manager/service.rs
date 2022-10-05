@@ -1,40 +1,58 @@
-use carrel_commons::carrel::server::firefly_keeper::v1::{ScanFilesForFirefliesRequest, ScanFilesForFirefliesResponse, ScanFolderForFirefliesRequest, ScanFolderForFirefliesResponse};
-use carrel_commons::carrel::server::firefly_keeper::v1::fireflies_service_server::FirefliesService;
-use carrel_core::fireflies::procedures::{FireflyKeeperOption, scan_file_for_fireflies};
+use std::io::Write;
+use carrel_commons::carrel::server::project_manager::v1::{AddArchiveRequest, AddArchiveResponse, GetProjectInfoRequest, GetProjectInfoResponse, OpenProjectRequest, OpenProjectResponse};
+use carrel_commons::carrel::server::project_manager::v1::project_manager_service_server::{ProjectManagerService, ProjectManagerServiceServer};
+use carrel_core::project::archivist::archivist::Archivist;
+use carrel_core::project::manage_project::ManageProjectTrait;
+
+
 use tonic::{Request, Response, Status};
+use crate::errors::carrel_server_error::CarrelServerError;
+use crate::errors::carrel_server_error::CarrelServerError::InvalidRequestPayload;
 
 
 #[derive(Debug, Default)]
-pub struct FireflyService {}
+pub struct ProjectService {}
 
 #[tonic::async_trait]
-impl FirefliesService for FireflyService {
-    async fn scan_folder_for_fireflies(&self, request: Request<ScanFolderForFirefliesRequest>) -> Result<Response<ScanFolderForFirefliesResponse>, Status> {
-        let req = request.into_inner();
-        let result = carrel_core::fireflies::procedures::scan_folder_for_fireflies(req.directory.as_str(), FireflyKeeperOption {
-            ignored_directory_names: req.ignore_directories,
-            classified_only: req.classified_only,
-        }).expect("Failed to scan folder for fireflies");
-        let res = Response::new(
-            ScanFolderForFirefliesResponse {
-                fireflies: Some(result)
-            });
-        Ok(res)
+impl ProjectManagerService for ProjectService {
+    async fn open_project(&self, request: Request<OpenProjectRequest>) -> Result<Response<OpenProjectResponse>, Status> {
+        todo!()
     }
 
-    async fn scan_files_for_fireflies(&self, request: Request<ScanFilesForFirefliesRequest>) -> Result<Response<ScanFilesForFirefliesResponse>, Status> {
+    async fn get_project_info(&self, request: Request<GetProjectInfoRequest>) -> Result<Response<GetProjectInfoResponse>, Status> {
+        todo!()
+    }
+
+    async fn add_archive(&self, request: Request<AddArchiveRequest>) -> Result<Response<AddArchiveResponse>, Status> {
         let req = request.into_inner();
-        let files: &[&str] = &req.files.iter().map(|s| s.as_str()).collect::<Vec<&str>>();
-        let result = scan_file_for_fireflies(
-            files,
-            FireflyKeeperOption {
-                classified_only: req.classified_only,
-                ..Default::default()
-            },
-        ).expect("Failed to scan files for fireflies");
+        let project = carrel_core::project::project_manager::ProjectManager::load(
+            req.project_directory.as_str()
+        ).unwrap();
+
+        // if it fails to unwrap, throw InvalidRequestPayload error
+        let dto = match req.add_archive_dto {
+            Some(dto) => dto,
+            None =>
+                {
+                    let err = InvalidRequestPayload("AddArchiveRequest.add_archive_dto is None".to_string());
+                    return Err(
+                        Status::invalid_argument(
+                            err.to_string()
+                        )
+                    )
+                }
+        };
+
+        let result = project.db.project_add_archive(
+            dto
+        ).await.unwrap();
+
         let res = Response::new(
-            ScanFilesForFirefliesResponse {
-                fireflies: Some(result)
+            AddArchiveResponse {
+                project_directory: project.project_directory.into_os_string().into_string().unwrap(),
+                db_file_name: project.config.carrel_db_file_name.into_os_string().into_string().unwrap(),
+                project_id: project.project_id,
+                archive_id: result
             });
         Ok(res)
     }
@@ -44,39 +62,52 @@ impl FirefliesService for FireflyService {
 #[cfg(test)]
 mod test
 {
-    use carrel_utils::test::test_folders::get_unit_test_module_folder;
+    use carrel_commons::carrel::core::project_manager::v1::{AddArchiveDto, ArchiveSourceType};
+    use carrel_commons::carrel::server::project_manager::v1::project_manager_service_client::ProjectManagerServiceClient;
     use tonic::transport::Channel;
     use crate::consts::server_addr::SERVER_ADDR;
-    use carrel_commons::carrel::server::firefly_keeper::v1::fireflies_service_client::FirefliesServiceClient;
+    use carrel_core::test_utils::carrel_tester::CarrelTester;
+    use carrel_core::test_utils::project_tester::ProjectTester;
 
     use super::*;
 
-    const MODULE_FIXTURE_FOLDER: &str = "firefly_keeper";
+    const MODULE_FIXTURE_FOLDER: &str = "ProjectManager_keeper";
 
 
-    async fn get_client() -> FirefliesServiceClient<Channel> {
-        let client = FirefliesServiceClient::connect(SERVER_ADDR.http_server_addr.as_str()).await;
-        client.expect("Failed to build firefly service client and connect to server")
+    async fn get_client() -> ProjectManagerServiceClient<Channel> {
+        let client = ProjectManagerServiceClient::connect(SERVER_ADDR.http_server_addr.as_str()).await;
+        client.expect("Failed to build ProjectManager service client and connect to server")
     }
 
-    fn get_firefly_fixture_path() -> String {
-        get_unit_test_module_folder(MODULE_FIXTURE_FOLDER)
-    }
+
 
 
     #[tokio::test]
-    async fn test_scan_for_fireflies() -> Result<(), Box<dyn std::error::Error>> {
-        let request = ScanFolderForFirefliesRequest {
-            directory: get_firefly_fixture_path(),
-            classified_only: false,
-            ..Default::default()
+    async fn test_project_manager_add_archive() -> Result<(), Box<dyn std::error::Error>> {
+
+        // initialize a project manager
+        let project_manager = CarrelTester::get_project_manager_with_seeded_db().await;
+
+        let add_archive_dto = Some( AddArchiveDto {
+            name: "carrel_server_tester_archive".to_string(),
+            description: "carrel_server_tester_archive_description".to_string(),
+            source_url: "carrel_server_tester_archive_source_url".to_string(),
+            archive_source_type: ArchiveSourceType::Directory as i32,
+            project_id: project_manager.project_id,
+        });
+
+
+        let request = AddArchiveRequest {
+            project_directory: project_manager.project_directory.to_str().unwrap().to_string(),
+            project_id: project_manager.project_id,
+            add_archive_dto
         };
 
-        let response = get_client().await.scan_folder_for_fireflies(request).await?;
+        let response = get_client().await.add_archive(request).await?;
         let response_value = response.into_inner();
 
-        // there should be three tags
-        assert_eq!(response_value.fireflies.unwrap().all_tags_count, 2);
+        assert_eq!(response_value.project_directory, project_manager.project_directory.to_str().unwrap().to_string());
+        assert_eq!(response_value.db_file_name, project_manager.config.carrel_db_file_name.to_str().unwrap().to_string());
 
 
         Ok(())

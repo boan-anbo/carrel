@@ -12,7 +12,7 @@ doc = false
 
 [dependencies]
 # Carrel components
-carrel_core = { path = "../carrel_core" }
+carrel_core = { path = "../carrel_core", features = ["test_helper"] }
 carrel_commons = { path = "../../carrel_commons", features = ["server", "generic"] }
 carrel_utils = { path = "../carrel_utils" }
 # Other dependencies
@@ -30,6 +30,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 dotenv = "0.15.0"
 serde = { version = "1.0.130", features = ["derive"] }
 futures-core = "0.3.24"
+thiserror = "1.0.37"
 
 [profile.release]
 strip = true

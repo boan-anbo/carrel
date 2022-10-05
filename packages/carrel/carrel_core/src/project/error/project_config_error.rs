@@ -8,4 +8,6 @@ pub enum ProjectConfigError {
     ConfigFileNotFound(String),
     #[error("Cannot write config file: `{0}`")]
     ConfigWriteError(String),
+    #[error("Cannot create config file: `{0}`")]
+    ConfigCreateError(String),
 }

@@ -3,6 +3,13 @@ name = "carrel_core"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+path = "src/lib.rs"
+
+[features]
+default = []
+test_helper = []
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
@@ -12,6 +19,7 @@ carrel_scaffold = { path = "../carrel_scaffold" }
 firefly_keeper = { path = "../../firefly_keeper" }
 serde = { version = "1.0.145", features = ["derive"] }
 serde_yaml = { version = "0.9.13" }
+serde_json = "1.0.85"
 prost = "0.11.0"
 carrel_commons = { path = "../../carrel_commons" }
 figment = { version = "0.10", features = ["yaml", "env"] }

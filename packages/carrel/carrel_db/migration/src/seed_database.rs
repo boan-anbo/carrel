@@ -14,6 +14,8 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
             Project::Directory,
             Project::DbName,
             Project::ToName,
+            Project::CreateAt,
+            Project::UpdatedAt,
         ])
         .values_panic([
             "seed_name".into(),
@@ -21,6 +23,8 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
             "seed_directory".into(),
             "seed_db_name".into(),
             "seed_to_name".into(),
+            get_now_iso_string().into(),
+            get_now_iso_string().into(),
         ]).to_owned();
 
     manager.exec_stmt(insert_project).await.unwrap();
