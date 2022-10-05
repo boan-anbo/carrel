@@ -47,7 +47,7 @@ pub struct FireflyKeeper {
 
 // constructor
 impl FireflyKeeper {
-    pub fn new(directory: &str, opt: FireflyKeeperOption) -> FireflyKeeper {
+    pub fn new(_directory: &str, opt: FireflyKeeperOption) -> FireflyKeeper {
         FireflyKeeper {
             result: Fireflies::default(),
             option: opt,

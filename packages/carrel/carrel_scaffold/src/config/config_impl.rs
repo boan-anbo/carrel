@@ -1,6 +1,5 @@
-use std::{fs, io};
+use std::{fs};
 use crate::config::config_struct::CarrelConfiguration;
-use serde_yaml::*;
 
 impl CarrelConfiguration {
     pub fn write_to_yaml(&self, path: &str) {

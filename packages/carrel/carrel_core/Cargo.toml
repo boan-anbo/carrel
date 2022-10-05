@@ -6,15 +6,28 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+tokio = { version = "1.0", features = ["full"] }
 carrel_scaffold = { path = "../carrel_scaffold" }
 # The reason fireflies is not in `carrel_fireflies` is because fireflies is still useful as independent app (for managing totags in files), while carrel_scaffold is not without using carrel.
 firefly_keeper = { path = "../../firefly_keeper" }
 serde = { version = "1.0.145", features = ["derive"] }
+serde_yaml = { version = "0.9.13" }
 prost = "0.11.0"
 carrel_commons = { path = "../../carrel_commons" }
-config = "0.13.1"
+figment = { version = "0.10", features = ["yaml", "env"] }
 carrel_db = {path = "../carrel_db"}
 carrel_utils = { path = "../carrel_utils" }
+uuid = { version = "1.1.2", features = ["serde", "v4"] }
+thiserror = "1.0"
+async-trait = "0.1.57"
+sea-orm={version = "0.9.2", features = [
+    "sqlx-sqlite",
+    "runtime-tokio-rustls",
+    "mock",
+    "macros",
+    "debug-print",
+    "uuid"
+]}
 
 [build-dependencies]
 carrel_utils = { path = "../carrel_utils" }

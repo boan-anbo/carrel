@@ -10,6 +10,8 @@ path = "src/lib.rs"
 
 [dependencies]
 async-std = { version = "^1", features = ["attributes", "tokio1"] }
+uuid = { version = "1.1.2", features = ["v4"] }
+carrel_utils = { path = "../../carrel_utils" }
 
 [dependencies.sea-orm-migration]
 version = "^0.9.2"
@@ -19,4 +21,6 @@ features = [
   # e.g.
   "runtime-tokio-rustls",  # `ASYNC_RUNTIME` feature
    "sqlx-sqlite",         # `DATABASE_DRIVER` feature
+
 ]
+

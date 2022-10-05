@@ -12,3 +12,5 @@ generated/
 
 packages/.DS_Store
 
+**/test/temp
+**/tests/temp

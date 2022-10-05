@@ -6,7 +6,7 @@ impl Scaffold {
         let project_parent_dir = &self.config.project_parent_dir;
         let project_name = &self.config.project_name;
         let project_folder = format!("{}/{}", project_parent_dir, project_name);
-        let result = std::fs::create_dir_all(&project_folder)?;
+        let _ = std::fs::create_dir_all(&project_folder)?;
         Ok(project_folder)
     }
 }
