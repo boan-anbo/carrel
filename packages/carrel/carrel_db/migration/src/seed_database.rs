@@ -1,6 +1,7 @@
 use sea_orm_migration::SchemaManager;
 use uuid::Uuid;
 use carrel_utils::datetime::get_iso_string::get_now_iso_string;
+use carrel_utils::uuid::new_v4;
 use crate::m20220929_111159_create_db::{Archive, File, Project};
 use crate::Query;
 
@@ -86,6 +87,7 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
             File::CreatedAt,
             File::ModifiedAt,
             File::ArchiveId,
+            File::Uuid,
         ])
         .values_panic([
             "seed_file_description_1".into(),
@@ -98,6 +100,7 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
             get_now_iso_string().into(),
             get_now_iso_string().into(),
             1.into(),
+            Uuid::new_v4().to_string().into(),
         ]).to_owned();
 
 
@@ -118,6 +121,7 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
             File::CreatedAt,
             File::ModifiedAt,
             File::ArchiveId,
+            File::Uuid,
         ])
         .values_panic([
             "seed_file_description_2_1".into(),
@@ -130,6 +134,7 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
             get_now_iso_string().into(),
             get_now_iso_string().into(),
             2.into(),
+            new_v4().to_string().into(),
         ]).to_owned();
 
     let insert_file_2_2 = Query::insert()
@@ -145,6 +150,7 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
             File::CreatedAt,
             File::ModifiedAt,
             File::ArchiveId,
+            File::Uuid,
         ])
         .values_panic([
             "seed_file_description_2_2".into(),
@@ -157,6 +163,7 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
             get_now_iso_string().into(),
             get_now_iso_string().into(),
             2.into(),
+            new_v4().to_string().into(),
         ]).to_owned();
 
     let insert_file_2_3 = Query::insert()
@@ -172,6 +179,7 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
             File::CreatedAt,
             File::ModifiedAt,
             File::ArchiveId,
+            File::Uuid,
         ])
         .values_panic([
             "seed_file_description_2_3".into(),
@@ -184,6 +192,7 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
             get_now_iso_string().into(),
             get_now_iso_string().into(),
             2.into(),
+            new_v4().to_string().into(),
         ]).to_owned();
 
 

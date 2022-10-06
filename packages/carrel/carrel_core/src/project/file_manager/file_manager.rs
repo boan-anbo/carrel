@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use carrel_db::entities::file;
-use carrel_db::entities::file::Column;
+use carrel_db::entities::file::{Column, Model};
 use sea_orm::{ColumnTrait};
 use carrel_db::entities::prelude::*;
 use carrel_db::errors::database_error::SeaOrmDatabaseError;
@@ -28,6 +28,15 @@ pub trait ManageFileTrait {
 
     // count all files
     async fn file_count_all_files(&self) -> Result<i64, SeaOrmDatabaseError>;
+
+    // get file by uuid
+    async fn file_get_file_by_uuid(&self, archive_id: i32, uuid: &str) -> Result<Option<file::Model>, SeaOrmDatabaseError>;
+
+    // get files by uuid
+    async fn file_get_files_by_uuid(&self, archive_id: i32, uuid: Vec<String>) -> Result<Vec<file::Model>, SeaOrmDatabaseError>;
+
+    // remove files by uuid
+    async fn archive_remove_files_by_uuid(&self, archive_id: i32, uuid: Vec<String>) -> Result<u64, SeaOrmDatabaseError>;
 }
 
 
@@ -57,7 +66,7 @@ impl ManageFileTrait for CarrelDbManager {
         Ok(files)
     }
 
-    async fn archive_filter_files(&self, archive_id: i32, filter_conditions:SimpleExpr) -> Result<Vec<file::Model>, SeaOrmDatabaseError> {
+    async fn archive_filter_files(&self, archive_id: i32, filter_conditions: SimpleExpr) -> Result<Vec<file::Model>, SeaOrmDatabaseError> {
         let db = self.get_connection().await;
         let files = File::find()
             .filter(
@@ -100,6 +109,48 @@ impl ManageFileTrait for CarrelDbManager {
             .map_err(SeaOrmDatabaseError::DatabaseQueryError)?;
         Ok(count as i64)
     }
+
+    async fn file_get_file_by_uuid(&self, archive_id: i32, uuid: &str) -> Result<Option<Model>, SeaOrmDatabaseError> {
+        let db = self.get_connection().await;
+        let file = File::find()
+            .filter(Column::ArchiveId.eq(archive_id))
+            .filter(Column::Uuid.eq(uuid))
+            .one(&db)
+            .await
+            .map_err(SeaOrmDatabaseError::DatabaseQueryError)?;
+        Ok(file)
+    }
+
+    async fn file_get_files_by_uuid(&self, archive_id: i32, uuids: Vec<String>) -> Result<Vec<Model>, SeaOrmDatabaseError> {
+        let db = self.get_connection().await;
+        let files = File::find()
+            .filter(Column::ArchiveId.eq(archive_id))
+            .filter(Column::Uuid.is_in(uuids))
+            .all(&db)
+            .await
+            .map_err(SeaOrmDatabaseError::DatabaseQueryError)?;
+        Ok(files)
+    }
+
+    async fn archive_remove_files_by_uuid(&self, archive_id: i32, uuid: Vec< String>) -> Result<u64, SeaOrmDatabaseError> {
+        let db = self.get_connection().await;
+        let res = File::delete_many()
+            .filter(
+                Column::ArchiveId.eq(archive_id)
+            )
+            .filter(
+                Column::Uuid.is_in(uuid)
+            )
+            .exec(&db)
+            .await
+            .map_err(SeaOrmDatabaseError::DatabaseDeleteError)?;
+
+        if res.rows_affected > 0 {
+            Ok(res.rows_affected)
+        } else {
+            Ok(0)
+        }
+    }
 }
 
 #[cfg(test)]
@@ -108,16 +159,13 @@ mod tests {
     use sea_orm::ColumnTrait;
     use crate::project::file_manager::file_manager::ManageFileTrait;
     use crate::project::project_manager::ProjectManager;
-    use crate::test_utils::test_entities::{CarrelTester, TestEntities};
+    use crate::test_utils::carrel_tester::CarrelTester;
+    use crate::test_utils::project_tester::ProjectTester;
 
     #[tokio::test]
-    async fn test_archive_list_files(){
+    async fn test_archive_list_files() {
         // get seeded db
-        let db = CarrelTester::get_seeded_db().await;
-        let project_manager = ProjectManager{
-            db: db,
-            ..Default::default()
-        };
+        let project_manager = CarrelTester::get_project_manager_with_seeded_db().await;
 
         let files_in_archive_1 = project_manager.db.archive_list_files(1).await.unwrap();
         // one file is seeded
@@ -128,14 +176,10 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_archive_filter_files(){
-        // get seeded db
-        let db = CarrelTester::get_seeded_db().await;
-        let project_manager = ProjectManager{
-            db: db,
-            ..Default::default()
-        };
+    async fn test_archive_filter_files() {
 
+        // get seeded db
+        let project_manager = CarrelTester::get_project_manager_with_seeded_db().await;
         let pdf_files_in_archive_2 = project_manager.db.archive_filter_files(2, file::Column::Extension.like("pdf")).await.unwrap();
         // two archived pdf files are seeded
         assert_eq!(pdf_files_in_archive_2.len(), 2);
@@ -145,20 +189,20 @@ mod tests {
         assert_eq!(md_files_in_archive_2.len(), 1);
 
         let pdf_file_with_name_1
-               = project_manager.db.archive_filter_files(2,
-                                                         file::Column::Extension.like("pdf")
+            = project_manager.db.archive_filter_files(2,
+                                                      file::Column::Extension.like("pdf")
                                                           .and(file::Column::FileName.like("seed_file_name_2_1")
-                                                      )
+                                                          ),
         ).await.unwrap();
 
         // one archived pdf file with name seed_file_name_2_1 is seeded
         assert_eq!(pdf_file_with_name_1.len(), 1);
         let non_existing_file
-               = project_manager.db.archive_filter_files(2,
-                                                         file::Column::Extension.like("pdf")
+            = project_manager.db.archive_filter_files(2,
+                                                      file::Column::Extension.like("pdf")
                                                           .and(file::Column::FileName.like("non_existing_file")
-                                                      )
+                                                          ),
         ).await.unwrap();
-         assert_eq!(non_existing_file.len(), 0);
+        assert_eq!(non_existing_file.len(), 0);
     }
 }

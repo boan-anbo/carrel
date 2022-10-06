@@ -14,10 +14,10 @@ pub struct ProjectManager {
 }
 
 // impl default
-impl  Default for ProjectManager {
-    fn default() -> Self {
+impl  ProjectManager {
+    pub fn new(project_directory: &str ) -> Self {
         ProjectManager {
-            db: CarrelDbManager::default(),
+            db: CarrelDbManager::new(project_directory, &ProjectConfig::default()),
             to_manager: ToManager::default(),
             config: ProjectConfig::default(),
             project_directory: PathBuf::new(),
@@ -37,9 +37,9 @@ pub trait InitProject {
 impl InitProject for ProjectManager {
     fn from_config(config: ProjectConfig, project_directory: &str) -> Self {
         ProjectManager {
-            db: CarrelDbManager::new(config.carrel_db_file_name.to_str().unwrap(),
-                                     config.carrel_db_type
-            ),
+            db: CarrelDbManager::new(project_directory,
+                                     &config)
+            ,
             project_directory: project_directory.parse().unwrap(),
             to_manager: ToManager::new(config.to_db_file_name.to_str().unwrap()),
             archive_ids: vec![],

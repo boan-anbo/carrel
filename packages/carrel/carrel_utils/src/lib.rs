@@ -4,4 +4,5 @@ pub mod test;
 pub mod fs;
 pub mod unicode;
 pub mod datetime;
+pub mod uuid;
 

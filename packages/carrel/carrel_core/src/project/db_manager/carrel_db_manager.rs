@@ -4,40 +4,41 @@ use carrel_commons::carrel::core::project_manager::v1::CarrelDbType;
 use carrel_db::db::connect::get_connection;
 use carrel_db::errors::database_error::SeaOrmDatabaseError;
 use sea_orm::DatabaseConnection;
-use crate::project::config::const_config_file_name::{CONFIG_DEFAULT_CARREL_DB_NAME, CONFIG_DEFAULT_CARREL_DB_TYPE};
+use crate::project::config::project_config::ProjectConfig;
+use crate::project::error::project_error::ProjectError;
 
 
 pub struct CarrelDbManager {
-    pub carrel_db_path: String,
+    pub carrel_db_name: PathBuf,
     pub carrel_db_type: CarrelDbType,
+    pub project_directory: PathBuf,
+    pub carrel_db_full_path: PathBuf,
 }
 
-impl Default for CarrelDbManager {
-    fn default() -> Self {
-        CarrelDbManager {
-            carrel_db_path: CONFIG_DEFAULT_CARREL_DB_NAME.to_string(),
-            carrel_db_type: CONFIG_DEFAULT_CARREL_DB_TYPE,
-        }
-    }
-}
 
 impl CarrelDbManager {
-    pub fn new(db_path: &str, db_type: CarrelDbType) -> Self {
+    pub fn new(project_directory_path: &str, config: &ProjectConfig) -> Self {
+        // check if project_directory is directory
+        let project_directory = PathBuf::from(project_directory_path);
+        if !project_directory.is_dir() {
+            // throw error
+            return Err(ProjectError::ProjectDirectoryError( "Project directory is not a directory: ".to_string() + project_directory_path.to_string().as_str())).unwrap();
+        }
+        let carrel_db_full_path = project_directory.join(&config.carrel_db_file_name);
         CarrelDbManager {
-            carrel_db_path: db_path.to_string(),
-            carrel_db_type: db_type,
+            carrel_db_name: config.carrel_db_file_name.clone(),
+            carrel_db_type: config.carrel_db_type,
+            project_directory: project_directory_path.parse().unwrap(),
+            carrel_db_full_path,
+
         }
     }
 
-    pub fn get_db_directory(&self) -> String {
-        let db_path = PathBuf::from(self.carrel_db_path.as_str());
-        let db_directory = db_path.parent().unwrap().to_str().unwrap().to_string();
-        db_directory
-    }
 }
 
 #[async_trait]
 pub trait CarrelDbManagerTrait {
+
     // initialize the db, create the db if not exist and return the db path
     async fn init_db(&self) -> Result<String, SeaOrmDatabaseError>;
     // get connection to the db
@@ -47,19 +48,25 @@ pub trait CarrelDbManagerTrait {
 #[async_trait]
 impl CarrelDbManagerTrait for CarrelDbManager {
     async fn init_db(&self) -> Result<String, SeaOrmDatabaseError> {
+        let carrel_db_already_exists = self.carrel_db_full_path.exists();
+        if carrel_db_already_exists {
+            return Ok(self.carrel_db_full_path.to_str().unwrap().to_string());
+        }
         let db_path = match self.carrel_db_type {
             CarrelDbType::Postgresql => {
                 unimplemented!("Postgres is not implemented yet")
             }
             CarrelDbType::SqliteUnspecified => {
                 let create_db_result = carrel_db::db::migrate::init_db(
-                    self.carrel_db_path.as_str()
+                    self.carrel_db_full_path.to_str().unwrap(),
                 ).await;
 
                 // if already exist, do nothing
                 match create_db_result {
                     Ok(created_db_path) => created_db_path,
-                    Err(SeaOrmDatabaseError::DatabaseFileAlreadyExistError(_)) => self.carrel_db_path.clone(),
+                    Err(SeaOrmDatabaseError::DatabaseFileAlreadyExistError(_)) => {
+                        self.carrel_db_full_path.to_str().unwrap().to_string()
+                    }
                     Err(err) => return Err(err)
                 }
             }
@@ -68,7 +75,7 @@ impl CarrelDbManagerTrait for CarrelDbManager {
     }
 
     async fn get_connection(&self) -> DatabaseConnection {
-        get_connection(self.carrel_db_path.as_str()).await.unwrap()
+        get_connection(self.carrel_db_full_path.to_str().unwrap()).await.unwrap()
     }
 }
 
@@ -77,23 +84,24 @@ impl CarrelDbManagerTrait for CarrelDbManager {
 mod tests {
     use carrel_utils::test::test_folders::{get_random_test_temp_folder_path_buf};
     use crate::project::db_manager::project_db_manager::MangageProjects;
-    use crate::test_utils::test_entities::{CarrelTester, TestEntities};
+    use crate::project::manage_project::ManageProjectTrait;
+    use crate::project::project_manager::ProjectManager;
+    use crate::test_utils::carrel_tester::CarrelTester;
+    use crate::test_utils::project_tester::ProjectTester;
     use super::*;
 
     #[tokio::test]
     async fn test_create_project() {
         let random_db_dir = get_random_test_temp_folder_path_buf();
-        let db_path = random_db_dir.join("test.db");
-        let db_manager = CarrelDbManager::new(
-            db_path.to_str().unwrap(), CarrelDbType::SqliteUnspecified);
-
-        let _created_db_path = db_manager.init_db().await.unwrap();
+        let project_manager = ProjectManager::load(
+            random_db_dir.to_str().unwrap(),
+        ).await.unwrap();
 
 
         // create project
         let create_project = CarrelTester::get_test_create_project();
 
-        let add_project_result = db_manager.add_project(create_project).await;
+        let add_project_result = project_manager.db.add_project(create_project).await;
 
         assert!(add_project_result.is_ok());
 
@@ -101,7 +109,5 @@ mod tests {
 
         assert!(project_id > 0);
 
-        // clear up
-        let _ = std::fs::remove_dir_all(random_db_dir);
     }
 }

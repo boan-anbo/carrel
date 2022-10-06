@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use carrel_commons::carrel::core::project_manager::v1::{CarrelDbType, CreateProjectRequest};
+use carrel_commons::carrel::core::project_manager::v1::{CreateProjectRequest};
 use carrel_utils::test::test_folders::get_random_test_temp_folder_path_buf;
 use std::path::PathBuf;
 use crate::project::config::const_config_file_name::{CONFIG_DEFAULT_CARREL_DB_NAME, CONFIG_DEFAULT_CARREL_TO_NAME};
@@ -27,13 +27,12 @@ impl ProjectTester for CarrelTester {
     fn get_test_db_manager() -> CarrelDbManager {
         let random_db_dir = get_random_test_temp_folder_path_buf();
         let db_path = random_db_dir.join(CONFIG_DEFAULT_CARREL_DB_NAME);
-        CarrelDbManager::new(db_path.to_str().unwrap(), CarrelDbType::SqliteUnspecified)
+        CarrelDbManager::new(db_path.to_str().unwrap(), &ProjectConfig::default())
     }
 
     async fn get_seeded_db() -> CarrelDbManager {
         let random_db_dir = get_random_test_temp_folder_path_buf();
-        let db_path = random_db_dir.join(CONFIG_DEFAULT_CARREL_DB_NAME);
-        let db_manager = CarrelDbManager::new(db_path.to_str().unwrap(), CarrelDbType::SqliteUnspecified);
+        let db_manager = CarrelDbManager::new(random_db_dir.to_str().unwrap(), &ProjectConfig::default());
 
         let _created_db_path = db_manager.init_db().await.unwrap();
         db_manager
@@ -45,11 +44,11 @@ impl ProjectTester for CarrelTester {
         ProjectManager {
             to_manager: ToManager::default(),
             config: ProjectConfig{
-                carrel_db_file_name: PathBuf::from(seeded_db.carrel_db_path.clone()),
+                carrel_db_file_name: PathBuf::from(seeded_db.carrel_db_name.clone()),
                 to_db_file_name: CONFIG_DEFAULT_CARREL_TO_NAME.parse().unwrap(),
                 carrel_db_type: seeded_db.carrel_db_type
             },
-            project_directory: PathBuf::from(seeded_db.get_db_directory()),
+            project_directory:seeded_db.project_directory.clone(),
             project_id: 1,
             archive_ids: vec![],
             db: seeded_db,

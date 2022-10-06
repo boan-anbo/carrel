@@ -3,6 +3,7 @@ use carrel_commons::carrel::core::project_manager::v1::{ProjectInfo};
 use crate::project::archivist::archivist::{Archivist};
 use crate::project::config::const_config_file_name::CONFIG_DEFAULT_FILE_NAME;
 use crate::project::config::project_config::ProjectConfig;
+use crate::project::db_manager::carrel_db_manager::CarrelDbManagerTrait;
 use crate::project::db_manager::project_db_manager::{MangageProjects};
 use crate::project::error::project_config_error::ProjectConfigError;
 use crate::project::error::project_error::ProjectError;
@@ -14,7 +15,7 @@ use crate::project::project_manager::{InitProject, ProjectManager};
 #[async_trait::async_trait]
 pub trait ManageProjectTrait {
     // open a project from a directory
-    fn load(path: &str) -> Result<Self, ProjectError> where Self: Sized;
+    async fn load(path: &str) -> Result<Self, ProjectError> where Self: Sized;
     // check if there is a project config file under the directory
     fn is_dir_project(path: &str) -> bool;
 
@@ -29,7 +30,7 @@ pub trait ManageProjectTrait {
 
 #[async_trait::async_trait]
 impl ManageProjectTrait for ProjectManager {
-    fn load(dir_path_str: &str) -> Result<ProjectManager, ProjectError> {
+    async fn load(dir_path_str: &str) -> Result<ProjectManager, ProjectError> {
         // check if the path is valid
         if !std::path::Path::new(dir_path_str).exists() {
             return Err(ProjectFolderDoesNotExit(dir_path_str.to_string()));
@@ -44,7 +45,12 @@ impl ManageProjectTrait for ProjectManager {
         )?;
 
         // construct a project manager from the config and return
-        Ok(ProjectManager::from_config(config, dir_path_str))
+        let project_manager = ProjectManager::from_config(config, dir_path_str);
+
+        // init db if they are not initialized
+        project_manager.db.init_db().await.map_err(ProjectError::ProjectDbInitializationError).unwrap();
+
+        Ok(project_manager)
     }
 
     fn is_dir_project(dir: &str) -> bool {
@@ -123,13 +129,14 @@ impl ManageProjectTrait for ProjectManager {
 mod tests {
     use std::fs;
     use crate::project::config::const_config_file_name::{CONFIG_DEFAULT_CARREL_DB_NAME, CONFIG_DEFAULT_CARREL_TO_NAME};
-    use crate::test_utils::test_entities::{CarrelTester, TestEntities};
+    use crate::test_utils::carrel_tester::{CarrelTester};
+    use crate::test_utils::project_tester::ProjectTester;
     use super::*;
 
-    #[test]
-    fn test_load_simple_project() {
+    #[tokio::test]
+    async fn test_load_simple_project() {
         let simple_project_fixture_folder = carrel_utils::test::test_folders::get_test_fixture_module_folder_path_buf("simple_project");
-        let project_manager = ProjectManager::load(simple_project_fixture_folder.to_str().unwrap()).unwrap();
+        let project_manager = ProjectManager::load(simple_project_fixture_folder.to_str().unwrap()).await.unwrap();
         assert_eq!(project_manager.project_directory, simple_project_fixture_folder);
         let config = project_manager.config;
         assert_eq!(config.carrel_db_file_name.file_name().unwrap(), CONFIG_DEFAULT_CARREL_DB_NAME);
@@ -138,10 +145,10 @@ mod tests {
         assert_eq!(ProjectManager::is_dir_project(simple_project_fixture_folder.to_str().unwrap()), true);
     }
 
-    #[test]
-    fn test_load_empty_project() {
+    #[tokio::test]
+    async fn test_load_empty_project() {
         let empty_project_fixture_folder = carrel_utils::test::test_folders::get_test_fixture_module_folder_path_buf("empty_project");
-        let project_manager = ProjectManager::load(empty_project_fixture_folder.to_str().unwrap()).unwrap();
+        let project_manager = ProjectManager::load(empty_project_fixture_folder.to_str().unwrap()).await.unwrap();
         assert_eq!(project_manager.project_directory, empty_project_fixture_folder);
         let config = project_manager.config;
         assert_eq!(config.carrel_db_file_name.file_name().unwrap(), CONFIG_DEFAULT_CARREL_DB_NAME);

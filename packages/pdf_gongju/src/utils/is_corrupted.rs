@@ -1,6 +1,6 @@
 use std::fs::File;
 use std::io::Read;
-use crate::pdfium::get_pdfium::get_pdfium;
+use crate::pdfium::pdfium_binary::get_pdfium;
 
 pub fn is_pdf_corrupted(file_path: &str) -> bool {
     let mut file = match File::open(file_path) {

@@ -30,6 +30,12 @@ pub fn get_test_temp_path() -> String {
     tests_temp_path.to_str().unwrap().to_string()
 }
 
+// clear test_temp folder
+pub fn clear_test_temp_folder() {
+    let tests_temp_path = get_test_temp_path_buf();
+    std::fs::remove_dir_all(&tests_temp_path).unwrap();
+}
+
 /// Get the path to the test folder under Cargo root folder
 pub fn get_cargo_root_test_folder() -> PathBuf {
     let cargo_root_path = std::env::var("CARGO_MANIFEST_DIR").unwrap();

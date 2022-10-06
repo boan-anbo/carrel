@@ -52,7 +52,7 @@ message Firefly {
     repeated string extra = 14;
 
     // created time
-    string create_at = 15;
+    string created_at = 15;
 
     // updated time
     string modified_at = 16;

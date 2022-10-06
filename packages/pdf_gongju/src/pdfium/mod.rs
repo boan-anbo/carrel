@@ -1,1 +1,1 @@
-pub(crate) mod get_pdfium;
+pub(crate) mod pdfium_binary;

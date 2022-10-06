@@ -69,7 +69,8 @@ impl Archivist for CarrelDbManager {
 #[cfg(test)]
 mod test {
     use crate::project::file_manager::file_manager::ManageFileTrait;
-    use crate::test_utils::test_entities::{CarrelTester, TestEntities};
+    use crate::test_utils::carrel_tester::CarrelTester;
+    use crate::test_utils::project_tester::ProjectTester;
     use super::*;
 
     // make sure delete archive cascade deletes files
@@ -90,11 +91,6 @@ mod test {
         db_manager.project_remove_archive(2).await.unwrap();
         let all_files_after_delete_second_archive = db_manager.file_list_all_files().await.unwrap();
         assert_eq!(all_files_after_delete_second_archive.len(), 0);
-
-
-
-
-
 
     }
 }

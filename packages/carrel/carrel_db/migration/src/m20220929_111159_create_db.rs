@@ -35,6 +35,7 @@ pub(crate) enum Archive {
 pub(crate) enum File {
     Table,
     Id,
+    Uuid,
     Description,
     FileName,
     Extension,
@@ -125,6 +126,18 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .auto_increment()
                             .primary_key(),
+                    )
+                    .col(
+                        ColumnDef::new(File::Uuid)
+                            .uuid()
+                            .not_null()
+                    )
+                    .index(
+                        Index::create()
+                            .name("idx_file_uuid")
+                            .table(File::Table)
+                            .col(File::Uuid)
+                            .unique()
                     )
                     .col(ColumnDef::new(File::Description).string().not_null())
                     .col(ColumnDef::new(File::FileName).string().not_null())

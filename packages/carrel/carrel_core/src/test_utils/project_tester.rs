@@ -8,7 +8,7 @@
 //!
 use async_trait::async_trait;
 use carrel_commons::carrel::core::project_manager::v1::CreateProjectRequest;
-use crate::project::db_manager::carrel_db_manager::{CarrelDbManager, CarrelDbManagerTrait};
+use crate::project::db_manager::carrel_db_manager::{CarrelDbManager};
 use crate::project::project_manager::ProjectManager;
 
 #[async_trait]
@@ -41,7 +41,7 @@ mod test {
         assert_eq!(archive2.name, "seed_archive_2");
 
         // clear the dr
-        let db_path = PathBuf::from(db_manager.carrel_db_path.as_str());
+        let db_path = PathBuf::from(db_manager.carrel_db_name.to_str().unwrap());
         let db_folder = db_path.parent().unwrap();
 
 

@@ -5,29 +5,38 @@ package carrel.server.project_manager.v1;
 
 
 import "carrel/core/project_manager/v1/project_manager_v1.proto";
+import "carrel/common/file/v1/file_v1.proto";
 
 
 // services
 service ProjectManagerService {
   // open project, return empty response if success
-  rpc OpenProject (OpenProjectRequest) returns (OpenProjectResponse) {}
-  // get project information
-  rpc GetProjectInfo (GetProjectInfoRequest) returns (GetProjectInfoResponse) {}
+  rpc OpenProjectAndGetInfo (OpenProjectAndGetInfoRequest) returns (OpenProjectAndGetInfoResponse) {}
 
+  // get project information
   // add archive
   rpc AddArchive (AddArchiveRequest) returns (AddArchiveResponse) {}
+
+  // list all files
+  rpc GetArchiveFiles (GetArchiveFilesRequest) returns (GetArchiveFilesResponse) {}
+
+  // add file paths to project archive
+  rpc AddFilesToArchive (AddFilesToArchiveRequest) returns (AddFilesToArchiveResponse) {}
+
+  // remove file paths from project archive
+  rpc RemoveFilesFromArchive (RemoveFilesFromArchiveRequest) returns (RemoveFilesFromArchiveResponse) {}
 }
 
 // message to open a project
-message OpenProjectRequest {
+message OpenProjectAndGetInfoRequest {
   // the id of the project
-  int32 project_id = 1;
+  string project_directory = 1;
 }
 
 // message to open a project
-message OpenProjectResponse {
+message OpenProjectAndGetInfoResponse {
   // the id of the project
-  int32 project_id = 1;
+  carrel.core.project_manager.v1.ProjectInfo project_info = 1;
 }
 
 // message to get project information
@@ -61,4 +70,77 @@ message AddArchiveResponse {
   int32 project_id = 3;
 // the id of the archive
   int32 archive_id = 4;
+}
+
+// message to get archive files
+message GetArchiveFilesRequest {
+  // the folder of the project
+  string project_directory = 1;
+  // the id of the project
+  int32 project_id = 2;
+  // the id of the archive
+  int32 archive_id = 3;
+}
+
+// message to get archive files
+message GetArchiveFilesResponse {
+  // the folder of the project
+  string project_directory = 1;
+  // the id of the project
+  int32 project_id = 2;
+  // the id of the archive
+  int32 archive_id = 3;
+  // the list of files
+  repeated carrel.common.file.v1.File files = 4;
+}
+
+
+// message to add files to archive
+message AddFilesToArchiveRequest {
+  // the folder of the project
+  string project_directory = 1;
+  // the id of the project
+  int32 project_id = 2;
+  // the id of the archive
+  int32 archive_id = 3;
+  // the list of files
+  repeated string file_paths = 4;
+}
+
+// message to add files to archive
+message AddFilesToArchiveResponse {
+  // the folder of the project
+  string project_directory = 1;
+  // the id of the project
+  int32 project_id = 2;
+  // the id of the archive
+  int32 archive_id = 3;
+  // the list of files
+  repeated carrel.common.file.v1.File files = 4;
+}
+
+
+// message to remove files from archive
+message RemoveFilesFromArchiveRequest {
+  // the folder of the project
+  string project_directory = 1;
+  // the id of the project
+  int32 project_id = 2;
+  // the id of the archive
+  int32 archive_id = 3;
+  // the list of files
+  repeated string file_uuids = 4;
+}
+
+// message to remove files from archive
+message RemoveFilesFromArchiveResponse {
+  // the folder of the project
+  string project_directory = 1;
+  // the id of the project
+  int32 project_id = 2;
+  // the id of the archive
+  int32 archive_id = 3;
+  int64 affected_rows = 4;
+  // bool when affected rows is 0
+  bool is_affacted_rows_zero = 5;
 }
