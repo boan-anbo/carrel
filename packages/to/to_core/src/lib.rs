@@ -36,3 +36,4 @@ pub mod to_ticket;
 pub(crate) mod utils;
 // Handles files etc.
 pub(crate) mod fs;
+pub mod orm;

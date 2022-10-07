@@ -6,6 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [features]
 
+[workspace]
+members = ["", "entity", "to_core_migration"]
+
 
 [dependencies]
 nanoid = "0.4.0"
@@ -26,5 +29,19 @@ ctor = "0.1.0"
 proc-macro-error = "1.0"
 strum = "0.24.1"
 strum_macros = "0.24.3"
+thiserror = "1.0.29"
+to_core_migration = {path = "to_core_migration"}
+async-trait = "0.1.57"
+
+sea-orm={version = "0.9.2", features = [
+    "sqlx-sqlite",
+    "runtime-tokio-rustls",
+    "mock",
+    "macros",
+    "debug-print",
+    "uuid"
+]}
+
+
 [dev-dependencies]
 carrel_utils = { path = "../../carrel/carrel_utils"}

@@ -26,6 +26,9 @@ pub mod carrel {
             pub mod v1 {
                 include!("generated/carrel_common_tag_v1.rs");
             }
+            pub mod v2 {
+                include!("generated/carrel_common_tag_v2.rs");
+            }
         }
 
         // context
@@ -56,6 +59,9 @@ pub mod carrel {
         pub mod firefly {
             pub mod v1 {
                 include!("generated/carrel_common_firefly_v1.rs");
+            }
+            pub mod v2 {
+                include!("generated/carrel_common_firefly_v2.rs");
             }
         }
 

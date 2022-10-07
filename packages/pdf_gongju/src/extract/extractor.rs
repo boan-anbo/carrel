@@ -1,104 +1,59 @@
-use thiserror::Error;
-use carrel_commons::carrel::common::firefly::v1::Firefly;
-use carrel_commons::carrel::common::passage::v1::Passage;
-use carrel_commons::carrel::common::snippet::v1::Snippet;
-use pdfium_render::prelude::*;
-use crate::pdfium::pdfium_binary::get_pdfium;
+use log::info;
 
+use carrel_commons::carrel::common::firefly::v2::Firefly;
+use simplelog::{ColorChoice, CombinedLogger, Config, LevelFilter, TerminalMode, TermLogger};
+use crate::extract::convert_annot_to_firefly::convert_pdf_annotation_to_firefly;
+use crate::extract::errors::PdfGongjuError;
+use crate::extract::extractor_options::ExtractorOption;
+use crate::extract::should_process_type::should_process;
+use crate::pdfium::pdfium_binary::get_pdfium;
 
 pub struct PdfGongju {}
 
 pub trait PdfExtractor {
-    fn extract_fireflies(pdf_path: &str) -> Result<Vec<Firefly>, String>;
-}
-
-fn convert_pdf_annotation_to_firefly(page: &PdfPage, page_index: usize, annot: PdfPageAnnotation) -> Firefly {
-    // initial firefly
-    let mut firefly = Firefly::default();
-
-    // modified
-    let modified_tag = annot.modification_date().unwrap_or("".to_string());
-    firefly.modified_at = modified_tag;
-
-    let created = annot.creation_date().unwrap_or("".to_string());
-    firefly.created_at = created;
-
-    firefly.description = match annot.annotation_type() {
-        PdfPageAnnotationType::Highlight => "highlight".to_string(),
-        PdfPageAnnotationType::Underline => "underline".to_string(),
-        PdfPageAnnotationType::Squiggly => "squiggly".to_string(),
-        PdfPageAnnotationType::Ink => "ink".to_string(),
-        PdfPageAnnotationType::Link => "link".to_string(),
-        PdfPageAnnotationType::Popup => "popup".to_string(),
-        PdfPageAnnotationType::FileAttachment => "fileattachment".to_string(),
-        PdfPageAnnotationType::Text => "text".to_string(),
-        _ => "unknown".to_string()
-    };
-
-    firefly.extra.push(annot.contents().unwrap_or("".to_string()));
-
-    // initial passage
-    let mut passage = Passage::default();
-
-    passage.location = page_index.to_string();
-
-
-    // initial snippet
-    let mut snippet = Snippet::default();
-
-    // extract
-    let annot_text = page.text().unwrap().for_annotation(&annot).unwrap();
-
-    // load text
-    snippet.snippet = annot_text;
-
-
-    // load values to firefly
-    firefly.snippet = Some(snippet);
-    firefly.passage = Some(passage);
-
-    firefly
-}
-
-
-#[derive(Error, Debug)]
-pub enum PdfGongjuError {
-    #[error("Failed to load pdfium")]
-    LoadPdfiumError,
-    #[error("Failed to load pdf: {0}")]
-    LoadPdfError(String),
-    #[error("Failed to load pdf page")]
-    LoadPdfPageError,
-    #[error("Failed to load pdf annotation")]
-    LoadPdfAnnotationError,
+    fn extract_fireflies(pdf_path: &str, opt: &ExtractorOption) -> Result<Vec<Firefly>, String>;
 }
 
 impl PdfExtractor for PdfGongju {
-    fn extract_fireflies(pdf_path: &str) -> Result<Vec<Firefly>, String> {
+    fn extract_fireflies(pdf_path: &str, opt: &ExtractorOption) -> Result<Vec<Firefly>, String> {
+        CombinedLogger::init(
+            vec![
+                TermLogger::new(LevelFilter::Warn, Config::default(), TerminalMode::Mixed, ColorChoice::Auto),
+            ]
+        ).unwrap();
+
+
         let mut fireflies: Vec<Firefly> = Vec::new();
         let pdfium = get_pdfium();
 
-        pdfium
+        let doc = pdfium
             .load_pdf_from_file(pdf_path, None)
-            .map_err(|_| PdfGongjuError::LoadPdfError(pdf_path.to_string())).unwrap()
-            .pages()
+            .map_err(|_| PdfGongjuError::LoadPdfError(pdf_path.to_string())).unwrap();
+
+        info!("Loaded PDF: {}", pdf_path);
+
+
+
+        doc.pages()
             .iter()
             .enumerate()
             .for_each(|(page_index, page)| {
-                // For each page in the document, iterate over the annotations attached to that page.
-
-                println!("=============== Page {} ===============", page_index);
-
                 page.annotations()
                     .iter()
                     .enumerate()
-                    .for_each(|(annotation_index, annotation)| {
+                    .for_each(|(_annotation_index, annotation)| {
+                        if !should_process(&annotation.annotation_type()) {
+                            return;
+                        }
+
                         fireflies.push(
-                            convert_pdf_annotation_to_firefly(&page, page_index, annotation)
+                            convert_pdf_annotation_to_firefly(&page, page_index, annotation, pdf_path, opt)
                         )
                     });
             });
 
+        // log how many fireflies were extracted from which file
+        info!("Extracted {} fireflies from {}", fireflies.len(), pdf_path);
 
         Ok(fireflies)
     }
@@ -107,18 +62,105 @@ impl PdfExtractor for PdfGongju {
 #[cfg(test)]
 mod tests {
     use carrel_utils::test::test_folders::get_test_fixture_module_folder_path_buf;
-    use serde_json::json;
     use crate::extract::extractor::{PdfExtractor, PdfGongju};
+    use crate::extract::extractor_options::ExtractorOption;
 
     #[test]
     fn test_extract_fireflies() {
-        let fireflies = PdfGongju::extract_fireflies("tests/chn.pdf").unwrap();
+        let fireflies = PdfGongju::extract_fireflies("tests/chn.pdf", &ExtractorOption {
+            firefly_include_full_text: true,
+            ..Default::default()
+        }).unwrap();
         let fireflies_pretty_json = serde_json::to_string_pretty(&fireflies).unwrap();
 
         // write to fixture
         let fixture_dir = get_test_fixture_module_folder_path_buf("extractor");
         std::fs::write(fixture_dir.join("fireflies.json"), fireflies_pretty_json).unwrap();
 
-        assert_eq!(fireflies.len(), 2);
+        // first annot
+        let first_annot = &fireflies[0];
+        assert_eq!(first_annot.light, "中國知識份子的邊緣化");
+        assert_eq!(first_annot.description, "Highlight");
+        assert_eq!(first_annot.created_at, "2022-08-22T23:52:45+05:00");
+        assert_eq!(first_annot.modified_at, "2022-08-22T23:52:58+05:00");
+
+        // check comment
+        assert_eq!(first_annot.comment, "Page 0: Highlight Text");
+        assert_eq!(first_annot.comment_author, "Bo");
+        assert_eq!(first_annot.comment_created_at, "2022-08-22T23:52:45+05:00");
+        assert_eq!(first_annot.comment_modified_at, "2022-08-22T23:52:58+05:00");
+
+        // check page
+        assert_eq!(first_annot.location_raw, "0");
+        assert_eq!(first_annot.location_actual, "0");
+
+        // check file
+        assert_eq!(first_annot.file_full_name, "chn.pdf");
+        assert_eq!(first_annot.file_extension, "pdf");
+        assert!(first_annot.file_directory.ends_with("tests"));
+
+        // check document
+        assert_eq!(first_annot.document_title, "chn");
+
+        // check full text
+        assert!(first_annot.context.len() > 0);
+
+        // second annot
+        let second_annot = &fireflies[1];
+        assert_eq!(second_annot.light, "我想借這個機會提出一個比較有趣的問題，供大家討論，");
+        assert_eq!(second_annot.description, "Underline");
+
+        // check comment
+        assert_eq!(second_annot.comment, "Page 0: Underline 中文");
+        assert_eq!(second_annot.comment_author, "Bo");
+    }
+
+    // test on corrupted pdf, should panic
+    #[test]
+    #[should_panic]
+    fn test_extract_fireflies_corrupted_pdf() {
+        let fireflies = PdfGongju::extract_fireflies("tests/corrupted.pdf", &ExtractorOption {
+            firefly_include_full_text: true,
+            ..Default::default()
+        }).unwrap();
+    }
+
+    // test chn_ocred.pdf, should not panic
+    #[test]
+    fn test_extract_fireflies_chn_ocred_pdf() {
+        let fireflies = PdfGongju::extract_fireflies("tests/chn_ocred.pdf", &ExtractorOption {
+            firefly_include_full_text: true,
+            ..Default::default()
+        }).unwrap();
+
+        // first annot
+        let first_annot = &fireflies[0];
+        assert!(first_annot.light.starts_with(r#"“你们 工作太 松哪。"#));
+        assert!(first_annot.comment.starts_with(r#"中文评论第一行"#));
+        assert_eq!(first_annot.location_raw, "4");
+        assert_eq!(first_annot.document_pages, 245);
+    }
+
+    // test pdf_with_tags.pdf, should not panic
+    #[test]
+    fn test_extract_fireflies_pdf_with_tags() {
+        let fireflies = PdfGongju::extract_fireflies("tests/pdf_with_tags.pdf", &ExtractorOption {
+            firefly_include_full_text: true,
+            ..Default::default()
+        }).unwrap();
+
+        // first annot
+        let first_annot = &fireflies[0];
+
+        assert_eq!(first_annot.comment, "beforeafter");
+        assert_eq!(first_annot.tags.len(), 1);
+        let first_tag = &first_annot.tags[0];
+
+        assert_eq!(first_tag.key, "Important");
+
+        assert_eq!(first_tag.value, Some("Important_value".to_string()));
+         assert_eq!(first_tag.note, Some("important_note".to_string()));
+
+
     }
 }

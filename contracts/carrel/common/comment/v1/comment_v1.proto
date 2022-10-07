@@ -10,11 +10,11 @@ message Comment {
     string content = 2;
     //  author
     string author = 3;
-    //  created, UNIX timestamp
-    int64 created = 4;
+    //  ISO string
+    string created_at = 4;
     
-    //  updated 
-    int64 updated = 5;
+    //  ISO string 
+    string modified_at = 5;
 
 
 

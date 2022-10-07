@@ -1,3 +1,4 @@
+use std::default::Default;
 use async_trait::async_trait;
 use carrel_commons::carrel::core::project_manager::v1::{CreateProjectRequest};
 use carrel_utils::test::test_folders::get_random_test_temp_folder_path_buf;
@@ -5,8 +6,8 @@ use std::path::PathBuf;
 use crate::project::config::const_config_file_name::{CONFIG_DEFAULT_CARREL_DB_NAME, CONFIG_DEFAULT_CARREL_TO_NAME};
 use crate::project::config::project_config::ProjectConfig;
 use crate::project::db_manager::carrel_db_manager::{CarrelDbManager, CarrelDbManagerTrait};
-use crate::project::project_manager::ProjectManager;
-use crate::project::to_manager::to_manager::ToManager;
+use crate::project::project_manager::{ProjectManager, ToManagerOption};
+use crate::project::to_manager::to_manager::{ManageTo, ToManager};
 use crate::test_utils::project_tester::ProjectTester;
 
 // helper to test the project manager
@@ -41,18 +42,24 @@ impl ProjectTester for CarrelTester {
     async fn get_project_manager_with_seeded_db() -> ProjectManager {
         let seeded_db = CarrelTester::get_seeded_db().await;
 
+        let to = ToManager::new(
+                seeded_db.project_directory.to_str().unwrap(),
+                CONFIG_DEFAULT_CARREL_TO_NAME
+                ,
+                ToManagerOption::default(),
+            ).await;
+
         ProjectManager {
-            to_manager: ToManager::default(),
-            config: ProjectConfig{
+            config: ProjectConfig {
                 carrel_db_file_name: PathBuf::from(seeded_db.carrel_db_name.clone()),
                 to_db_file_name: CONFIG_DEFAULT_CARREL_TO_NAME.parse().unwrap(),
-                carrel_db_type: seeded_db.carrel_db_type
+                carrel_db_type: seeded_db.carrel_db_type,
             },
-            project_directory:seeded_db.project_directory.clone(),
+            project_directory: seeded_db.project_directory.clone(),
             project_id: 1,
             archive_ids: vec![],
+            to,
             db: seeded_db,
         }
-
     }
 }

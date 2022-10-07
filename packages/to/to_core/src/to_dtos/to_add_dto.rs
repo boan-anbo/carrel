@@ -15,7 +15,7 @@ use crate::utils::get_random_test_database_dir::get_random_test_database_dir;
 use crate::utils::id_generator::generate_id;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct TextualObjectStoredReceipt {
+pub struct ToStoredReceipt {
     // <Unique_Store_Id, Stored_Textual_Object>
     pub tos_stored: IndexMap<String, TextualObject>,
     // <Unique_Store_Id, Stored_Textual_Object>
@@ -27,9 +27,9 @@ pub struct TextualObjectStoredReceipt {
 
 // create receipt From TextualObjectStoredReceipt
 
-impl From<ToAddManyDto> for TextualObjectStoredReceipt {
-    fn from(add_tos_dto: ToAddManyDto) -> Self {
-        let mut receipt = TextualObjectStoredReceipt {
+impl From<ToAddManyRequest> for ToStoredReceipt {
+    fn from(add_tos_dto: ToAddManyRequest) -> Self {
+        let mut receipt = ToStoredReceipt {
             tos_stored: IndexMap::new(),
             store_info: String::new(),
             store_url: add_tos_dto.store_dir,
@@ -44,10 +44,10 @@ impl From<ToAddManyDto> for TextualObjectStoredReceipt {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct ToAddManyDto {
+pub struct ToAddManyRequest {
     // list of textual objects to add, String is the unique source id.
     // this is so that the recept will provide a list of unique ids with stored textual objects.
-    pub tos: Vec<ToAddDto>,
+    pub tos: Vec<ToAddRequest>,
     // whether when there is an existing TO in the store with the same source_id, replace it with the new item.
     pub overwrite: bool,
     pub store_info: Option<String>,
@@ -58,9 +58,9 @@ pub struct ToAddManyDto {
 }
 
 // impl default
-impl Default for ToAddManyDto {
+impl Default for ToAddManyRequest {
     fn default() -> Self {
-        ToAddManyDto {
+        ToAddManyRequest {
             tos: Vec::new(),
             overwrite: false,
             store_info: None,
@@ -71,9 +71,9 @@ impl Default for ToAddManyDto {
     }
 }
 
-impl ToAddManyDto {
+impl ToAddManyRequest {
     pub fn sample() -> Self {
-        let mut sample_dto = ToAddManyDto {
+        let mut sample_dto = ToAddManyRequest {
             tos: Vec::new(),
             overwrite: false,
             store_info: Some("Random Store Info".to_string()),
@@ -82,7 +82,7 @@ impl ToAddManyDto {
             card_map_rules: Vec::new(),
         };
         for _ in 0..10 {
-            sample_dto.tos.push(ToAddDto::sample());
+            sample_dto.tos.push(ToAddRequest::sample());
         }
         sample_dto
     }
@@ -140,7 +140,7 @@ impl ToAddManyDto {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct ToAddDto {
+pub struct ToAddRequest {
     // unique ID of the item in the source
     pub source_id: Option<String>,
     // eg Zotero URI or Zotero Citekey are two types of `source_id`
@@ -155,9 +155,9 @@ pub struct ToAddDto {
 }
 
 // impl default
-impl Default for ToAddDto {
+impl Default for ToAddRequest {
     fn default() -> Self {
-        ToAddDto {
+        ToAddRequest {
             source_id: None,
             source_id_type: None,
             source_path: None,
@@ -167,9 +167,9 @@ impl Default for ToAddDto {
     }
 }
 
-impl ToAddDto {
+impl ToAddRequest {
     pub fn sample() -> Self {
-        ToAddDto {
+        ToAddRequest {
             source_id: Some("source_id_value".to_string()),
             source_id_type: Some("source_id_type_value".to_string()),
             source_path: Some("source_path_value".to_string()),
@@ -193,8 +193,8 @@ impl ToAddDto {
 }
 
 // implement from dto to textual object
-impl From<ToAddDto> for TextualObject {
-    fn from(dto: ToAddDto) -> Self {
+impl From<ToAddRequest> for TextualObject {
+    fn from(dto: ToAddRequest) -> Self {
         let ticket_id = generate_id();
         // create a new textual object, ready to persist to the database
         let mut to = TextualObject {
@@ -251,7 +251,7 @@ mod test {
             }
         });
 
-        let dto = ToAddDto {
+        let dto = ToAddRequest {
             source_id: Some("source_id_value".to_string()),
             source_id_type: Some("source_id_type_value".to_string()),
             source_path: Some("source_path_value".to_string()),
@@ -269,7 +269,7 @@ mod test {
     // test validity check for add many dto
     #[test]
     fn test_are_textual_objects_valid() {
-        let dto = ToAddManyDto {
+        let dto = ToAddManyRequest {
             tos: vec![],
             ..Default::default()
         };

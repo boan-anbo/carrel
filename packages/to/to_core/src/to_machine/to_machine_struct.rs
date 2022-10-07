@@ -5,7 +5,7 @@ use sqlx::{Pool, Sqlite};
 
 use crate::db::db_op::{connect_to_database, initialize_database, join_db_path};
 use crate::enums::store_type::StoreType;
-use crate::to_dtos::to_add_dto::ToAddManyDto;
+use crate::to_dtos::to_add_dto::ToAddManyRequest;
 use crate::to_dtos::to_find_dto::ToFindRequestDto;
 use crate::to_machine::to_machine_option::ToMachineOption;
 use crate::utils::id_generator::generate_id;
@@ -15,6 +15,11 @@ use crate::utils::split_store_path::split_store_path;
 /// The main entry point of TO application. This needs to be written in as many languages as there is a need for.
 /// This is the Rust version.
 ///
+/// # Examples
+///
+/// ```
+///
+/// ```
 #[derive(Debug, Clone)]
 pub struct ToMachine {
     // store type
@@ -112,8 +117,8 @@ impl ToMachine {
         tom
     }
 
-    // initialize ToM from TextualObjectAddManyDto
-    pub async fn new_from_add_dto(dto: &ToAddManyDto) -> Self {
+    // instantiate ToM from TextualObjectAddManyDto
+    pub async fn new_with_add_request(dto: &ToAddManyRequest) -> Self {
         ToMachine::new(
             &dto.store_dir,
             StoreType::SQLITE,
@@ -127,8 +132,8 @@ impl ToMachine {
         .await
     }
 
-    // initialize ToM from TextualObjectFindRequestDto
-    pub async fn new_from_find_dto(dto: &ToFindRequestDto) -> Self {
+    // instantiate ToM from TextualObjectFindRequestDto
+    pub async fn new_with_find_request(dto: &ToFindRequestDto) -> Self {
         // check if store_full_path is provided, if not, use dir and filename
 
         let (dir, filename) = split_store_path(&dto.store_url);

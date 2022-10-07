@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+
+
+import "carrel/common/tag/v2/tag_v2.proto";
+ 
+import "carrel/common/importance/v1/importance_v1.proto";
+
+
+    // context
+// A key unit of extracted useful information from a document.
+// Compared to Passage, a card is annotated with a selection of key text, and even comments and importance.
+// V2: completely flatten the structure, using single fields.
+package carrel.common.firefly.v2;
+
+message Firefly {
+    // Uuid of the source.
+    string uuid = 1;
+    string title = 2;
+    // meta description
+    string description = 3;
+    // main content, such as a highlighted sentence
+    string light = 4;
+    // main context, usually the relevant part, such as a paragraph
+    string context = 5;
+    // full text, such as the whole document, full text of the article etc
+    string full_text = 6;
+    // my comment
+    string comment = 7;
+    // comment author
+    string comment_author = 8;
+    // comment created time
+    string comment_created_at = 9;
+    // comment modified time
+    string comment_modified_at = 10;
+
+    // importance
+    carrel.common.importance.v1.Importance importance = 11;
+    // location, this should be the actuion location, e.g. the actual page number of a page as in print.
+    string location_actual = 12;
+    // location type, e.g. page, url, etc
+    string location_actual_type = 13;
+    
+    // location, this could be raw location such as the index in a pdf file which does not correspond to the actual page number.
+    string location_raw = 14;
+    string location_raw_type = 15;
+
+    // source document title
+    string document_title = 16;
+    // source document description
+    string document_description = 17;
+    // source document reference
+    string document_reference = 18;
+    // source document publication year
+    int64 document_publication_year = 19;
+    // source document publication datetime
+    string document_publication_datetime = 20;
+    // source document author
+    string document_author = 21;
+    // any other metadata about the document
+    map<string, string> document_metadata = 22;
+
+    // source document id, citekey
+    string document_id = 23;
+    // source document id type, e.g. citekey
+    string document_id_type = 24;
+
+    // document straoge id, e.g. Zotero id, or database id, where the document is stored
+    string document_storage_id = 25;
+    // document storage id type, e.g. Zotero
+    string document_storage_id_type = 26;
+    // document storage url, e.g. Zotero url or sqlite url
+    string document_storage_url = 27;
+
+    // file directory, C:/Users/xxx/Documents/xxx
+    string file_directory =     28;
+    // file full name, a.pdf
+   string file_full_name =          29;
+   // file extension, pdf
+    string file_extension = 30;
+    string file_full_path = 31;
+
+    // the tag that is used to select the firefly
+    carrel.common.tag.v2.Tag select_tag = 32;
+    // tags
+    repeated carrel.common.tag.v2.Tag tags = 33;
+
+    // storage unique id, for this firefly
+    string storage_id_str = 34;
+    // storage numerical id, for this firefly
+    int64 storage_id_int = 35;
+    // storage description
+    string storage_description = 36;
+    // storage url, e.g. file name of the db
+    string storage_url = 37;
+
+    // created time
+    string created_at = 38;
+
+    // modified time
+    string modified_at = 39;
+
+    // extraction time, the last time the firefly is extracted from the document
+    string extracted_at = 40;
+
+    // last time this is viewed
+    string viewed_at = 41;
+
+    // collection ids, a group of uuids to describe the collections that the firefly belongs to
+    repeated string collection_uuids = 42;
+
+    // meta data
+    map<string, string> metadata = 43;
+
+    // additional comments, map<ISO Datetime, Comment>
+    map<string, string> more_comments = 44;
+
+    // location actual modified at
+    string location_actual_modified_at = 45;
+
+    // document pages
+    int64 document_pages = 46;
+
+    // unique id, this is diffferent from uuid.
+    // e.g. for a pdf annotation, this is the modified_at
+    // e.g. for a firefly extracted from the textfile, this should the modified date of 
+    string unique_id = 47;
+
+}
