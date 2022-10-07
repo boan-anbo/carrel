@@ -9,9 +9,12 @@ use crate::project::error::project_config_error::ProjectConfigError;
 use crate::project::error::project_error::ProjectError;
 use crate::project::error::project_error::ProjectError::ProjectFolderDoesNotExit;
 use crate::project::file_manager::file_manager::{ManageFileTrait};
-use crate::project::project_manager::{InitProject, ProjectManager};
+use crate::project::project_manager::{InstantiateFromConfig, ProjectManager};
+use crate::project::to_manager::to_manager::ManageTo;
 
-/// Methods for managing a project that is already initialized.
+/// Methods for managing a project that is already instantiated.
+///
+/// Common tasks include init the db.
 #[async_trait::async_trait]
 pub trait ManageProjectTrait {
     // open a project from a directory
@@ -45,10 +48,13 @@ impl ManageProjectTrait for ProjectManager {
         )?;
 
         // construct a project manager from the config and return
-        let project_manager = ProjectManager::from_config(config, dir_path_str);
+        let project_manager = ProjectManager::from_config(config, dir_path_str).await;
 
-        // init db if they are not initialized
+        // init carrel db if they are not initialized
         project_manager.db.init_db().await.map_err(ProjectError::ProjectDbInitializationError).unwrap();
+
+        // init to db
+        project_manager.to.init_to_db().await;
 
         Ok(project_manager)
     }

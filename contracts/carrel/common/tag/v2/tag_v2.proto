@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+
+package carrel.common.tag.v2;
+
+
+/// A common tag for carrel system.
+message Tag {
+    string key = 1;
+    optional string value = 2;
+    optional string note = 3;
+    string raw_tag_string = 4;
+    string uuid = 5;
+    repeated string collection_uuids = 6;
+    repeated string related_tag_uuids = 7;
+}

@@ -1,8 +1,9 @@
 use crate::error::ToErrors;
 use std::collections::HashMap;
+use to_core_migration::async_trait::async_trait;
 
 use crate::to::to_struct::TextualObject;
-use crate::to_dtos::to_add_dto::{TextualObjectStoredReceipt, ToAddManyDto};
+use crate::to_dtos::to_add_dto::{ToStoredReceipt, ToAddManyRequest};
 use crate::to_dtos::to_find_dto::{ToFindRequestDto, ToFindResultDto};
 use crate::to_dtos::to_scan_dto::{ToScanRequestDto, ToScanResultDto};
 use crate::to_machine::to_machine_struct::ToMachine;
@@ -10,14 +11,39 @@ use crate::to_parser::parser::ToParser;
 use crate::to_parser::parser_option::ToParserOption;
 use crate::to_ticket::to_ticket_struct::ToTicket;
 
-impl ToMachine {
+#[async_trait]
+pub trait ToMPubMethods {
     /// add from TextualObjectAddManyDto, main method for adding from dto
     async fn add_tos(
         &mut self,
-        add_tos_dto: ToAddManyDto,
-    ) -> Result<TextualObjectStoredReceipt, ToErrors> {
+        add_tos_dto: ToAddManyRequest,
+    ) -> Result<ToStoredReceipt, ToErrors>;
+    /// find TOs by ticket ids
+    async fn find_tos_by_ticket_ids(
+        &mut self,
+        find_request_dto: &ToFindRequestDto,
+    ) -> Result<ToFindResultDto, ToErrors>;
+    /// This is higher level than find_tos_by_ticket_ids, for it classify the results into found and missing
+    async fn find_by_ticket_ids(
+        &mut self,
+        ticket_ids: &Vec<String>,
+    ) -> (Vec<TextualObject>, Vec<String>);
+    // find TOs by text
+    async fn find_tos_by_text(
+        &mut self,
+        scan_request: &ToScanRequestDto,
+    ) -> Result<ToScanResultDto, ToErrors>;
+}
+
+#[async_trait]
+impl ToMPubMethods for ToMachine {
+    /// add from TextualObjectAddManyDto, main method for adding from dto
+    async fn add_tos(
+        &mut self,
+        add_tos_req: ToAddManyRequest,
+    ) -> Result<ToStoredReceipt, ToErrors> {
         // validate dto
-        let is_valid = add_tos_dto.is_valid();
+        let is_valid = add_tos_req.is_valid();
         match is_valid {
             Ok(_) => {}
             Err(e) => {
@@ -27,10 +53,10 @@ impl ToMachine {
         // get pool
         let _pool = self.get_pool().await;
         // create receipt
-        let mut receipt = TextualObjectStoredReceipt::from(add_tos_dto.clone());
+        let mut receipt = ToStoredReceipt::from(add_tos_req.clone());
         // iterate over tos IndexMap
         // interate over tos IndexMap asynchronously
-        for to_to_add in add_tos_dto.tos.iter() {
+        for to_to_add in add_tos_req.tos.iter() {
             // convert
             let mut to = TextualObject::from(to_to_add.clone());
 
@@ -137,6 +163,7 @@ impl ToMachine {
     }
 }
 
+
 // test
 #[cfg(test)]
 mod test {
@@ -145,20 +172,21 @@ mod test {
     use crate::error::error_message::ToErrorMessage;
     use crate::error::ToErrors;
     use crate::to::to_struct::TextualObject;
-    use crate::to_dtos::to_add_dto::ToAddManyDto;
+    use crate::to_dtos::to_add_dto::ToAddManyRequest;
     use crate::to_dtos::to_find_dto::ToFindRequestDto;
     use crate::to_machine::to_machine_option::ToMachineOption;
     use crate::to_machine::to_machine_struct::ToMachine;
     use crate::utils::get_random_test_database_dir::get_random_test_database_dir;
     use crate::utils::id_generator::generate_id;
     use std::fmt::Debug;
+    use crate::to_machine::to_machine_pub_op::ToMPubMethods;
 
     // test add_tos
     #[tokio::test]
     async fn test_add_tos() {
         //
         // create add_tos_dto
-        let add_tos_dto = ToAddManyDto::sample();
+        let add_tos_dto = ToAddManyRequest::sample();
 
         // get resources test folder
 
@@ -210,7 +238,7 @@ mod test {
     async fn test_add_tos_invalid() {
         //
         // create add_tos_dto
-        let add_tos_dto = ToAddManyDto::sample();
+        let add_tos_dto = ToAddManyRequest::sample();
         let mut invalid_add_tos_dto = add_tos_dto.clone();
         invalid_add_tos_dto.tos.clear();
         // get resources test folder

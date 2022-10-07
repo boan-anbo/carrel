@@ -5,12 +5,17 @@ fn main() {
     let proto_files = vec![
         // commons
         "carrel/common/tag/v1/tag_v1.proto",
+        "carrel/common/tag/v2/tag_v2.proto",
+
         "carrel/common/file/v1/file_v1.proto",
         "carrel/common/importance/v1/importance_v1.proto",
         "carrel/common/person/v1/person_v1.proto",
         "carrel/common/passage/v1/passage_v1.proto",
         "carrel/common/storage_info/v1/storage_info_v1.proto",
+
         "carrel/common/firefly/v1/firefly_v1.proto",
+        "carrel/common/firefly/v2/firefly_v2.proto",
+
         "carrel/common/comment/v1/comment_v1.proto",
         "carrel/common/document/v1/document.proto",
         "carrel/common/snippet/v1/snippet_v1.proto",
