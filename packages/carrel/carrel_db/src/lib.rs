@@ -1,6 +1,7 @@
 pub mod archive_op;
-pub mod project;
-pub mod errors;
 pub mod db;
-pub use entity::entities;
+pub mod errors;
+pub mod project;
+pub mod query;
 
+pub use entity::*;

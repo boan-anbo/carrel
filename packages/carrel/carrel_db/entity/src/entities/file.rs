@@ -17,6 +17,9 @@ pub struct Model {
     pub task_state: i32,
     pub created_at: String,
     pub modified_at: String,
+    pub synced_at: Option<String>,
+    pub is_missing_file: i32,
+    pub is_out_of_sync: i32,
     pub archive_id: i32,
 }
 

@@ -1,3 +1,4 @@
+use pebble_query::errors::PebbleQueryError;
 use thiserror::Error;
 // use thiserror::Error to generate the error typef for database connection related errors.
 
@@ -17,4 +18,10 @@ pub enum SeaOrmDatabaseError {
     DatabaseDeleteError(#[source] sea_orm::DbErr),
     #[error("Database query error: {0}")]
     DatabaseQueryError(#[source] sea_orm::DbErr),
+    #[error("Database update error: {0}")]
+    DatabaseUpdateError(#[source] sea_orm::DbErr),
+    #[error("Invalid Query Parameter {0}")]
+    InvalidQueryParameterError(String),
+    #[error("PebbleQueryError: {0}")]
+    PebbleQueryError(#[source] PebbleQueryError),
 }

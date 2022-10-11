@@ -1,5 +1,6 @@
-use sea_orm_migration::prelude::*;
 use crate::seed_database::seed_database;
+use carrel_utils::uuid::new_v4;
+use sea_orm_migration::prelude::*;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -8,6 +9,7 @@ pub struct Migration;
 pub enum Project {
     Table,
     Id,
+    Uuid,
     Name,
     Description,
     Directory,
@@ -15,7 +17,6 @@ pub enum Project {
     ToName,
     CreateAt,
     UpdatedAt,
-
 }
 
 /// Learn more at https://docs.rs/sea-query#iden
@@ -27,6 +28,8 @@ pub(crate) enum Archive {
     Uuid,
     Name,
     Description,
+    Importance,
+    IsFavorite,
     CreatedAt,
     UpdatedAt,
 }
@@ -46,6 +49,10 @@ pub(crate) enum File {
     ArchiveId,
     CreatedAt,
     ModifiedAt,
+    SyncedAt,
+    IsMissingFile,
+    // when the modified_at is newer than synced_at, it means the file is not synced
+    IsOutOfSync,
 }
 
 #[async_trait::async_trait]
@@ -65,6 +72,12 @@ impl MigrationTrait for Migration {
                             .auto_increment()
                             .primary_key(),
                     )
+                    .col(
+                        ColumnDef::new(Project::Uuid)
+                            .uuid()
+                            .not_null()
+                            .default(new_v4().to_string()),
+                    )
                     .col(ColumnDef::new(Project::Name).string().not_null())
                     .col(ColumnDef::new(Project::Description).string().not_null())
                     .col(ColumnDef::new(Project::Directory).string().null())
@@ -72,9 +85,10 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Project::ToName).string().null())
                     .col(ColumnDef::new(Project::CreateAt).string().not_null())
                     .col(ColumnDef::new(Project::UpdatedAt).string().not_null())
-                .to_owned(),
+                    .to_owned(),
             )
-            .await.unwrap();
+            .await
+            .unwrap();
 
         manager
             .create_table(
@@ -86,21 +100,24 @@ impl MigrationTrait for Migration {
                             .integer()
                             .not_null()
                             .primary_key()
-                            .auto_increment()
-                        ,
+                            .auto_increment(),
                     )
-                    .col(
-                        ColumnDef::new(Archive::ProjectId)
-                            .integer()
-                            .not_null()
-                    )
-                    .col(
-                        ColumnDef::new(Archive::Uuid)
-                            .uuid()
-                            .not_null()
-                    )
+                    .col(ColumnDef::new(Archive::ProjectId).integer().not_null())
+                    .col(ColumnDef::new(Archive::Uuid).uuid().not_null())
                     .col(ColumnDef::new(Archive::Name).string().not_null())
                     .col(ColumnDef::new(Archive::Description).string().not_null())
+                    .col(
+                        ColumnDef::new(Archive::Importance)
+                            .integer()
+                            .not_null()
+                            .default(0),
+                    )
+                    .col(
+                        ColumnDef::new(Archive::IsFavorite)
+                            .boolean()
+                            .not_null()
+                            .default(false),
+                    )
                     .col(ColumnDef::new(Archive::CreatedAt).string().not_null())
                     .col(ColumnDef::new(Archive::UpdatedAt).string().not_null())
                     .foreign_key(
@@ -109,11 +126,12 @@ impl MigrationTrait for Migration {
                             .from(Archive::Table, Archive::ProjectId)
                             .to(Project::Table, Project::Id)
                             .on_delete(ForeignKeyAction::Cascade)
-                            .on_update(ForeignKeyAction::Cascade)
+                            .on_update(ForeignKeyAction::Cascade),
                     )
                     .to_owned(),
             )
-            .await.unwrap();
+            .await
+            .unwrap();
 
         manager
             .create_table(
@@ -127,17 +145,13 @@ impl MigrationTrait for Migration {
                             .auto_increment()
                             .primary_key(),
                     )
-                    .col(
-                        ColumnDef::new(File::Uuid)
-                            .uuid()
-                            .not_null()
-                    )
+                    .col(ColumnDef::new(File::Uuid).uuid().not_null())
                     .index(
                         Index::create()
                             .name("idx_file_uuid")
                             .table(File::Table)
                             .col(File::Uuid)
-                            .unique()
+                            .unique(),
                     )
                     .col(ColumnDef::new(File::Description).string().not_null())
                     .col(ColumnDef::new(File::FileName).string().not_null())
@@ -149,26 +163,39 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(File::CreatedAt).string().not_null())
                     .col(ColumnDef::new(File::ModifiedAt).string().not_null())
                     .col(
-                        ColumnDef::new(File::ArchiveId)
-                            .integer()
-                            .not_null()
+                        ColumnDef::new(File::SyncedAt)
+                            .string()
+                            .null()
+                            .default("NULL"),
                     )
+                    .col(
+                        ColumnDef::new(File::IsMissingFile)
+                            .boolean()
+                            .not_null()
+                            .default(false),
+                    )
+                    // default to true, because a newly added file has not been synced
+                    .col(
+                        ColumnDef::new(File::IsOutOfSync)
+                            .boolean()
+                            .not_null()
+                            .default(true),
+                    )
+                    .col(ColumnDef::new(File::ArchiveId).integer().not_null())
                     .foreign_key(
                         ForeignKey::create()
                             .name("fk_file_archive")
                             .from(File::Table, File::ArchiveId)
                             .to(Archive::Table, Archive::Id)
                             .on_delete(ForeignKeyAction::Cascade)
-                            .on_update(ForeignKeyAction::Cascade)
+                            .on_update(ForeignKeyAction::Cascade),
                     )
                     .to_owned(),
             )
-            .await.unwrap();
-
+            .await
+            .unwrap();
 
         seed_database(manager).await;
-
-
 
         Ok(())
     }
@@ -178,18 +205,16 @@ impl MigrationTrait for Migration {
 
         manager
             .drop_table(Table::drop().table(File::Table).to_owned())
-            .await.unwrap();
-
+            .await
+            .unwrap();
 
         manager
             .drop_table(Table::drop().table(Archive::Table).to_owned())
-            .await.unwrap();
-
+            .await
+            .unwrap();
 
         manager
             .drop_table(Table::drop().table(Project::Table).to_owned())
             .await
     }
 }
-
-

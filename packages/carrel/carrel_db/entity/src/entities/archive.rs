@@ -11,6 +11,8 @@ pub struct Model {
     pub uuid: String,
     pub name: String,
     pub description: String,
+    pub importance: i32,
+    pub is_favorite: i32,
     pub created_at: String,
     pub updated_at: String,
 }
