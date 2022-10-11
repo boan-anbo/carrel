@@ -6,63 +6,98 @@
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
 import {Importance} from "../../importance/v1/importance_v1_pb.js";
-import {Task} from "../../task/v1/task_v1_pb.js";
+import {TaskState} from "../../task_state/v1/task_state_v1_pb.js";
 
 /**
  * @generated from message carrel.common.file.v1.File
  */
 export class File extends Message<File> {
   /**
+   * @generated from field: int32 id = 1;
+   */
+  id = 0;
+
+  /**
    * id
    *
-   * @generated from field: string uuid = 1;
+   * @generated from field: string uuid = 2;
    */
   uuid = "";
 
   /**
    * description
    *
-   * @generated from field: string description = 2;
+   * @generated from field: string description = 3;
    */
   description = "";
 
   /**
    * importance
    *
-   * @generated from field: carrel.common.importance.v1.Importance importance = 3;
+   * @generated from field: carrel.common.importance.v1.Importance importance = 4;
    */
   importance = Importance.NONE_UNSPECIFIED;
 
   /**
    * / filename, with extension
    *
-   * @generated from field: string file_name = 10;
+   * @generated from field: string file_name = 5;
    */
   fileName = "";
 
   /**
    * / file extension
    *
-   * @generated from field: string file_extension = 11;
+   * @generated from field: string extension = 6;
    */
-  fileExtension = "";
+  extension = "";
 
   /**
    * / file directory
    *
-   * @generated from field: string file_dir = 12;
+   * @generated from field: string directory = 7;
    */
-  fileDir = "";
+  directory = "";
 
   /**
-   * @generated from field: string file_full_path = 13;
+   * @generated from field: string full_path = 8;
    */
-  fileFullPath = "";
+  fullPath = "";
 
   /**
-   * @generated from field: repeated carrel.common.task.v1.Task tasks = 20;
+   * @generated from field: string created_at = 9;
    */
-  tasks: Task[] = [];
+  createdAt = "";
+
+  /**
+   * @generated from field: string modified_at = 10;
+   */
+  modifiedAt = "";
+
+  /**
+   * @generated from field: optional string synced_at = 11;
+   */
+  syncedAt?: string;
+
+  /**
+   * @generated from field: bool is_missing_file = 12;
+   */
+  isMissingFile = false;
+
+  /**
+   * @generated from field: bool is_out_of_sync = 13;
+   */
+  isOutOfSync = false;
+
+  /**
+   * @generated from field: string collection_id = 14;
+   */
+  collectionId = "";
+
+  /**
+   * @generated from field: carrel.common.task_state.v1.TaskState task_state = 15;
+   */
+  taskState = TaskState.UNSPECIFIED;
 
   constructor(data?: PartialMessage<File>) {
     super();
@@ -72,14 +107,21 @@ export class File extends Message<File> {
   static readonly runtime = proto3;
   static readonly typeName = "carrel.common.file.v1.File";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "importance", kind: "enum", T: proto3.getEnumType(Importance) },
-    { no: 10, name: "file_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 11, name: "file_extension", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 12, name: "file_dir", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 13, name: "file_full_path", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 20, name: "tasks", kind: "message", T: Task, repeated: true },
+    { no: 1, name: "id", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 2, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "importance", kind: "enum", T: proto3.getEnumType(Importance) },
+    { no: 5, name: "file_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: "extension", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: "directory", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 8, name: "full_path", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 9, name: "created_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 10, name: "modified_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 11, name: "synced_at", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 12, name: "is_missing_file", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 13, name: "is_out_of_sync", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 14, name: "collection_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 15, name: "task_state", kind: "enum", T: proto3.getEnumType(TaskState) },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): File {

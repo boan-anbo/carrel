@@ -18,6 +18,5 @@ chrono= { version = "0.4.19", features = ["serde"] }
 log = "0.4.14"
 simplelog = "0.12.0"
 to_core = { path = "../to/to_core"}
-
 [dev-dependencies]
 carrel_utils = { path = "../carrel/carrel_utils" }

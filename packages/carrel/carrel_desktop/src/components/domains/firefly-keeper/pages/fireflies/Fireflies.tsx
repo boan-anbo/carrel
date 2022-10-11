@@ -1,46 +1,41 @@
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../../store/store";
-import {useEffect, useMemo} from "react";
-import {Tag} from "../../../../../carrel_server_client/carrel/common/tag/v1/tag_v1_pb";
-import {PartialMessage} from "@bufbuild/protobuf";
-import {FireflyCard} from "../../components/firefly/FireflyCard";
 import './Fireflies.css';
-import {Firefly} from "../../../../../carrel_server_client/carrel/common/firefly/v1/firefly_v1_pb";
 import Page from "../../../../ui/page/Page";
-import {setFireflies} from "../../../../../store/slices/firefly-keeper-state/firefly-keeper-store";
-import {actionRefreshFireflies} from "../../../../../actions/action-refresh-fireflies";
-import {Button} from "@blueprintjs/core";
+import {Card, Column, DataTable, TabMenu} from "primereact";
+import {useEffect, useState} from "react";
+import {carrelQueries} from "../../../../../server-api/carrel-queries";
+import { Firefly } from "../../../../../carrel_server_client/carrel/common/firefly/v2/firefly_v2_pb";
+import {FireflyDataview} from "./FireflyDataView";
+import {File} from "../../../../../carrel_server_client/carrel/common/file/v1/file_v1_pb";
+import {ApiStandardQuery} from "../../../../../server-api/query_utils";
+import {
+    QueryFilesRequest, QueryFirefliesRequest
+} from "../../../../../carrel_server_client/carrel/server/project_manager/v1/server_project_manager_v1_pb";
+import {carrelApi} from "../../../../../server-api/carrel-api";
+import {DataTablePFSEvent} from "primereact/datatable";
+import {Logger, LogSource} from "../../../../../utils/logger";
 
+const LOG = new Logger(LogSource.FireflyTable)
 export function Fireflies() {
-
-    useEffect(() => {
-        console.log("Fireflies");
-    });
-    const fireflies = useSelector((rootState: RootState) => rootState.fireflyKeeper.fireflies);
-
-
-    const dispatch = useDispatch();
 
     const workingProject = useSelector((state: RootState) => state.workingProject.workingProject);
 
-    const spotFireflies = async () => {
-        dispatch(setFireflies(null));
-        const fireflies = await actionRefreshFireflies(workingProject.workingFolder);
-        dispatch(setFireflies(fireflies));
-    }
 
-    const selectedFirelies = (): PartialMessage<Tag>[] => useMemo(() => {
-        return fireflies?.allFireflies ?? [];
-    }, [fireflies]);
-
-    const elements = selectedFirelies().map((firefly, index) => {
-        return <FireflyCard firefly={firefly as Firefly} key={index}/>
-    });
 
     return <Page>
-        <Button onClick={spotFireflies}>Spot Fireflies</Button>
-        <div className={'fireflies-list'}>
-            {elements}
+        <div className={'space-y-4'}>
+            {/*<TabMenu model={menuItems} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}/>*/}
+
+
+            <Card>
+                <FireflyDataview
+
+
+
+
+                ></FireflyDataview>
+            </Card>
         </div>
     </Page>
 }

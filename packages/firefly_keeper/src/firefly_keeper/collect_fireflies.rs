@@ -1,6 +1,6 @@
 use carrel_commons::carrel::common::firefly::v1::Firefly;
-use carrel_commons::carrel::common::tag::v1::Tag;
 use carrel_commons::carrel::firefly_keeper::v1::Fireflies;
+use to_core::to_tag::to_tag_converter_v1::to_tag_to_common_tag_v1;
 
 use crate::firefly_keeper::firefly_keeper_option::FireflyKeeperOption;
 use crate::firefly_keeper::internal_scan_results::InternalScanResults;
@@ -23,9 +23,8 @@ pub fn collect_fireflies(scan_result: InternalScanResults, directory: Option<Str
         // check if it's a note tag
         let lower_tag_key = tag.key.to_lowercase();
 
-        let converted_tag = Tag::from(tag);
-
-        let firefly = Firefly::from(converted_tag);
+        let commond_tag = to_tag_to_common_tag_v1(tag);
+        let firefly = Firefly::from(commond_tag);
 
 
         if lower_tag_key == "note" || lower_tag_key == "n" {

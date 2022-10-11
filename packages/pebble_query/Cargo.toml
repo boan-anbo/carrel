@@ -1,0 +1,19 @@
+[package]
+name = "pebble_query"
+version = "0.1.0"
+edition = "2021"
+authors = ["Bo An"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sea-orm={version = "0.9.2", features = [
+    "sqlx-sqlite",
+    "runtime-tokio-rustls",
+    "mock",
+    "macros",
+    "debug-print",
+    "uuid"
+]}
+carrel_commons = {path = "../carrel_commons"}
+thiserror = "1.0.37"

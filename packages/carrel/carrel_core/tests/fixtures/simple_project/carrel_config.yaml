@@ -1,2 +1,2 @@
-db_path: test_db.db
-to_path: test_to.db
+carrel_db: simple_db.db
+to_db: simple_to.db

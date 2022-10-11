@@ -1,24 +1,38 @@
 syntax = "proto3";
 
-import "carrel/common/importance/v1/importance_v1.proto";
-import "carrel/common/task/v1/task_v1.proto";
 
 package carrel.common.file.v1;
 
+import "carrel/common/task_state/v1/task_state_v1.proto";
+
+import "carrel/common/importance/v1/importance_v1.proto";
+
 message File {
+    int32 id = 1;
     // id
-    string uuid = 1;
+    string uuid = 2;
     // description
-    string description = 2;
+    string description = 3;
     // importance
-    carrel.common.importance.v1.Importance importance = 3;
+    carrel.common.importance.v1.Importance importance = 4;
     /// filename, with extension
-    string file_name = 10;
+    string file_name = 5;
     /// file extension
-    string file_extension = 11;
+    string extension = 6;
     /// file directory
-    string file_dir = 12;
-    string file_full_path = 13;
-    repeated carrel.common.task.v1.Task tasks = 20;
+    string directory = 7;
+    string full_path = 8;
+
+    string created_at = 9;
+    string modified_at = 10;
+    optional string synced_at = 11;
+
+    bool is_missing_file = 12;
+    bool is_out_of_sync = 13;
+
+    string collection_id = 14;
+
+    carrel.common.task_state.v1.TaskState task_state = 15;
+
 
 }

@@ -11,16 +11,11 @@ use crate::pdfium::pdfium_binary::get_pdfium;
 pub struct PdfGongju {}
 
 pub trait PdfExtractor {
-    fn extract_fireflies(pdf_path: &str, opt: &ExtractorOption) -> Result<Vec<Firefly>, String>;
+    fn extract_fireflies(pdf_path: &str, opt: &ExtractorOption) -> Result<Vec<Firefly>, PdfGongjuError>;
 }
 
 impl PdfExtractor for PdfGongju {
-    fn extract_fireflies(pdf_path: &str, opt: &ExtractorOption) -> Result<Vec<Firefly>, String> {
-        CombinedLogger::init(
-            vec![
-                TermLogger::new(LevelFilter::Warn, Config::default(), TerminalMode::Mixed, ColorChoice::Auto),
-            ]
-        ).unwrap();
+    fn extract_fireflies(pdf_path: &str, opt: &ExtractorOption) -> Result<Vec<Firefly>, PdfGongjuError> {
 
 
         let mut fireflies: Vec<Firefly> = Vec::new();
@@ -28,7 +23,7 @@ impl PdfExtractor for PdfGongju {
 
         let doc = pdfium
             .load_pdf_from_file(pdf_path, None)
-            .map_err(|_| PdfGongjuError::LoadPdfError(pdf_path.to_string())).unwrap();
+            .map_err(|_| PdfGongjuError::LoadPdfError(pdf_path.to_string()))?;
 
         info!("Loaded PDF: {}", pdf_path);
 
@@ -135,8 +130,6 @@ mod tests {
 
         // first annot
         let first_annot = &fireflies[0];
-        assert!(first_annot.light.starts_with(r#"“你们 工作太 松哪。"#));
-        assert!(first_annot.comment.starts_with(r#"中文评论第一行"#));
         assert_eq!(first_annot.location_raw, "4");
         assert_eq!(first_annot.document_pages, 245);
     }

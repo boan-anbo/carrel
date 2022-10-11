@@ -1,12 +1,12 @@
 use crate::carrel::common::document::v1::Document;
 use crate::carrel::common::firefly::v1::Firefly;
-use crate::carrel::common::tag::v1::Tag;
+use crate::carrel::common::tag::v1::Tag as TagV1;
 
 use carrel_utils::datetime::get_iso_string::{get_now_iso_string};
 
 // impl firefly from tag
-impl From<Tag> for Firefly {
-    fn from(tag: Tag) -> Self {
+impl From<TagV1> for Firefly {
+    fn from(tag: TagV1) -> Self {
 
         let select_tag = Some(tag.clone());
         let document = Document::from(tag.clone());
@@ -33,4 +33,7 @@ impl From<Tag> for Firefly {
 
         }
     }
+
+
 }
+

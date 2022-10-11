@@ -11,6 +11,10 @@ pub fn get_now_iso_string() -> String {
     get_iso_string(Utc::now())
 }
 
+pub fn get_now() -> DateTime<Utc> {
+    Utc::now()
+}
+
 
 #[cfg(test)]
 mod test {

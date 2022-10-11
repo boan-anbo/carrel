@@ -44,24 +44,25 @@ pub fn filter_out_supported_files_by_extensions(supported_files_extensions: &[&s
 
 #[cfg(test)]
 mod tests {
-    use crate::test::test_folders::{get_test_fixture_path, get_test_module_folder};
+    use crate::test::test_folders::{get_test_fixture_module_folder_path, get_test_fixture_path};
     use super::*;
 
     #[test]
     fn test_is_supported_text_files() {
-        let test_folder = get_test_fixture_path();
+        let test_folder_string = get_test_fixture_path();
+        let test_folder = test_folder_string.as_str();
         let supported_files_extensions = ["txt", "md"];
         let file1_txt = format!("{}/file1.txt", test_folder);
         let file2_txt_under_dir1 = format!("{}/dir1/file2.txt", test_folder);
 
         let file3_md_under_dir2 = format!("{}/dir1/dir2/file3.md", test_folder);
 
-        assert_eq!(has_extensions(&supported_files_extensions, &file1_txt), true);
-        assert_eq!(has_extensions(&supported_files_extensions, &file2_txt_under_dir1), true);
-        assert_eq!(has_extensions(&supported_files_extensions, &file3_md_under_dir2), true);
+        assert_eq!(has_extensions(&supported_files_extensions, file1_txt.as_str()), true);
+        assert_eq!(has_extensions(&supported_files_extensions, file2_txt_under_dir1.as_str()), true);
+        assert_eq!(has_extensions(&supported_files_extensions, file3_md_under_dir2.as_str()), true);
         // false cases
-        assert_eq!(has_extensions(&[], &file1_txt), false);
-        assert_eq!(has_extensions(&["md"], &file1_txt), false);
+        assert_eq!(has_extensions(&[], file1_txt.as_str()), false);
+        assert_eq!(has_extensions(&["md"], file1_txt.as_str()), false);
 
 
 
@@ -71,7 +72,7 @@ mod tests {
     #[test]
     fn should_return_false_instead_of_panic_when_is_directory() {
         let supported_files_extensions = ["txt", "md"];
-        let file_path = get_test_module_folder("test_folder");
+        let file_path = get_test_fixture_path();
         let result = has_extensions(&supported_files_extensions, &file_path);
         assert_eq!(result, false);
         // clear
@@ -81,7 +82,7 @@ mod tests {
     #[test]
     fn should_return_false_instead_of_panic_when_no_extension() {
         let supported_files_extensions = ["txt", "md"];
-        let test_folder_path = get_test_module_folder("test");
+        let test_folder_path = get_test_fixture_module_folder_path("test");
         let file_path = format!("{}\\test", test_folder_path);
         // create file
         std::fs::write(&file_path, "test").unwrap();
@@ -89,5 +90,12 @@ mod tests {
         assert_eq!(result, false);
         // clear
         std::fs::remove_file(file_path).unwrap();
+    }
+
+    #[test]
+    fn should_return_false_for_png_file() {
+        let supported_files_extensions = ["txt", "md"];
+        let result = has_extensions(&supported_files_extensions, "test.png");
+        assert_eq!(result, false);
     }
 }

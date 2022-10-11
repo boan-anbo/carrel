@@ -4,7 +4,7 @@
 /* @ts-nocheck */
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
-import {Message, proto3} from "@bufbuild/protobuf";
+import {Message, proto3, protoInt64} from "@bufbuild/protobuf";
 import {Archive} from "../../archive/v1/archive_v1_pb.js";
 
 /**
@@ -12,56 +12,61 @@ import {Archive} from "../../archive/v1/archive_v1_pb.js";
  */
 export class Project extends Message<Project> {
   /**
-   * @generated from field: string uuid = 1;
+   * @generated from field: int64 id = 1;
+   */
+  id = protoInt64.zero;
+
+  /**
+   * @generated from field: string uuid = 2;
    */
   uuid = "";
 
   /**
    * the name of the project
    *
-   * @generated from field: string name = 2;
+   * @generated from field: string name = 3;
    */
   name = "";
 
   /**
    * description of the project
    *
-   * @generated from field: optional string description = 3;
+   * @generated from field: optional string description = 4;
    */
   description?: string;
 
   /**
    * the working folder of the project
    *
-   * @generated from field: optional string working_folder = 4;
+   * @generated from field: optional string working_folder = 5;
    */
   workingFolder?: string;
 
   /**
    * last time the project was modified in ISO 8601 format
    *
-   * @generated from field: string updated_at = 5;
+   * @generated from field: string updated_at = 6;
    */
   updatedAt = "";
 
   /**
    * last time the project was opened in ISO 8601 format
    *
-   * @generated from field: string opened_at = 6;
+   * @generated from field: string last_used_at = 7;
    */
-  openedAt = "";
+  lastUsedAt = "";
 
   /**
    * created
    *
-   * @generated from field: string created_at = 7;
+   * @generated from field: string created_at = 8;
    */
   createdAt = "";
 
   /**
    * finished at
    *
-   * @generated from field: optional string finished_at = 8;
+   * @generated from field: optional string finished_at = 9;
    */
   finishedAt?: string;
 
@@ -69,7 +74,7 @@ export class Project extends Message<Project> {
    * the id of the archive associated with the project;
    * the archive
    *
-   * @generated from field: repeated carrel.common.archive.v1.Archive archives = 9;
+   * @generated from field: repeated carrel.common.archive.v1.Archive archives = 10;
    */
   archives: Archive[] = [];
 
@@ -81,15 +86,16 @@ export class Project extends Message<Project> {
   static readonly runtime = proto3;
   static readonly typeName = "carrel.common.project.v1.Project";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
-    { no: 4, name: "working_folder", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
-    { no: 5, name: "updated_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 6, name: "opened_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 7, name: "created_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 8, name: "finished_at", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
-    { no: 9, name: "archives", kind: "message", T: Archive, repeated: true },
+    { no: 1, name: "id", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 2, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 5, name: "working_folder", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 6, name: "updated_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: "last_used_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 8, name: "created_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 9, name: "finished_at", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 10, name: "archives", kind: "message", T: Archive, repeated: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Project {

@@ -4,12 +4,14 @@ import appstateReducer from "./slices/appstate/appstate";
 import workingProjectReducer from "./slices/working-project-state/working-project-state";
 import {listenerMiddleware} from "./listners";
 import {fireflyKeeperStore} from "./slices/firefly-keeper-state/firefly-keeper-store";
+import Inspector from "./slices/inspector/inspector";
 
 const store = configureStore({
         reducer: {
             appstate: appstateReducer,
             workingProject: workingProjectReducer,
-            fireflyKeeper: fireflyKeeperStore.reducer
+            fireflyKeeper: fireflyKeeperStore.reducer,
+            inspector: Inspector
         },
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware().concat(logger).prepend(

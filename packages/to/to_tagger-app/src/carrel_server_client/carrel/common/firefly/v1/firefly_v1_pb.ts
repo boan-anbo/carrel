@@ -114,9 +114,9 @@ export class Firefly extends Message<Firefly> {
   /**
    * created time
    *
-   * @generated from field: string create_at = 15;
+   * @generated from field: string created_at = 15;
    */
-  createAt = "";
+  createdAt = "";
 
   /**
    * updated time
@@ -146,7 +146,7 @@ export class Firefly extends Message<Firefly> {
     { no: 12, name: "tags", kind: "message", T: Tag, repeated: true },
     { no: 13, name: "importance", kind: "enum", T: proto3.getEnumType(Importance) },
     { no: 14, name: "extra", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-    { no: 15, name: "create_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 15, name: "created_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 16, name: "modified_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 

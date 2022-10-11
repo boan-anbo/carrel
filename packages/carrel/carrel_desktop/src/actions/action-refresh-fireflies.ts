@@ -1,4 +1,4 @@
-import {fireflyKeeperApi} from "../server-utils/api-clients";
+import {fireflyKeeperApi} from "../server-api/carrel-api";
 import {Fireflies} from "../carrel_server_client/carrel/firefly_keeper/v1/firefly_keeper_v1_pb";
 
 export const actionRefreshFireflies = async (workingProjectDirectory: string | undefined): Promise<Fireflies | null>  => {

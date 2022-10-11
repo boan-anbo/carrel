@@ -5,25 +5,38 @@ package carrel.common.archive.v1;
 
 import "carrel/common/document/v1/document.proto";
 
+import "carrel/common/file/v1/file_v1.proto";
+
+import "carrel/common/importance/v1/importance_v1.proto";
+
+
 // A collection of materials for certain purposes and associated with certain projects.
 message Archive {
-    string uuid = 1;
+    int64 id = 1;
+
+    string uuid = 2;
     // the project uuid it is associated with
-    repeated string project_uuids = 2;
+    repeated string project_uuids = 3;
     // the name of the archive
-    string name = 3;
+    string name = 4;
     // the description of the archive
-    string description = 4;
+    string description = 5;
     // Documents
-    repeated carrel.common.document.v1.Document documents = 5;
+    repeated carrel.common.document.v1.Document documents = 6;
 
     // removed items
-    repeated carrel.common.document.v1.Document removed_documents = 6;
+    repeated carrel.common.document.v1.Document removed_documents = 7;
+
+    carrel.common.importance.v1.Importance importance = 8;
+
+    bool is_favorite = 9;
+
+    repeated carrel.common.file.v1.File files = 10;
 
 
     // time markers
-    string created_at = 7;
-    string updated_at = 8;
+    string created_at = 11;
+    string updated_at = 12;
 
 }
 

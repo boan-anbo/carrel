@@ -13,6 +13,5 @@
 //! let firefly_keeper = FireflyKeeper::new(directory_to_scan);
 //! let fireflies = firefly_keeper.scan_directory().expect("directory not found");
 //! ```
-mod tag_impl;
 pub mod firefly_keeper;
 

@@ -1,0 +1,11 @@
+.cabinet-archives-container {
+    @apply bg-teal-100 flex;
+}
+
+.cabinet-archive-list {
+    @apply bg-red-200 flex flex-col w-2/12 h-full;
+}
+
+.cabinet-archive-selected {
+    @apply bg-blue-200 flex w-10/12 h-12;
+}

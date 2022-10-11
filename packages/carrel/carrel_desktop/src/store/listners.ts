@@ -1,8 +1,10 @@
 import {createListenerMiddleware} from "@reduxjs/toolkit";
 import {setTauriWindow} from "../tauri/window/set-tauri-window";
 import {setCurrentComponent} from "./slices/appstate/appstate";
-import {openWorkingProject} from "./slices/working-project-state/working-project-state";
 import {getDirectoryName} from "../utils/get-directory-name";
+import {setWorkingProject} from "./slices/working-project-state/working-project-state";
+import {PlainMessage} from "@bufbuild/protobuf/dist/types/message";
+import {ProjectInfo} from "../carrel_server_client/carrel/core/project_manager/v1/project_manager_v1_pb";
 
 export const listenerMiddleware = createListenerMiddleware();
 
@@ -28,7 +30,7 @@ listenerMiddleware.startListening(
 listenerMiddleware.startListening(
     {
         // this listener is trigger for this action: setCurrentComponent
-        actionCreator: openWorkingProject,
+        actionCreator: setWorkingProject,
         effect: async (action, listenerApi) => {
             console.log("listenerMiddleware.startListening: openWorkingProject)",
             {
@@ -36,11 +38,15 @@ listenerMiddleware.startListening(
                 listenerApi
             });
 
-            const projectName = getDirectoryName(action.payload);
-            // update tauri window when working folder is changed
-            // setting tauri window
-            console.info('Setting tauri window');
-            await setTauriWindow(projectName);
+            if (action.payload) {
+
+                const projectInfo = action.payload as PlainMessage<ProjectInfo>;
+                // update tauri window when working folder is changed
+                // setting tauri window
+                console.info('Setting tauri window');
+                await setTauriWindow(projectInfo.name);
+            }
+
         }
     }
 )

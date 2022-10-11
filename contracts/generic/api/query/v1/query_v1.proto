@@ -1,0 +1,163 @@
+syntax = "proto3";
+
+
+package generic.api.query.v1;
+
+
+
+message FilterSet {
+
+
+ repeated Condition must = 1;
+
+  // a set of filters
+ repeated Condition any = 2;
+
+}
+
+enum OPERATOR {
+
+  OPERATOR_UNSPECIFIED = 0;
+
+ OPERATOR_EQUALS = 1;
+
+    OPERATOR_NOT_EQUALS = 2;
+
+    OPERATOR_GREATER_THAN = 3;
+
+    OPERATOR_GREATER_THAN_OR_EQUALS = 4;
+
+    OPERATOR_LESS_THAN = 5;
+
+    OPERATOR_LESS_THAN_OR_EQUALS = 6;
+
+    OPERATOR_IN = 7;
+
+    OPERATOR_NOT_IN = 8;
+
+    OPERATOR_CONTAINS = 9;
+
+    OPERATOR_NOT_CONTAINS = 10;
+
+    OPERATOR_STARTS_WITH = 11;
+
+    OPERATOR_NOT_STARTS_WITH = 12;
+
+    OPERATOR_ENDS_WITH = 13;
+
+    OPERATOR_NOT_ENDS_WITH = 14;
+
+    OPERATOR_EXISTS = 15;
+
+    OPERATOR_NOT_EXISTS = 16;
+
+    OPERATOR_IS_NULL = 17;
+
+    OPERATOR_IS_NOT_NULL = 18;
+
+    OPERATOR_IS_TRUE = 19;
+
+    OPERATOR_IS_FALSE = 20;
+
+    OPERATOR_LIKE = 21;
+
+    OPERATOR_NOT_LIKE = 22;
+
+    OPERATOR_ILIKE = 23;
+
+    OPERATOR_NOT_ILIKE = 24;
+
+    OPERATOR_BETWEEN = 25;
+
+    OPERATOR_NOT_BETWEEN = 26;
+
+}
+
+message Condition {
+
+  string field = 1;
+
+  OPERATOR  operator = 2;
+
+  // the only or first value.
+  optional string value = 3;
+
+  // a list of value, to be used with IN, NOT_IN
+  repeated string value_list = 4;
+
+  // the to value in expressions such as between A and B
+  optional string value_to = 5;
+
+
+}
+
+
+message StandardQuery {
+
+  SortCondition sort = 1;
+
+
+    int32 offset = 3;
+
+    int32 length = 4;
+
+  int32 page = 5;
+
+    FilterSet filter = 6;
+
+    bool find_one = 7;
+
+}
+
+// this is the message that is the server returns to the query sender
+// It describes only the metadata of the query, not the data itself, which needs a dedicated message
+message StandardQueryResultMetadata {
+
+  // the actual count of the result contained in the response
+  int32 result_items = 1;
+  
+
+  int32 offset = 2;
+
+  int32 length = 3;
+
+  int32 page = 4;
+
+  int32 result_total_pages = 5;
+
+  int32 result_total_items = 6;
+
+    StandardQuery query = 7;
+
+    // the count of results that are filtered out after the query in the post-processing process.
+    // For example, I queried fireflies, but there are 1000 textual objects but only 600 fireflies, then the filtered out count is 400, and the result count is 600, and the total result count is 1000
+    // Remember, this does not include the count of the results that are filtered out before the query, such as the ones that are not visible to the user.
+   optional int32 filter_count = 9;
+    // describe the reason
+    optional string filter_reason = 10;
+
+}
+
+
+message SortCondition {
+
+  string field = 1;
+
+  SortDirection order = 2;
+
+}
+
+
+
+enum SortDirection {
+
+  SORT_DIRECTION_UNSPECIFIED = 0;
+
+  SORT_DIRECTION_ASC = 1;
+
+  SORT_DIRECTION_DESC = 2;
+
+}
+
+
+

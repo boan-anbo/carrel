@@ -5,8 +5,15 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[features]
+default = []
+faker = ["fake"]
+
+
 [dependencies]
 regex = "1.6.0"
 unicode-segmentation = "1.10.0"
 chrono = "0.4.22"
-uuid = {version = "1.1.2", features = ["v4"]}
+uuid = { version = "1.1.2", features = ["v4"] }
+fake = { version = "2.5", optional = true }
+rand = "0.8"

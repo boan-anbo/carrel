@@ -20,6 +20,7 @@ fn main() {
         "carrel/common/document/v1/document.proto",
         "carrel/common/snippet/v1/snippet_v1.proto",
         "carrel/common/project/v1/project_v1.proto",
+        "carrel/common/project/v2/project_v2.proto",
         "carrel/common/archive/v1/archive_v1.proto",
         // tasks
         "carrel/common/task/v1/task_v1.proto",
@@ -43,6 +44,8 @@ fn main() {
         "grpc/health/v1/grpc_health_v1.proto",
         // generic
         "generic/api/request_directory/v1/request_directory_v1.proto",
+        // generic query
+        "generic/api/query/v1/query_v1.proto",
         // core
         "carrel/core/project_manager/v1/project_manager_v1.proto",
     ];

@@ -3,13 +3,16 @@ syntax = "proto3";
 
 package carrel.core.project_manager.v1;
 
+import 'carrel/common/project/v2/project_v2.proto';
 
 
 enum CarrelDbType {
     // sqlite default
-    CARREL_DB_TYPE_SQLITE_UNSPECIFIED = 0;
+    CARREL_DB_TYPE_UNSPECIFIED = 0;
+    // sqlite
+    CARREL_DB_TYPE_SQLITE = 1;
     // postgresql
-    CARREL_DB_TYPE_POSTGRESQL = 1;
+    CARREL_DB_TYPE_POSTGRESQL = 2;
 
 }
 
@@ -48,28 +51,27 @@ enum ArchiveSourceType {
     ARCHIVE_SOURCE_TYPE_ZOTERO = 2;
 }
 
+// Metadata of a project for the app.
 message ProjectInfo {
-  // the id of the project
-  int32 project_id = 1;
+  // the id of the project in the CarrelApp database
+  // This is NOT the id of the project in individual folders, where the project id is always 1.
+  int32 app_project_id = 1;
+  // uuid
+  string uuid = 2;
+
   // the name of the project
-  string name = 2;
+  string name = 3;
   // the description of the project
-  string description = 3;
+  string description = 4;
   // project folder
-  string directory = 4;
+  string directory = 5;
   // Carrel db name
-  string db_name = 5;
+  string db_name = 6;
   // To db name
-  string to_name = 6;
+  string to_name = 7;
   // Carrel db type
-  CarrelDbType db_type = 7;
-  // number of archives
-  int64 archive_count = 8;
-  // number of documents
-  int64 file_count = 9;
-  // created at
-  string created_at = 10;
-  // updated at
-  string updated_at = 11;
+  CarrelDbType db_type = 8;
+
+  repeated carrel.common.project.v2.Project project = 12;
 }
 

@@ -1,7 +1,6 @@
+use crate::project::error::project_config_error::ProjectConfigError;
 use carrel_db::errors::database_error::SeaOrmDatabaseError;
 use thiserror::Error;
-use crate::project::error::project_config_error::ProjectConfigError;
-
 
 #[derive(Error, Debug)]
 pub enum ProjectError {
@@ -15,6 +14,7 @@ pub enum ProjectError {
     ProjectDirectoryError(String),
     #[error("Project db intialization error `{0}` does not exist")]
     ProjectDbInitializationError(#[source] SeaOrmDatabaseError),
-
+    // project update error
+    #[error("Project update error: `{0}`")]
+    ProjectUpdateError(String),
 }
-

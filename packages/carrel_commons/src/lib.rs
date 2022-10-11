@@ -11,7 +11,8 @@
 //! This why it cannot be fixed, by letting FireflyKeeper build its own set of protos, for example, unless we write a set of conversions between what effectively are the same type of definitions such `common.Tag.v1.Tag` to `common.Tag.v1.Tag`, as far as I know.
 
 
-mod implementations;
+pub mod implementations;
+pub mod traits;
 
 pub mod carrel {
     pub const FILE_DESCRIPTOR_SET: &[u8] = include_bytes!("generated/carrel_descriptor.bin");
@@ -92,6 +93,10 @@ pub mod carrel {
         pub mod project {
             pub mod v1 {
                 include!("generated/carrel_common_project_v1.rs");
+            }
+
+            pub mod v2 {
+                include!("generated/carrel_common_project_v2.rs");
             }
         }
 
@@ -193,6 +198,12 @@ pub mod generic {
         pub mod request_directory {
             pub mod v1 {
                 include!("generated/generic_api_request_directory_v1.rs");
+            }
+        }
+
+        pub mod query {
+            pub mod v1 {
+                include!("generated/generic_api_query_v1.rs");
             }
         }
     }

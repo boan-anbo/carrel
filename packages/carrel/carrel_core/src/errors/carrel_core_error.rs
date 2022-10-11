@@ -1,5 +1,6 @@
-use std::{fmt, io};
-use std::fmt::{Display, Formatter};
+use carrel_app_db::carrel_app_manager::CarrelAppError;
+use std::io;
+
 use thiserror::Error;
 
 // create a custom error for carrel_core
@@ -9,8 +10,9 @@ pub enum CarrelCoreError {
     #[error("IoError")]
     IoError(#[from] io::Error),
     #[error("ToDbInitError: {0}")]
-    ToDbInitError(String)
-
+    ToDbInitError(String),
+    #[error("ToDbInitError: {0}")]
+    CarrelAppDbError(#[source] CarrelAppError),
+    #[error("CarrelConnectError: {0}")]
+    CarrelConnectError(String),
 }
-
-

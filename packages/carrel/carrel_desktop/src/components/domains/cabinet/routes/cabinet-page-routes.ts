@@ -7,5 +7,10 @@ export const CabinetPageRoutes: TCabinetPageRoutes = {
     [ECabinetPages.Home]: {
         absolutePath: appDomainRoutes[CarrelComponent.CABINET] + ECabinetPages.Home,
         relativePath: ECabinetPages.Home
+    },
+    [ECabinetPages.Archives]: {
+        absolutePath: appDomainRoutes[CarrelComponent.CABINET] + ECabinetPages.Archives,
+        relativePath: ECabinetPages.Archives
+
     }
 }

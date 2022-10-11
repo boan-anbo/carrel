@@ -4,7 +4,7 @@
 /* @ts-nocheck */
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
-import {Message, proto3, protoInt64} from "@bufbuild/protobuf";
+import {Message, proto3} from "@bufbuild/protobuf";
 
 /**
  * @generated from message carrel.common.comment.v1.Comment
@@ -32,18 +32,18 @@ export class Comment extends Message<Comment> {
   author = "";
 
   /**
-   *  created, UNIX timestamp
+   *  ISO string
    *
-   * @generated from field: int64 created = 4;
+   * @generated from field: string created_at = 4;
    */
-  created = protoInt64.zero;
+  createdAt = "";
 
   /**
-   *  updated 
+   *  ISO string 
    *
-   * @generated from field: int64 updated = 5;
+   * @generated from field: string modified_at = 5;
    */
-  updated = protoInt64.zero;
+  modifiedAt = "";
 
   constructor(data?: PartialMessage<Comment>) {
     super();
@@ -56,8 +56,8 @@ export class Comment extends Message<Comment> {
     { no: 1, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "content", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 3, name: "author", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "created", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
-    { no: 5, name: "updated", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 4, name: "created_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "modified_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Comment {

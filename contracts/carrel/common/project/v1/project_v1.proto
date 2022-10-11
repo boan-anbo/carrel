@@ -6,28 +6,28 @@ import "carrel/common/archive/v1/archive_v1.proto";
 
 package carrel.common.project.v1;
 
-
 message Project {
-  string uuid = 1;
+  int64 id = 1;
+  string uuid = 2;
   // the name of the project
-  string name = 2;
+  string name = 3;
   // description of the project
-    optional string description = 3;
+    optional string description = 4;
     // the working folder of the project
-    optional string working_folder = 4;
+    optional string working_folder = 5;
 
 
     // last time the project was modified in ISO 8601 format
-    string updated_at = 5;
+    string updated_at = 6;
     // last time the project was opened in ISO 8601 format
-    string opened_at = 6;
+    string last_used_at = 7;
     // created
-    string created_at = 7;
+    string created_at = 8;
     // finished at
-  optional string finished_at = 8;
+  optional string finished_at = 9;
     // the id of the archive associated with the project;
     // the archive
-    repeated carrel.common.archive.v1.Archive archives = 9;
+    repeated carrel.common.archive.v1.Archive archives = 10;
 }
 
 

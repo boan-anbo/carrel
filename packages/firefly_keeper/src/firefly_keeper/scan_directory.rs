@@ -1,5 +1,8 @@
 use std::io;
 use std::borrow::Borrow;
+use std::fs::OpenOptions;
+use std::io::Write;
+
 
 use carrel_commons::carrel::firefly_keeper::v1::Fireflies;
 use to_core::to_tag::to_tag_struct::ToTag;
@@ -11,10 +14,7 @@ use crate::firefly_keeper::firefly_keeper_option::FireflyKeeperOption;
 use crate::firefly_keeper::internal_scan_results::InternalScanResults;
 
 
-
 impl FireflyKeeper {
-
-
     pub fn scan_directory(directory: &str, opt: &FireflyKeeperOption) -> Result<Fireflies, io::Error> {
 
         // construct initial result
@@ -30,33 +30,37 @@ impl FireflyKeeper {
     pub fn scan_files(files: &[&str], option: &FireflyKeeperOption) -> Result<Fireflies, io::Error> {
         // construct initial result
         let all_tags = get_all_tags_in_files(files);
-        let result = collect_fireflies(all_tags, None,option);
+        let result = collect_fireflies(all_tags, None, option);
         // test result
         Ok(result)
     }
-
-
 }
 
 
 fn get_all_tags_in_files(files: &[&str]) -> InternalScanResults {
-
     let mut all_tags = Vec::new();
     for file in files {
-        let result  = ToParser::scan_file_for_tags(file, &ToParserOption::default()).unwrap();
+        let result = ToParser::scan_file_for_tags(file, &ToParserOption::default()).unwrap();
         all_tags.extend(result.tos);
-
     }
-    InternalScanResults{
+    InternalScanResults {
         all_files_scaned: 0,
         text_files_scaned: 0,
         tags: all_tags,
     }
 }
 
+// a mutable once_cell to store last checked timestamp
+use once_cell::sync::Lazy;
+use std::sync::Mutex;
+use std::time::{Duration, SystemTime};
+
+static LAST_CHECKED: Lazy<Mutex<SystemTime>> = Lazy::new(|| Mutex::new(SystemTime::now()));
 
 // scan all folders recursively and get all tags
 fn get_all_tags_under_directory_recursive(internal_scan_results: InternalScanResults, directory: &str, opt: &FireflyKeeperOption) -> InternalScanResults {
+
+
     let mut all_tags: Vec<ToTag> = Vec::new();
 
     // file statistics
@@ -89,6 +93,49 @@ fn get_all_tags_under_directory_recursive(internal_scan_results: InternalScanRes
         if is_file && is_supported_file {
             // add 1 to text files scaned
             text_files_scaned += 1;
+
+
+
+
+            // append directory to log, root log.txt
+            // open log.txt
+            // write to log.txt
+            // create my-file.txt if it doesn't exist
+            let mut file = OpenOptions::new()
+                .write(true)
+                .append(true)
+                .create(true)
+                .open("my-file.txt")
+                .unwrap();
+
+
+            // write last checked timestamp to file
+            let calculate_new_duration: Duration = LAST_CHECKED.lock().unwrap().elapsed().unwrap();
+            let new_duration = calculate_new_duration.as_secs();
+            let new_duration = new_duration.to_string();
+            file.write_all(b"Last Spent: ").unwrap();
+            file.write_all(new_duration.as_bytes()).unwrap();
+
+
+
+            // update last checked timestamp
+            *LAST_CHECKED.lock().unwrap() = SystemTime::now();
+
+            // write new line
+            // write new line
+            file.write_all(b"\n\n").unwrap();
+
+
+
+
+            // write to log.txt
+            file.write_all(format!( "path_str: {}", path_str).as_bytes()).unwrap();
+            // write time marker
+            let time_stamp = chrono::Local::now().to_rfc3339();
+            file.write_all(format!( " at {}", time_stamp).as_bytes()).unwrap();
+
+
+
             // get file tags
             let scan_result = ToParser::scan_file_for_tags(path_str, &ToParserOption::default());
 
@@ -99,19 +146,19 @@ fn get_all_tags_under_directory_recursive(internal_scan_results: InternalScanRes
 
         // if path is directory then recursively scan directory
         if path.is_dir() {
-            let mut sub_directory_tags = get_all_tags_under_directory_recursive(InternalScanResults{
-                                        all_files_scaned,
-                                        text_files_scaned,
-                                        tags: vec![],
-                                    },
-                                    path_str,
-                                    opt);
+            let mut sub_directory_tags = get_all_tags_under_directory_recursive(InternalScanResults {
+                all_files_scaned,
+                text_files_scaned,
+                tags: vec![],
+            },
+                                                                                path_str,
+                                                                                opt);
             all_tags.append(&mut sub_directory_tags.tags);
             all_files_scaned = sub_directory_tags.all_files_scaned;
             text_files_scaned = sub_directory_tags.text_files_scaned;
         }
     };
-    InternalScanResults{
+    InternalScanResults {
         all_files_scaned,
         text_files_scaned,
         tags: all_tags,
@@ -131,10 +178,10 @@ mod tests {
         // use its test folder as directory to scan
         let test_directory = format!("{}/tests", root_dir);
 
-        let result = FireflyKeeper::scan_directory(&test_directory, &FireflyKeeperOption{
+        let result = FireflyKeeper::scan_directory(&test_directory, &FireflyKeeperOption {
             ..Default::default()
         }).unwrap();
-        assert_eq!(result.all_tags_count, 4);
+        assert_eq!(result.all_fireflies_count, 4);
         assert_eq!(result.notes.len(), 2);
     }
 
@@ -147,10 +194,10 @@ mod tests {
         // recursively get all files under test directory
         let files = get_all_file_paths_under_directory(&test_directory, &["txt", "md"], None);
 
-        let file_paths: Vec<&str> =  files.iter().map(|file| file.as_str()).collect();
+        let file_paths: Vec<&str> = files.iter().map(|file| file.as_str()).collect();
 
         let result = FireflyKeeper::scan_files(&file_paths, &FireflyKeeperOption::default()).unwrap();
-        assert_eq!(result.all_tags_count, 4);
+        assert_eq!(result.all_fireflies_count, 4);
         assert_eq!(result.notes.len(), 2);
     }
 
@@ -164,8 +211,10 @@ mod tests {
             &test_directory,
             &FireflyKeeperOption::default(),
         ).expect("error scanning directory");
-        assert_eq!(result.all_tags_count, 1262);
+        assert_eq!(result.all_fireflies_count, 1262);
     }
+
+
 
     #[test]
     fn should_have_all_text_scanned_and_all_files_scanned() {
@@ -175,7 +224,7 @@ mod tests {
         let test_directory = format!("{}/tests", root_dir);
 
 
-        let firefly_keeper =get_all_tags_under_directory_recursive(InternalScanResults::default(), &test_directory, &FireflyKeeperOption::default());
+        let firefly_keeper = get_all_tags_under_directory_recursive(InternalScanResults::default(), &test_directory, &FireflyKeeperOption::default());
         let all_files_scaned = firefly_keeper.all_files_scaned;
         let text_files_scaned = firefly_keeper.text_files_scaned;
         assert_eq!(all_files_scaned, 4);
@@ -190,7 +239,7 @@ mod tests {
         let test_directory = format!("{}/tests", root_dir);
         let first_file_txt = format!("{}/first_file.md", test_directory);
 
-        let result = ToParser::scan_file_for_tags(&first_file_txt, &ToParserOption{
+        let result = ToParser::scan_file_for_tags(&first_file_txt, &ToParserOption {
             context_chars_after: 7,
             context_chars_before: 7,
             ..Default::default()

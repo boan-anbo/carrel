@@ -4,8 +4,10 @@
 /* @ts-nocheck */
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
-import {Message, proto3} from "@bufbuild/protobuf";
+import {Message, proto3, protoInt64} from "@bufbuild/protobuf";
 import {Document} from "../../document/v1/document_pb.js";
+import {Importance} from "../../importance/v1/importance_v1_pb.js";
+import {File} from "../../file/v1/file_v1_pb.js";
 
 /**
  * A collection of materials for certain purposes and associated with certain projects.
@@ -14,54 +16,74 @@ import {Document} from "../../document/v1/document_pb.js";
  */
 export class Archive extends Message<Archive> {
   /**
-   * @generated from field: string uuid = 1;
+   * @generated from field: int64 id = 1;
+   */
+  id = protoInt64.zero;
+
+  /**
+   * @generated from field: string uuid = 2;
    */
   uuid = "";
 
   /**
    * the project uuid it is associated with
    *
-   * @generated from field: repeated string project_uuids = 2;
+   * @generated from field: repeated string project_uuids = 3;
    */
   projectUuids: string[] = [];
 
   /**
    * the name of the archive
    *
-   * @generated from field: string name = 3;
+   * @generated from field: string name = 4;
    */
   name = "";
 
   /**
    * the description of the archive
    *
-   * @generated from field: string description = 4;
+   * @generated from field: string description = 5;
    */
   description = "";
 
   /**
    * Documents
    *
-   * @generated from field: repeated carrel.common.document.v1.Document documents = 5;
+   * @generated from field: repeated carrel.common.document.v1.Document documents = 6;
    */
   documents: Document[] = [];
 
   /**
    * removed items
    *
-   * @generated from field: repeated carrel.common.document.v1.Document removed_documents = 6;
+   * @generated from field: repeated carrel.common.document.v1.Document removed_documents = 7;
    */
   removedDocuments: Document[] = [];
 
   /**
+   * @generated from field: carrel.common.importance.v1.Importance importance = 8;
+   */
+  importance = Importance.NONE_UNSPECIFIED;
+
+  /**
+   * @generated from field: bool is_favorite = 9;
+   */
+  isFavorite = false;
+
+  /**
+   * @generated from field: repeated carrel.common.file.v1.File files = 10;
+   */
+  files: File[] = [];
+
+  /**
    * time markers
    *
-   * @generated from field: string created_at = 7;
+   * @generated from field: string created_at = 11;
    */
   createdAt = "";
 
   /**
-   * @generated from field: string updated_at = 8;
+   * @generated from field: string updated_at = 12;
    */
   updatedAt = "";
 
@@ -73,14 +95,18 @@ export class Archive extends Message<Archive> {
   static readonly runtime = proto3;
   static readonly typeName = "carrel.common.archive.v1.Archive";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "project_uuids", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-    { no: 3, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "documents", kind: "message", T: Document, repeated: true },
-    { no: 6, name: "removed_documents", kind: "message", T: Document, repeated: true },
-    { no: 7, name: "created_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 8, name: "updated_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 1, name: "id", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 2, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "project_uuids", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+    { no: 4, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: "documents", kind: "message", T: Document, repeated: true },
+    { no: 7, name: "removed_documents", kind: "message", T: Document, repeated: true },
+    { no: 8, name: "importance", kind: "enum", T: proto3.getEnumType(Importance) },
+    { no: 9, name: "is_favorite", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 10, name: "files", kind: "message", T: File, repeated: true },
+    { no: 11, name: "created_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 12, name: "updated_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Archive {

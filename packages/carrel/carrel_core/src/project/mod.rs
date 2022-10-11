@@ -19,24 +19,29 @@
 //! ## Open a project
 //!
 //! ```rust
-//! use carrel_core::project::project_manager::manage_project::ManageProjectTrait;
-//! use carrel_core::project::project_manager::project_manager::ProjectManager;
+//! use carrel_core::project::project_manager::CarrelProjectManager;
+//! use carrel_core::project::project_manager_methods::manage_project::ManageProjectTrait;
 //!
-//! let project_manager = ProjectManager::load("path/to/project/directory").unwrap();
+//! #[tokio::main]
+//! async fn main() {
 //!
-//! let is_project = ProjectManager::is_dir_project("path/to/project/directory");
+//! let project_manager = CarrelProjectManager::load("path/to/project/directory").await.unwrap();
+//!
+//! let is_project = CarrelProjectManager::is_dir_project("path/to/project/directory");
 //!
 //! assert_eq!(is_project, true);
 //!
+//! }
+//!
+//!
 //! ```
 //!
-pub mod error;
-pub mod db_manager;
 pub mod archivist;
 pub mod config;
+pub mod db_manager;
+pub mod error;
 pub mod file_manager;
-pub mod manage_project;
+pub mod project_implementation;
 pub mod project_manager;
+pub mod project_manager_methods;
 pub mod to_manager;
-pub mod firefly_keeper;
-

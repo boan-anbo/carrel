@@ -7,11 +7,18 @@ package carrel.server.project_manager.v1;
 import "carrel/core/project_manager/v1/project_manager_v1.proto";
 import "carrel/common/file/v1/file_v1.proto";
 
+import "carrel/common/archive/v1/archive_v1.proto";
+
+import "carrel/common/firefly/v2/firefly_v2.proto";
+
+import "generic/api/query/v1/query_v1.proto";
+
+import "carrel/common/project/v2/project_v2.proto";
 
 // services
 service ProjectManagerService {
   // open project, return empty response if success
-  rpc OpenProjectAndGetInfo (OpenProjectAndGetInfoRequest) returns (OpenProjectAndGetInfoResponse) {}
+  rpc OpenProject (OpenProjectRequest) returns (OpenProjectResponse) {}
 
   // get project information
   // add archive
@@ -22,21 +29,49 @@ service ProjectManagerService {
 
   // add file paths to project archive
   rpc AddFilesToArchive (AddFilesToArchiveRequest) returns (AddFilesToArchiveResponse) {}
+  // add all files under directory to project archive
+  rpc AddDirectoryToArchive (AddDirectoryToArchiveRequest) returns (AddDirectoryToArchiveResponse) {}
 
   // remove file paths from project archive
   rpc RemoveFilesFromArchive (RemoveFilesFromArchiveRequest) returns (RemoveFilesFromArchiveResponse) {}
+
+  rpc ListAllProjectArchives (ListAllProjectArchivesRequest) returns (ListAllProjectArchivesResponse) {}
+
+  // List all files stored in the archive with the given ID.
+  rpc ListFilesInArchive (ListFilesInArchiveRequest) returns (ListFilesInArchiveResponse) {}
+
+  rpc SyncProjectArchives (SyncProjectArchivesRequest) returns (SyncProjectArchivesResponse) {}
+
+  rpc ListAllProjectFiles (ListAllProjectFilesRequest) returns (ListAllProjectFilesResponse) {}
+
+  // fireflies
+  rpc ListAllProjectFireflies (ListAllProjectFirefliesRequest) returns (ListAllProjectFirefliesResponse) {}
+
+  // generic queries
+  rpc QueryFiles (QueryFilesRequest) returns (QueryFilesResponse) {}
+
+  // query fireflies
+  rpc QueryFireflies (QueryFirefliesRequest) returns (QueryFirefliesResponse) {}
+
+  // list most recent projects
+  rpc ListRecentProjects (ListRecentProjectsRequest) returns (ListRecentProjectsResponse) {}
+
+
 }
 
 // message to open a project
-message OpenProjectAndGetInfoRequest {
+message OpenProjectRequest {
   // the id of the project
   string project_directory = 1;
+  // app
+  string app_directory = 2;
 }
 
 // message to open a project
-message OpenProjectAndGetInfoResponse {
-  // the id of the project
-  carrel.core.project_manager.v1.ProjectInfo project_info = 1;
+message OpenProjectResponse {
+  string app_directory = 2;
+  string project_directory = 3;
+  carrel.core.project_manager.v1.ProjectInfo project_info = 4;
 }
 
 // message to get project information
@@ -99,8 +134,6 @@ message GetArchiveFilesResponse {
 message AddFilesToArchiveRequest {
   // the folder of the project
   string project_directory = 1;
-  // the id of the project
-  int32 project_id = 2;
   // the id of the archive
   int32 archive_id = 3;
   // the list of files
@@ -118,6 +151,29 @@ message AddFilesToArchiveResponse {
   // the list of files
   repeated carrel.common.file.v1.File files = 4;
 }
+
+
+// message to add folder files to archive
+message AddDirectoryToArchiveRequest {
+  // the folder of the project
+  string project_directory = 1;
+  // the id of the archive
+  int32 archive_id = 3;
+  // the list of files
+  string source_directory = 4;
+}
+
+// message to add folder files to archive
+message AddDirectoryToArchiveResponse {
+  // the folder of the project
+  string project_directory = 1;
+  // the id of the archive
+  int32 archive_id = 3;
+  // the list of files
+  repeated carrel.common.file.v1.File files = 4;
+}
+
+
 
 
 // message to remove files from archive
@@ -143,4 +199,142 @@ message RemoveFilesFromArchiveResponse {
   int64 affected_rows = 4;
   // bool when affected rows is 0
   bool is_affacted_rows_zero = 5;
+}
+
+
+
+// message to list all project archives
+message ListAllProjectArchivesRequest {
+  // the folder of the project
+  string project_directory = 1;
+}
+
+// message to list all project archives
+message ListAllProjectArchivesResponse {
+
+  string project_directory = 1;
+  // the folder of the project
+  repeated carrel.common.archive.v1.Archive archives = 3;
+  // the list of archives
+}
+
+// message to list files in archive
+message ListFilesInArchiveRequest {
+  // the folder of the project
+  string project_directory = 1;
+  // the id of the archive
+  int32 archive_id = 2;
+}
+
+// message to list files in archive
+message ListFilesInArchiveResponse {
+  // the folder of the project
+  string project_directory = 1;
+  // the id of the archive
+  int32 archive_id = 2;
+  // the list of files
+  repeated carrel.common.file.v1.File files = 3;
+}
+
+// message to sync archive
+message SyncProjectArchivesRequest {
+  // the folder of the project
+  string project_directory = 1;
+  // the id of the archive
+  int32 archive_id = 2;
+}
+
+// message to sync archive
+message SyncProjectArchivesResponse {
+  // the folder of the project
+  string project_directory = 1;
+  // the id of the archive
+  repeated carrel.common.file.v1.File synced_files = 3;
+
+  repeated carrel.common.firefly.v2.Firefly new_fireflies = 4;
+}
+
+
+// message to list all project files
+message ListAllProjectFilesRequest {
+  // the folder of the project
+  string project_directory = 1;
+}
+
+// message to list all project files
+message ListAllProjectFilesResponse {
+  // the folder of the project
+  string project_directory = 1;
+  // the list of files
+  repeated carrel.common.file.v1.File files = 3;
+}
+
+
+// message to list all project fireflies
+message ListAllProjectFirefliesRequest {
+  // the folder of the project
+  string project_directory = 1;
+}
+
+// message to list all project fireflies
+message ListAllProjectFirefliesResponse {
+  // the folder of the project
+  string project_directory = 1;
+  // the list of fireflies
+  repeated carrel.common.firefly.v2.Firefly fireflies = 3;
+  // count
+  uint64 count = 4;
+}
+
+// message to query files
+message QueryFilesRequest {
+  // the folder of the project
+  string project_directory = 1;
+  // the query
+  generic.api.query.v1.StandardQuery query = 2;
+}
+
+// message that replies to query files request
+message QueryFilesResponse {
+  // the folder of the project
+  string project_directory = 1;
+  // the list of files
+  repeated carrel.common.file.v1.File files = 3;
+  generic.api.query.v1.StandardQueryResultMetadata response_metadata = 4;
+}
+
+// message to query fireflies
+message QueryFirefliesRequest {
+  // the folder of the project
+  string project_directory = 1;
+  // the query
+  generic.api.query.v1.StandardQuery query = 2;
+}
+
+// message that replies to query fireflies request
+message QueryFirefliesResponse {
+  // the folder of the project
+  string project_directory = 1;
+  // the list of fireflies
+  repeated carrel.common.firefly.v2.Firefly fireflies = 3;
+  generic.api.query.v1.StandardQueryResultMetadata response_metadata = 4;
+}
+
+
+// list more recent project request
+message ListRecentProjectsRequest {
+  // app directory
+  string app_directory = 1;
+  // number of projects
+  int32 number_of_projects = 2;
+
+}
+
+// list more recent project response
+message ListRecentProjectsResponse {
+
+  repeated carrel.common.project.v2.Project projects = 1;
+
+  string app_directory = 3;
+
 }

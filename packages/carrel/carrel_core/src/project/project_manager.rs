@@ -1,36 +1,60 @@
-use std::path::PathBuf;
-use async_trait::async_trait;
-use to_core::to_machine::to_machine_option::ToMachineOption;
+use crate::app::app_manager::{CarrelAppManager, ManageCarrelApp};
 use crate::project::config::const_config_file_name::CONFIG_DEFAULT_CARREL_DB_NAME;
 use crate::project::config::project_config::ProjectConfig;
-use crate::project::db_manager::carrel_db_manager::{CarrelDbManager};
-use crate::project::to_manager::to_manager::{ManageTo, ToManager};
+use crate::project::db_manager::carrel_db_manager::CarrelDbManager;
+use crate::project::db_manager::project_db_manager::MangageProjects;
+use crate::project::to_manager::to_manager::{FireflyKepper, KeepFireflies};
+use async_trait::async_trait;
+use carrel_db::entities::project;
+use carrel_utils::datetime::get_iso_string::get_now_iso_string;
+use sea_orm::ActiveValue::Set;
+use std::path::PathBuf;
 
-
-pub struct ProjectManager {
+pub struct CarrelProjectManager {
     pub db: CarrelDbManager,
-    pub to: ToManager,
+    pub to: FireflyKepper,
     pub config: ProjectConfig,
     pub project_directory: PathBuf,
     pub project_id: i32,
     pub archive_ids: Vec<i32>,
 }
 
-// impl default
-impl ProjectManager {
-    pub async fn new(project_directory: &str) -> Self {
-        let to = ToManager::new(
-            project_directory,
-            CONFIG_DEFAULT_CARREL_DB_NAME,
-             ToManagerOption::default()
-        ).await;
-        ProjectManager {
-            db: CarrelDbManager::new(project_directory, &ProjectConfig::default()),
-            to,
-            config: ProjectConfig::default(),
-            project_directory: PathBuf::new(),
-            project_id: 1,
-            archive_ids: vec![],
+impl CarrelProjectManager {
+    pub async fn to_project(&self) -> project::ActiveModel {
+        let directory = &self.project_directory;
+
+        let directory_string = directory.to_str().unwrap().to_string();
+
+        let dir_name = directory.file_name().unwrap().to_str().unwrap().to_string();
+
+        let project_name = dir_name.clone();
+
+        let db_name = self
+            .config
+            .carrel_db
+            .file_name()
+            .unwrap()
+            .to_str()
+            .unwrap()
+            .to_string();
+
+        let to_name = self
+            .config
+            .to_db
+            .file_name()
+            .unwrap()
+            .to_str()
+            .unwrap()
+            .to_string();
+
+        project::ActiveModel {
+            id: Set(1),
+            name: Set(project_name),
+            directory: Set(Some(directory_string)),
+            db_name: Set(Some(db_name)),
+            to_name: Set(Some(to_name)),
+            updated_at: Set(get_now_iso_string()),
+            ..Default::default()
         }
     }
 }
@@ -42,22 +66,20 @@ pub trait InstantiateFromConfig {
     async fn from_config(config: ProjectConfig, project_directory: &str) -> Self;
 }
 
-
 #[async_trait]
-impl InstantiateFromConfig for ProjectManager {
+impl InstantiateFromConfig for CarrelProjectManager {
     async fn from_config(config: ProjectConfig, project_directory: &str) -> Self {
-        let to = ToManager::new(
-                project_directory,
-                config.to_db_file_name.to_str().unwrap(),
-                ToManagerOption::default()
-
-            ).await;
-        ProjectManager {
-            db: CarrelDbManager::new(project_directory,
-                                     &config)
-            ,
-            project_directory: project_directory.parse().unwrap(),
+        // initialize Textual Object and Carrel DBs. This does not init the db files which is a separate process.
+        let to = FireflyKepper::new(
+            project_directory,
+            config.to_db.to_str().unwrap(),
+            ToManagerOption::default(),
+        );
+        let db = CarrelDbManager::new(project_directory, &config);
+        CarrelProjectManager {
+            db,
             to,
+            project_directory: project_directory.parse().unwrap(),
             archive_ids: vec![],
             config,
             project_id: 1,
@@ -65,36 +87,31 @@ impl InstantiateFromConfig for ProjectManager {
     }
 }
 
-pub struct ToManagerOption {
-
-}
+pub struct ToManagerOption {}
 
 impl Default for ToManagerOption {
     fn default() -> Self {
-        ToManagerOption{
-
-        }
+        ToManagerOption {}
     }
 }
 
-
 #[cfg(test)]
 mod tests {
-    use carrel_commons::carrel::core::project_manager::v1::CarrelDbType;
-    use carrel_utils::test::test_folders::{get_random_test_temp_folder_path_buf};
-    use crate::project::project_manager::InstantiateFromConfig;
     use super::*;
-
+    use crate::project::project_manager::InstantiateFromConfig;
+    use carrel_commons::carrel::core::project_manager::v1::CarrelDbType;
+    use carrel_utils::test::test_folders::get_random_test_temp_folder_path_buf;
 
     #[tokio::test]
     async fn test_project_manager_from_config() {
         let temp_project_folder = get_random_test_temp_folder_path_buf();
         let config = ProjectConfig {
-            carrel_db_file_name: "test.db".to_string().parse().unwrap(),
-            to_db_file_name: "test_to.db".to_string().parse().unwrap(),
-            carrel_db_type: CarrelDbType::SqliteUnspecified,
+            carrel_db: "test.db".to_string().parse().unwrap(),
+            to_db: "test_to.db".to_string().parse().unwrap(),
+            carrel_db_type: CarrelDbType::Sqlite,
         };
-        let project_manager = ProjectManager::from_config(config, temp_project_folder.to_str().unwrap()).await;
+        let project_manager =
+            CarrelProjectManager::from_config(config, temp_project_folder.to_str().unwrap()).await;
 
         assert_eq!(project_manager.project_directory, temp_project_folder);
     }
