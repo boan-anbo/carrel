@@ -3,10 +3,10 @@ use tracing::Level;
 
 use crate::launch::launch_server;
 
-pub(crate) mod services;
-pub mod errors;
 pub(crate) mod consts;
+pub mod errors;
 mod launch;
+pub(crate) mod services;
 
 // main
 #[tokio::main]

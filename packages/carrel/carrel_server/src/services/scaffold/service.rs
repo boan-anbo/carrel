@@ -1,7 +1,9 @@
 use std::borrow::Borrow;
 
-use carrel_commons::carrel::server::scaffold::v1::{ScaffoldNewProjectRequest, ScaffoldNewProjectResponse};
 use carrel_commons::carrel::server::scaffold::v1::scaffold_new_project_service_server::ScaffoldNewProjectService;
+use carrel_commons::carrel::server::scaffold::v1::{
+    ScaffoldNewProjectRequest, ScaffoldNewProjectResponse,
+};
 use tonic::{Request, Response, Status};
 
 #[derive(Debug, Default)]
@@ -9,7 +11,10 @@ pub struct ScaffoldService {}
 
 #[tonic::async_trait]
 impl ScaffoldNewProjectService for ScaffoldService {
-    async fn scaffold_new_project(&self, request: Request<ScaffoldNewProjectRequest>) -> Result<Response<ScaffoldNewProjectResponse>, Status> {
+    async fn scaffold_new_project(
+        &self,
+        request: Request<ScaffoldNewProjectRequest>,
+    ) -> Result<Response<ScaffoldNewProjectResponse>, Status> {
         let request_value = request.into_inner();
 
         let new_dir_path = carrel_core::scaffold::procedures::scaffold_new_project(
@@ -17,19 +22,16 @@ impl ScaffoldNewProjectService for ScaffoldService {
             request_value.project_parent_dir.as_str(),
         );
 
-        let response = Response::new(
-            ScaffoldNewProjectResponse {
-                project_dir: new_dir_path.unwrap()
-            }
-        );
+        let response = Response::new(ScaffoldNewProjectResponse {
+            project_dir: new_dir_path.unwrap(),
+        });
         Ok(response)
     }
 }
 
 // test
 #[cfg(test)]
-mod test
-{
+mod test {
     use std::path::Path;
 
     use carrel_commons::carrel::server::scaffold::v1::scaffold_new_project_service_client::ScaffoldNewProjectServiceClient;
@@ -40,16 +42,15 @@ mod test
 
     use super::*;
 
-
-
     async fn get_client() -> ScaffoldNewProjectServiceClient<Channel> {
-        ScaffoldNewProjectServiceClient::connect(SERVER_ADDR.http_server_addr.as_str()).await.expect("cannot build scaffold service client")
+        ScaffoldNewProjectServiceClient::connect(SERVER_ADDR.http_server_addr.as_str())
+            .await
+            .expect("cannot build scaffold service client")
     }
 
     fn get_scaffold_fixture_path() -> String {
         get_random_unit_test_module_folder()
     }
-
 
     #[tokio::test]
     async fn test_scaffold_new_project() -> Result<(), Box<dyn std::error::Error>> {
@@ -59,7 +60,6 @@ mod test
         });
 
         let response = get_client().await.scaffold_new_project(request).await?;
-
 
         // make sure a new folder is created in the fixture folder
         let new_project_dir = Path::new(response.get_ref().project_dir.as_str());

@@ -1,5 +1,5 @@
-use tower_http::cors::{Any, CorsLayer};
 use crate::Method;
+use tower_http::cors::{Any, CorsLayer};
 
 pub fn load_cors() -> CorsLayer {
     CorsLayer::new()

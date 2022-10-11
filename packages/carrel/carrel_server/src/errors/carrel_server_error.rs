@@ -1,7 +1,7 @@
-use std::{io};
-use thiserror::Error;
+use carrel_core::carrel_db::errors::database_error::SeaOrmDatabaseError;
 use carrel_core::errors::carrel_core_error::CarrelCoreError;
-use carrel_core::SeaOrmDatabaseError;
+use std::io;
+use thiserror::Error;
 
 // create a custom error for carrel_core
 #[derive(Debug, Error)]
@@ -15,7 +15,4 @@ pub enum CarrelServerError {
     ProjectOperationFailed(#[source] SeaOrmDatabaseError),
     #[error("CarrelServerError: Invalid Request payload: {0}")]
     InvalidRequestPayload(String),
-
 }
-
-

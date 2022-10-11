@@ -1,5 +1,5 @@
-use tracing_subscriber::fmt::Subscriber as FmtSubscriber;
 use crate::Level;
+use tracing_subscriber::fmt::Subscriber as FmtSubscriber;
 
 /// Attach a debug tracing subscriber to the current thread.
 pub fn attach_tracing_subscriber() {
