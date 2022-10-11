@@ -1,15 +1,17 @@
+use crate::fs::read_file_content::read_file_content;
 use crate::to_dtos::to_scan_dto::ToScanRequestDto;
 use regex::{escape, Regex};
 use std::borrow::Borrow;
 use std::io::Error;
-use crate::fs::read_file_content::read_file_content;
 
 use crate::to_parser::parser_option::ToParserOption;
 use crate::to_parser::to_parser_result::ToParserResult;
 use crate::to_tag::to_tag_struct::ToTag;
 use crate::to_ticket::to_ticket_position::ToTicketPositionInfo;
 use crate::to_ticket::to_ticket_struct::ToTicket;
-use crate::util_entities::to_context::{extract_context, extract_context_by_position, ToContext, ToContextExtractOption};
+use crate::util_entities::to_context::{
+    extract_context, extract_context_by_position, ToContext, ToContextExtractOption,
+};
 
 /// Parser to scan text for tickets
 pub struct ToParser {}
@@ -37,7 +39,11 @@ impl ToParser {
     /// assert_eq!(result.tos.first().unwrap().note, "NOTE");
     ///
     /// ```
-    pub fn scan_text_for_tags(text: &str, opt: &ToParserOption, file_path: Option<String>) -> ToParserResult<ToTag> {
+    pub fn scan_text_for_tags(
+        text: &str,
+        opt: &ToParserOption,
+        file_path: Option<String>,
+    ) -> ToParserResult<ToTag> {
         let text_original = text.to_string();
         let all_tickets = ToParser::scan_text_for_tickets(text, opt, file_path);
         let mut tags: Vec<ToTag> = Vec::new();
@@ -128,7 +134,11 @@ impl ToParser {
     /// assert_eq!(result.get(1).unwrap().position.line_number, 1);
     /// assert_eq!(result.get(1).unwrap().position.column_number, 1);
     /// ```
-    pub fn scan_text_for_tickets(text: &str, opt: &ToParserOption, file_path: Option<String>) -> Vec<ToTicket> {
+    pub fn scan_text_for_tickets(
+        text: &str,
+        opt: &ToParserOption,
+        file_path: Option<String>,
+    ) -> Vec<ToTicket> {
         let lines: &Vec<String> = &text.lines().map(|s| s.to_string()).collect();
         let re = Regex::new(
             format!(
@@ -136,20 +146,21 @@ impl ToParser {
                 escape(&opt.to_marker.left_marker),
                 escape(&opt.to_marker.right_marker)
             )
-                .as_str(),
+            .as_str(),
         )
-            .unwrap();
+        .unwrap();
         let mut result = Vec::new();
         // iterate with line number
         for (line_number, line) in lines.iter().enumerate() {
             // iterate with match
             for m in re.captures_iter(line) {
                 // get the match position
-                let position: ToTicketPositionInfo = ToTicketPositionInfo::from_match(&m, line_number, file_path.clone());
-
+                let position: ToTicketPositionInfo =
+                    ToTicketPositionInfo::from_match(&m, line_number, file_path.clone());
 
                 // get to context
-                let to_context = extract_context_by_position(&position, text, ToContextExtractOption::from(opt));
+                let to_context =
+                    extract_context_by_position(&position, text, ToContextExtractOption::from(opt));
 
                 // get first group of match
                 let content = m.get(1).unwrap().as_str();
@@ -163,34 +174,44 @@ impl ToParser {
     }
 
     /// Read a plain text file and scan tags in it
-    pub fn scan_file_for_tags(file_path: &str, opt: &ToParserOption) -> Result<ToParserResult<ToTag>, Error> {
+    pub fn scan_file_for_tags(
+        file_path: &str,
+        opt: &ToParserOption,
+    ) -> Result<ToParserResult<ToTag>, Error> {
         let text = read_file_content(file_path);
         match text {
             Ok(text) => {
                 let result = ToParser::scan_text_for_tags(&text, opt, Some(file_path.to_string()));
                 Ok(result)
-            },
+            }
             Err(e) => Err(e),
         }
     }
 
-
     /// Read a plain text file and scan tickets in it
-    pub fn scan_file_for_tickets(file_path: &str, opt: &ToParserOption) -> Result<Vec<ToTicket>, Error> {
+    pub fn scan_file_for_tickets(
+        file_path: &str,
+        opt: &ToParserOption,
+    ) -> Result<Vec<ToTicket>, Error> {
         let text = read_file_content(file_path);
         match text {
-            Ok(text) => Ok(ToParser::scan_text_for_tickets(&text, opt, Some(file_path.to_string()))),
+            Ok(text) => Ok(ToParser::scan_text_for_tickets(
+                &text,
+                opt,
+                Some(file_path.to_string()),
+            )),
             Err(e) => Err(e),
         }
     }
 }
 
-
 // test create default TextualObjectTicket
 #[cfg(test)]
 mod tests {
     use super::*;
+    use carrel_utils::test::test_folders::get_test_fixture_module_folder_path_buf;
     use std::borrow::Borrow;
+    use std::fs;
 
     #[test]
     fn test_one_mark() {
@@ -319,8 +340,11 @@ mod tests {
 
         let raw_text_without_duplicate =
             "1[[KEY|VALUE|NOTE]]\n2[[KEY2|VALUE2|NOTE2]]\n3[[KEY3|VALUE3|NOTE3]]";
-        let result_without_duplicate =
-            ToParser::scan_text_for_tags(raw_text_without_duplicate, &ToParserOption::default(), None);
+        let result_without_duplicate = ToParser::scan_text_for_tags(
+            raw_text_without_duplicate,
+            &ToParserOption::default(),
+            None,
+        );
         let cleaned_text = result_without_duplicate.text_cleaned;
         assert_eq!(result_without_duplicate.tos.len(), 3);
         assert_eq!(cleaned_text, "1\n2\n3");
@@ -354,11 +378,15 @@ mod tests {
         // long text with random contenxt
         let raw_text = "Long context text with 21[[KEY|VALUE|NOTE]]12 and some more context";
 
-        let parse_result = ToParser::scan_text_for_tags(raw_text, &ToParserOption{
-            context_chars_after: 1,
-            context_chars_before: 1,
-            ..ToParserOption::default()
-        }, None);
+        let parse_result = ToParser::scan_text_for_tags(
+            raw_text,
+            &ToParserOption {
+                context_chars_after: 1,
+                context_chars_before: 1,
+                ..ToParserOption::default()
+            },
+            None,
+        );
 
         let first_tag = parse_result.tos.first().unwrap();
 
@@ -369,11 +397,15 @@ mod tests {
         assert_eq!(context.context, "1[[KEY|VALUE|NOTE]]1");
 
         // add one more character to context
-        let parse_result = ToParser::scan_text_for_tags(raw_text, &ToParserOption{
-            context_chars_after: 2,
-            context_chars_before: 2,
-            ..ToParserOption::default()
-        }, None);
+        let parse_result = ToParser::scan_text_for_tags(
+            raw_text,
+            &ToParserOption {
+                context_chars_after: 2,
+                context_chars_before: 2,
+                ..ToParserOption::default()
+            },
+            None,
+        );
 
         let first_tag = parse_result.tos.first().unwrap();
 
@@ -384,31 +416,43 @@ mod tests {
         assert_eq!(context.context, "21[[KEY|VALUE|NOTE]]12");
 
         // try out of bounds context
-        let parse_result = ToParser::scan_text_for_tags(raw_text, &ToParserOption{
-            context_chars_after: 100,
-            context_chars_before: 100,
-            ..ToParserOption::default()
-        }, None);
+        let parse_result = ToParser::scan_text_for_tags(
+            raw_text,
+            &ToParserOption {
+                context_chars_after: 100,
+                context_chars_before: 100,
+                ..ToParserOption::default()
+            },
+            None,
+        );
 
         let first_tag = parse_result.tos.first().unwrap();
         // has context
         let snippet = first_tag.snippet.as_ref().unwrap();
         let context = snippet.context.as_ref().unwrap();
 
-        assert_eq!(context.context, "Long context text with 21[[KEY|VALUE|NOTE]]12 and some more context");
+        assert_eq!(
+            context.context,
+            "Long context text with 21[[KEY|VALUE|NOTE]]12 and some more context"
+        );
     }
 
     // test if context can handle Context[[N|SOME NOTE]]Context
     #[test]
     fn test_scan_text_for_tags_context_information_with_note() {
         // long text with random contenxt
-        let raw_text = "First line\ntest\nLong context text with 21[[N|SOME NOTE]]12 and some more context";
+        let raw_text =
+            "First line\ntest\nLong context text with 21[[N|SOME NOTE]]12 and some more context";
 
-        let parse_result = ToParser::scan_text_for_tags(raw_text, &ToParserOption{
-            context_chars_after: 1,
-            context_chars_before: 1,
-            ..ToParserOption::default()
-        }, None);
+        let parse_result = ToParser::scan_text_for_tags(
+            raw_text,
+            &ToParserOption {
+                context_chars_after: 1,
+                context_chars_before: 1,
+                ..ToParserOption::default()
+            },
+            None,
+        );
 
         let first_tag = parse_result.tos.first().unwrap();
 
@@ -419,6 +463,35 @@ mod tests {
         // has context
 
         assert_eq!(context.context, "1[[N|SOME NOTE]]1");
+    }
 
+    #[test]
+    fn test_processing_img_files() {
+        let fixture_folder = get_test_fixture_module_folder_path_buf("exceptions");
+        let dir_path = fixture_folder.join("img_files");
+        assert_eq!(dir_path.is_dir(), true);
+
+        let mut all_results: Vec<ToTag> = Vec::new();
+        // iterate over all files and scan each file
+        for entry in fs::read_dir(dir_path).unwrap() {
+            let entry = entry.unwrap();
+            let path = entry.path();
+            let file_name = path.file_name().unwrap().to_str().unwrap();
+            let file_path = path.to_str().unwrap();
+            let result = ToParser::scan_file_for_tags(file_path, &ToParserOption::default());
+
+            match result {
+                Ok(result) => {
+                    all_results.extend(result.tos);
+                }
+                Err(e) => {
+                    // continue
+                    println!("Error while parsing file {}: {}", file_name, e);
+                }
+            }
+            // should not panic
+        }
+
+        assert_eq!(all_results.len(), 0);
     }
 }

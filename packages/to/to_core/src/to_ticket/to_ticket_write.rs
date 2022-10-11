@@ -31,10 +31,7 @@ impl ToTicket {
             // check opt to see if include_updated
             // if so, print date string without nano-second
             if opt.include_updated {
-                print_label.push(format!(
-                    "updated: {}",
-                    self.to_updated.format("%Y-%m-%d %H:%M:%S")
-                ));
+                print_label.push(format!("updated: {}", self.to_updated));
             }
             // check opt to see if include_store_info, length of store_id is not None, and length of store_id is not 0
             if opt.include_store_info
@@ -85,6 +82,7 @@ impl ToTicket {
 // test module
 #[cfg(test)]
 mod tests {
+    use carrel_utils::datetime::get_iso_string::get_now_iso_string;
     use chrono::{FixedOffset, TimeZone, Utc};
 
     use crate::to::to_struct::TextualObject;
@@ -137,7 +135,7 @@ mod tests {
         ticket
             .values
             .insert("key2".to_string(), "value2".to_string());
-        ticket.to_updated = FixedOffset::east(0).ymd(2019, 1, 1).and_hms(0, 0, 0);
+        ticket.to_updated = get_now_iso_string();
         ticket.to_store_url = Some("store_info_value".to_string());
         ticket.to_store_info = Some("store_id_value".to_string());
         let print_label = ticket.print(None);
@@ -155,7 +153,7 @@ mod tests {
         ticket
             .values
             .insert("key2".to_string(), "value2".to_string());
-        ticket.to_updated = FixedOffset::east(0).ymd(2019, 1, 1).and_hms(0, 0, 0);
+        ticket.to_updated = get_now_iso_string();
         ticket.to_store_url = Some("correct_store_info_value".to_string());
         ticket.to_store_info = Some("correct_store_info_value".to_string());
         ticket.values.insert(

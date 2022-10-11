@@ -1,3 +1,5 @@
+use carrel_utils::datetime::get_iso_string::get_now_iso_string;
+use carrel_utils::uuid::new_v4;
 use std::collections::HashMap;
 
 use crate::error::{TextualObjectErrorMessage, ToErrors};
@@ -22,7 +24,7 @@ pub struct ToStoredReceipt {
     pub store_info: String,
     pub store_url: String,
     pub stored: chrono::NaiveDateTime,
-    pub total_tos_stored: usize,
+    pub total_tos_stored: u64,
 }
 
 // create receipt From TextualObjectStoredReceipt
@@ -150,8 +152,13 @@ pub struct ToAddRequest {
     // name of the source of the textual object, e.g. "Zotero", "DOI"
     pub source_name: String,
 
+    /// See TO fields specifications
+    pub json_type: Option<String>,
+    /// See TO fields specifications
+    pub json_unique_id: Option<String>,
+
     // item
-    pub json: serde_json::Value,
+    pub json: String,
 }
 
 // impl default
@@ -162,7 +169,9 @@ impl Default for ToAddRequest {
             source_id_type: None,
             source_path: None,
             source_name: String::new(),
-            json: serde_json::Value::Null,
+            json: String::new(),
+            json_type: None,
+            json_unique_id: None,
         }
     }
 }
@@ -174,6 +183,9 @@ impl ToAddRequest {
             source_id_type: Some("source_id_type_value".to_string()),
             source_path: Some("source_path_value".to_string()),
             source_name: "source_name_value".to_string(),
+
+            json_type: Some("json_type_value".to_string()),
+            json_unique_id: Some(new_v4().to_string()),
             json: serde_json::json!({
                 "test_string": "test_string_value",
                 "test_number": 1,
@@ -187,41 +199,46 @@ impl ToAddRequest {
                     "test_null": null,
                     "test_array": [1, 2, 3],
                 }
-            }),
+            })
+            .to_string(),
         }
     }
 }
 
 // implement from dto to textual object
 impl From<ToAddRequest> for TextualObject {
-    fn from(dto: ToAddRequest) -> Self {
+    fn from(req: ToAddRequest) -> Self {
         let ticket_id = generate_id();
         // create a new textual object, ready to persist to the database
         let mut to = TextualObject {
-            id: Uuid::new_v4(),
+            id: 0,
 
-            source_id: dto.source_id.unwrap_or("".to_string()),
-            source_id_type: dto.source_id_type.unwrap_or("".to_string()),
-            source_path: dto.source_path.unwrap_or("".to_string()),
-            source_name: dto.source_name,
+            uuid: Uuid::new_v4().to_string(),
+
+            source_id: req.source_id.unwrap_or("".to_string()),
+            source_id_type: req.source_id_type.unwrap_or("".to_string()),
+            source_path: req.source_path.unwrap_or("".to_string()),
+            source_name: req.source_name,
 
             store_url: String::new(),
             // this will come from the receipt.
             store_info: "".to_string(),
 
             ticket_id: ticket_id.clone(),
-            ticket_minimal: print_minimal_ticket(&ticket_id, None),
+            ticket_minimal: print_minimal_ticket(ticket_id.as_str(), None),
 
-            created: Utc::now().naive_utc(),
-            updated: Utc::now().naive_utc(),
+            created: get_now_iso_string(),
+            updated: get_now_iso_string(),
 
             card_map: String::new(),
             context: "".to_string(),
-            card: sqlx::types::Json(ToCard::default()),
+            card: json!(ToCard::default()).to_string(),
 
-            json: sqlx::types::Json(dto.json),
+            json: req.json,
 
+            json_type: req.json_type,
             ticket_index_in_context: 0,
+            json_unique_id: req.json_unique_id,
         };
         to.update_minimal_ticket()
     }
@@ -256,7 +273,9 @@ mod test {
             source_id_type: Some("source_id_type_value".to_string()),
             source_path: Some("source_path_value".to_string()),
             source_name: "source_name_value".to_string(),
-            json: json_value.clone(),
+            json_type: Some("json_type_value".to_string()),
+            json_unique_id: Some("json_unique_id_value".to_string()),
+            json: json_value.to_string(),
         };
         let textual_object = TextualObject::from(dto);
         assert_eq!(textual_object.source_id, "source_id_value");

@@ -1,11 +1,15 @@
+use carrel_commons::carrel::common::context::v1::Context;
 use std::iter;
 use std::ops::Sub;
-use std::str::Lines;
-use crate::util_entities::to_snippet::ToSnippet;
+
 use serde::{Deserialize, Serialize};
+use serde_json::json;
+
 use crate::to_parser::parser_option::ToParserOption;
 use crate::to_ticket::to_ticket_position::ToTicketPositionInfo;
+use crate::util_entities::to_snippet::ToSnippet;
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ToContextExtractOption {
     // characters before the context index
     pub chars_before: usize,
@@ -22,8 +26,8 @@ impl Default for ToContextExtractOption {
     fn default() -> Self {
         // default to extract two lines above and below the context line
         ToContextExtractOption {
-            chars_before: 0,
-            chars_after: 0,
+            chars_before: 500,
+            chars_after: 500,
             whole_line: true,
             whole_text: false,
         }
@@ -52,9 +56,15 @@ pub struct ToContext {
     pub snippet_string: String,
 }
 
-
 // implement method for ToContext with takes in a ToSnippet with location information and a original text
-pub fn extract_context(snippet_string: String, snippet_line: usize, snippet_start_index: usize, snippet_lenth: usize, text: &str, opt: ToContextExtractOption) -> ToContext {
+pub fn extract_context(
+    snippet_string: String,
+    snippet_line: usize,
+    snippet_start_index: usize,
+    snippet_lenth: usize,
+    text: &str,
+    opt: ToContextExtractOption,
+) -> ToContext {
     let line_number = snippet_line;
     // characters before the context index
     let chars_before = opt.chars_before;
@@ -83,7 +93,13 @@ pub fn extract_context(snippet_string: String, snippet_line: usize, snippet_star
         };
     }
 
-    let context = extract_context_by_indices(snippet_start_index, snippet_lenth, text, chars_before, chars_after);
+    let context = extract_context_by_indices(
+        snippet_start_index,
+        snippet_lenth,
+        text,
+        chars_before,
+        chars_after,
+    );
 
     ToContext {
         context,
@@ -92,14 +108,21 @@ pub fn extract_context(snippet_string: String, snippet_line: usize, snippet_star
     }
 }
 
-fn extract_context_by_indices(snipper_start_index: usize, length: usize, text: &str, chars_before_snippet: usize, chars_after_snippet: usize) -> String {
+fn extract_context_by_indices(
+    snipper_start_index: usize,
+    length: usize,
+    text: &str,
+    chars_before_snippet: usize,
+    chars_after_snippet: usize,
+) -> String {
     let initial_end_index = snipper_start_index + length;
 
     // find the context_start_index by going backwards from the start_index by chars_before_snippet, chars_before_snippet by unicode or ascii
     // loop
     // check if the start_index is the beginning of a char boundary
-    let context_start_index_starting_point = snipper_start_index.saturating_sub(chars_before_snippet);
-    let context_start_index = if  context_start_index_starting_point > 0 {
+    let context_start_index_starting_point =
+        snipper_start_index.saturating_sub(chars_before_snippet);
+    let context_start_index = if context_start_index_starting_point > 0 {
         let mut current_context_start_index = context_start_index_starting_point;
         while !text.is_char_boundary(current_context_start_index) {
             current_context_start_index -= 1;
@@ -115,18 +138,25 @@ fn extract_context_by_indices(snipper_start_index: usize, length: usize, text: &
 
     // iter the number of times of chars_after_snippet
 
-    let context_end_index = iter::repeat(0).take(chars_after_snippet).fold(context_end_index_starting_point, |current_context_end_index, _| {
-        if current_context_end_index <= text.len() {
-            let mut current_context_end_index = context_end_index_starting_point;
-            while !text.is_char_boundary(current_context_end_index) {
-                current_context_end_index += 1;
-                context_end_index_starting_point += 1;
+    let context_end_index = iter::repeat(0).take(chars_after_snippet).fold(
+        context_end_index_starting_point,
+        |current_context_end_index, _| {
+            if current_context_end_index <= text.len() {
+                let mut current_context_end_index = context_end_index_starting_point;
+                while !text.is_char_boundary(current_context_end_index) {
+                    current_context_end_index += 1;
+                    context_end_index_starting_point += 1;
+                    // break if the current_context_end_index is over end of the text
+                    if current_context_end_index > text.len() {
+                        break;
+                    }
+                }
+                current_context_end_index
+            } else {
+                text.len()
             }
-            current_context_end_index
-        } else {
-            text.len()
-        }
-    });
+        },
+    );
     // let context_end_index = if  context_end_index_starting_point <= text.len() {
     //     let mut current_context_end_index = context_end_index_starting_point;
     //     while !text.is_char_boundary(current_context_end_index) {
@@ -138,44 +168,99 @@ fn extract_context_by_indices(snipper_start_index: usize, length: usize, text: &
     // };
 
     // use the context_start_index and context_end_index to get the context according for unicode or ascii
-    let context = text.get(context_start_index..context_end_index).unwrap_or(text).to_string();
+    let context = text
+        .get(context_start_index..context_end_index)
+        .unwrap_or(text)
+        .to_string();
     context
 }
 
-
-
-pub fn extract_context_by_snippet(snippet: &ToSnippet, text: &str, opt: ToContextExtractOption) -> ToContext {
+pub fn extract_context_by_snippet(
+    snippet: &ToSnippet,
+    text: &str,
+    opt: ToContextExtractOption,
+) -> ToContext {
     let snippet_string = snippet.snippet.clone();
     let snippet_line = snippet.line_number as usize;
     let snippet_start_index = snippet.column_number as usize;
     let snippet_length = snippet.length as usize;
 
-    extract_context(snippet_string, snippet_line, snippet_start_index, snippet_length, text, opt)
+    extract_context(
+        snippet_string,
+        snippet_line,
+        snippet_start_index,
+        snippet_length,
+        text,
+        opt,
+    )
 }
 
-pub fn extract_context_by_position(position: &ToTicketPositionInfo, text: &str, opt: ToContextExtractOption) -> ToContext {
+/// Extract context from a text
+pub fn extract_context_by_position(
+    position: &ToTicketPositionInfo,
+    text: &str,
+    opt: ToContextExtractOption,
+) -> ToContext {
     let snippet_string = position.raw_text.clone();
     let snippet_line = position.line as usize;
 
     let snippet_start_index = calculate_starting_column_from_position(position, text);
     let snippet_length = position.length as usize;
 
-    extract_context(snippet_string, snippet_line, snippet_start_index, snippet_length, text, opt)
+    extract_context(
+        snippet_string,
+        snippet_line,
+        snippet_start_index,
+        snippet_length,
+        text,
+        opt,
+    )
 }
 
 /// IMPORTANT: ToTicketPositionInfo is based on regex match index, which are based on bytes, not chars (especially not unicode chars). For example, starting index 12 is only the fifth char (啊) in the string "你好世界啊" (which is 5 unicode chars long). So we need to convert the byte index to char index.
 fn calculate_starting_column_from_position(position: &ToTicketPositionInfo, text: &str) -> usize {
-
     // We need not to worry about the starting index, because it's gurantteed to be the beginning of a char boundary. But we need to worry about the ending index, because it's not gurantteed to be the end of a char boundary. So we need to find the next char boundary or the one before.
     let all_lines_before = text.lines().take(position.line).collect::<Vec<&str>>();
     let all_bytes_index_count_before = all_lines_before.iter().map(|s| s.len()).sum::<usize>();
     all_bytes_index_count_before + position.column
 }
 
+// impl context from ToContext
+impl From<ToContext> for carrel_commons::carrel::common::context::v1::Context {
+    fn from(to_context: ToContext) -> Self {
+        carrel_commons::carrel::common::context::v1::Context {
+            context: to_context.context,
+
+            snippet_in_context_column_number: to_context.snippet_in_context_column_number,
+            snippet_string: to_context.snippet_string,
+        }
+    }
+}
 
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn should_handle_exception_1() {
+        let position = ToTicketPositionInfo {
+            line: 0,
+            column: 0,
+            length: 8,
+            raw_text: "[[id:1]]".to_string(),
+            file_path: None,
+        };
+        let text = "[[id:1]]";
+        let opt = ToContextExtractOption {
+            chars_before: 500,
+            chars_after: 500,
+            whole_line: false,
+            whole_text: false,
+        };
+
+        let result = extract_context_by_indices(0, 8, text, 500, 500);
+        assert_eq!(result, "[[id:1]]".to_string());
+    }
 
     #[test]
     fn test_extract_context() {
@@ -247,9 +332,13 @@ mod test {
             ..Default::default()
         };
 
-        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+        let context =
+            extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
 
-        assert_eq!(context.context, "is the first line\nThis is the second line\nThi");
+        assert_eq!(
+            context.context,
+            "is the first line\nThis is the second line\nThi"
+        );
     }
 
     // check the snippet_in_context_column_number
@@ -263,7 +352,6 @@ mod test {
             length: 20,
             file: None,
             context: None,
-
         };
 
         let option_chars_before_and_after = ToContextExtractOption {
@@ -273,7 +361,8 @@ mod test {
             ..Default::default()
         };
 
-        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+        let context =
+            extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
 
         println!("context: {}", context.context);
         assert_eq!(context.snippet_in_context_column_number, 5);
@@ -299,7 +388,8 @@ mod test {
             ..Default::default()
         };
 
-        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+        let context =
+            extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
 
         assert_eq!(context.context, "This is the first line\nThis is the second line\nThis is the third line\nThis is the fourth line");
     }
@@ -324,14 +414,15 @@ mod test {
             ..Default::default()
         };
 
-        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+        let context =
+            extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
 
         assert_eq!(context.context, "文[[Note]]这");
     }
 
     // try extract unicode characters on second line
     #[test]
-        fn test_extract_context_unicode_second_line() {
+    fn test_extract_context_unicode_second_line() {
         let sample_text = "这是中文\n这是中文[[Note]]这是中文";
         let snippet = ToSnippet {
             snippet: "[[Note]]".to_string(),
@@ -349,16 +440,15 @@ mod test {
             ..Default::default()
         };
 
-        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+        let context =
+            extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
 
         assert_eq!(context.context, "文[[Note]]这");
-
-
     }
 
     // try extract unicode characters on third line between line breaks
-        #[test]
-        fn test_extract_context_unicode_third_line() {
+    #[test]
+    fn test_extract_context_unicode_third_line() {
         let sample_text = "这是中文\n这是中文\n这是中文[[Note]]这是中文";
         let snippet = ToSnippet {
             snippet: "[[Note]]".to_string(),
@@ -376,7 +466,8 @@ mod test {
             ..Default::default()
         };
 
-        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+        let context =
+            extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
 
         assert_eq!(context.context, "文[[Note]]这");
     }
@@ -401,7 +492,8 @@ mod test {
             ..Default::default()
         };
 
-        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+        let context =
+            extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
 
         assert_eq!(context.context, "文\n[[Note]]这");
     }
@@ -426,12 +518,11 @@ mod test {
             ..Default::default()
         };
 
-        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+        let context =
+            extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
 
         assert_eq!(context.context, "中文[[Note]]这是");
     }
-
-
 
     #[test]
     fn test_extract_context_ascii() {
@@ -452,7 +543,8 @@ mod test {
             ..Default::default()
         };
 
-        let context = extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
+        let context =
+            extract_context_by_snippet(&snippet, sample_text, option_chars_before_and_after);
 
         assert_eq!(context.context, "i[[Note]]T");
     }
@@ -483,16 +575,14 @@ mod test {
             file_path: None,
         };
 
-        let starting_column_2nd = calculate_starting_column_from_position(&position_2nd, sample_text_2nd);
+        let starting_column_2nd =
+            calculate_starting_column_from_position(&position_2nd, sample_text_2nd);
 
         assert_eq!(starting_column_2nd, 12);
-
-
     }
 
     #[test]
     fn test_calculate_starting_column_from_position_unicode() {
-
         // two lines, the second line is the starting line, the first line is not empty
         let sample_text_2nd = "这是第一行\n这是中文[[Note]]这是中文";
 
@@ -504,7 +594,8 @@ mod test {
             file_path: None,
         };
 
-        let starting_column_2nd = calculate_starting_column_from_position(&position_2nd, sample_text_2nd);
+        let starting_column_2nd =
+            calculate_starting_column_from_position(&position_2nd, sample_text_2nd);
 
         assert_eq!(starting_column_2nd, 15 + 12);
     }

@@ -1,6 +1,5 @@
 // implement print minimal ticket for TextualObjectMachine
 
-
 use crate::to::to_struct::TextualObject;
 use crate::to_ticket::to_ticket_struct::ToTicket;
 

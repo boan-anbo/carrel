@@ -1,14 +1,13 @@
+use crate::to_db::migrate::init_db;
 use std::path::PathBuf;
 
-use sqlx::pool::PoolConnection;
-use sqlx::{Pool, Sqlite};
-
-use crate::db::db_op::{connect_to_database, initialize_database, join_db_path};
 use crate::enums::store_type::StoreType;
-use crate::to_dtos::to_add_dto::ToAddManyRequest;
+use crate::to_db::to_orm::{ToOrm, ToOrmError};
+use crate::to_dtos::to_add_request::ToAddManyRequest;
 use crate::to_dtos::to_find_dto::ToFindRequestDto;
 use crate::to_machine::to_machine_option::ToMachineOption;
 use crate::utils::id_generator::generate_id;
+use crate::utils::join_path::join_dir_and_file_name;
 use crate::utils::split_store_path::split_store_path;
 
 ///
@@ -29,10 +28,9 @@ pub struct ToMachine {
     // store info that describe what this store does
     pub(crate) store_info: String,
     // number of tos in the store, read only for the outside world
-    pub(crate) to_count: i64,
+    pub(crate) to_count: u64,
 
-    // pool
-    pub(crate) pool: Option<Pool<Sqlite>>,
+    pub to_orm: ToOrm,
 }
 
 // default constructor for ToMachine
@@ -78,13 +76,13 @@ impl ToMachine {
         let mut tom = ToMachine {
             store_type,
             store_url: String::new(),
+            to_orm: ToOrm::temporary(),
             store_info: input_opt
                 .unwrap_or(ToMachineOption::default())
                 .store_info
                 .clone()
                 .unwrap_or("".to_string()),
             to_count,
-            pool: None,
         };
 
         // initialize db and complete temporary object information
@@ -97,20 +95,31 @@ impl ToMachine {
                 // }
             }
             StoreType::SQLITE => {
+                let db_path = join_dir_and_file_name(store_directory, &store_file_name);
                 // create a new TextualObjectMachineRs with SQLITE store
                 // check if sqlite file exists, if not, throw an error
-                let re = initialize_database(store_directory, &store_file_name).await;
-                if re.is_err() {
-                    panic!(
-                        "Check file conflict: cannot initialize database at {}",
-                        join_db_path(store_directory, &store_file_name)
-                    );
-                } else {
-                    tom.store_url = re.unwrap();
+                let db_path = init_db(db_path.as_str()).await;
+                match db_path {
+                    Ok(valid_db_path) => {
+                        tom.store_url = valid_db_path;
+                    }
+                    Err(e) => match e {
+                        ToOrmError::DatabaseFileAlreadyExistError(valid_db_path) => {
+                            tom.store_url = valid_db_path;
+                        }
+                        _ => {
+                            panic!(
+                                "Check file conflict: cannot initialize database at {}",
+                                join_dir_and_file_name(store_directory, &store_file_name)
+                            );
+                        }
+                    },
                 }
-                // get count of tos in the store
             }
         }
+
+        // instantiate to_query
+        tom.to_orm = ToOrm::new(tom.store_url.as_str());
 
         // update item count
         tom.update_to_count().await;
@@ -159,31 +168,11 @@ impl ToMachine {
     pub fn get_store_path(&self) -> String {
         self.store_url.clone()
     }
-    pub fn get_to_count(&self) -> i64 {
+    pub fn get_to_count(&self) -> u64 {
         self.to_count
     }
-    pub fn set_to_count(&mut self, to_count: i64) {
+    pub fn set_to_count(&mut self, to_count: u64) {
         self.to_count = to_count;
-    }
-}
-
-// implement uitility functions for TextualObjectMachine
-impl ToMachine {
-    pub(crate) async fn get_pool(&mut self) -> PoolConnection<Sqlite> {
-        // check if TOM has a pool, if not, create a new one
-        if self.pool.is_none() {
-            self.pool = Some(connect_to_database(&self.store_url).await);
-        }
-        if self.pool.as_ref().unwrap().is_closed() {
-            self.pool = Some(connect_to_database(&self.store_url).await);
-        }
-        let result = self.pool.as_ref().as_mut().unwrap().acquire().await;
-        match result {
-            Ok(conn) => conn,
-            Err(_e) => {
-                panic!("Cannot get connection from pool: ");
-            }
-        }
     }
 }
 
@@ -216,13 +205,13 @@ mod tests {
         let existent_sqlite_file = get_test_asset_path(None);
         // create a new TextualObjectMachineRs with SQLITE store
         let machine = ToMachine::new(
-            &existent_sqlite_file,
+            existent_sqlite_file.as_str(),
             StoreType::SQLITE,
             Some(ToMachineOption::new().set_store_file_name(Some(test_db_file_name.as_str()))),
         )
         .await;
         // check if the machine is created
         assert_eq!(machine.store_type, StoreType::SQLITE);
-        assert_eq!(machine.to_count, 0);
+        assert_eq!(machine.to_count, 3);
     }
 }

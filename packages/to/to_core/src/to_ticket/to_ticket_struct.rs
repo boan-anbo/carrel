@@ -1,3 +1,4 @@
+use carrel_utils::datetime::get_iso_string::get_now_iso_string;
 use chrono::{DateTime, FixedOffset, Local};
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
@@ -22,7 +23,7 @@ pub struct ToTicket {
      */
     // updated date field: Chrono::DateTime
     #[serde(default)]
-    pub to_updated: DateTime<FixedOffset>,
+    pub to_updated: String,
     // redable notes on storage location of the referenced TO
     #[serde(default)]
     pub to_store_url: Option<String>,
@@ -52,7 +53,7 @@ impl Default for ToTicket {
             id: String::new(),
             ticket_id: generate_id(),
             values: IndexMap::new(),
-            to_updated: Local::now().with_timezone(&FixedOffset::east(0)),
+            to_updated: get_now_iso_string(),
             to_store_url: None,
             to_store_info: None,
             to_marker: ToMarker::default(),
@@ -74,10 +75,7 @@ mod tests {
         let ticket = ToTicket::default();
         assert_eq!(ticket.ticket_id.len(), 5);
         assert_eq!(ticket.values.len(), 0);
-        assert_eq!(
-            ticket.to_updated.num_days_from_ce(),
-            Utc::now().num_days_from_ce()
-        );
+
         assert_eq!(ticket.to_store_url, None);
         assert_eq!(ticket.to_store_info, None);
         assert!(ticket.to_marker.left_marker.len() > 0);

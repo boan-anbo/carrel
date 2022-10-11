@@ -27,11 +27,10 @@ impl ToTicketPositionInfo {
     }
 }
 
-
 #[cfg(test)]
 mod test {
 
-//     Should handle Chinese character matches
+    //     Should handle Chinese character matches
 
     use crate::to_ticket::to_ticket_position::ToTicketPositionInfo;
 
@@ -39,11 +38,15 @@ mod test {
     fn test_chinese() {
         let text = "这是一个测试";
         let re = regex::Regex::new(r"(测试)").unwrap();
-        let mut line = 0;
-        let mut file_path = None;
+        let line = 0;
+        let file_path = None;
         let mut positions = vec![];
         for m in re.captures_iter(text) {
-            positions.push(ToTicketPositionInfo::from_match(&m, line, file_path.clone()));
+            positions.push(ToTicketPositionInfo::from_match(
+                &m,
+                line,
+                file_path.clone(),
+            ));
         }
         assert_eq!(positions.len(), 1);
         assert_eq!(positions[0].line, 0);
@@ -52,5 +55,4 @@ mod test {
         assert_eq!(positions[0].length, 6);
         assert_eq!(positions[0].raw_text, "测试");
     }
-
 }

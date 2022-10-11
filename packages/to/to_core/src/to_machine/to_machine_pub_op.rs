@@ -1,9 +1,9 @@
 use crate::error::ToErrors;
+use async_trait::async_trait;
 use std::collections::HashMap;
-use to_core_migration::async_trait::async_trait;
 
 use crate::to::to_struct::TextualObject;
-use crate::to_dtos::to_add_dto::{ToStoredReceipt, ToAddManyRequest};
+use crate::to_dtos::to_add_request::{ToAddManyRequest, ToStoredReceipt};
 use crate::to_dtos::to_find_dto::{ToFindRequestDto, ToFindResultDto};
 use crate::to_dtos::to_scan_dto::{ToScanRequestDto, ToScanResultDto};
 use crate::to_machine::to_machine_struct::ToMachine;
@@ -14,10 +14,8 @@ use crate::to_ticket::to_ticket_struct::ToTicket;
 #[async_trait]
 pub trait ToMPubMethods {
     /// add from TextualObjectAddManyDto, main method for adding from dto
-    async fn add_tos(
-        &mut self,
-        add_tos_dto: ToAddManyRequest,
-    ) -> Result<ToStoredReceipt, ToErrors>;
+    async fn add_tos(&mut self, add_tos_dto: ToAddManyRequest)
+        -> Result<ToStoredReceipt, ToErrors>;
     /// find TOs by ticket ids
     async fn find_tos_by_ticket_ids(
         &mut self,
@@ -47,11 +45,10 @@ impl ToMPubMethods for ToMachine {
         match is_valid {
             Ok(_) => {}
             Err(e) => {
-                return Err(e);
+                // log error
+                println!("Invalid add_many_request: {:?}", e);
             }
         }
-        // get pool
-        let _pool = self.get_pool().await;
         // create receipt
         let mut receipt = ToStoredReceipt::from(add_tos_req.clone());
         // iterate over tos IndexMap
@@ -69,7 +66,7 @@ impl ToMPubMethods for ToMachine {
             to.store_url = self.store_url.clone();
             to.source_id = String::from(&to_to_add.source_id.clone().unwrap_or("".to_string()));
             // insert to
-            self.add_textual_object(&to).await;
+            self.add_textual_object(to.clone()).await;
             receipt.tos_stored.insert(unique_ticket_id, to);
             receipt.total_tos_stored += 1;
         }
@@ -113,7 +110,7 @@ impl ToMPubMethods for ToMachine {
         let mut found_tos: Vec<TextualObject> = Vec::new();
         let mut missing_to_ids: Vec<String> = vec![];
         for ticket_id in ticket_ids.iter() {
-            let found_to = self.find(ticket_id).await;
+            let found_to = self.find_by_ticket_id(ticket_id).await;
             match found_to {
                 Some(found_to) => {
                     found_tos.push(found_to);
@@ -138,8 +135,11 @@ impl ToMPubMethods for ToMachine {
             }
         }
         // use find method to get all tos
-        let matched_to_tickets =
-            ToParser::scan_text_for_tickets(&scan_request.text, &ToParserOption::default(), scan_request.origin_file_path.clone());
+        let matched_to_tickets = ToParser::scan_text_for_tickets(
+            &scan_request.text,
+            &ToParserOption::default(),
+            scan_request.origin_file_path.clone(),
+        );
 
         let found_tos = self
             .find_by_ticket_ids(
@@ -163,23 +163,22 @@ impl ToMPubMethods for ToMachine {
     }
 }
 
-
 // test
 #[cfg(test)]
 mod test {
-    use crate::db::db_op::join_db_path;
     use crate::enums::store_type::StoreType;
     use crate::error::error_message::ToErrorMessage;
     use crate::error::ToErrors;
     use crate::to::to_struct::TextualObject;
-    use crate::to_dtos::to_add_dto::ToAddManyRequest;
+    use crate::to_dtos::to_add_request::ToAddManyRequest;
     use crate::to_dtos::to_find_dto::ToFindRequestDto;
     use crate::to_machine::to_machine_option::ToMachineOption;
+    use crate::to_machine::to_machine_pub_op::ToMPubMethods;
     use crate::to_machine::to_machine_struct::ToMachine;
     use crate::utils::get_random_test_database_dir::get_random_test_database_dir;
     use crate::utils::id_generator::generate_id;
+    use crate::utils::join_path::join_dir_and_file_name;
     use std::fmt::Debug;
-    use crate::to_machine::to_machine_pub_op::ToMPubMethods;
 
     // test add_tos
     #[tokio::test]
@@ -228,7 +227,7 @@ mod test {
         );
 
         // check tos count
-        assert_eq!(receipt.total_tos_stored, add_tos_dto.tos.len());
+        assert_eq!(receipt.total_tos_stored, add_tos_dto.tos.len() as u64);
 
         println!("{:?}", serde_json::to_string_pretty(&receipt).unwrap());
     }
@@ -259,23 +258,10 @@ mod test {
         // add tos
         let result = textual_object_machine
             .add_tos(invalid_add_tos_dto.clone())
-            .await;
-        let error = match result {
-            Ok(_) => {
-                panic!("Expected error");
-            }
-            Err(e) => e,
-        };
+            .await
+            .unwrap();
 
-        let add_error = match error {
-            ToErrors::AddManyRequestError(add_error) => add_error,
-            _e => {
-                panic!("Expected invalid request error");
-            }
-        };
-        // assert error
-        assert_eq!(add_error.code, None);
-        assert_eq!(add_error.message, "No textual objects to add");
+        assert_eq!(result.tos_stored.len(), 0);
     }
 
     // test find_tos_by_ticket_ids
@@ -292,13 +278,14 @@ mod test {
         // random filename
         let random_filename = generate_id();
 
+        let db_path = join_dir_and_file_name(&test_database_dir, &random_filename).to_string();
         let find_request_dto = ToFindRequestDto {
             ticket_ids: vec![
                 to_1.ticket_id.clone(),
                 to_2.ticket_id.clone(),
                 to_3.ticket_id.clone(),
             ],
-            store_url: join_db_path(&test_database_dir, &random_filename).to_string(),
+            store_url: join_dir_and_file_name(&test_database_dir, &random_filename).to_string(),
         };
         // create TextualObjectMachine
         let mut textual_object_machine = ToMachine::new(
@@ -318,7 +305,9 @@ mod test {
         // assert result
         assert_eq!(result_missing.missing_tos_ids.len(), 3);
         // add one
-        textual_object_machine.add_textual_object(&to_1).await;
+        textual_object_machine
+            .add_textual_object(to_1.clone())
+            .await;
         // search again
         let result_found_one_wrapped = textual_object_machine
             .find_tos_by_ticket_ids(&find_request_dto)
@@ -332,8 +321,12 @@ mod test {
         let first_found = result_found_one.found_tos.first().unwrap();
         assert_eq!(first_found.ticket_id, to_1.ticket_id);
         // add three
-        textual_object_machine.add_textual_object(&to_2).await;
-        textual_object_machine.add_textual_object(&to_3).await;
+        textual_object_machine
+            .add_textual_object(to_2.clone())
+            .await;
+        textual_object_machine
+            .add_textual_object(to_3.clone())
+            .await;
         let first_found_to = result_found_one.found_tos.first().unwrap();
         assert_eq!(first_found_to.ticket_id, to_1.ticket_id);
         // search again
@@ -357,6 +350,7 @@ mod test {
         // check result store url equals to machine store url
         assert_eq!(result_found_all.store_url, textual_object_machine.store_url);
     }
+
     // test find request dto with invalid request
     #[tokio::test]
     async fn test_find_tos_by_ticket_ids_invalid() {
@@ -370,7 +364,7 @@ mod test {
 
         let find_request_dto = ToFindRequestDto {
             ticket_ids: vec![],
-            store_url: join_db_path(&test_database_dir, &random_filename).to_string(),
+            store_url: join_dir_and_file_name(&test_database_dir, &random_filename).to_string(),
         };
         // create TextualObjectMachine
         let mut textual_object_machine = ToMachine::new(
@@ -400,5 +394,4 @@ mod test {
             }
         }
     }
-
 }

@@ -21,8 +21,6 @@
 //! # Features
 //!
 
-pub mod db;
-pub mod util_entities;
 pub mod enums;
 pub mod error;
 pub mod file_utils;
@@ -33,7 +31,10 @@ pub mod to_machine;
 pub mod to_parser;
 pub mod to_tag;
 pub mod to_ticket;
+pub mod util_entities;
 pub(crate) mod utils;
 // Handles files etc.
 pub(crate) mod fs;
-pub mod orm;
+pub mod to_db;
+
+pub use entity::*;

@@ -1,7 +1,7 @@
 use crate::to_parser::parser::ToParser;
+use crate::util_entities::to_snippet::ToSnippet;
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
-use crate::util_entities::to_snippet::ToSnippet;
 
 use crate::to_parser::parser_option::ToParserOption;
 use crate::to_ticket::to_ticket_marker::ToMarker;
@@ -43,7 +43,7 @@ impl From<ToTicket> for ToTag {
             }
         }
 
-// use the format to represent the string of the tag: leftMarker +[key|value|note]+ rightMarker
+        // use the format to represent the string of the tag: leftMarker +[key|value|note]+ rightMarker
         // use string builder
         let mut tag_string = String::new();
         tag_string.push_str(&to_ticket.to_marker.left_marker);
@@ -64,7 +64,11 @@ impl From<ToTicket> for ToTag {
 
         if ticket_position.is_some() {
             let ticket_position = ticket_position.unwrap();
-            snippet = Some(ToSnippet::from_to_ticket_position_and_file_path(&tag_string, &ticket_position, to_ticket.to_context));
+            snippet = Some(ToSnippet::from_to_ticket_position_and_file_path(
+                &tag_string,
+                &ticket_position,
+                to_ticket.to_context,
+            ));
 
             // give the ticket string to the snippet location as duplicate information that is useful when snippet_location is used alone.
             snippet.as_mut().unwrap().snippet = tag_string.clone();
@@ -199,8 +203,11 @@ mod test {
         assert_eq!(&first_tag_with_key_value.tag_string, "[[KEY|VALUE]]");
 
         let raw_text_with_key_value_note = "[[KEY|VALUE|NOTE]]";
-        let result_with_key_value_note =
-            ToParser::scan_text_for_tags(raw_text_with_key_value_note, &ToParserOption::default(), None);
+        let result_with_key_value_note = ToParser::scan_text_for_tags(
+            raw_text_with_key_value_note,
+            &ToParserOption::default(),
+            None,
+        );
         let first_tag_with_key_value_note = result_with_key_value_note.tos[0].clone();
         assert_eq!(result_with_key_value_note.tos.len(), 1);
         assert_eq!(

@@ -2,39 +2,35 @@
 
 use std::borrow::BorrowMut;
 
+use entity::entities::textual_objects::Model;
 use uuid::Uuid;
 
-use crate::db::to_db_op::{
-    check_if_ticket_id_exists, count_textual_objects, delete_to_by_ticket_id, find_to_by_ticket_id,
-    insert_to,
-};
 use crate::to::to_struct::TextualObject;
+use crate::to_db::to_orm::QueryTo;
+use crate::to_db::util_trait::IntoTextualObjectOption;
 use crate::to_machine::to_machine_struct::ToMachine;
 use crate::utils::id_generator::generate_id;
 
 impl ToMachine {
-    pub async fn update_to_count(&mut self) -> i64 {
-        let pool = self.get_pool().await;
-
-        let count = count_textual_objects(pool).await;
+    pub async fn update_to_count(&mut self) -> u64 {
+        let count = self.to_orm.count_tos().await.unwrap_or(0);
         self.set_to_count(count);
         self.to_count
     }
 
     // add from
 
-    pub async fn add_textual_object(&mut self, textual_object: &TextualObject) -> Uuid {
-        let mut pool = self.get_pool().await;
-        let id = insert_to(pool.borrow_mut(), textual_object).await;
+    pub async fn add_textual_object(&mut self, textual_object: TextualObject) -> TextualObject {
+        let added_to = self.to_orm.insert(textual_object).await.unwrap();
         // update to_count
         self.update_to_count().await;
-        id
+        added_to
     }
 
     // find by ticket id
-    pub async fn find(&mut self, ticket_id: &str) -> Option<TextualObject> {
-        let found_to = find_to_by_ticket_id(self.get_pool().await.borrow_mut(), ticket_id).await;
-        found_to
+    pub async fn find_by_ticket_id(&mut self, ticket_id: &str) -> Option<TextualObject> {
+        let to = self.to_orm.find_by_ticket_id(ticket_id).await;
+        to.unwrap().into_textual_object()
     }
 
     // find all by ticket ids
@@ -42,7 +38,7 @@ impl ToMachine {
         // use find method to get all tos
         let mut found_tos = Vec::new();
         for ticket_id in ticket_ids {
-            let found_to = self.find(ticket_id).await;
+            let found_to = self.find_by_ticket_id(ticket_id).await;
             match found_to {
                 Some(found_to) => {
                     found_tos.push(found_to);
@@ -56,22 +52,21 @@ impl ToMachine {
     }
 
     // delete by ticket id, return true if successful
-    pub async fn delete(&mut self, ticket_id: &String) -> bool {
-        let mut pool = self.get_pool().await;
-        let result = delete_to_by_ticket_id(pool.borrow_mut(), ticket_id).await;
+    pub async fn delete_by_ticket_id(&mut self, ticket_id: &str) -> () {
+        // let result = delete_to_by_ticket_id(pool.borrow_mut(), ticket_id).await;
+        self.to_orm.delete_by_ticket_id(ticket_id).await.unwrap();
         // update to_count
         self.update_to_count().await;
-        if result.rows_affected() == 1 {
-            true
-        } else {
-            false
-        }
     }
 
     pub async fn get_unique_ticket_id(&mut self) -> String {
         let mut unique_ticket_id_to_try = generate_id();
-        let mut pool = self.get_pool().await;
-        while check_if_ticket_id_exists(pool.borrow_mut(), unique_ticket_id_to_try.as_str()).await {
+        while self
+            .to_orm
+            .check_if_ticket_id_exists(unique_ticket_id_to_try.as_str())
+            .await
+            .unwrap()
+        {
             unique_ticket_id_to_try = generate_id();
         }
         unique_ticket_id_to_try
@@ -84,10 +79,13 @@ mod test {
 
     // initiate for tests
 
+    use carrel_utils::test::test_folders::get_random_test_temp_folder_path_buf;
+    use carrel_utils::uuid::new_v4;
     use std::path::PathBuf;
 
     use crate::enums::store_type::StoreType;
     use crate::to::to_struct::TextualObject;
+    use crate::to_db::to_orm::QueryTo;
     use crate::to_machine::to_machine_option::ToMachineOption;
     use crate::to_machine::to_machine_struct::ToMachine;
     use crate::utils::get_random_test_database_dir::get_random_test_database_dir;
@@ -136,10 +134,9 @@ mod test {
         // create a new textual object
         let sample_to = TextualObject::get_sample();
         // add the textual object to the machine
-        let _id = tom.add_textual_object(&sample_to).await;
+        let _id = tom.add_textual_object(sample_to).await;
         // check if the textual object is added
         assert_eq!(tom.to_count, current_to_count + 1);
-        tom.delete_store().await;
     }
 
     // test find by ticket id
@@ -162,11 +159,11 @@ mod test {
         // create a new textual object
         let sample_to = TextualObject::get_sample();
         // add the textual object to the machine
-        let _id = tom.add_textual_object(&sample_to).await;
+        let _id = tom.add_textual_object(sample_to.clone()).await;
         // check if the textual object is added
         assert_eq!(tom.to_count, current_to_count + 1);
         // find the textual object by ticket id
-        let found_to = tom.find(&sample_to.ticket_id).await;
+        let found_to = tom.find_by_ticket_id(&sample_to.ticket_id).await;
         // check if the textual object is found
         assert_eq!(found_to.unwrap().ticket_id, sample_to.ticket_id);
     }
@@ -174,56 +171,86 @@ mod test {
     // test delete by ticket id
     #[tokio::test]
     async fn test_delete_by_ticket_id() {
-        let existent_sqlite_file = get_test_asset_path_without_file();
+        let random_dir = get_random_test_temp_folder_path_buf();
+
         // create a new TextualObjectMachineRs with SQLITE store
         let mut tom = ToMachine::new(
-            &existent_sqlite_file,
+            &random_dir.to_str().unwrap(),
             StoreType::SQLITE,
             Some(ToMachineOption {
-                store_file_name: Some(generate_id()),
+                use_random_file_name: true,
                 ..Default::default()
             }),
         )
         .await;
         let current_to_count = tom.to_count;
-        // check if the machine is created
-        assert_eq!(tom.store_type, StoreType::SQLITE);
-        // create a new textual object
-        let sample_to = TextualObject::get_sample();
-        // add the textual object to the machine
-        let _id = tom.add_textual_object(&sample_to).await;
-        // check if the textual object is added
-        assert_eq!(tom.to_count, current_to_count + 1);
+        assert_eq!(current_to_count, 3);
+
+        // get first ticket_id
+        let first_ticket_id = tom
+            .to_orm
+            .find_all()
+            .await
+            .unwrap()
+            .first()
+            .unwrap()
+            .ticket_id
+            .clone();
+        // delete by ticket_id
+        tom.delete_by_ticket_id(&first_ticket_id).await;
+        // check if the count is decreased
+        assert_eq!(tom.to_count, current_to_count - 1);
+        // check if the deleted ticket_id is not found
+        let found_to = tom.find_by_ticket_id(&first_ticket_id).await;
+        assert_eq!(found_to.is_some(), false);
+    }
+
+    // test find non existent by ticket id should return None
+    #[tokio::test]
+    async fn test_find_non_existent_by_ticket_id() {
+        let random_dir = get_random_test_temp_folder_path_buf();
+
+        // create a new TextualObjectMachineRs with SQLITE store
+        let mut tom = ToMachine::new(
+            &random_dir.to_str().unwrap(),
+            StoreType::SQLITE,
+            Some(ToMachineOption {
+                use_random_file_name: true,
+                ..Default::default()
+            }),
+        )
+        .await;
+
         // find the textual object by ticket id
-        let found_to = tom.find(&sample_to.ticket_id).await;
+        let found_to = tom.find_by_ticket_id(new_v4().to_string().as_str()).await;
         // check if the textual object is found
-        assert_eq!(found_to.unwrap().ticket_id, sample_to.ticket_id);
-        // delete the textual object by ticket id
-        let result = tom.delete(&sample_to.ticket_id).await;
-        // check if the textual object is deleted
-        assert_eq!(result, true);
-        // check if the textual object is not found
-        let found_to = tom.find(&sample_to.ticket_id).await;
-        assert_eq!(found_to.is_none(), true);
-        // check count after delete
-        assert_eq!(tom.to_count, current_to_count);
+        assert_eq!(found_to.is_some(), false);
     }
 
     // test find all by ticket ids
     #[tokio::test]
     async fn test_find_all_by_ticket_ids() {
-        let existent_sqlite_file = get_test_asset_path_without_file();
+        let random_dir = get_random_test_temp_folder_path_buf();
         // create a new TextualObjectMachineRs with SQLITE store
-        let mut tom = ToMachine::new(&existent_sqlite_file, StoreType::SQLITE, None).await;
+        let mut tom = ToMachine::new(
+            &random_dir.to_str().unwrap(),
+            StoreType::SQLITE,
+            Some(ToMachineOption {
+                use_random_file_name: true,
+                ..Default::default()
+            }),
+        )
+        .await;
+
         let _current_to_count = tom.to_count;
         // create three new textual objects
         let sample_to1 = TextualObject::get_sample();
         let sample_to2 = TextualObject::get_sample();
         let sample_to3 = TextualObject::get_sample();
         // add the textual objects to the machine
-        let _id1 = tom.add_textual_object(&sample_to1).await;
-        let _id2 = tom.add_textual_object(&sample_to2).await;
-        let _id3 = tom.add_textual_object(&sample_to3).await;
+        let _id1 = tom.add_textual_object(sample_to1.clone()).await;
+        let _id2 = tom.add_textual_object(sample_to2.clone()).await;
+        let _id3 = tom.add_textual_object(sample_to3.clone()).await;
         // find all the textual objects by ticket ids
         let found_tos = tom
             .find_all(&vec![

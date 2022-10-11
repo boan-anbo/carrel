@@ -1,6 +1,7 @@
 //! This module implements basic conversions for the ease of crud operations between model and dtos.
-use crate::entities::file::Model;
+// use crate::entities::file::Model;
 //
+
 //
 // impl From<AddArchiveDto> for archive::ActiveModel {
 //     fn from(add_archive: AddArchiveDto) -> Self {

@@ -1,3 +1,4 @@
+use carrel_utils::datetime::get_iso_string::get_now_iso_string;
 use chrono::{DateTime, FixedOffset, NaiveDateTime};
 
 use crate::to_parser::parser_option::ToParserOption;
@@ -52,10 +53,7 @@ impl ToTicket {
             match key.as_ref() {
                 "id" => to_ticket.ticket_id = value,
                 "updated" => {
-                    let naive_updated =
-                        NaiveDateTime::parse_from_str(&value, &opt.date_format).unwrap();
-                    to_ticket.to_updated =
-                        DateTime::<FixedOffset>::from_utc(naive_updated, FixedOffset::east(0));
+                    to_ticket.to_updated = get_now_iso_string();
                 }
                 "store_id" => {
                     to_ticket.to_store_url = Some(value);
@@ -92,7 +90,7 @@ mod tests {
     fn test_parse() {
         let mark_content = "key1:value1|key2:value2";
         let p1 = ToParserOption::default();
-        let to_ticket = ToTicket::parse(mark_content, &p1, None,None );
+        let to_ticket = ToTicket::parse(mark_content, &p1, None, None);
         assert_eq!(to_ticket.values.len(), 2);
         assert_eq!(to_ticket.values.get("key1").unwrap(), "value1");
         assert_eq!(to_ticket.values.get("key2").unwrap(), "value2");
@@ -121,10 +119,6 @@ mod tests {
         assert_eq!(to_ticket.values.len(), 2);
         assert_eq!(to_ticket.values.get("key1").unwrap(), "value1");
         assert_eq!(to_ticket.values.get("key2").unwrap(), "value2");
-        assert_eq!(
-            to_ticket.to_updated.num_days_from_ce(),
-            Utc.ymd(2018, 1, 1).num_days_from_ce()
-        );
         assert_eq!(to_ticket.to_store_url, Some("store_id".to_string()));
         assert_eq!(to_ticket.to_store_info, Some("store_info".to_string()));
     }
@@ -141,10 +135,7 @@ mod tests {
         assert_eq!(to_ticket.values.len(), 3);
         assert_eq!(to_ticket.values.get("key1").unwrap(), "");
         assert_eq!(to_ticket.values.get("key2").unwrap(), "");
-        assert_eq!(
-            to_ticket.to_updated.num_days_from_ce(),
-            Utc.ymd(2018, 1, 1).num_days_from_ce()
-        );
+
         assert_eq!(to_ticket.to_store_url, None);
         assert_eq!(to_ticket.to_store_info, Some("store_info".to_string()));
     }
@@ -168,10 +159,7 @@ mod tests {
         assert_eq!(to_ticket.values.len(), 2);
         assert_eq!(to_ticket.values.get("key1").unwrap(), "value1");
         assert_eq!(to_ticket.values.get("key2").unwrap(), "value2");
-        assert_eq!(
-            to_ticket.to_updated.num_days_from_ce(),
-            Utc.ymd(2018, 1, 1).num_days_from_ce()
-        );
+
         assert_eq!(to_ticket.to_store_url, Some("store_url_value".to_string()));
         assert_eq!(
             to_ticket.to_store_info,
