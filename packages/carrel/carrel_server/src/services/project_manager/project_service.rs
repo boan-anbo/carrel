@@ -33,6 +33,8 @@ use carrel_utils::fs::get_all_files_under_directory::get_all_file_paths_under_di
 
 use crate::errors::carrel_server_error::CarrelServerError::InvalidRequestPayload;
 use tonic::{Request, Response, Status};
+use crate::services::project_manager::query_mocker;
+use crate::services::project_manager::query_mocker::{QueryMocker, QueryMockerTrait};
 
 #[derive(Debug, Default)]
 pub struct ProjectService {}
@@ -398,6 +400,13 @@ impl ProjectManagerService for ProjectService {
         request: Request<QueryFirefliesRequest>,
     ) -> Result<Response<QueryFirefliesResponse>, Status> {
         let req = request.into_inner();
+        // check if it's mock query
+        let mock = req.is_mock;
+
+        if mock {
+            return QueryMocker::mock_query_fireflies(req).await
+        }
+
         let query = req.query.unwrap();
         let cpm = CarrelProjectManager::load(req.project_directory.as_str())
             .await

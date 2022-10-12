@@ -3,19 +3,13 @@ import {Logger, LogSource} from "../../../../../utils/logger";
 import {Firefly} from "../../../../../carrel_server_client/carrel/common/firefly/v2/firefly_v2_pb";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../../../store/store";
-import {
-    ColumnDef,
-    createColumnHelper,
-    getCoreRowModel,
-    NoInfer,
-    PaginationState,
-    useReactTable
-} from "@tanstack/react-table";
+import {ColumnDef, createColumnHelper, getCoreRowModel, PaginationState, useReactTable} from "@tanstack/react-table";
 import {carrelQueries} from "../../../../../server-api/carrel-queries";
 import {ApiStandardQuery} from "../../../../../server-api/query_utils";
-import {CarrelDataTable} from "../../../../core/data/CarrelDataTable";
-import {CarrelDataPaginator} from "../../../../core/data/CarrelDataPaginator";
-import {IndeterminateCheckbox} from "../../../../core/data/CarrelDataCheckBox";
+import {CarrelDataTable} from "../../../../ui/data/CarrelDataTable";
+import {CarrelDataPaginator} from "../../../../ui/data/CarrelDataPaginator";
+import {IndeterminateCheckbox} from "../../../../ui/data/CarrelDataCheckBox";
+import {CommentCell} from "../../../../ui/data/CommentCell";
 
 const LOG = new Logger(LogSource.FileDatatable)
 
@@ -45,12 +39,6 @@ const sampleData: Firefly[] = [
 ]
 
 const columnHelper = createColumnHelper<Firefly>();
-
-function CommentCell(props: { value: NoInfer<String> }) {
-    return <div>
-        <div>CCC: {props.value}</div>
-    </div>;
-}
 
 export function FireflyDataview(props: {}) {
 
@@ -123,7 +111,7 @@ export function FireflyDataview(props: {}) {
     const [rowSelection, setRowSelection] = useState({})
     // create table instance
     const table = useReactTable({
-        data: dataQuery.data?.fireflies || [],
+        data: dataQuery.data?.fireflies || sampleData,
         columns,
         pageCount: dataQuery.data?.responseMetadata?.resultTotalPages || -1, // use returned metadata to calculate page count
         getCoreRowModel: getCoreRowModel(),

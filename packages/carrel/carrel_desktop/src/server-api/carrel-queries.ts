@@ -157,18 +157,19 @@ export class ApiQuery {
         }
     )
 
-    QueryFireflies = (query: StandardQuery, projectDirectory?: string) => useQuery(
+    QueryFireflies = (query: StandardQuery, projectDirectory?: string, isMock?: boolean) => useQuery(
         ["fireflies", query],
         async (): Promise<QueryFirefliesResponse | null> => {
 
             if (!projectDirectory) {
                 return null
-            }
+                }
 
             let result = await carrelApi.queryFireflies(
                 {
                     query,
-                    projectDirectory
+                    projectDirectory,
+                    isMock
                 })
 
             this.log("QueryFireflies", "fireflies", result)

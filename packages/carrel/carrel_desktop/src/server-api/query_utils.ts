@@ -198,6 +198,7 @@ export class ApiStandardQuery {
     }
 
     static fromPageIndexAndPageSize(pageIndex: number, pageSize: number) {
+        console.log("triggered", pageIndex, pageSize);
         const query = new StandardQuery();
         query.offset = pageIndex * pageSize;
         query.length = pageSize;

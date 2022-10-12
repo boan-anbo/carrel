@@ -309,6 +309,7 @@ message QueryFirefliesRequest {
   string project_directory = 1;
   // the query
   generic.api.query.v1.StandardQuery query = 2;
+  bool is_mock = 3;
 }
 
 // message that replies to query fireflies request
