@@ -1,8 +1,8 @@
 import {useButton} from 'react-aria';
 import {useRef} from 'react';
-import { button, buttonStyles } from './button.css';
 import clsx from 'clsx';
 import { CUSize } from '../props/size';
+import {  CUButtonVariantType } from './CUButtonVariant';
 
 export interface ButtonProps {
   /**
@@ -10,7 +10,7 @@ export interface ButtonProps {
    * @default 'primary'
    * @type 'primary' | 'secondary'
    */
-  variant?: CUButtonVariant;
+  variant?: CUButtonVariantType;
 
   size?: CUSize;
   
@@ -20,21 +20,18 @@ export interface ButtonProps {
 }
 
 export const Button = ({
-  variant = CUButtonVariant.UNSPECIFIED,
+  variant = 'menu',
+  size,
   ...props}: ButtonProps) => {
-  let ref = useRef();
+  let ref = useRef(null);
   let { buttonProps } = useButton(props, ref);
   let { children } = props;
 
   return (
     <button
+    
       {...buttonProps}
-      className={clsx(
-        buttonStyles({
-          size: props.size,
-          variant: props.variant,
-        })
-      )}
+
       ref={ref}
     >
       {children}

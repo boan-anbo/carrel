@@ -1,22 +1,28 @@
-import { Button, Text } from '@adobe/react-spectrum';
 import React from 'react';
-
-import { navBarItem, navBarItemButton } from './NavBarItem.css';
-
-
+import { Button } from '../Button/Button';
+import { CUButtonVariantType } from '../Button/CUButtonVariant';
+import styles from './NavBarItem.module.scss';
 export interface NavBarItemProps {
-  name?: string;
-  onCLick?: () => void;
+  variant?: CUButtonVariantType
+  onClick?: () => void;
   icon?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-export function NavBarItem({name = 'Nav Bar Item', icon}: NavBarItemProps) {
+
+
+export const NavBarItem = ({
+  children,
+  icon,
+  variant,
+  ...props
+}: NavBarItemProps) => {
   return (
-    <div className={navBarItem}>
-      <Button variant="primary">
-        {icon}
-        <Text>Icon + Label</Text>
+    <div  className={styles.button}>
+      <Button variant={variant} onClick={props.onClick}>
+        {children}
       </Button>
     </div>
   );
 }
+

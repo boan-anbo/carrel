@@ -36,7 +36,7 @@ export const Basic = Template.bind({});
 Basic.args = {
   title: 'Carrel',
   menuBarItems: [
-    <div><NavBarItem name='Carrel'></NavBarItem></div>,
-    <div><NavBarItem name='Cabinet'></NavBarItem></div>,
+    <div><NavBarItem>Car111rel</NavBarItem></div>,
+    <div><NavBarItem>Cabinet</NavBarItem></div>,
   ]
 };

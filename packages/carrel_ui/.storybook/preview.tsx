@@ -1,7 +1,6 @@
-import {lightTheme} from '../src/styles/light.css';
-import '../src/index.css';
 import React from 'react';
-import { defaultTheme, Provider } from '@adobe/react-spectrum';
+
+import "../src/index.scss";
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
@@ -14,10 +13,6 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
-    <Provider theme={defaultTheme}>
-      <div className={lightTheme}>
-        <Story />
-      </div>
-    </Provider>
+      <Story />
   ),
 ];

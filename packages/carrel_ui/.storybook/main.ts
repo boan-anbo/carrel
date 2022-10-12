@@ -8,8 +8,31 @@ module.exports = {
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "storybook-addon-react-router-v6",
-    "@storybook/addon-interactions",{
-   name: '@storybook/addon-postcss',
+    "@storybook/addon-interactions",
+    {
+			name: `@storybook/preset-scss`,
+			options: {
+				rule: {
+					test: /(?<!\.module).s[ca]ss$/,
+				}
+			},
+		},
+		// module
+		{
+			name: `@storybook/preset-scss`,
+			options: {
+				rule: {
+					test: /\.module\.s[ca]ss$/,
+				},
+				cssLoaderOptions: {
+					modules: {
+						localIdentName: '[name]__[local]--[hash:base64:5]',
+					},
+				}
+			},
+		},
+    {
+      name: '@storybook/addon-postcss',
       options: {
         cssLoaderOptions: {
           // When you have splitted your css over multiple files
@@ -21,8 +44,9 @@ module.exports = {
           implementation: require('postcss'),
         },
       },
-    }
-    
+    }, 
+
+    "@storybook/preset-scss",
   ],
   "framework": "@storybook/react",
   "core": {
@@ -34,7 +58,14 @@ module.exports = {
   },
   async viteFinal(config) {
     return mergeConfig(config, {
-      plugins: [require("@vanilla-extract/vite-plugin").vanillaExtractPlugin()],
+      css: {
+        preprocessorOptions: {
+          scss: {
+            // Next line will prepend the import in all you scss files as you did with your vite.config.js file
+            
+          },
+        },
+      }, 
     });
   },
 }

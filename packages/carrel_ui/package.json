@@ -1,25 +1,36 @@
 {
   "name": "carrel-ui",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "build-storybook": "build-storybook",
-    "storybook": "start-storybook -p 6006"
+    "storybook": "start-storybook -p 6006",
+    "build-lib": "unbuild"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "packageManager": "yarn",
   "dependencies": {
     "@adobe/react-spectrum": "^3.22.0",
+    "@babel/plugin-transform-typescript": "^7.19.3",
     "@radix-ui/react-icons": "^1.1.1",
     "@storybook/addon-docs": "^6.5.12",
+    "@storybook/preset-scss": "^1.0.3",
     "@storybook/preview-web": "^6.5.12",
-    "@vanilla-extract/css": "^1.9.1",
-    "@vanilla-extract/recipes": "^0.2.5",
-    "@vanilla-extract/sprinkles": "^1.5.0",
-    "@vanilla-extract/vite-plugin": "^3.6.1",
+    "@types/jest": "^29.1.2",
     "autoprefixer": "^10.4.12",
     "clsx": "^1.2.1",
     "postcss": "^8.4.17",
@@ -28,11 +39,12 @@
     "react-dom": "^18.2.0",
     "require-from-string": "^2.0.2",
     "sass": "^1.55.0",
+    "storybook-css-modules": "^1.0.8",
     "tailwindcss": "^3.1.8",
-    "webpack": ">=2.0.0"
+    "unbuild": "^0.8.11",
+    "vite-plugin-sass-dts": "^1.1.44"
   },
   "devDependencies": {
-    "@babel/core": "^7.19.3",
     "@storybook/addon-actions": "^6.5.12",
     "@storybook/addon-essentials": "^6.5.12",
     "@storybook/addon-interactions": "^6.5.12",
@@ -44,9 +56,11 @@
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.1.0",
-    "babel-loader": "^8.2.5",
+    "css-loader": "5.2.6",
+    "sass-loader": "10.1.1",
     "storybook-addon-react-router-v6": "^0.2.1",
-    "typescript": "^4.6.4",
+    "style-loader": "2.0.0",
+    "typescript": "^4.8.4",
     "vite": "^3.1.0"
   }
 }

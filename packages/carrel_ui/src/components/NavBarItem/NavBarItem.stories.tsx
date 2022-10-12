@@ -22,11 +22,13 @@ const meta: Meta = {
 export default meta;
 
 // 👇 We create a "template" of how args map to rendering
-const Template: StoryFn<NavBarItemProps> = (args) => <NavBarItem {...args} />;
+const Template: StoryFn<NavBarItemProps> = (args) => <NavBarItem  {...args} />;
 
 // 👇 Each story then reuses that template
 export const Basic = Template.bind({});
 
 // Story args
 // Learn more: https://storybook.js.org/docs/react/writing-stories/args
-Basic.args = {};
+Basic.args = {
+  children: 'NavBarItem',
+};

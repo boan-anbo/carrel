@@ -1,4 +1,3 @@
-import {Alignment, Button, Navbar} from '@blueprintjs/core';
 import React, {ReactElement, useMemo} from 'react';
 import {MainMenuItems} from "../../../../store/slices/appstate/main-menu-items";
 import {AiOutlineBuild, BiCabinet, GiEagleHead, GiLaserSparks, GiRead, SiActigraph, SiBookstack} from "react-icons/all";
@@ -10,7 +9,9 @@ import {CarrelComponent} from "../../../../carrel_server_client/carrel/core/shar
 import {useNavigate} from "react-router-dom";
 import {CarrelPageRoutes} from "../../../domains/carrel/routes/carrel-page-routes";
 import {CabinetPageRoutes} from "../../../domains/cabinet/routes/cabinet-page-routes";
-import clsx from "clsx";
+import {NavBar} from "carrel-ui";
+import {Alignment, Button} from "@blueprintjs/core";
+
 
 function HeaderMenu() {
 
@@ -83,9 +84,9 @@ function HeaderMenu() {
     }, [])
 
     return (
-        <div className={clsx('flex space-x-10')}>
-            {MainMenuItemElements}
-        </div>)
+        <NavBar  title={'carrel'} menuBarItems={MainMenuItemElements} />
+
+    );
 }
 
 export default HeaderMenu;
