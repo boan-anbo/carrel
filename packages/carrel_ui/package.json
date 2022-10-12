@@ -1,0 +1,52 @@
+{
+  "name": "carrel-ui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "build-storybook": "build-storybook",
+    "storybook": "start-storybook -p 6006"
+  },
+  "packageManager": "yarn",
+  "dependencies": {
+    "@adobe/react-spectrum": "^3.22.0",
+    "@radix-ui/react-icons": "^1.1.1",
+    "@storybook/addon-docs": "^6.5.12",
+    "@storybook/preview-web": "^6.5.12",
+    "@vanilla-extract/css": "^1.9.1",
+    "@vanilla-extract/recipes": "^0.2.5",
+    "@vanilla-extract/sprinkles": "^1.5.0",
+    "@vanilla-extract/vite-plugin": "^3.6.1",
+    "autoprefixer": "^10.4.12",
+    "clsx": "^1.2.1",
+    "postcss": "^8.4.17",
+    "react": "^18.2.0",
+    "react-aria": "^3.20.0",
+    "react-dom": "^18.2.0",
+    "require-from-string": "^2.0.2",
+    "sass": "^1.55.0",
+    "tailwindcss": "^3.1.8",
+    "webpack": ">=2.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@storybook/addon-actions": "^6.5.12",
+    "@storybook/addon-essentials": "^6.5.12",
+    "@storybook/addon-interactions": "^6.5.12",
+    "@storybook/addon-links": "^6.5.12",
+    "@storybook/addon-postcss": "^2.0.0",
+    "@storybook/builder-vite": "^0.2.4",
+    "@storybook/react": "^6.5.12",
+    "@storybook/testing-library": "^0.0.13",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-react": "^2.1.0",
+    "babel-loader": "^8.2.5",
+    "storybook-addon-react-router-v6": "^0.2.1",
+    "typescript": "^4.6.4",
+    "vite": "^3.1.0"
+  }
+}

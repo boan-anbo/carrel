@@ -1,0 +1,35 @@
+[package]
+name = "carrel_app_db"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[workspace]
+members = ["", "entities", "migration"]
+
+
+[dependencies]
+async-trait = "0.1.57"
+thiserror = "1.0.26"
+carrel_app_db_entities = { path = "entities" }
+carrel_app_db_migration = { path = "migration" }
+tokio = { version = "1.13.0", features = ["full"] }
+carrel_utils = { path = "../carrel_utils", features = ["faker"] }
+pebble_query = { path = "../../pebble_query" }
+
+
+
+
+[dependencies.sea-orm]
+version = "0.9.3"
+features = [
+    "sqlx-sqlite",
+    "runtime-tokio-rustls",
+    "macros",
+    "uuid"
+]
+
+
+[build-dependencies]
+dotenv = "0.15.0"
+carrel_utils = { path = "../carrel_utils", features = ["faker"] }

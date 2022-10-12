@@ -196,4 +196,13 @@ export class ApiStandardQuery {
         return query;
 
     }
+
+    static fromPageIndexAndPageSize(pageIndex: number, pageSize: number) {
+        const query = new StandardQuery();
+        query.offset = pageIndex * pageSize;
+        query.length = pageSize;
+
+        return query;
+
+    }
 }

@@ -10,6 +10,7 @@ import {CarrelComponent} from "../../../../carrel_server_client/carrel/core/shar
 import {useNavigate} from "react-router-dom";
 import {CarrelPageRoutes} from "../../../domains/carrel/routes/carrel-page-routes";
 import {CabinetPageRoutes} from "../../../domains/cabinet/routes/cabinet-page-routes";
+import clsx from "clsx";
 
 function HeaderMenu() {
 
@@ -45,7 +46,7 @@ function HeaderMenu() {
                     case CarrelComponent.CABINET:
                         text = 'Cabinet';
                         icon = <BiCabinet/>;
-                        homePath= CabinetPageRoutes.archives.absolutePath;
+                        homePath = CabinetPageRoutes.archives.absolutePath;
                         break;
                     case CarrelComponent.INTERACT:
                         text = 'Interact';
@@ -82,21 +83,10 @@ function HeaderMenu() {
     }, [])
 
     return (
-        <Navbar className={''}>
-            <Navbar.Group className={'flex w-full'} align={Alignment.LEFT}>
-                <Navbar.Heading className={'w-2/12'}>{currentComponent.name}</Navbar.Heading>
-
-                <Navbar.Divider/>
-
-                <Navbar.Group>
-
-                    <div className={''}>
-                        {MainMenuItemElements}
-                    </div>
-
-                </Navbar.Group>
-            </Navbar.Group>
-        </Navbar>);
+        <div className={clsx('flex space-x-10')}>
+            {MainMenuItemElements}
+        </div>)
 }
 
 export default HeaderMenu;
+

@@ -23,7 +23,7 @@ impl FirefliesService for FireflyService {
                 classified_only: req.classified_only,
             },
         )
-        .expect("Failed to scan folder for fireflies");
+            .expect("Failed to scan folder for fireflies");
         let res = Response::new(ScanFolderForFirefliesResponse {
             fireflies: Some(result),
         });
@@ -43,7 +43,7 @@ impl FirefliesService for FireflyService {
                 ..Default::default()
             },
         )
-        .expect("Failed to scan files for fireflies");
+            .expect("Failed to scan files for fireflies");
         let res = Response::new(ScanFilesForFirefliesResponse {
             fireflies: Some(result),
         });

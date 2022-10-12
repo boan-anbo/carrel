@@ -76,7 +76,7 @@ impl KeepFireflies for FireflyKepper {
             StoreType::SQLITE,
             Some(tom_option),
         )
-        .await;
+            .await;
         Ok(to_machine)
     }
 
@@ -92,7 +92,7 @@ impl KeepFireflies for FireflyKepper {
                 store_type: StoreType::JSON,
             }),
         )
-        .await;
+            .await;
     }
 
     async fn save_firefly_to_to_db(
@@ -332,7 +332,7 @@ mod tests {
             chn_pdf_path.to_str().unwrap(),
             &ExtractorOption::default(),
         )
-        .unwrap();
+            .unwrap();
 
         assert_eq!(fireflies.len(), 3);
 

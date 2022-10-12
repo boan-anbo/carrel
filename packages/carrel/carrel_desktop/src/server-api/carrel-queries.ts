@@ -2,15 +2,16 @@ import {Archive} from "../carrel_server_client/carrel/common/archive/v1/archive_
 import {File} from "../carrel_server_client/carrel/common/file/v1/file_v1_pb";
 import {
     AddDirectoryToArchiveResponse,
-    ListAllProjectArchivesResponse
+    ListAllProjectArchivesResponse, QueryFirefliesResponse
 } from "../carrel_server_client/carrel/server/project_manager/v1/server_project_manager_v1_pb";
 import {carrelApi} from "./carrel-api";
-import {QueryFunction, useMutation, useQuery} from "@tanstack/react-query";
+import {Query, QueryFunction, useMutation, useQuery} from "@tanstack/react-query";
 import {Firefly} from "../carrel_server_client/carrel/common/firefly/v2/firefly_v2_pb";
 import workingProjectState from "../store/slices/working-project-state/working-project-state";
 import {BaseDirectory} from "@tauri-apps/api/fs";
 import {Project} from "../carrel_server_client/carrel/common/project/v2/project_v2_pb";
 import {appDir, dataDir} from "@tauri-apps/api/path";
+import {StandardQuery} from "../carrel_server_client/generic/api/query/v1/query_v1_pb";
 
 
 // Main entry point for all pages to retrieve data.
@@ -153,7 +154,27 @@ export class ApiQuery {
 
             this.log("QueryListRecentProjects", "list_recent_projects", result)
             return result.projects
-        })
+        }
+    )
+
+    QueryFireflies = (query: StandardQuery, projectDirectory?: string) => useQuery(
+        ["fireflies", query],
+        async (): Promise<QueryFirefliesResponse | null> => {
+
+            if (!projectDirectory) {
+                return null
+            }
+
+            let result = await carrelApi.queryFireflies(
+                {
+                    query,
+                    projectDirectory
+                })
+
+            this.log("QueryFireflies", "fireflies", result)
+            return result
+        }
+    )
 
 
 }

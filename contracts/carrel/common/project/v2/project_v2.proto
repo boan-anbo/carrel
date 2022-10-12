@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+
+package carrel.common.project.v2;
+// the same but with right order
+
+// same but with right order
+
+message Project {
+  int32 id = 1;
+  string uuid = 2;
+  string name = 3;
+  string description = 4;
+  string project_directory = 5;
+  string project_db_directory = 6;
+  optional string last_used_at = 7;
+  optional string deadline_at = 8;
+  optional string next_meeting_at = 9;
+  string created_at = 10;
+  optional string completed_at = 11;
+  int32 total_files = 12;
+  int32 total_notes = 13;
+    int32 total_tags = 14;
+  int32 total_text_documents = 15;
+  int32 total_archives = 16;
+  int32 importance = 17;
+  int32 task_state = 18;
+  bool is_favorite = 19;
+  bool is_missing = 20;
+  bool is_hidden = 21;
+  bool is_archived = 22;
+  bool is_completed = 23;
+  map<string, string> metadata = 24;
+}
+
+

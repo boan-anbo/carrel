@@ -1,0 +1,963 @@
+Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\backup\current_hm_export.md at 2022-10-07T19:53:00.681664700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\backup\notes.md at 2022-10-07T19:53:01.177994700-04:00Last Spent: 2
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\backup\text.txt at 2022-10-07T19:53:04.062323200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Abstract] - [[Project]].md at 2022-10-07T19:53:04.266558300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Analyses] - [[Project]].md at 2022-10-07T19:53:04.267367900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Design] - [[Project]].md at 2022-10-07T19:53:04.267933-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Entities] - [[Project]].md at 2022-10-07T19:53:04.268591600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Logistics] - [[Project]].md at 2022-10-07T19:53:04.269185200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Log] - [[Project]].md at 2022-10-07T19:53:04.269721300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[References] - [[Project]].md at 2022-10-07T19:53:04.270356100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Sources] - [[Project]].md at 2022-10-07T19:53:04.270930200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1st Draft] - [[Project]]\[Tests]\[Test] Argument.md at 2022-10-07T19:53:04.272747300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1st Draft] - [[Project]]\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:04.273394400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1st Draft] - [[Project]]\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:04.273946600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1st Draft] - [[Project]]\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:04.274642200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1st Draft] - [[Project]]\[Tests]\[Test] Literature.md at 2022-10-07T19:53:04.275196200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[1st Draft] - [[Project]]\[Tests]\[Test] Significance.md at 2022-10-07T19:53:04.275725500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[2 Free Drafts] - [[Project]]\[0 Scratches] - [[Project]].md at 2022-10-07T19:53:04.276423400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[2 Free Drafts] - [[Project]]\[1 Observations] - [[Project]].md at 2022-10-07T19:53:04.276955200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[2 Free Drafts] - [[Project]]\[2 Points] - [[Project]].md at 2022-10-07T19:53:04.277544-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[2 Free Drafts] - [[Project]]\[3 Freedraft] - [[Project]].md at 2022-10-07T19:53:04.281400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[2 Free Drafts] - [[Project]]\[4 Outline] - [[Project]].md at 2022-10-07T19:53:04.282129900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[4 Revision Documents] - [[Project]]\[Feeback] - [[Project]].md at 2022-10-07T19:53:04.283083900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\2022_10_01 - fall_draft\notes\[Folder] - [[Project]]\[4 Revision Documents] - [[Project]]\[Review2] - [[Project]].md at 2022-10-07T19:53:04.283769300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Design Documents] - Introduction\[Abstract] - Introduction.md at 2022-10-07T19:53:04.285976300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Design Documents] - Introduction\[Analyses] - Introduction.md at 2022-10-07T19:53:04.286604600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Design Documents] - Introduction\[Design] - Introduction.md at 2022-10-07T19:53:04.287244300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Design Documents] - Introduction\[Entities] - Introduction.md at 2022-10-07T19:53:04.288078900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Design Documents] - Introduction\[Feeback] - Introduction.md at 2022-10-07T19:53:04.288807600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Design Documents] - Introduction\[Logistics] - Introduction.md at 2022-10-07T19:53:04.289499600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Design Documents] - Introduction\[Log] - Introduction.md at 2022-10-07T19:53:04.290208500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Design Documents] - Introduction\[References] - Introduction.md at 2022-10-07T19:53:04.291115200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Design Documents] - Introduction\[Review2] - Introduction.md at 2022-10-07T19:53:04.291677200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Design Documents] - Introduction\[Sources] - Introduction.md at 2022-10-07T19:53:04.292253700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Draft1] - Introduction\[Tests]\[Test] Argument.md at 2022-10-07T19:53:04.293986100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Draft1] - Introduction\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:04.294613700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Draft1] - Introduction\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:04.295166600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Draft1] - Introduction\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:04.296064600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Draft1] - Introduction\[Tests]\[Test] Literature.md at 2022-10-07T19:53:04.296801300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Draft1] - Introduction\[Tests]\[Test] Significance.md at 2022-10-07T19:53:04.297381100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Free Drafts] - Introduction\[0 Scratches] - Introduction.md at 2022-10-07T19:53:04.298193800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Free Drafts] - Introduction\[1 Observations] - Introduction.md at 2022-10-07T19:53:04.298810500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Free Drafts] - Introduction\[2 Points] - Introduction.md at 2022-10-07T19:53:04.299737900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Free Drafts] - Introduction\[3 Free draft] - Introduction.md at 2022-10-07T19:53:04.300461-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\0 [Project] - Introduction\[Free Drafts] - Introduction\[4 Outline] - Introduction.md at 2022-10-07T19:53:04.301189100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Design Documents] - Logistics and Operations Research\[Abstract] - Logistics and Operations Research.md at 2022-10-07T19:53:04.302577100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Design Documents] - Logistics and Operations Research\[Analyses] - Logistics and Operations Research.md at 2022-10-07T19:53:04.303164400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Design Documents] - Logistics and Operations Research\[Design] - Logistics and Operations Research.md at 2022-10-07T19:53:04.303712700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Design Documents] - Logistics and Operations Research\[Entities] - Logistics and Operations Research.md at 2022-10-07T19:53:04.304373200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Design Documents] - Logistics and Operations Research\[Feeback] - Logistics and Operations Research.md at 2022-10-07T19:53:04.304953700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Design Documents] - Logistics and Operations Research\[Logistics] - Logistics and Operations Research.md at 2022-10-07T19:53:04.305533800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Design Documents] - Logistics and Operations Research\[Log] - Logistics and Operations Research.md at 2022-10-07T19:53:04.306071600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Design Documents] - Logistics and Operations Research\[Outline] - Logistics and Operations Research.md at 2022-10-07T19:53:04.306637200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Design Documents] - Logistics and Operations Research\[Points] - Logistics and Operations Research.md at 2022-10-07T19:53:04.307204500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Design Documents] - Logistics and Operations Research\[References] - Logistics and Operations Research.md at 2022-10-07T19:53:04.307991300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Design Documents] - Logistics and Operations Research\[Review2] - Logistics and Operations Research.md at 2022-10-07T19:53:04.308617300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Design Documents] - Logistics and Operations Research\[Scratches] - Logistics and Operations Research.md at 2022-10-07T19:53:04.309184200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Design Documents] - Logistics and Operations Research\[Sources] - Logistics and Operations Research.md at 2022-10-07T19:53:04.309730400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Drafts] - Logistics and Operations Research\[Draft1] - Logistics and Operations Research\[Tests]\[Test] Argument.md at 2022-10-07T19:53:04.310986900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Drafts] - Logistics and Operations Research\[Draft1] - Logistics and Operations Research\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:04.311603900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Drafts] - Logistics and Operations Research\[Draft1] - Logistics and Operations Research\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:04.312160700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Drafts] - Logistics and Operations Research\[Draft1] - Logistics and Operations Research\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:04.313284900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Drafts] - Logistics and Operations Research\[Draft1] - Logistics and Operations Research\[Tests]\[Test] Literature.md at 2022-10-07T19:53:04.313874400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\1 [Project] - Logistics and Operations Research\[Drafts] - Logistics and Operations Research\[Draft1] - Logistics and Operations Research\[Tests]\[Test] Significance.md at 2022-10-07T19:53:04.314424600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\BJHS Revision Draft\BJHS Formatting Guideline.md at 2022-10-07T19:53:04.319436700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\BJHS Revision Draft\Draft\dropped-snippets.md at 2022-10-07T19:53:04.321727900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\BJHS Revision Draft\test.md at 2022-10-07T19:53:04.324430700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\BJHS Revision Draft\[Outline]-skeleton.md at 2022-10-07T19:53:04.325005400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\BJHS Revision Draft\[Outline].md at 2022-10-07T19:53:04.325692700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\BJHS Revision Draft\[Points] .md at 2022-10-07T19:53:04.326421100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\first draft\Addendum.md at 2022-10-07T19:53:04.327490700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\Old Drafts\BJHS Draft\Addendum.md at 2022-10-07T19:53:04.332363100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\Old Drafts\BJHS Draft\BJHS Revision Instructions\BJHS Guidline.md at 2022-10-07T19:53:04.333087700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\Old Drafts\BJHS Draft\BJHS Revision Instructions\notes.md at 2022-10-07T19:53:04.333808700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\Old Drafts\BJHS Draft\list of referees.md at 2022-10-07T19:53:04.337016100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\Symposium PPT 211213\[Script] china-history-ai.md at 2022-10-07T19:53:04.342015900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\[Abstract] - History of AI.md at 2022-10-07T19:53:04.342927500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\[Controlled Entities] - History of AI.md at 2022-10-07T19:53:04.343479-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\[Design Document] - History of AI.md at 2022-10-07T19:53:04.344137600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\[Log] - History of AI.md at 2022-10-07T19:53:04.345027100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\[Outline] - History of AI.md at 2022-10-07T19:53:04.345857400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\[Research Journal] - History of AI.md at 2022-10-07T19:53:04.346617100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\[Reviewer II] - History of AI.md at 2022-10-07T19:53:04.347400600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\[Revision] March 28th.md at 2022-10-07T19:53:04.348340400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\3 [P] History of AI\[Scratch Pad] - History of AI.md at 2022-10-07T19:53:04.349021500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\test.md at 2022-10-07T19:53:04.350839700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Abstract] - Computer Education PE.md at 2022-10-07T19:53:04.351776-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Analyses] - Computer Education PE.md at 2022-10-07T19:53:04.352334600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Design] - 0.1 - Computer Education PE.md at 2022-10-07T19:53:04.352877500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Design] - Computer Education PE.md at 2022-10-07T19:53:04.353639500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Entities] - Computer Education PE.md at 2022-10-07T19:53:04.354424100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Feeback] - Computer Education PE.md at 2022-10-07T19:53:04.354989100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Literature] - Computer Education PE.md at 2022-10-07T19:53:04.355583-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Logistics] - Computer Education PE.md at 2022-10-07T19:53:04.356150500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Log] - Computer Education PE.md at 2022-10-07T19:53:04.356689800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Outline] - Computer Education PE.md at 2022-10-07T19:53:04.357569800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Points] - Computer Education PE.md at 2022-10-07T19:53:04.358255800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[References] - Computer Education PE.md at 2022-10-07T19:53:04.358988100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Review2] - Computer Education PE.md at 2022-10-07T19:53:04.359547500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Scratches] - Computer Education PE.md at 2022-10-07T19:53:04.360112800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Design Documents] - Computer Education PE\[Sources] - Computer Education PE.md at 2022-10-07T19:53:04.360648600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Drafts] - Computer Education PE\[Draft1] - Computer Education PE\notes.md at 2022-10-07T19:53:04.365038900-04:00Last Spent: 52
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Drafts] - Computer Education PE\[Draft1] - Computer Education PE\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.557311200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Drafts] - Computer Education PE\[Draft1] - Computer Education PE\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.558605900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Drafts] - Computer Education PE\[Draft1] - Computer Education PE\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.559342500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Drafts] - Computer Education PE\[Draft1] - Computer Education PE\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.560359700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Drafts] - Computer Education PE\[Draft1] - Computer Education PE\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.561221500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\4 [Project] - Computer Education PE\[Drafts] - Computer Education PE\[Draft1] - Computer Education PE\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.562032700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\Outlines\1 50年代计算数学.md at 2022-10-07T19:53:56.569417500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\Outlines\2. 文革中和投入产出分析.md at 2022-10-07T19:53:56.571111100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\Outlines\3. 80年代早期的复兴.md at 2022-10-07T19:53:56.572228-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\Outlines\4. 80年代计算机的换代.md at 2022-10-07T19:53:56.573803-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\Outlines\5. 80年代中期和计量经济学的接壤.md at 2022-10-07T19:53:56.576541700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\Outlines\6. 信息经济和主体问题.md at 2022-10-07T19:53:56.577633300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\Outlines\7. 结论 消失的质量.md at 2022-10-07T19:53:56.578915400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\Outlines\8. 其他.md at 2022-10-07T19:53:56.579758700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[Abstract] - Quantitative Economics.md at 2022-10-07T19:53:56.580517400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[Analyses] - Quantitative Economics.md at 2022-10-07T19:53:56.581172200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[Design] - Quantitative Economics.md at 2022-10-07T19:53:56.582018200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[Entities] - Quantitative Economics.md at 2022-10-07T19:53:56.583246900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[Feeback] - Quantitative Economics.md at 2022-10-07T19:53:56.584346700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[Logistics] - Quantitative Economics.md at 2022-10-07T19:53:56.585119300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[Log] - Quantitative Economics.md at 2022-10-07T19:53:56.586080700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[Observations] - Quantitative Economics.md at 2022-10-07T19:53:56.587385700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[Outline] - Quantitative Economics.md at 2022-10-07T19:53:56.588306300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[Points] - Quantitative Economics.md at 2022-10-07T19:53:56.592840300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[References] - Quantitative Economics.md at 2022-10-07T19:53:56.593705700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[Review2] - Quantitative Economics.md at 2022-10-07T19:53:56.594549400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[Scratches] - Quantitative Economics.md at 2022-10-07T19:53:56.595263-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Design Documents] - Quantitative Economics\[Sources] - Quantitative Economics.md at 2022-10-07T19:53:56.596112900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Drafts] - Quantitative Economics\[Draft1] - Quantitative Economics\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.599522100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Drafts] - Quantitative Economics\[Draft1] - Quantitative Economics\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.600375500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Drafts] - Quantitative Economics\[Draft1] - Quantitative Economics\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.601150300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Drafts] - Quantitative Economics\[Draft1] - Quantitative Economics\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.602339600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Drafts] - Quantitative Economics\[Draft1] - Quantitative Economics\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.604964700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\5 [Project] - Quantitative Economics\[Drafts] - Quantitative Economics\[Draft1] - Quantitative Economics\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.605873900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Design Documents] - China in 2000\[Abstract] - China in 2000.md at 2022-10-07T19:53:56.608356400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Design Documents] - China in 2000\[Analyses] - China in 2000.md at 2022-10-07T19:53:56.609382600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Design Documents] - China in 2000\[Design] - China in 2000.md at 2022-10-07T19:53:56.610066300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Design Documents] - China in 2000\[Entities] - China in 2000.md at 2022-10-07T19:53:56.610879700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Design Documents] - China in 2000\[Feeback] - China in 2000.md at 2022-10-07T19:53:56.611597200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Design Documents] - China in 2000\[Logistics] - China in 2000.md at 2022-10-07T19:53:56.612372600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Design Documents] - China in 2000\[Log] - China in 2000.md at 2022-10-07T19:53:56.613230600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Design Documents] - China in 2000\[Outline] - China in 2000.md at 2022-10-07T19:53:56.614052500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Design Documents] - China in 2000\[Points] - China in 2000.md at 2022-10-07T19:53:56.614907300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Design Documents] - China in 2000\[References] - China in 2000.md at 2022-10-07T19:53:56.615635700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Design Documents] - China in 2000\[Review2] - China in 2000.md at 2022-10-07T19:53:56.616558-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Design Documents] - China in 2000\[Scratches] - China in 2000.md at 2022-10-07T19:53:56.617294900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Design Documents] - China in 2000\[Sources] - China in 2000.md at 2022-10-07T19:53:56.618089300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Drafts] - China in 2000\[Draft1] - China in 2000\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.620454400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Drafts] - China in 2000\[Draft1] - China in 2000\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.621484500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Drafts] - China in 2000\[Draft1] - China in 2000\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.622219700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Drafts] - China in 2000\[Draft1] - China in 2000\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.623091500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Drafts] - China in 2000\[Draft1] - China in 2000\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.623873900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\6 [Project] - China in 2000\[Drafts] - China in 2000\[Draft1] - China in 2000\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.625806600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Design Documents] - Conclusion\[Abstract] - Conclusion.md at 2022-10-07T19:53:56.627729100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Design Documents] - Conclusion\[Analyses] - Conclusion.md at 2022-10-07T19:53:56.628398800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Design Documents] - Conclusion\[Design] - Conclusion.md at 2022-10-07T19:53:56.629071-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Design Documents] - Conclusion\[Entities] - Conclusion.md at 2022-10-07T19:53:56.629958800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Design Documents] - Conclusion\[Feeback] - Conclusion.md at 2022-10-07T19:53:56.630809900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Design Documents] - Conclusion\[Logistics] - Conclusion.md at 2022-10-07T19:53:56.631487400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Design Documents] - Conclusion\[Log] - Conclusion.md at 2022-10-07T19:53:56.632607400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Design Documents] - Conclusion\[Outline] - Conclusion.md at 2022-10-07T19:53:56.633473700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Design Documents] - Conclusion\[Points] - Conclusion.md at 2022-10-07T19:53:56.634606500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Design Documents] - Conclusion\[References] - Conclusion.md at 2022-10-07T19:53:56.636867800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Design Documents] - Conclusion\[Review2] - Conclusion.md at 2022-10-07T19:53:56.637629600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Design Documents] - Conclusion\[Scratches] - Conclusion.md at 2022-10-07T19:53:56.638611-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Design Documents] - Conclusion\[Sources] - Conclusion.md at 2022-10-07T19:53:56.639548900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Drafts] - Conclusion\[Draft1] - Conclusion\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.643154400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Drafts] - Conclusion\[Draft1] - Conclusion\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.644027900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Drafts] - Conclusion\[Draft1] - Conclusion\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.645468100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Drafts] - Conclusion\[Draft1] - Conclusion\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.647668600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Drafts] - Conclusion\[Draft1] - Conclusion\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.648399600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Chapters]\7 [Project] - Conclusion\[Drafts] - Conclusion\[Draft1] - Conclusion\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.649214-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Design Documents] - Dissertation\[Abstract] - Dissertation.md at 2022-10-07T19:53:56.651143300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Design Documents] - Dissertation\[Analyses] - Dissertation.md at 2022-10-07T19:53:56.651909200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Design Documents] - Dissertation\[Design] - Dissertation.md at 2022-10-07T19:53:56.652766100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Design Documents] - Dissertation\[Entities] - Dissertation.md at 2022-10-07T19:53:56.653743100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Design Documents] - Dissertation\[Feeback] - Dissertation.md at 2022-10-07T19:53:56.654605300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Design Documents] - Dissertation\[Logistics] - Dissertation.md at 2022-10-07T19:53:56.655308300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Design Documents] - Dissertation\[Log] - Dissertation.md at 2022-10-07T19:53:56.656060300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Design Documents] - Dissertation\[Outline] - Dissertation.md at 2022-10-07T19:53:56.656901300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Design Documents] - Dissertation\[Points] - Dissertation.md at 2022-10-07T19:53:56.657718700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Design Documents] - Dissertation\[References] - Dissertation.md at 2022-10-07T19:53:56.658416600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Design Documents] - Dissertation\[Review2] - Dissertation.md at 2022-10-07T19:53:56.659092-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Design Documents] - Dissertation\[Scratches] - Dissertation.md at 2022-10-07T19:53:56.659834900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Design Documents] - Dissertation\[Sources] - Dissertation.md at 2022-10-07T19:53:56.660554-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Draft1] - Dissertation\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.662980800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Draft1] - Dissertation\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.663889900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Draft1] - Dissertation\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.664719400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Draft1] - Dissertation\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.665746800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Draft1] - Dissertation\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.666514300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[Draft1] - Dissertation\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.667231900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[R] Women Trafficking\0217 简介.md at 2022-10-07T19:53:56.675242200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[R] Women Trafficking\0219 研讨会.md at 2022-10-07T19:53:56.676452300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[R] Women Trafficking\0227 - Agenda.md at 2022-10-07T19:53:56.678596100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[R] Women Trafficking\2019 新群通告.md at 2022-10-07T19:53:56.679761-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[R] Women Trafficking\2019 群通告.md at 2022-10-07T19:53:56.680768900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[R] Women Trafficking\notes copy.md at 2022-10-07T19:53:56.681606300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[R] Women Trafficking\notes.md at 2022-10-07T19:53:56.682602800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[R] Women Trafficking\questions.md at 2022-10-07T19:53:56.683531700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[R] Women Trafficking\Tags.md at 2022-10-07T19:53:56.684236700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Dissertation]\[R] Women Trafficking\黄律师研讨会\简介.md at 2022-10-07T19:53:56.685152100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[LOG]\My Research Routine.md at 2022-10-07T19:53:56.686880400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[LOG]\[CFPs]\22.2.14 - AAS Technology in Asia.md at 2022-10-07T19:53:56.687848700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[LOG]\[CFPs]\22.4.14 - Special Issue Data COloniliasm.md at 2022-10-07T19:53:56.688687-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[LOG]\[LOG] Archive - UW.md at 2022-10-07T19:53:56.689412400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[LOG]\[LOG] Daily.md at 2022-10-07T19:53:56.690388100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[LOG]\[LOG] The Incubator.md at 2022-10-07T19:53:56.692190200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[LOG]\[LOG] Workflow.md at 2022-10-07T19:53:56.693590300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\2021 Science Library Workshop\presentation.md at 2022-10-07T19:53:56.704152-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\4-4 Markdown Rewards\notes.md at 2022-10-07T19:53:56.705768500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\letters\to_caltech_archive.md at 2022-10-07T19:53:56.707225100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\220513 - Ghosh - Review\notes.md at 2022-10-07T19:53:56.710293300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\220513 - Ghosh - Review\review.md at 2022-10-07T19:53:56.711511900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\CEAS Summer Grant\some tips.md at 2022-10-07T19:53:56.713001100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\Review - Chinese Anti-Virus Software\follow-up (DESKTOP-S35LB52's conflicted copy 2022-01-18).md at 2022-10-07T19:53:56.713891600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\Review - Chinese Anti-Virus Software\follow-up.md at 2022-10-07T19:53:56.714759300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\Review - Chinese Anti-Virus Software\guide.md at 2022-10-07T19:53:56.715438700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\Review - Chinese Anti-Virus Software\review.md at 2022-10-07T19:53:56.716208200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\review-addendum.md at 2022-10-07T19:53:56.717073300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\scrps\Second Part.txt at 2022-10-07T19:53:56.717795200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\Summary of Animo Nullius.md at 2022-10-07T19:53:56.718634600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\Wang Hao and AI\draft 1\scraps.md at 2022-10-07T19:53:56.720061400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\Wang Hao and AI\log.md at 2022-10-07T19:53:56.721656600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\Wang Hao and AI\outline.md at 2022-10-07T19:53:56.722998100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\Wang Hao and AI\test-source.md at 2022-10-07T19:53:56.727205400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\Wang Hao and AI\test-target.md at 2022-10-07T19:53:56.728191200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\Wang Hao and AI\test.md at 2022-10-07T19:53:56.728896200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\Short Writings\[Yale] Pre-Submission PPT\notes.md at 2022-10-07T19:53:56.731706600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\tests\test_tags - Copy.md at 2022-10-07T19:53:56.733515-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\tests\test_tags.md at 2022-10-07T19:53:56.734625600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\[A] California 220526\220523 - Stanford - Nelson - Emails.md at 2022-10-07T19:53:56.735897300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\[A] California 220526\220523 - Stanford - Nelson - List of people.md at 2022-10-07T19:53:56.738832400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\[A] California 220526\220525 - Things to retrieve from CHM.md at 2022-10-07T19:53:56.739684200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\[A] California 220526\CHM\images scaned.md at 2022-10-07T19:53:56.740615100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\[G] Writing Group\22.01.23 - Week I.md at 2022-10-07T19:53:56.760544900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\[G] Writing Group\Fanxing.md at 2022-10-07T19:53:56.761440400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\[Misc]\2021 HSS - Systems Qian Xuesen\Conference notes.md at 2022-10-07T19:53:56.762319900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\[Misc]\2021 HSS - Systems Qian Xuesen\Design Document.md at 2022-10-07T19:53:56.763023-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\[Misc]\2021 SIGCIS\0. moderation.md at 2022-10-07T19:53:56.766050-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\[Misc]\2021 SIGCIS\1. bios.md at 2022-10-07T19:53:56.766881400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\[Misc]\2021 SIGCIS\2. Official Panel Program.md at 2022-10-07T19:53:56.767597200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Others]\[Misc]\寻情记\总结.md at 2022-10-07T19:53:56.772582500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\European AI History\abstract.md at 2022-10-07T19:53:56.778163200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[1 Design Documents] - Automation By Design\[Abstract] - Automation By Design.md at 2022-10-07T19:53:56.779719400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[1 Design Documents] - Automation By Design\[Analyses] - Automation By Design.md at 2022-10-07T19:53:56.780508400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[1 Design Documents] - Automation By Design\[Design] - Automation By Design.md at 2022-10-07T19:53:56.781289800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[1 Design Documents] - Automation By Design\[Entities] - Automation By Design.md at 2022-10-07T19:53:56.784355100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[1 Design Documents] - Automation By Design\[Logistics] - Automation By Design.md at 2022-10-07T19:53:56.785171300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[1 Design Documents] - Automation By Design\[Log] - Automation By Design.md at 2022-10-07T19:53:56.786487300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[1 Design Documents] - Automation By Design\[References] - Automation By Design.md at 2022-10-07T19:53:56.787367700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[1 Design Documents] - Automation By Design\[Sources] - Automation By Design.md at 2022-10-07T19:53:56.788131900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[2 Free Drafts] - Automation By Design\[0 Scratches] - Automation By Design.md at 2022-10-07T19:53:56.789025700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[2 Free Drafts] - Automation By Design\[1 Observations] - Automation By Design.md at 2022-10-07T19:53:56.789782100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[2 Free Drafts] - Automation By Design\[2 Points] - Automation By Design.md at 2022-10-07T19:53:56.790529300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[2 Free Drafts] - Automation By Design\[3 Freedraft] - Automation By Design.md at 2022-10-07T19:53:56.791627100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[2 Free Drafts] - Automation By Design\[4 Outline] - Automation By Design.md at 2022-10-07T19:53:56.792679700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[3 Latex Drafts] - Automation By Design\[1st Draft] - Automation By Design\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.795068300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[3 Latex Drafts] - Automation By Design\[1st Draft] - Automation By Design\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.795841800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[3 Latex Drafts] - Automation By Design\[1st Draft] - Automation By Design\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.796518100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[3 Latex Drafts] - Automation By Design\[1st Draft] - Automation By Design\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.798078100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[3 Latex Drafts] - Automation By Design\[1st Draft] - Automation By Design\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.798782900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[3 Latex Drafts] - Automation By Design\[1st Draft] - Automation By Design\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.799478700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[4 Revision Documents] - Automation By Design\[Feeback] - Automation By Design.md at 2022-10-07T19:53:56.800377600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Automation By Design\[4 Revision Documents] - Automation By Design\[Review2] - Automation By Design.md at 2022-10-07T19:53:56.801105600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[1 Design Documents] - Book Review Venacular Digitality\[Abstract] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.803435-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[1 Design Documents] - Book Review Venacular Digitality\[Analyses] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.804086100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[1 Design Documents] - Book Review Venacular Digitality\[Design] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.804788200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[1 Design Documents] - Book Review Venacular Digitality\[Entities] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.805648600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[1 Design Documents] - Book Review Venacular Digitality\[Logistics] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.806597600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[1 Design Documents] - Book Review Venacular Digitality\[Log] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.807291700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[1 Design Documents] - Book Review Venacular Digitality\[References] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.808338500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[1 Design Documents] - Book Review Venacular Digitality\[Sources] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.809196900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[2 Free Drafts] - Book Review Venacular Digitality\[0 Scratches] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.810100700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[2 Free Drafts] - Book Review Venacular Digitality\[1 Observations] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.810825800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[2 Free Drafts] - Book Review Venacular Digitality\[2 Points] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.811567700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[2 Free Drafts] - Book Review Venacular Digitality\[3 Freedraft] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.812333900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[2 Free Drafts] - Book Review Venacular Digitality\[4 Outline] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.813083300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[3 Latex Drafts] - Book Review Venacular Digitality\[1st Draft] - Book Review Venacular Digitality\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.814856400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[3 Latex Drafts] - Book Review Venacular Digitality\[1st Draft] - Book Review Venacular Digitality\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.815783400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[3 Latex Drafts] - Book Review Venacular Digitality\[1st Draft] - Book Review Venacular Digitality\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.816568700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[3 Latex Drafts] - Book Review Venacular Digitality\[1st Draft] - Book Review Venacular Digitality\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.817633500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[3 Latex Drafts] - Book Review Venacular Digitality\[1st Draft] - Book Review Venacular Digitality\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.818485900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[3 Latex Drafts] - Book Review Venacular Digitality\[1st Draft] - Book Review Venacular Digitality\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.819165-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[4 Revision Documents] - Book Review Venacular Digitality\[Feeback] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.820043700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Book Review Venacular Digitality\[4 Revision Documents] - Book Review Venacular Digitality\[Review2] - Book Review Venacular Digitality.md at 2022-10-07T19:53:56.820713500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Design Documents] - Chinese Decision Software\[Abstract] - Chinese Decision Software.md at 2022-10-07T19:53:56.822328100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Design Documents] - Chinese Decision Software\[Analyses] - Chinese Decision Software.md at 2022-10-07T19:53:56.823057200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Design Documents] - Chinese Decision Software\[Design] - Chinese Decision Software.md at 2022-10-07T19:53:56.823752800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Design Documents] - Chinese Decision Software\[Entities] - Chinese Decision Software.md at 2022-10-07T19:53:56.824633800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Design Documents] - Chinese Decision Software\[Feeback] - Chinese Decision Software.md at 2022-10-07T19:53:56.825581800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Design Documents] - Chinese Decision Software\[Logistics] - Chinese Decision Software.md at 2022-10-07T19:53:56.826303300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Design Documents] - Chinese Decision Software\[Log] - Chinese Decision Software.md at 2022-10-07T19:53:56.827052800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Design Documents] - Chinese Decision Software\[Outline] - Chinese Decision Software.md at 2022-10-07T19:53:56.827747100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Design Documents] - Chinese Decision Software\[Points] - Chinese Decision Software.md at 2022-10-07T19:53:56.828421200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Design Documents] - Chinese Decision Software\[References] - Chinese Decision Software.md at 2022-10-07T19:53:56.829223100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Design Documents] - Chinese Decision Software\[Review2] - Chinese Decision Software.md at 2022-10-07T19:53:56.829884600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Design Documents] - Chinese Decision Software\[Scratches] - Chinese Decision Software.md at 2022-10-07T19:53:56.830536200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Design Documents] - Chinese Decision Software\[Sources] - Chinese Decision Software.md at 2022-10-07T19:53:56.831213900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Drafts] - Chinese Decision Software\[Draft1] - Chinese Decision Software\outline.md at 2022-10-07T19:53:56.832383200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Drafts] - Chinese Decision Software\[Draft1] - Chinese Decision Software\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.833302-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Drafts] - Chinese Decision Software\[Draft1] - Chinese Decision Software\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.834083700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Drafts] - Chinese Decision Software\[Draft1] - Chinese Decision Software\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.834744300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Drafts] - Chinese Decision Software\[Draft1] - Chinese Decision Software\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.835668200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Drafts] - Chinese Decision Software\[Draft1] - Chinese Decision Software\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.836322500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese Decision Software\[Drafts] - Chinese Decision Software\[Draft1] - Chinese Decision Software\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.836994800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[1 Design Documents] - Chinese History of Reinforcement Learning\[Abstract] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.838616300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[1 Design Documents] - Chinese History of Reinforcement Learning\[Analyses] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.839273300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[1 Design Documents] - Chinese History of Reinforcement Learning\[Design] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.839939800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[1 Design Documents] - Chinese History of Reinforcement Learning\[Entities] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.840738200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[1 Design Documents] - Chinese History of Reinforcement Learning\[Logistics] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.841483900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[1 Design Documents] - Chinese History of Reinforcement Learning\[Log] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.842232700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[1 Design Documents] - Chinese History of Reinforcement Learning\[References] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.842969400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[1 Design Documents] - Chinese History of Reinforcement Learning\[Sources] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.843622800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[2 Free Drafts] - Chinese History of Reinforcement Learning\[0 Scratches] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.844464400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[2 Free Drafts] - Chinese History of Reinforcement Learning\[1 Observations] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.845285-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[2 Free Drafts] - Chinese History of Reinforcement Learning\[2 Points] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.846122800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[2 Free Drafts] - Chinese History of Reinforcement Learning\[3 Freedraft] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.846937800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[2 Free Drafts] - Chinese History of Reinforcement Learning\[4 Outline] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.847797900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[3 Latex Drafts] - Chinese History of Reinforcement Learning\[1st Draft] - Chinese History of Reinforcement Learning\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.849900700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[3 Latex Drafts] - Chinese History of Reinforcement Learning\[1st Draft] - Chinese History of Reinforcement Learning\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.850703900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[3 Latex Drafts] - Chinese History of Reinforcement Learning\[1st Draft] - Chinese History of Reinforcement Learning\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.851403100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[3 Latex Drafts] - Chinese History of Reinforcement Learning\[1st Draft] - Chinese History of Reinforcement Learning\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.852300700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[3 Latex Drafts] - Chinese History of Reinforcement Learning\[1st Draft] - Chinese History of Reinforcement Learning\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.853001400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[3 Latex Drafts] - Chinese History of Reinforcement Learning\[1st Draft] - Chinese History of Reinforcement Learning\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.853672600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[4 Revision Documents] - Chinese History of Reinforcement Learning\[Feeback] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.854550900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Chinese History of Reinforcement Learning\[4 Revision Documents] - Chinese History of Reinforcement Learning\[Review2] - Chinese History of Reinforcement Learning.md at 2022-10-07T19:53:56.855235700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[1 Design Documents] - Do Poor Children Have a Future\[Abstract] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.856783300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[1 Design Documents] - Do Poor Children Have a Future\[Analyses] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.858382100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[1 Design Documents] - Do Poor Children Have a Future\[Design] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.859087300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[1 Design Documents] - Do Poor Children Have a Future\[Entities] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.859978700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[1 Design Documents] - Do Poor Children Have a Future\[Logistics] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.860715900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[1 Design Documents] - Do Poor Children Have a Future\[Log] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.861481900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[1 Design Documents] - Do Poor Children Have a Future\[References] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.862304200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[1 Design Documents] - Do Poor Children Have a Future\[Sources] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.863203900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[2 Free Drafts] - Do Poor Children Have Future\[0 Scratches] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.864479400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[2 Free Drafts] - Do Poor Children Have Future\[1 Observations] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.865216200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[2 Free Drafts] - Do Poor Children Have Future\[2 Points] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.866058900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[2 Free Drafts] - Do Poor Children Have Future\[3 Freedraft] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.866867500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[2 Free Drafts] - Do Poor Children Have Future\[4 Outline] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.868324300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[3 Latex Drafts] - Do Poor Children Have Future\[1st Draft] - Do Poor Children Have Future\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.870831600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[3 Latex Drafts] - Do Poor Children Have Future\[1st Draft] - Do Poor Children Have Future\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.871797100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[3 Latex Drafts] - Do Poor Children Have Future\[1st Draft] - Do Poor Children Have Future\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.872742700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[3 Latex Drafts] - Do Poor Children Have Future\[1st Draft] - Do Poor Children Have Future\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.873865300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[3 Latex Drafts] - Do Poor Children Have Future\[1st Draft] - Do Poor Children Have Future\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.875764100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[3 Latex Drafts] - Do Poor Children Have Future\[1st Draft] - Do Poor Children Have Future\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.877006100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[4 Revision Documents] - Do Poor Children Have Future\[Feeback] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.878028900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Do Poor Children Have Future\[4 Revision Documents] - Do Poor Children Have Future\[Review2] - Do Poor Children Have Future.md at 2022-10-07T19:53:56.878766100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[1 Design Documents] - Template\[Abstract] - Template.md at 2022-10-07T19:53:56.881122600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[1 Design Documents] - Template\[Analyses] - Template.md at 2022-10-07T19:53:56.881880900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[1 Design Documents] - Template\[Design] - Template.md at 2022-10-07T19:53:56.882607900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[1 Design Documents] - Template\[Entities] - Template.md at 2022-10-07T19:53:56.883502700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[1 Design Documents] - Template\[Logistics] - Template.md at 2022-10-07T19:53:56.884335200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[1 Design Documents] - Template\[Log] - Template.md at 2022-10-07T19:53:56.885062600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[1 Design Documents] - Template\[References] - Template.md at 2022-10-07T19:53:56.885791900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[1 Design Documents] - Template\[Sources] - Template.md at 2022-10-07T19:53:56.886446900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[2 Free Drafts] - Template\[0 Scratches] - Template.md at 2022-10-07T19:53:56.887239300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[2 Free Drafts] - Template\[1 Observations] - Template.md at 2022-10-07T19:53:56.888800200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[2 Free Drafts] - Template\[2 Points] - Template.md at 2022-10-07T19:53:56.889592300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[2 Free Drafts] - Template\[3 Freedraft] - Template.md at 2022-10-07T19:53:56.890910800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[2 Free Drafts] - Template\[4 Outline] - Template.md at 2022-10-07T19:53:56.891757300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[3 Latex Drafts] - Template\[1st Draft] - Template\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.894601600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[3 Latex Drafts] - Template\[1st Draft] - Template\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.895420400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[3 Latex Drafts] - Template\[1st Draft] - Template\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.896145500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[3 Latex Drafts] - Template\[1st Draft] - Template\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.897198-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[3 Latex Drafts] - Template\[1st Draft] - Template\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.898004-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[3 Latex Drafts] - Template\[1st Draft] - Template\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.898783-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[4 Revision Documents] - Template\[Feeback] - Template.md at 2022-10-07T19:53:56.899780900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Learning and Gaming\[4 Revision Documents] - Template\[Review2] - Template.md at 2022-10-07T19:53:56.900556-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[1 Design Documents] - Oxford Handbook Digital\[Abstract2] - Oxford Handbook Digital  - For Filtering.md at 2022-10-07T19:53:56.902871-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[1 Design Documents] - Oxford Handbook Digital\[Abstract] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.903551700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[1 Design Documents] - Oxford Handbook Digital\[Analyses] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.904332900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[1 Design Documents] - Oxford Handbook Digital\[Design] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.905056400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[1 Design Documents] - Oxford Handbook Digital\[Entities] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.907368500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[1 Design Documents] - Oxford Handbook Digital\[Logistics] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.908195200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[1 Design Documents] - Oxford Handbook Digital\[Log] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.908967400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[1 Design Documents] - Oxford Handbook Digital\[References] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.910212600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[1 Design Documents] - Oxford Handbook Digital\[Sources] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.910922700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[1 Design Documents] - Oxford Handbook Digital\[Taxonomy] - Anti-censorship tools.md at 2022-10-07T19:53:56.911590800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[2 Free Drafts] - Oxford Handbook Digital\[0 Scratches] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.912420700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[2 Free Drafts] - Oxford Handbook Digital\[1 Observations] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.913033900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[2 Free Drafts] - Oxford Handbook Digital\[2 Points] - Oxford Handbook Digital-skeleton.md at 2022-10-07T19:53:56.913972400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[2 Free Drafts] - Oxford Handbook Digital\[2 Points] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.914620300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[2 Free Drafts] - Oxford Handbook Digital\[3 Freedraft] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.916275600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[2 Free Drafts] - Oxford Handbook Digital\[4 Outline] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.916936800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[3 Latex Drafts] - Oxford Handbook Digital\[1st Draft] - Oxford Handbook Digital\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.920732100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[3 Latex Drafts] - Oxford Handbook Digital\[1st Draft] - Oxford Handbook Digital\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.921668500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[3 Latex Drafts] - Oxford Handbook Digital\[1st Draft] - Oxford Handbook Digital\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.922365600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[3 Latex Drafts] - Oxford Handbook Digital\[1st Draft] - Oxford Handbook Digital\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.923261700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[3 Latex Drafts] - Oxford Handbook Digital\[1st Draft] - Oxford Handbook Digital\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.923976-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[3 Latex Drafts] - Oxford Handbook Digital\[1st Draft] - Oxford Handbook Digital\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.924640700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[3 Latex Drafts] - Oxford Handbook Digital\[2nd Draft] - Oxford Handbook Digital\220813 - PPT\notes.md at 2022-10-07T19:53:56.927778500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[3 Latex Drafts] - Oxford Handbook Digital\[2nd Draft] - Oxford Handbook Digital\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.931907900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[3 Latex Drafts] - Oxford Handbook Digital\[2nd Draft] - Oxford Handbook Digital\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.932832200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[3 Latex Drafts] - Oxford Handbook Digital\[2nd Draft] - Oxford Handbook Digital\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.933626500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[3 Latex Drafts] - Oxford Handbook Digital\[2nd Draft] - Oxford Handbook Digital\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.934683300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[3 Latex Drafts] - Oxford Handbook Digital\[2nd Draft] - Oxford Handbook Digital\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.935391300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[3 Latex Drafts] - Oxford Handbook Digital\[2nd Draft] - Oxford Handbook Digital\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.936066400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[4 Revision Documents] - Oxford Handbook Digital\[Feeback] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.936969300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Oxford Handbook Digital\[4 Revision Documents] - Oxford Handbook Digital\[Review2] - Oxford Handbook Digital.md at 2022-10-07T19:53:56.937624600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[Abstract] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.939267500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[Analyses] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.939950700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[Design] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.940855400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[Entities] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.942260900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[Feeback] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.943651100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[Logistics] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.944439800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[Log] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.945400600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[Outline1] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.946357800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[Outline2] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.947396300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[Points] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.948203400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[References] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.952467600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[Review2] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.953331200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[Scratches] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.954111800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Design Documents] - Qian Xuesen and Chinese AI\[Sources] - Qian Xuesen and Chinese AI.md at 2022-10-07T19:53:56.957228700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Drafts] - Qian Xuesen and Chinese AI\[Draft1] - Qian Xuesen and Chinese AI\[Tests]\[Test] Argument.md at 2022-10-07T19:53:56.971111500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Drafts] - Qian Xuesen and Chinese AI\[Draft1] - Qian Xuesen and Chinese AI\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:56.972071400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Drafts] - Qian Xuesen and Chinese AI\[Draft1] - Qian Xuesen and Chinese AI\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:56.972800500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Drafts] - Qian Xuesen and Chinese AI\[Draft1] - Qian Xuesen and Chinese AI\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:56.974080300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Drafts] - Qian Xuesen and Chinese AI\[Draft1] - Qian Xuesen and Chinese AI\[Tests]\[Test] Literature.md at 2022-10-07T19:53:56.975114700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Qian Xuesen and Chinese AI\[Drafts] - Qian Xuesen and Chinese AI\[Draft1] - Qian Xuesen and Chinese AI\[Tests]\[Test] Significance.md at 2022-10-07T19:53:56.975949400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\Ai_in_flux.md at 2022-10-07T19:53:56.977484900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\Notes\notes.v1.md at 2022-10-07T19:53:56.978360200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\Notes\notes.v1.selected.md at 2022-10-07T19:53:57.585102900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Design Documents] - Systems Theory in China and World\[Abstract] - Systems Theory in China and World.md at 2022-10-07T19:53:58.086348300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Design Documents] - Systems Theory in China and World\[Analyses] - Systems Theory in China and World.md at 2022-10-07T19:53:58.087303800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Design Documents] - Systems Theory in China and World\[Design] - Systems Theory in China and World.md at 2022-10-07T19:53:58.088086800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Design Documents] - Systems Theory in China and World\[Entities] - Systems Theory in China and World.md at 2022-10-07T19:53:58.088987100-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Design Documents] - Systems Theory in China and World\[Feeback] - Systems Theory in China and World.md at 2022-10-07T19:53:58.089758400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Design Documents] - Systems Theory in China and World\[Logistics] - Systems Theory in China and World.md at 2022-10-07T19:53:58.090570700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Design Documents] - Systems Theory in China and World\[Log] - Systems Theory in China and World.md at 2022-10-07T19:53:58.091257200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Design Documents] - Systems Theory in China and World\[Outline] - Systems Theory in China and World.md at 2022-10-07T19:53:58.094119300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Design Documents] - Systems Theory in China and World\[Points] - Systems Theory in China and World.md at 2022-10-07T19:53:58.095215200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Design Documents] - Systems Theory in China and World\[References] - Systems Theory in China and World.md at 2022-10-07T19:53:58.096096-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Design Documents] - Systems Theory in China and World\[Review2] - Systems Theory in China and World.md at 2022-10-07T19:53:58.096943600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Design Documents] - Systems Theory in China and World\[Scratches] - Systems Theory in China and World.md at 2022-10-07T19:53:58.097787600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Design Documents] - Systems Theory in China and World\[Sources] - Systems Theory in China and World.md at 2022-10-07T19:53:58.100715400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Drafts] - Systems Theory in China and World\[Draft1] - Systems Theory in China and World\[Tests]\[Test] Argument.md at 2022-10-07T19:53:58.103567900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Drafts] - Systems Theory in China and World\[Draft1] - Systems Theory in China and World\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:58.104527600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Drafts] - Systems Theory in China and World\[Draft1] - Systems Theory in China and World\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:58.105413800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Drafts] - Systems Theory in China and World\[Draft1] - Systems Theory in China and World\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:58.106478600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Drafts] - Systems Theory in China and World\[Draft1] - Systems Theory in China and World\[Tests]\[Test] Literature.md at 2022-10-07T19:53:58.107196700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Drafts] - Systems Theory in China and World\[Draft1] - Systems Theory in China and World\[Tests]\[Test] Significance.md at 2022-10-07T19:53:58.108085600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Drafts] - Systems Theory in China and World\[Presentation] AI in Flux\[Script] qian_and_three_new_theories copy.md at 2022-10-07T19:53:58.113522400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Projects]\[Project] - Systems Theory in China and World\[Drafts] - Systems Theory in China and World\[Presentation] AI in Flux\[Script] qian_and_three_new_theories.md at 2022-10-07T19:53:58.121511400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[2 Free Drafts] - [[Project]]\[0 Scratches] - [[Project]].md at 2022-10-07T19:53:58.124270600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[2 Free Drafts] - [[Project]]\[1 Observations] - [[Project]].md at 2022-10-07T19:53:58.124975200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[2 Free Drafts] - [[Project]]\[2 Points] - [[Project]].md at 2022-10-07T19:53:58.126781300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[2 Free Drafts] - [[Project]]\[3 Freedraft] - [[Project]].md at 2022-10-07T19:53:58.127725200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[2 Free Drafts] - [[Project]]\[4 Outline] - [[Project]].md at 2022-10-07T19:53:58.128759300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Abstract] - [[Project]].md at 2022-10-07T19:53:58.130121-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Analyses] - [[Project]].md at 2022-10-07T19:53:58.131100800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Design] - [[Project]].md at 2022-10-07T19:53:58.131827700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Entities] - [[Project]].md at 2022-10-07T19:53:58.132704700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Logistics] - [[Project]].md at 2022-10-07T19:53:58.133570600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Log] - [[Project]].md at 2022-10-07T19:53:58.134341400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[References] - [[Project]].md at 2022-10-07T19:53:58.136079200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1 Design Documents] - [[Project]]\[Sources] - [[Project]].md at 2022-10-07T19:53:58.136935600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1st Draft] - [[Project]]\[Tests]\[Test] Argument.md at 2022-10-07T19:53:58.138612900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1st Draft] - [[Project]]\[Tests]\[Test] Conclusion.md at 2022-10-07T19:53:58.139605400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1st Draft] - [[Project]]\[Tests]\[Test] Evidence.md at 2022-10-07T19:53:58.140473500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1st Draft] - [[Project]]\[Tests]\[Test] Introduction.md at 2022-10-07T19:53:58.141535600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1st Draft] - [[Project]]\[Tests]\[Test] Literature.md at 2022-10-07T19:53:58.142549500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[1st Draft] - [[Project]]\[Tests]\[Test] Significance.md at 2022-10-07T19:53:58.143427200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[2 Free Drafts] - [[Project]]\[0 Scratches] - [[Project]].md at 2022-10-07T19:53:58.144426700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[2 Free Drafts] - [[Project]]\[1 Observations] - [[Project]].md at 2022-10-07T19:53:58.145107700-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[2 Free Drafts] - [[Project]]\[2 Points] - [[Project]].md at 2022-10-07T19:53:58.145786600-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[2 Free Drafts] - [[Project]]\[3 Freedraft] - [[Project]].md at 2022-10-07T19:53:58.146521900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[2 Free Drafts] - [[Project]]\[4 Outline] - [[Project]].md at 2022-10-07T19:53:58.147175400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[4 Revision Documents] - [[Project]]\[Feeback] - [[Project]].md at 2022-10-07T19:53:58.148030300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Folder] - [[Project]]\[4 Revision Documents] - [[Project]]\[Review2] - [[Project]].md at 2022-10-07T19:53:58.148796800-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Strategies]\[Strategy] Outlining.md at 2022-10-07T19:53:58.150108500-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Project] - Template\[Strategies]\[Strategy] Sentence.md at 2022-10-07T19:53:58.150835200-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Wiki]\home.md at 2022-10-07T19:53:58.220813-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Wiki]\personal\about-me.md at 2022-10-07T19:53:58.221875-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Wiki]\readings\first-reading.md at 2022-10-07T19:53:58.222737900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Wiki]\readings\list-of-reading.md at 2022-10-07T19:53:58.223913-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Wiki]\readings\[R] [[KuzBasic22]] KuzuogluU - 2022 - Basic Chinese - Cognitive Management, Communication Engineering, and Mass Literacy in China.md at 2022-10-07T19:53:58.224710300-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Wiki]\README.md at 2022-10-07T19:53:58.226049900-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Wiki]\software\list.md at 2022-10-07T19:53:58.226837400-04:00Last Spent: 0
+
+path_str: D:/Dropbox/NEra/[W] Writing Projects\[Wiki]\topic\list.md at 2022-10-07T19:53:58.227892900-04:00

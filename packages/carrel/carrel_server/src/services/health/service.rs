@@ -21,7 +21,6 @@ impl Health for HealthService {
 // test
 #[cfg(test)]
 mod test {
-
     use carrel_commons::grpc::health::v1::health_client::HealthClient;
 
     use crate::consts::server_addr::SERVER_ADDR;
