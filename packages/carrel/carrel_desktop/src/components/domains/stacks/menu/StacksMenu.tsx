@@ -1,9 +1,8 @@
-import * as React from "react";
-import {Link} from "react-router-dom";
-import {CgBoard, FcManager} from "react-icons/all";
-import {MenuItem} from "@blueprintjs/core";
-import {AppPageRoutes} from "../../../../routing/app-page-routes";
-import {CarrelComponent} from "../../../../carrel_server_client/carrel/core/shared/v1/core_shared_v1_pb";
+import { MenuItem } from "@chakra-ui/react";
+import { FcManager } from "react-icons/all";
+import { Link } from "react-router-dom";
+import { CarrelComponent } from "../../../../carrel_server_client/carrel/core/shared/v1/core_shared_v1_pb";
+import { AppPageRoutes } from "../../../../routing/app-page-routes";
 
 
 export function StacksMenu() {
@@ -11,7 +10,7 @@ export function StacksMenu() {
 
     return <>
         <Link to={AppPageRoutes[CarrelComponent.CARREL_UNSPECIFIED].home.absolutePath}>
-            <MenuItem icon={<FcManager/>} text={'Manager'}/>
+            <MenuItem icon={<FcManager/>} >Text</MenuItem>
         </Link>
 
 

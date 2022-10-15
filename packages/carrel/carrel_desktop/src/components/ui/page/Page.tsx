@@ -1,16 +1,25 @@
-import './Page.css'
+import { Container, HStack, VStack } from '@chakra-ui/react';
 import React from 'react';
-import {ScrollPanel} from "primereact";
+import { BODY_HEIGHT } from '../../../styles/constants';
+import { PageHeader } from './components';
 
-function Page({children} : {children?: React.ReactNode}) {
-    return (
-        <div className={'page'}>
-            <ScrollPanel style={{ width: '100%', height: '100%' }}>
-            {children}
-            </ScrollPanel>
-        </div>
+export interface PageProps {
+    children?: React.ReactNode;
+    title?: string;
+    description?: string;
+}
 
-    );
+function Page({ children, ...props }: PageProps) {
+  return (
+    <Container overflow='hidden' h={BODY_HEIGHT} maxH="full" p="0" m='0' maxW="full">
+      <VStack  h="full" w="full">
+        <PageHeader title={props.title} description={props.description} />
+        <Container overflowY='auto' h="full" maxW="full" p="0">
+          {children}
+        </Container>
+      </VStack>
+    </Container>
+  );
 }
 
 export default Page;

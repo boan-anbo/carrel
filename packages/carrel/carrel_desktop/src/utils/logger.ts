@@ -1,9 +1,10 @@
 export enum LogSource {
-    ArchiveTable = 'ArchiveTable',
-    FileDatatable   = 'FileDatatable',
-    ProjectManager = 'ProjectManager',
-    FireflyTable = 'FireflyTable',
-
+  ArchiveTable = 'ArchiveTable',
+  FileDatatable = 'FileDatatable',
+  ProjectManager = 'ProjectManager',
+  FireflyTable = 'FireflyTable',
+  CarrelDataTable = "CarrelDataTable",
+  ArchiveList = "ArchiveList"
 }
 
 export class Logger {

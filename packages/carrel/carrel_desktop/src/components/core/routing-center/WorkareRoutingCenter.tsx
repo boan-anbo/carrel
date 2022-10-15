@@ -6,7 +6,7 @@ import {CarrelPageRoutes} from "../../domains/carrel/routes/carrel-page-routes";
 import {FireflyKeeperPageRoutes} from "../../domains/firefly-keeper/routes/firefly-keeper-page-routes";
 import {FireflyHouse} from "../../domains/firefly-keeper/pages/fire-fly-house/FireflyHouse";
 import {CarrelComponent} from "../../../carrel_server_client/carrel/core/shared/v1/core_shared_v1_pb";
-import {Fireflies} from "../../domains/firefly-keeper/pages/fireflies/Fireflies";
+import {FirefliesPage} from "../../domains/firefly-keeper/pages/fireflies/FirefliesPage";
 import {CabinetPageRoutes} from "../../domains/cabinet/routes/cabinet-page-routes";
 import {CabinetArchives} from "../../domains/cabinet/pages/cabinet_archives/CabinetArchives";
 
@@ -28,7 +28,7 @@ export function WorkareaRoutingCenter() {
             >
                 <Route index element={<FireflyHouse/>}/>
                 <Route path={FireflyKeeperPageRoutes.home.relativePath} element={<FireflyHouse/>}/>
-                <Route path={FireflyKeeperPageRoutes.fireflies.relativePath} element={<Fireflies/>}/>
+                <Route path={FireflyKeeperPageRoutes.fireflies.relativePath} element={<FirefliesPage/>}/>
             </Route>
             <Route
                 path={appDomainRoutes[CarrelComponent.CABINET]}

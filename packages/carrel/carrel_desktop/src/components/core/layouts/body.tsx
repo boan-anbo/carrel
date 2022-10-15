@@ -1,19 +1,29 @@
 import {Workarea} from "./workarea/Workarea";
-import {LeftNav} from "./leftnav/LeftNav";
 import {Inspector} from "../inspector/inspector";
+import {Box, Container, Flex} from "@chakra-ui/react";
+import {LeftMenu} from "../nav/LeftMenu/LeftMenu";
 
 function RightInspector() {
-    return <div className={'layout-right-inspector'}>
-        <Inspector />
-        </div>;
+    return <Container maxW='full' px='0' h='full'>
+        <Inspector/>
+    </Container>;
 }
 
 export function Body() {
-    return <div className={'layout-body'}>
+    return (
+        <Container p="0" maxW="full" maxH='full' h='full'>
+            <Flex gap='0' h='full'>
+                <Box w="200px" bg={"primaryBg"}>
+                    <LeftMenu/>
+                </Box>
+                <Box w="full">
+                    <Workarea/>
+                </Box>
 
-        <LeftNav />
-        <Workarea/>
-
-        <RightInspector/>
-    </div>;
+                <Box w="400px">
+                    <RightInspector/>
+                </Box>
+            </Flex>
+        </Container>
+    );
 }

@@ -1316,6 +1316,13 @@ export class QueryFilesRequest extends Message<QueryFilesRequest> {
    */
   query?: StandardQuery;
 
+  /**
+   * whether use mock data
+   *
+   * @generated from field: bool is_mock = 3;
+   */
+  isMock = false;
+
   constructor(data?: PartialMessage<QueryFilesRequest>) {
     super();
     proto3.util.initPartial(data, this);
@@ -1326,6 +1333,7 @@ export class QueryFilesRequest extends Message<QueryFilesRequest> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "project_directory", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "query", kind: "message", T: StandardQuery },
+    { no: 3, name: "is_mock", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): QueryFilesRequest {
@@ -1421,6 +1429,8 @@ export class QueryFirefliesRequest extends Message<QueryFirefliesRequest> {
   query?: StandardQuery;
 
   /**
+   * whether use mock data
+   *
    * @generated from field: bool is_mock = 3;
    */
   isMock = false;

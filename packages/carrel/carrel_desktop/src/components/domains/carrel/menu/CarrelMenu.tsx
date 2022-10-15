@@ -1,17 +1,18 @@
 import * as React from "react";
 import {Link} from "react-router-dom";
 import {CgBoard, FcManager} from "react-icons/all";
-import {MenuItem} from "@blueprintjs/core";
 import {CarrelPageRoutes} from "../routes/carrel-page-routes";
+import { Button } from "@chakra-ui/react";
+import { LeftMenuItem } from "../../../core/nav/LeftMenu/components";
 
 
 export function CarrelMenu() {
     return <>
         <Link to={CarrelPageRoutes.home.absolutePath}>
-            <MenuItem icon={<FcManager/>} text={'Manager'}/>
+            <LeftMenuItem>Manager</LeftMenuItem>
         </Link>
         <Link to={CarrelPageRoutes.board.absolutePath}>
-            <MenuItem icon={<CgBoard/>} text={'Board'}/>
+            <LeftMenuItem>Project Boards</LeftMenuItem>
         </Link>
 
 

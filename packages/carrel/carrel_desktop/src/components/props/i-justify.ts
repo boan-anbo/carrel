@@ -1,0 +1,1 @@
+export type TCarrelJustify = 'start' | 'end' | 'center' | 'between' | 'around' | 'evenly';

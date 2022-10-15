@@ -9,9 +9,12 @@ import {CarrelComponent} from "../../../../carrel_server_client/carrel/core/shar
 import {useNavigate} from "react-router-dom";
 import {CarrelPageRoutes} from "../../../domains/carrel/routes/carrel-page-routes";
 import {CabinetPageRoutes} from "../../../domains/cabinet/routes/cabinet-page-routes";
-import {NavBar} from "carrel-ui";
-import {Alignment, Button} from "@blueprintjs/core";
+import { Button, Icon } from '@chakra-ui/react';
+import { NavBar } from '../../NavBar/NavBar';
 
+export interface HeaderMenuProps {
+
+}
 
 function HeaderMenu() {
 
@@ -64,28 +67,28 @@ function HeaderMenu() {
                 }
 
                 return (
-                    <Button
-                        key={index}
-                        text={text}
-                        icon={icon}
-                        onClick={() => {
-                            // set app state
-                            dispatch(
-                                setCurrentComponent(component)
-                            )
-                            // navigate to the home page of the component
-                            navigate(homePath);
-                        }}
-                        minimal={true}
-                        alignText={Alignment.LEFT}
-                    />
+                  <Button
+                      size='md'
+
+                    variant={"link"}
+                      textColor={'primaryText'}
+                    key={index}
+                    onClick={() => {
+                      // set app state
+                      dispatch(setCurrentComponent(component));
+                      // navigate to the home page of the component
+                      navigate(homePath);
+                    }}
+                  >
+                    <Icon>{icon}</Icon>
+                    <span>{text}</span>
+                  </Button>
                 );
             })
     }, [])
 
     return (
-        <NavBar  title={'carrel'} menuBarItems={MainMenuItemElements} />
-
+        <NavBar  title={'Carrel'} menuBarItems={MainMenuItemElements} />
     );
 }
 

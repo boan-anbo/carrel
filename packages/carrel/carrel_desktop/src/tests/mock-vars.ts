@@ -1,0 +1,1 @@
+export const mockProjectDirectory = "C:\\Script\\carrel\\packages\\carrel\\carrel_desktop\\test\\fixtures\\simple_project"

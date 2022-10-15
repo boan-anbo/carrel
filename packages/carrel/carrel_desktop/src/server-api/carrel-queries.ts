@@ -1,17 +1,12 @@
-import {Archive} from "../carrel_server_client/carrel/common/archive/v1/archive_v1_pb";
-import {File} from "../carrel_server_client/carrel/common/file/v1/file_v1_pb";
-import {
-    AddDirectoryToArchiveResponse,
-    ListAllProjectArchivesResponse, QueryFirefliesResponse
-} from "../carrel_server_client/carrel/server/project_manager/v1/server_project_manager_v1_pb";
-import {carrelApi} from "./carrel-api";
-import {Query, QueryFunction, useMutation, useQuery} from "@tanstack/react-query";
-import {Firefly} from "../carrel_server_client/carrel/common/firefly/v2/firefly_v2_pb";
-import workingProjectState from "../store/slices/working-project-state/working-project-state";
-import {BaseDirectory} from "@tauri-apps/api/fs";
-import {Project} from "../carrel_server_client/carrel/common/project/v2/project_v2_pb";
-import {appDir, dataDir} from "@tauri-apps/api/path";
-import {StandardQuery} from "../carrel_server_client/generic/api/query/v1/query_v1_pb";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { dataDir } from "@tauri-apps/api/path";
+import { Archive } from "../carrel_server_client/carrel/common/archive/v1/archive_v1_pb";
+import { File } from "../carrel_server_client/carrel/common/file/v1/file_v1_pb";
+import { Firefly } from "../carrel_server_client/carrel/common/firefly/v2/firefly_v2_pb";
+import { Project } from "../carrel_server_client/carrel/common/project/v2/project_v2_pb";
+import { QueryFilesResponse, QueryFirefliesResponse } from "../carrel_server_client/carrel/server/project_manager/v1/server_project_manager_v1_pb";
+import { StandardQuery } from "../carrel_server_client/generic/api/query/v1/query_v1_pb";
+import { carrelApi } from "./carrel-api";
 
 
 // Main entry point for all pages to retrieve data.
@@ -25,22 +20,32 @@ export class ApiQuery {
     }
 
 
-    QueryFilesByArchiveId = (workingProjectDirectory: string | null, archiveId: number | null) => useQuery(
-        ["QueryFilesByArchiveId", workingProjectDirectory, archiveId],
-        async (): Promise<File[]> => {
+    QueryFilesByArchiveId = (query: StandardQuery | undefined, workingProjectDirectory: string | null, archiveId: number | null, isMock?: boolean) => useQuery(
+        ["QueryFilesByArchiveId", workingProjectDirectory, archiveId, query],
+        async (): Promise<QueryFilesResponse | null> => {
 
-            if (workingProjectDirectory && archiveId) {
 
-                let result = await carrelApi.listFilesInArchive(
+            if (workingProjectDirectory && archiveId && query) {
+
+                // sending request
+                this.log("Sending request", "QueryFilesByArchiveId", { workingProjectDirectory, archiveId, query, isMock })
+                let result = await carrelApi.queryFiles(
                     {
                         projectDirectory: workingProjectDirectory,
-                        archiveId: archiveId
+                        query,
+                        isMock
                     }
                 )
-                this.log("QueryFilesByArchiveId", "QueryFilesByArchiveId", result.files)
-                return result.files
+                this.log("QueryFilesByArchiveId", "QueryFilesByArchiveId", result)
+                return result
+            } else {
+                this.log("QueryFilesByArchiveId Missing condition", "three conditions", {
+                    workingProjectDirectory,
+                    archiveId,
+                    query
+                })
             }
-            return [];
+            return null;
         }
     )
 
@@ -141,9 +146,27 @@ export class ApiQuery {
         }
     )
 
-    QueryListRecentProjects = (numberOfProjects: number) => useQuery(
+    QueryListRecentProjects = (numberOfProjects: number, isMock?: boolean) => useQuery(
         ["list_recent_projects", numberOfProjects],
         async (): Promise<Project[]> => {
+            if (isMock) {
+                return [
+                    {
+                        id: 1,
+                        name: "Project 1",
+                        description: "Project 1 description",
+                        projectDirectory: "C:\\Users\\user\\Documents\\project1",
+                        createdAt: new Date().toISOString(),
+                    } as Project,
+                    {
+                        id: 2,
+                        name: "Project 2",
+                        description: "Project 2 description",
+                        projectDirectory: "C:\\Users\\user\\Documents\\project2",
+                        createdAt: new Date().toISOString(),
+                    } as Project,
+                ]
+            }
 
             let appDirectory = await dataDir()
             let result = await carrelApi.listRecentProjects(
@@ -157,11 +180,11 @@ export class ApiQuery {
         }
     )
 
-    QueryFireflies = (query: StandardQuery, projectDirectory?: string, isMock?: boolean) => useQuery(
+    QueryFireflies = (query: StandardQuery | undefined, projectDirectory?: string, isMock?: boolean) => useQuery(
         ["fireflies", query],
         async (): Promise<QueryFirefliesResponse | null> => {
 
-            if (!projectDirectory) {
+            if (!projectDirectory || !query) {
                 return null
                 }
 

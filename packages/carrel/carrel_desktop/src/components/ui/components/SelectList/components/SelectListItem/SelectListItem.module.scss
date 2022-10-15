@@ -1,0 +1,10 @@
+  .button {
+    // hover styles
+    background-color: 'red';
+  
+  }
+  .button:hover {
+    // hover styles
+    background-color: var(--chakra-colors-primaryBgHover);
+    background-color: 'red'
+  }

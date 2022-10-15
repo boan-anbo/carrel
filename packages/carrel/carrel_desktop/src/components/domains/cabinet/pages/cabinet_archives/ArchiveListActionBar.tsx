@@ -1,17 +1,16 @@
-import {PartialMessage, PlainMessage} from "@bufbuild/protobuf";
-import {Button, confirmDialog, ConfirmDialog, SplitButton, Toolbar} from "primereact";
-import {Fragment, MouseEvent} from "react";
-import {pickPdfs} from "../../../../../fs/pick-pdfs";
-import {carrelApi} from "../../../../../server-api/carrel-api";
+import { PartialMessage } from "@bufbuild/protobuf";
+import { Button, Flex, Menu, MenuButton, MenuList } from "@chakra-ui/react";
+import { Fragment } from "react";
+import { useSelector } from "react-redux";
 import {
-    AddFilesToArchiveRequest, AddFilesToArchiveResponse
+    AddFilesToArchiveRequest
 } from "../../../../../carrel_server_client/carrel/server/project_manager/v1/server_project_manager_v1_pb";
-import {useSelector} from "react-redux";
-import {RootState} from "../../../../../store/store";
-import {carrelDialogs} from "../../../../../fs/carrel_dialogs";
-import {useMutation} from "@tanstack/react-query";
-import {carrelQueries} from "../../../../../server-api/carrel-queries";
-import {notify} from "../../../../../notify/notify";
+import { carrelDialogs } from "../../../../../fs/carrel_dialogs";
+import { notify } from "../../../../../notify/notify";
+import { carrelApi } from "../../../../../server-api/carrel-api";
+import { carrelQueries } from "../../../../../server-api/carrel-queries";
+import { RootState } from "../../../../../store/store";
+import { ActionBar } from "../../../../ui/components/ActionBar/ActionBar";
 
 export const ArchiveListActionBar = (props: {
     selectedArchiveId: number | null,
@@ -46,19 +45,33 @@ export const ArchiveListActionBar = (props: {
     ];
 
     const leftContents = (
-        <Fragment>
-            <Button label="New" icon="pi pi-plus" className="mr-2"/>
-            <SplitButton
-                model={addFileSubmenu}
+      <Flex>
+        <Button className="mr-2">New</Button>
+        <Menu>
+          <MenuButton
+            disabled={!props.selectedArchiveId}
+            onClick={onAddFilesToArchive}
+            className="b-black"
+          >
+            Add files
+          </MenuButton>
 
-                disabled={!props.selectedArchiveId}
-                onClick={onAddFilesToArchive}
-                label="Add files" icon="pi pi-upload" className="b-black"
-            />
-            <i className="pi pi-bars p-toolbar-separator mr-2"/>
-            <Button label="Save" icon="pi pi-check" className="p-button-warning"></Button>
-            <Button label="Refresh" icon="pi pi-refresh" className="p-button-success ml-2" onClick={props.onRefresh}/>
-        </Fragment>
+          <MenuList>
+            {addFileSubmenu.map((item, index) => {
+              return (
+                <li key={index}>
+                  <Button onClick={item.command}>{item.label}</Button>
+                </li>
+              );
+            })}
+          </MenuList>
+        </Menu>
+        <i className="pi pi-bars p-toolbar-separator mr-2" />
+       
+        <Button
+          className="p-button-success ml-2"
+        >Refresh</Button>
+      </Flex>
     );
 
     const syncAllProjects = carrelQueries.MutateSyncAllProjectArchives(
@@ -77,14 +90,16 @@ export const ArchiveListActionBar = (props: {
 
     // with a button to sync
     const rightContents = (
-        <Fragment>
-            <Button label="Sync" icon="pi pi-sync" className="p-button-success ml-2" onClick={
-                async () => {
-                    await syncAllProjects.mutate();
-
-                }
-            }/>
-        </Fragment>
+      <Flex>
+        <Button
+          className="p-button-success ml-2"
+          onClick={async () => {
+            await syncAllProjects.mutate();
+          }}
+        >
+          Sync
+        </Button>
+      </Flex>
     );
 
     async function onAddFilesToArchive() {
@@ -111,33 +126,32 @@ export const ArchiveListActionBar = (props: {
         const totalText = total > 1 ? `\n\nand ${total} other files.` : '';
 
         const first_file = fileOrDirs[0];
-        confirmDialog(
-            {
-                message: `Do you want to the following to archive "${archiveTitle}\n\n${first_file}${totalText}"?`,
-                header: 'Confirm',
-                icon: 'pi pi-exclamation-triangle',
-                accept: async () => {
-                    const request: PartialMessage<AddFilesToArchiveRequest> = {
-                        projectDirectory: workingProjectDirectory,
-                        archiveId: selectedArchiveId,
-                        filePaths: fileOrDirs,
-                    };
-                    await carrelApi.addFilesToArchive(
-                        request
-                    );
-                },
-                reject: () => {
-                    return
-                }
-            }
-            ,
-        )
+        // confirmDialog(
+        //     {
+        //         message: `Do you want to the following to archive "${archiveTitle}\n\n${first_file}${totalText}"?`,
+        //         header: 'Confirm',
+        //         icon: 'pi pi-exclamation-triangle',
+        //         accept: async () => {
+        //             const request: PartialMessage<AddFilesToArchiveRequest> = {
+        //                 projectDirectory: workingProjectDirectory,
+        //                 archiveId: selectedArchiveId,
+        //                 filePaths: fileOrDirs,
+        //             };
+        //             await carrelApi.addFilesToArchive(
+        //                 request
+        //             );
+        //         },
+        //         reject: () => {
+        //             return
+        //         }
+        //     }
+        //     ,
+        // )
     }
 
     return (
         <div>
-            <Toolbar left={leftContents} right={rightContents}/>
-            <ConfirmDialog/>
+            <ActionBar left={leftContents} right={rightContents}/>
         </div>
     )
 }

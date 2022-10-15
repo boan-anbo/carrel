@@ -1,16 +1,13 @@
-import {WorkareaRoutingCenter} from "../../routing-center/WorkareRoutingCenter";
+import { Box, Container, VStack } from "@chakra-ui/react";
+import { WorkareaRoutingCenter } from "../../routing-center/WorkareRoutingCenter";
 
+export interface WorkAreaProps {}
 export function Workarea() {
-    return <div className={'layout-workarea'}>
-
-        <div className={'component-page-layout-container'}>
-
-            <div className={'component-page-layout-body'}>
-
-                <WorkareaRoutingCenter/>
-
-            </div>
-            <div className={'component-page-layout-footer'}>Component page footer</div>
-        </div>
-    </div>
+    return (
+      <Container maxH="full" w='full' h="full" maxW="full" p='0' >
+        <Box m='0' p='0' w="full" h="full">
+          <WorkareaRoutingCenter />
+        </Box>
+      </Container>
+    );
 }

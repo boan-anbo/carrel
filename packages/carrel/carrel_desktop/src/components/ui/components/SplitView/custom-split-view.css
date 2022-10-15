@@ -1,0 +1,28 @@
+.gutter-horizontal {
+    padding: 0 1px;
+    height: 100%;
+    width: 40px;
+    opacity: 1;
+    background: var(--chakra-colors-splitDivider);
+  }
+  .gutter-horizontal:hover {
+    cursor: col-resize;
+    opacity: 0.8;
+  }
+
+  .gutter-vertical {
+    padding: 1px 0;
+    width: 100%;
+    height: 40px;
+    opacity: 1;
+    background: var(--chakra-colors-splitDivider);
+  }
+
+  .gutter-vertical:hover {
+    cursor: row-resize;
+    opacity: 0.8;
+  }
+  
+  .dragger-horizontal {
+    display: none;
+  }

@@ -15,7 +15,6 @@
 // });
 
 
-import {DataTableFilterParams} from "primereact";
 import {
     Condition,
     FilterSet,
@@ -24,121 +23,29 @@ import {
     StandardQuery
 } from "../carrel_server_client/generic/api/query/v1/query_v1_pb";
 import {PlainMessage} from "@bufbuild/protobuf";
-import {DataTablePFSEvent} from "primereact/datatable";
 import {camel_to_snake_case} from "../utils/camel_to_snake_case";
-import {DataViewPageParams} from "primereact/dataview";
+import { SortingState } from "@tanstack/react-table";
 
 
-export class ApiStandardQuery {
+export class StandardQueryHelper {
 
+    public static addArchiveId(query: StandardQuery, archiveId: number) {
+        return this.addMustCondition(query, "archive_id", archiveId.toString(), OPERATOR.OPERATOR_EQUALS);
+    }
 
-    /**
-     * Convert a lazy param to a standard query
-     *
-     * For repeated conditions, use the must or any conditions parameters.
-     *
-     * For example, I want to query only file columns with a certain archive Id, then add a Must condition for it, by calling
-     *
-     * ```javascript
-     *
-     * const archive_id_condition = new Condition();
-     * archive_id_condition.field = 'archive_id';
-     * archive_id_condition.operator = OPERATOR.EQUAL;
-     * archive_id_condition.value = '123';
-     *
-     * const query = ApiStandardQuery.fromLazyParam(lazyParam, [archive_id_condition]);     *
-     *
-     * ```
-     * @param params
-     * @param additional_must_conditions
-     * @param additional_any_conditions
-     * @constructor
-     */
-    public static DatatableParamsToQueryParams = (
-        params: DataTablePFSEvent,
-        additional_must_conditions?: PlainMessage<Condition>[],
-        additional_any_conditions?: PlainMessage<Condition> []
-    ): StandardQuery => {
-
-        let query: StandardQuery = new StandardQuery();
-        query.offset = params.first;
-        query.length = params.rows;
-        query.findOne = false;
-        query.page = params.page ?? 0;
-
-        // loop over filters
-        const filterSet: FilterSet = new FilterSet();
-
-        // try get global filter value
-        let global_filter_entyr: string = params.filters['global']
-        let global_filter_value = ''
-        if (global_filter_entyr) {
-            global_filter_value = global_filter_entyr
-
+    public static addMustCondition(query: StandardQuery, fieldName: string, fieldValue: string, operator: OPERATOR): StandardQuery {
+        const condition = new Condition();
+        condition.field = fieldName;
+        condition.operator = operator;
+        condition.value = fieldValue;
+        if (query.filter) {
+            query.filter.must.push(condition);
         }
-        console.log('global_filter_value', global_filter_value);
-        for (const [lazy_filter_field, lazy_filter] of Object.entries(params.filters)) {
-            // skip global
-            if (lazy_filter_field === 'global') {
-                continue
-            }
-            // get field_condition key and values;
-            for (const [field_condition_key, field_condition_value] of Object.entries(lazy_filter)) {
-                const condition = new Condition();
-                condition.field = lazy_filter_field;
-
-                if (!condition.field || condition.field === 'null') {
-                    continue;
-                }
-
-                if (field_condition_key === 'matchMode') {
-                    switch (field_condition_value) {
-                        case 'contains':
-                            condition.operator = OPERATOR.OPERATOR_CONTAINS;
-                            break;
-                    }
-
-                } else if (field_condition_key === 'value') {
-                    condition.value = field_condition_value;
-                }
-
-                if (global_filter_value.length > 0) {
-                    // add global filter value to the condition
-                    condition.value = global_filter_value;
-                    condition.operator = OPERATOR.OPERATOR_CONTAINS;
-                }
-
-                if (condition.value || condition.valueList.length > 0 || condition.valueTo) {
-
-                    filterSet.any.push(condition);
-                }
-            }
+        else {
+            const filter = new FilterSet();
+            filter.must.push(condition);
+            query.filter = filter;
         }
-
-        // adding must conditions
-        if (additional_must_conditions) {
-
-            filterSet.must.push(...additional_must_conditions.map((condition) => new Condition(condition)));
-        }
-
-        // adding any conditions
-        if (additional_any_conditions) {
-            filterSet.any.push(...additional_any_conditions.map((condition) => new Condition(condition)));
-        }
-
-        query.filter = filterSet;
-
-        // load sort
-        if (params.sortField) {
-            const sortCondition = new SortCondition();
-            sortCondition.field = params.sortField;
-            sortCondition.order = params.sortOrder === 1 ? SortDirection.ASC : SortDirection.DESC;
-            query.sort = sortCondition;
-        }
-
-
-        query = ApiStandardQuery.NormalizeFieldNames(query);
-
         return query;
     }
 
@@ -161,49 +68,27 @@ export class ApiStandardQuery {
 
     }
 
-    /**
-     *
-     * Helper function to query files in a certain archive
-     *
-     * @param params
-     * @param archiveId
-     * @constructor
-     */
-    public static QueryArchiveFiles = (params: DataTablePFSEvent, archiveId: number): StandardQuery => {
-        return ApiStandardQuery.DatatableParamsToQueryParams(params, [
-                {
-                    field: 'archive_id',
-                    operator: OPERATOR.OPERATOR_EQUALS,
-                    value: archiveId.toString(),
-                    valueList: [],
-                    valueTo: '',
-                }
-            ],
-            []);
-    }
-
-    public static QueryFireflyFiles = (params: DataTablePFSEvent, fireflyId: number): StandardQuery => {
-        return ApiStandardQuery.DatatableParamsToQueryParams(params, [],
-            []);
-    }
-
-
-    static DataViewPageParamsToApiStandardQuery(pageParams: DataViewPageParams) {
-        const query = new StandardQuery();
-        query.offset = pageParams.first;
-        query.length = pageParams.rows;
-
-        return query;
-
-    }
-
-    static fromPageIndexAndPageSize(pageIndex: number, pageSize: number) {
-        console.log("triggered", pageIndex, pageSize);
+    static fromPageChange(pageIndex: number, pageSize: number, sorting: SortingState, globalFilter: string) {
         const query = new StandardQuery();
         query.offset = pageIndex * pageSize;
         query.length = pageSize;
 
-        return query;
+        for (const sort of sorting) {
+            const sortCondition = new SortCondition();
+            sortCondition.field = sort.id;
+            sortCondition.order = sort.desc ? SortDirection.DESC : SortDirection.ASC;
+            query.sort = sortCondition;
+        }
 
+        if (globalFilter) {
+            if (query.filter) {
+                query.filter.globalFilter = globalFilter;
+            } else {
+                const filterSet = new FilterSet();
+                filterSet.globalFilter = globalFilter;
+                query.filter = filterSet;
+            }
+        }
+        return query;
     }
 }

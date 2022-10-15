@@ -1,29 +1,58 @@
-import "./CabinetArchives.css";
-import Page from "../../../../ui/page/Page";
-import {ArchiveList} from "./ArchiveList";
-import {ArchiveSelected} from "./ArchiveSelected";
+import {Box, VStack} from "@chakra-ui/react";
+import {Allotment} from "allotment";
 import {useState} from "react";
-import {ArchiveListActionBar} from "./ArchiveListActionBar";
+import {FaPlus} from "react-icons/fa";
+import {ActionBar, Block, SplitView} from "../../../../ui/components";
+import Page from "../../../../ui/page/Page";
+import {ArchiveFiles} from "./ArchiveFiles";
+import {ArchiveList} from "./ArchiveList";
+import "./CabinetArchives.css";
+
+export interface CabinetArchivesProps {
+    projectDirectory?: string;
+    isMock?: boolean;
+}
 
 
-export function CabinetArchives() {
+export function CabinetArchives(props: CabinetArchivesProps) {
 
-    const [selectedArchiveId, setSelectedArchiveId] = useState<number | null>(null);
+    const [selectedArchiveId, setSelectedArchiveId] =
+        useState<number | null>(null);
 
-
-    return <Page>
-
-        <ArchiveListActionBar selectedArchiveId={selectedArchiveId}/>
-
-        <div className={'cabinet-archives-container'}>
-
-            <div className={'cabinet-archive-list'}>
-
-                <ArchiveList onArchiveIdSelected={setSelectedArchiveId}/>
-            </div>
-            <div className={'cabinet-archive-selected'}>
-                <ArchiveSelected selectedArchiveId={selectedArchiveId}/>
-            </div>
+    const first = (
+        
+            <ArchiveList
+                projectDirectory={props.projectDirectory}
+                onArchiveIdSelected={setSelectedArchiveId}
+            />
+    );
+    const second = (
+        <div style={
+            {
+                height: "100%",
+                width: "100%",
+                overflow: "auto"
+            }
+        }>
+            <Block headerPosition="end" title={`Archive ${selectedArchiveId} files.`}>
+                <ArchiveFiles
+                    isMock={props.isMock}
+                    projectDirectory={props.isMock ? "mock" : undefined}
+                    selectedArchiveId={selectedArchiveId}
+                />
+            </Block>
         </div>
-    </Page>;
+    );
+
+    return (
+        <Page title={"Archives"} description="browse archive files">
+            {/*<ArchiveListActionBar selectedArchiveId={selectedArchiveId}/>*/}
+            <SplitView
+                firstSnap
+                firstMin={200}
+                firstInitial={300}
+                secondMin={400}
+                first={first} second={second}/>
+        </Page>
+    );
 }

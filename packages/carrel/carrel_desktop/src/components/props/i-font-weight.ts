@@ -1,0 +1,1 @@
+export type TCarrelFontWeight = 'normal' | 'bold' | 'extrabold' | 'semibold' | 'medium' | 'light' | 'thin';

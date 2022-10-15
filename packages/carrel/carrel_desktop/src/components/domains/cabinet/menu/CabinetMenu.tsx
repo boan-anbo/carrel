@@ -1,21 +1,19 @@
 import * as React from "react";
 import {Link} from "react-router-dom";
 import {CgBoard, FcManager} from "react-icons/all";
-import {MenuItem} from "@blueprintjs/core";
 import {CabinetPageRoutes} from "../routes/cabinet-page-routes";
-import {ArchiveList} from "../pages/cabinet_archives/ArchiveList";
+import { LeftMenuItem } from "../../../core/nav/LeftMenu/components";
 
 
 export function CabinetMenu() {
-    return <>
+    return (
+      <>
         <Link to={CabinetPageRoutes.home.absolutePath}>
-            <MenuItem icon={<FcManager/>} text={'Manager'}/>
+          <LeftMenuItem>Archives</LeftMenuItem>
         </Link>
         <Link to={CabinetPageRoutes.archives.absolutePath}>
-            <MenuItem icon={<CgBoard/>} text={'Archives'}/>
+          <LeftMenuItem>Files</LeftMenuItem>
         </Link>
-
-
 
         {/*<MenuDivider title={'Project'}/>*/}
         {/*<MenuItem icon="cog" labelElement={<Icon icon="share"/>} text="Settings..." intent="primary"/>*/}
@@ -53,5 +51,6 @@ export function CabinetMenu() {
         {/*        </MenuItem>*/}
         {/*    </MenuItem>*/}
         {/*</MenuItem>*/}
-    </>;
+      </>
+    );
 }

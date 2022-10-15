@@ -1,0 +1,1 @@
+export type TCarrelSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';

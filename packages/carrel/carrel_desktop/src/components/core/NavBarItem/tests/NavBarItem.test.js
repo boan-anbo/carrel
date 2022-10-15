@@ -1,0 +1,2 @@
+describe('<NavBarItem />', () => { });
+export {};

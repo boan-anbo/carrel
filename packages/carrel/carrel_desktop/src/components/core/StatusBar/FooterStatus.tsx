@@ -1,7 +1,6 @@
-import React from 'react';
 import {RootState} from "../../../store/store";
 import {useSelector} from "react-redux";
-import { BreadCrumb } from 'primereact/breadcrumb';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
 function FooterStatus() {
     const workingProject = useSelector((state: RootState) => state.workingProject.workingProject);
 
@@ -15,12 +14,19 @@ function FooterStatus() {
                 open(workingProject?.directory ?? '');
             }
         }
-    ]
+    ].map((item, index) => {
+        return (
+          <BreadcrumbItem key={index}>
+            {item.label}
+            <BreadcrumbLink onClick={item.command} />
+          </BreadcrumbItem>
+        );
+    });
 
     return (
         <div>
 
-            <BreadCrumb model={items} home={{icon: 'pi pi-home'}}/>
+            <Breadcrumb>{items}</Breadcrumb>
         </div>
     );
 }
