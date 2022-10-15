@@ -13,6 +13,9 @@ message FilterSet {
   // a set of filters
  repeated Condition any = 2;
 
+ // global filter
+ optional string global_filter = 3;
+
 }
 
 enum OPERATOR {
