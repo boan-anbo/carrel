@@ -1,25 +1,25 @@
-use sea_orm::Condition;
-use sea_orm::{ColumnTrait, FromQueryResult, PaginatorTrait};
 use std::collections::HashMap;
 use std::iter::Iterator;
 use std::string::ToString;
 
+use carrel_commons::generic::api::query::v1::{
+    Operator, SortCondition, SortDirection, StandardQuery,
+};
+use convert_case::{Case, Casing};
+use sea_orm::Condition;
 use sea_orm::DatabaseConnection;
 use sea_orm::DbErr;
 use sea_orm::EntityTrait;
-
 use sea_orm::QueryFilter;
 use sea_orm::QueryOrder;
 use sea_orm::QuerySelect;
+use sea_orm::Select;
+use sea_orm::{ColumnTrait, FromQueryResult, PaginatorTrait};
 
 use crate::errors::PebbleQueryError;
 use crate::errors::PebbleQueryError::{InvalidOperator, MissingValue};
 use crate::filter_conditions::SeaOrmFilterConditions;
 use crate::pebble_query_result::PebbleQueryResult;
-use carrel_commons::generic::api::query::v1::{
-    Operator, SortCondition, SortDirection, StandardQuery,
-};
-use sea_orm::Select;
 
 pub struct PebbleQuery {}
 
@@ -28,9 +28,9 @@ impl PebbleQuery {
         query: StandardQuery,
         field_column_map: &HashMap<String, E::Column>,
     ) -> SeaOrmFilterConditions
-    where
-        E: EntityTrait<Model = M>,
-        M: FromQueryResult + Sized + Send + Sync,
+        where
+            E: EntityTrait<Model=M>,
+            M: FromQueryResult + Sized + Send + Sync,
     {
         let mut must_conditions = Condition::all();
 
@@ -44,7 +44,7 @@ impl PebbleQuery {
                     filter,
                     field_column_map,
                 )
-                .unwrap();
+                    .unwrap();
             }
 
             for filter in filter_set.any {
@@ -53,7 +53,7 @@ impl PebbleQuery {
                     filter,
                     field_column_map,
                 )
-                .unwrap();
+                    .unwrap();
             }
         };
 
@@ -108,10 +108,12 @@ impl PebbleQuery {
         query: StandardQuery,
         field_to_column_map: &HashMap<String, E::Column>,
     ) -> Result<PebbleQueryResult<E>, DbErr>
-    where
-        E: EntityTrait<Model = M>,
-        M: FromQueryResult + Sized + Send + Sync,
+        where
+            E: EntityTrait<Model=M>,
+            M: FromQueryResult + Sized + Send + Sync,
     {
+        let query = Self::normalize_query(query);
+
         let (current_must_condition, current_any_condition) =
             Self::extract_sea_orm_conditions_from_query::<E, M>(&query, field_to_column_map);
 
@@ -119,6 +121,27 @@ impl PebbleQuery {
             .filter(current_must_condition) // add the must condition
             .filter(current_any_condition) // add the any condition
             ;
+
+        let filter = query.filter.clone();
+
+        if filter.is_some() {
+            let filter_unwrapped = filter.unwrap();
+            let global_filter_value = filter_unwrapped.global_filter.unwrap_or("".to_string());
+            if !global_filter_value.is_empty() {
+                let mut global_conditions = Condition::any();
+                for column in field_to_column_map.values() {
+                    global_conditions = Self::add_condition::<E, M>(
+                        global_conditions,
+                        Operator::Contains as i32,
+                        column,
+                        global_filter_value.as_str(),
+                        vec![],
+                        None,
+                    )
+                        .unwrap();
+                }
+            }
+        }
 
         // check if offset and length are set
         if query.length > 0 {
@@ -170,12 +193,11 @@ impl PebbleQuery {
         query: &StandardQuery,
         field_to_column_map: &HashMap<String, <E>::Column>,
     ) -> (Condition, Condition)
-    where
-        E: EntityTrait<Model = M>,
-        M: FromQueryResult + Sized + Send + Sync,
+        where
+            E: EntityTrait<Model=M>,
+            M: FromQueryResult + Sized + Send + Sync,
     {
         let mut current_must_condition = Condition::all();
-
         let mut current_any_condition = Condition::any();
 
         let query_filter = query.filter.clone();
@@ -187,7 +209,7 @@ impl PebbleQuery {
                     filter,
                     field_to_column_map,
                 )
-                .unwrap();
+                    .unwrap();
             }
 
             for filter in filter_set.any {
@@ -196,7 +218,7 @@ impl PebbleQuery {
                     filter,
                     field_to_column_map,
                 )
-                .unwrap();
+                    .unwrap();
             }
         };
         (current_must_condition, current_any_condition)
@@ -328,9 +350,9 @@ impl PebbleQuery {
         sq_filter: carrel_commons::generic::api::query::v1::Condition,
         field_column_map: &HashMap<String, E::Column>,
     ) -> Result<Condition, DbErr>
-    where
-        E: EntityTrait<Model = M>,
-        M: FromQueryResult + Sized + Send + Sync,
+        where
+            E: EntityTrait<Model=M>,
+            M: FromQueryResult + Sized + Send + Sync,
     {
         let result: E::Column = field_column_map
             .into_iter()
@@ -340,7 +362,7 @@ impl PebbleQuery {
                     "Column {} not provided in field_to_column_map",
                     sq_filter.field.as_str() // throw if
                 )
-                .as_str(),
+                    .as_str(),
             )
             .1
             .clone();
@@ -350,7 +372,7 @@ impl PebbleQuery {
             &sq_filter,
             result,
         )
-        .unwrap();
+            .unwrap();
         Ok(result)
     }
 
@@ -360,34 +382,60 @@ impl PebbleQuery {
         filter: &carrel_commons::generic::api::query::v1::Condition,
         column: E::Column,
     ) -> Result<Condition, PebbleQueryError>
-    where
-        E: EntityTrait<Model = M>,
-        M: FromQueryResult + Sized + Send + Sync,
+        where
+            E: EntityTrait<Model=M>,
+            M: FromQueryResult + Sized + Send + Sync,
     {
         let value = filter.value.clone().unwrap_or_else(|| "".to_string());
         let value_list = filter.value_list.clone();
         let value_to = filter.value_to.clone();
-        let result = match Operator::from_i32(filter.operator).unwrap_or(Operator::Unspecified) {
+        let result = Self::add_condition::<E, M>(
+            input_current_condition,
+            filter.operator,
+            &column,
+            value.as_str(),
+            value_list,
+            value_to,
+        )?;
+
+        Ok(result)
+    }
+
+    // add condition to the input_condition
+    fn add_condition<E, M>(
+        input_condition: Condition,
+        operator: i32,
+        column: &E::Column,
+        value: &str,
+        value_list: Vec<String>,
+        value_to: Option<String>,
+    ) -> Result<Condition, PebbleQueryError>
+        where
+            E: EntityTrait<Model=M>,
+            M: FromQueryResult + Sized + Send + Sync,
+    {
+        let condition = match Operator::from_i32(operator).unwrap_or(Operator::Unspecified) {
             Operator::Contains => {
-                let value = filter.value.as_ref().unwrap();
-                input_current_condition.add(column.contains(value))
+                let value = value.as_ref();
+                input_condition.add(column.contains(value))
             }
-            Operator::Equals => input_current_condition.add(column.eq(value)),
-            Operator::GreaterThan => input_current_condition.add(column.gt(value)),
-            Operator::GreaterThanOrEquals => input_current_condition.add(column.gte(value)),
-            Operator::LessThan => input_current_condition.add(column.lt(value)),
-            Operator::LessThanOrEquals => input_current_condition.add(column.lte(value)),
-            Operator::NotEquals => input_current_condition.add(column.ne(value)),
-            Operator::In => input_current_condition.add(column.is_in(value_list)),
-            Operator::NotIn => input_current_condition.add(column.is_not_in(value_list)),
-            Operator::IsNull => input_current_condition.add(column.is_null()),
-            Operator::IsNotNull => input_current_condition.add(column.is_not_null()),
-            Operator::StartsWith => input_current_condition.add(column.starts_with(value.as_str())),
-            Operator::EndsWith => input_current_condition.add(column.ends_with(value.as_str())),
+            Operator::Equals => input_condition.add(column.eq(value)),
+            Operator::GreaterThan => input_condition.add(column.gt(value)),
+            Operator::GreaterThanOrEquals => input_condition.add(column.gte(value)),
+            Operator::Like => input_condition.add(column.like(value)),
+            Operator::LessThan => input_condition.add(column.lt(value)),
+            Operator::LessThanOrEquals => input_condition.add(column.lte(value)),
+            Operator::NotEquals => input_condition.add(column.ne(value)),
+            Operator::In => input_condition.add(column.is_in(value_list)),
+            Operator::NotIn => input_condition.add(column.is_not_in(value_list)),
+            Operator::IsNull => input_condition.add(column.is_null()),
+            Operator::IsNotNull => input_condition.add(column.is_not_null()),
+            Operator::StartsWith => input_condition.add(column.starts_with(value)),
+            Operator::EndsWith => input_condition.add(column.ends_with(value)),
             Operator::Between => {
                 if !value.is_empty() {
                     if let Some(value_to) = value_to {
-                        input_current_condition.add(column.between(value, value_to))
+                        input_condition.add(column.between(value, value_to.as_str()))
                     } else {
                         return Err(MissingValue("value_to is required for between".to_string()));
                     }
@@ -398,7 +446,7 @@ impl PebbleQuery {
             Operator::NotBetween => {
                 if !value.is_empty() {
                     if let Some(value_to) = value_to {
-                        input_current_condition.add(column.not_between(value, value_to))
+                        input_condition.add(column.not_between(value, value_to.as_str()))
                     } else {
                         return Err(MissingValue(
                             "value_to is required for not between".to_string(),
@@ -411,13 +459,47 @@ impl PebbleQuery {
                 }
             }
             _ => {
-                return Err(InvalidOperator(format!(
-                    "Invalid operator: {}",
-                    filter.operator
-                )));
+                return Err(InvalidOperator(format!("Invalid operator: {}", operator)));
             }
         };
+        Ok(condition)
+    }
+    fn normalize_query(input_query: StandardQuery) -> StandardQuery {
+        let mut query = input_query;
+        if query.filter.is_some() {
+            query.filter = query.filter.clone().map(|mut filter| {
+                filter.must = filter
+                    .must
+                    .into_iter()
+                    .map(|mut condition| {
+                        condition.field = condition.field.to_case(
+                            Case::Snake,
+                        );
+                        condition
+                    })
+                    .collect();
+                filter.any = filter
+                    .any
+                    .into_iter()
+                    .map(|mut condition| {
+                        condition.field = condition.field.to_case(
+                            Case::Snake,
+                        );
+                        condition
+                    })
+                    .collect();
+                filter
+            });
+        }
 
-        Ok(result)
+        if query.sort.is_some() {
+            query.sort = query.sort.clone().map(|mut sort| {
+                sort.field = sort.field.to_case(
+                    Case::Snake,
+                );
+                sort
+            });
+        }
+        query
     }
 }

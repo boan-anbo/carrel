@@ -1,7 +1,6 @@
 use log::info;
 
 use carrel_commons::carrel::common::firefly::v2::Firefly;
-use simplelog::{ColorChoice, CombinedLogger, Config, LevelFilter, TerminalMode, TermLogger};
 use crate::extract::convert_annot_to_firefly::convert_pdf_annotation_to_firefly;
 use crate::extract::errors::PdfGongjuError;
 use crate::extract::extractor_options::ExtractorOption;

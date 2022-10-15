@@ -1,3 +1,5 @@
+#![feature(is_some_and)]
+
 use tonic::codegen::http::Method;
 use tracing::Level;
 

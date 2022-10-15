@@ -33,7 +33,6 @@ use carrel_utils::fs::get_all_files_under_directory::get_all_file_paths_under_di
 
 use crate::errors::carrel_server_error::CarrelServerError::InvalidRequestPayload;
 use tonic::{Request, Response, Status};
-use crate::services::project_manager::query_mocker;
 use crate::services::project_manager::query_mocker::{QueryMocker, QueryMockerTrait};
 
 #[derive(Debug, Default)]
@@ -367,6 +366,13 @@ impl ProjectManagerService for ProjectService {
         request: Request<QueryFilesRequest>,
     ) -> Result<Response<QueryFilesResponse>, Status> {
         let req = request.into_inner();
+
+        let mock = req.is_mock;
+
+        if mock {
+            return QueryMocker::mock_query_files(req).await
+        }
+
         let project = carrel_core::project::project_manager::CarrelProjectManager::load(
             req.project_directory.as_str(),
         )

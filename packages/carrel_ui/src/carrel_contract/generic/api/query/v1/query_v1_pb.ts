@@ -218,6 +218,13 @@ export class FilterSet extends Message<FilterSet> {
    */
   any: Condition[] = [];
 
+  /**
+   * global filter
+   *
+   * @generated from field: optional string global_filter = 3;
+   */
+  globalFilter?: string;
+
   constructor(data?: PartialMessage<FilterSet>) {
     super();
     proto3.util.initPartial(data, this);
@@ -228,6 +235,7 @@ export class FilterSet extends Message<FilterSet> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "must", kind: "message", T: Condition, repeated: true },
     { no: 2, name: "any", kind: "message", T: Condition, repeated: true },
+    { no: 3, name: "global_filter", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): FilterSet {
