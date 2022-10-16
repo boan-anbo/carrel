@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package carrel.common.box.v1;
+
+/// A common tag for carrel system.
+message Box {
+  // the numeric id of the box, usually the same as in the database.
+  int32 id = 1;
+  // unique uuid.
+  string uuid = 2;
+  // label, label of the box.
+  string label = 3;
+  // tags in the box.
+  repeated string tag_uuids = 4;
+  // the count of tags under the collection;
+  int32 tag_count = 5;
+  // the boxes under this box;
+  repeated string box_uuids = 6;
+  // the count of boxes under the tag;
+  int32 box_count = 7;
+  // modified at
+  string modified_at = 8;
+  // created at
+  string created_at = 9;
+  // last checked for updates at, e.g. the last time all the fireflies under the box are checked.
+  string last_checked_at = 10;
+  // whether this is a root level box to be retrieved first
+  bool is_root = 11;
+  // the count of all fireles that belong to the tags and boxes of the box.
+  int32 firefly_count = 12;
+  // whether the box should come before other boxes when being displayed.
+  bool is_pinned = 13;
+  // whether the box has an order when being displayed.
+  int32 order = 14;
+
+}

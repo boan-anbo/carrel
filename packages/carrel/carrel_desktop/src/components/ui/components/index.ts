@@ -5,3 +5,4 @@ export {SelectList} from './SelectList';
 export {Tooltip} from './Tooltip';
 export {SplitView} from './SplitView';
 export {ItemInfo} from './ItemInfo';
+export {DataTree} from './DataTree';
