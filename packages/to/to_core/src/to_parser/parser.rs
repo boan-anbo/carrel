@@ -465,33 +465,5 @@ mod tests {
         assert_eq!(context.context, "1[[N|SOME NOTE]]1");
     }
 
-    #[test]
-    fn test_processing_img_files() {
-        let fixture_folder = get_test_fixture_module_folder_path_buf("exceptions");
-        let dir_path = fixture_folder.join("img_files");
-        assert_eq!(dir_path.is_dir(), true);
 
-        let mut all_results: Vec<ToTag> = Vec::new();
-        // iterate over all files and scan each file
-        for entry in fs::read_dir(dir_path).unwrap() {
-            let entry = entry.unwrap();
-            let path = entry.path();
-            let file_name = path.file_name().unwrap().to_str().unwrap();
-            let file_path = path.to_str().unwrap();
-            let result = ToParser::scan_file_for_tags(file_path, &ToParserOption::default());
-
-            match result {
-                Ok(result) => {
-                    all_results.extend(result.tos);
-                }
-                Err(e) => {
-                    // continue
-                    println!("Error while parsing file {}: {}", file_name, e);
-                }
-            }
-            // should not panic
-        }
-
-        assert_eq!(all_results.len(), 0);
-    }
 }

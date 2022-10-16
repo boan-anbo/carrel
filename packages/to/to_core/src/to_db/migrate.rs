@@ -30,8 +30,9 @@ pub async fn init_db(db_path: &str) -> Result<String, ToOrmError> {
 mod test {
     use super::*;
     use crate::to::to_struct::TextualObject;
-    use crate::to_db::to_orm::{QueryTo, ToOrm};
+    use crate::to_db::to_orm::{ToOrmTrait, ToOrm};
     use carrel_utils::test::test_folders::get_random_test_temp_folder;
+    use uuid::Uuid;
 
     #[tokio::test]
     async fn test_init_db() {
@@ -79,7 +80,7 @@ mod test {
         assert_eq!(results, 0);
 
         // insert a new to
-        let to = to_orm
+        let to: Uuid = to_orm
             .insert_one(TextualObject::get_sample())
             .await
             .unwrap();

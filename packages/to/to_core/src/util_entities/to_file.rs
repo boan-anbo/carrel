@@ -4,7 +4,7 @@ use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use uuid::Uuid;
 
-#[derive(Deserialize, Serialize, Clone)]
+#[derive(Deserialize, Debug, Serialize, Clone)]
 pub struct ToFile {
     pub file_path: String,
     pub file_name: String,

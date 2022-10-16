@@ -2,6 +2,7 @@ use crate::to_parser::parser::ToParser;
 use crate::util_entities::to_snippet::ToSnippet;
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 use crate::to_parser::parser_option::ToParserOption;
 use crate::to_ticket::to_ticket_marker::ToMarker;
@@ -9,13 +10,16 @@ use crate::to_ticket::to_ticket_struct::ToTicket;
 use crate::util_entities::to_context::ToContext;
 
 /// This is a
-#[derive(Deserialize, Serialize, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct ToTag {
+    pub id: Option<i32>,
+    pub uuid: Uuid,
     pub key: String,
     pub value: Option<String>,
     pub note: Option<String>,
-    pub tag_string: String,
+    pub raw_tag_string: String,
     pub snippet: Option<ToSnippet>,
+    pub to_uuid: Option<Uuid>,
 }
 
 // implement from TextualObjectTicket
@@ -75,11 +79,14 @@ impl From<ToTicket> for ToTag {
         }
 
         ToTag {
+            id: None,
+            uuid: Uuid::new_v4(), // since this is a new tag, it needs a new uuid
             key,
             value,
             note,
-            tag_string,
+            raw_tag_string: tag_string,
             snippet,
+            to_uuid: None, // this is a new tag, so it has no to_uuid until its parent TO is saved
         }
     }
 }
@@ -104,6 +111,25 @@ impl ToTag {
         format!("{}{}{}", to_marker.left_marker, tag, to_marker.right_marker)
 
         // add value if it exists with separator
+    }
+
+    // get random totag
+    pub fn get_random_totags(to_uuid: Uuid, num_of_tags: i32) -> Vec<ToTag> {
+        let mut tags: Vec<ToTag> = vec![];
+        for _ in 0..num_of_tags {
+            let tag = ToTag {
+                id: None,
+                uuid: Uuid::new_v4(),
+                key: "key".to_string(),
+                value: Some("value".to_string()),
+                note: Some("note".to_string()),
+                raw_tag_string: "raw_tag_string".to_string(),
+                snippet: None,
+                to_uuid: Some(to_uuid),
+            };
+            tags.push(tag);
+        }
+        tags
     }
 }
 
@@ -193,14 +219,14 @@ mod test {
             ToParser::scan_text_for_tags(raw_text_with_only_key, &ToParserOption::default(), None);
         let first_tag_with_only_key = result_with_only_key.tos[0].clone();
         assert_eq!(result_with_only_key.tos.len(), 1);
-        assert_eq!(&first_tag_with_only_key.tag_string, "[[KEY]]");
+        assert_eq!(&first_tag_with_only_key.raw_tag_string, "[[KEY]]");
 
         let raw_text_with_key_value = "[[KEY|VALUE]]";
         let result_with_key_value =
             ToParser::scan_text_for_tags(raw_text_with_key_value, &ToParserOption::default(), None);
         let first_tag_with_key_value = result_with_key_value.tos[0].clone();
         assert_eq!(result_with_key_value.tos.len(), 1);
-        assert_eq!(&first_tag_with_key_value.tag_string, "[[KEY|VALUE]]");
+        assert_eq!(&first_tag_with_key_value.raw_tag_string, "[[KEY|VALUE]]");
 
         let raw_text_with_key_value_note = "[[KEY|VALUE|NOTE]]";
         let result_with_key_value_note = ToParser::scan_text_for_tags(
@@ -211,7 +237,7 @@ mod test {
         let first_tag_with_key_value_note = result_with_key_value_note.tos[0].clone();
         assert_eq!(result_with_key_value_note.tos.len(), 1);
         assert_eq!(
-            &first_tag_with_key_value_note.tag_string,
+            &first_tag_with_key_value_note.raw_tag_string,
             "[[KEY|VALUE|NOTE]]"
         );
     }

@@ -1,4 +1,4 @@
-use crate::m20220929_111159_create_db::TextualObjects;
+use crate::m20220929_111159_create_to::{Tag, TagRelation, TextualObjects};
 use crate::Query;
 use carrel_utils::datetime::get_iso_string::get_now_iso_string;
 use carrel_utils::uuid::new_v4;
@@ -31,6 +31,7 @@ use sea_orm_migration::SchemaManager;
 // }
 
 pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
+    let first_to_uuid = new_v4().to_string();
     // // seed project
     let insert_to_1 = Query::insert()
         .into_table(TextualObjects::Table)
@@ -57,7 +58,7 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
             ])
         .values_panic(
             [
-                new_v4().to_string().into(),
+                first_to_uuid.clone().into(),
                 "ticket_id1".into(),
                 "ticket_1_ticket_minimal".into(),
                 "source_id1".into(),
@@ -169,6 +170,106 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
             3.into(),
         ])
         .to_owned();
+
+    // pub id: i32,
+    // pub key: String,
+    // pub value: String,
+    // pub note: String,
+    // pub raw_tag_string: String,
+    // pub uuid: String,
+    // pub to_id: i32,
+    // insert two tags to the first textual object
+    let insert_to_1_tag_1 = Query::insert()
+        .into_table(Tag::Table)
+        .columns(vec![
+            Tag::Id,
+            Tag::Key,
+            Tag::Value,
+            Tag::Note,
+            Tag::RawTagString,
+            Tag::Uuid,
+            Tag::ToUuid,
+            Tag::ToId,
+        ])
+        .values_panic([
+            1.into(),
+            "tag_key_1".into(),
+            "tag_value_1".into(),
+            "tag_note_1".into(),
+            "tag_raw_tag_string_1".into(),
+            new_v4().to_string().into(),
+            first_to_uuid.clone().into(),
+            1.into(),
+        ])
+        .to_owned();
+
+    let insert_to_1_tag_2 = Query::insert()
+        .into_table(Tag::Table)
+        .columns(vec![
+            Tag::Id,
+            Tag::Key,
+            Tag::Value,
+            Tag::Note,
+            Tag::RawTagString,
+            Tag::Uuid,
+            Tag::ToUuid,
+            Tag::ToId,
+        ])
+        .values_panic([
+            2.into(),
+            "tag_key_2".into(),
+            "tag_value_2".into(),
+            "tag_note_2".into(),
+            "tag_raw_tag_string_2".into(),
+            new_v4().to_string().into(),
+            first_to_uuid.clone().into(),
+            1.into(),
+        ])
+        .to_owned();
+
+    manager.exec_stmt(insert_to_1_tag_1).await.unwrap();
+
+    manager.exec_stmt(insert_to_1_tag_2).await.unwrap();
+
+    // Table,
+    // SourceId,
+    // TargetId,
+    // RelationType,
+    // insert two relations between the tags
+    let insert_to_tag_1_relation_1 = Query::insert()
+        .into_table(TagRelation::Table)
+        .columns(vec![
+            TagRelation::SourceId,
+            TagRelation::TargetId,
+            TagRelation::RelationType,
+        ])
+        .values_panic([
+            1.into(),
+            2.into(),
+            0.into(),
+        ])
+        .to_owned();
+
+    manager.exec_stmt(insert_to_tag_1_relation_1).await.unwrap();
+
+    let insert_to_tag_2_relation_1 = Query::insert()
+        .into_table(TagRelation::Table)
+        .columns(vec![
+            TagRelation::SourceId,
+            TagRelation::TargetId,
+            TagRelation::RelationType,
+        ])
+        .values_panic([
+            2.into(),
+            1.into(),
+            2.into(),
+        ])
+        .to_owned();
+
+    manager.exec_stmt(insert_to_tag_2_relation_1).await.unwrap();
+
+
+
 
     manager.exec_stmt(insert_to_3).await.unwrap();
 }

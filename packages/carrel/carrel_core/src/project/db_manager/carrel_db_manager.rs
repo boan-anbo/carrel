@@ -1,14 +1,14 @@
-use crate::project::config::const_config_file_name::{
-    CONFIG_DEFAULT_BATCH_INSERT_SIZE, CONFIG_DEFAULT_CARREL_DB_TYPE,
-};
-use crate::project::config::project_config::ProjectConfig;
-use crate::project::error::project_error::ProjectError;
+use std::path::PathBuf;
+
 use async_trait::async_trait;
 use carrel_commons::carrel::core::project_manager::v1::CarrelDbType;
 use carrel_db::db::connect::get_connection;
 use carrel_db::errors::database_error::SeaOrmDatabaseError;
 use sea_orm::DatabaseConnection;
-use std::path::PathBuf;
+
+use crate::project::config::const_config_file_name::CONFIG_DEFAULT_BATCH_INSERT_SIZE;
+use crate::project::config::project_config::ProjectConfig;
+use crate::project::error::project_error::ProjectError;
 
 pub struct CarrelDbManager {
     pub(crate) batch_insert_size: usize,
@@ -28,7 +28,7 @@ impl CarrelDbManager {
                 "Project directory is not a directory: ".to_string()
                     + project_directory_path.to_string().as_str(),
             ))
-            .unwrap();
+                .unwrap();
         }
         let carrel_db_full_path = project_directory.join(&config.carrel_db);
         CarrelDbManager {
@@ -91,13 +91,13 @@ impl CarrelDbManagerTrait for CarrelDbManager {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use carrel_utils::test::test_folders::get_random_test_temp_folder_path_buf;
+
     use crate::project::db_manager::project_db_manager::MangageProjects;
     use crate::project::project_manager::CarrelProjectManager;
     use crate::project::project_manager_methods::manage_project::ManageProjectTrait;
     use crate::test_utils::carrel_tester::CarrelTester;
     use crate::test_utils::project_tester::ProjectTester;
-    use carrel_utils::test::test_folders::get_random_test_temp_folder_path_buf;
 
     #[tokio::test]
     async fn test_create_project() {

@@ -38,10 +38,10 @@
 //!
 use async_trait::async_trait;
 use carrel_commons::generic::api::query::v1::StandardQuery;
-use entity::entities::textual_objects;
-use entity::entities::textual_objects::{ActiveModel, Column, Model};
+use entity::entities::{tag, textual_objects};
+use entity::entities::textual_objects::{ActiveModel, Column, Entity, Model};
 use pebble_query::errors::PebbleQueryError;
-use pebble_query::pebble_query_result::PebbleQueryResult;
+use pebble_query::pebble_query_result::{PebbleQueryResult, PebbleQueryResultGeneric, PebbleQueryResultUtilTrait};
 use sea_orm::{Database, DatabaseConnection, DbBackend, ModelTrait, Statement};
 use std::io;
 use thiserror::Error;
@@ -50,12 +50,14 @@ use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, PaginatorTrait, QueryF
 // use seaorm errors
 use crate::to::to_struct::TextualObject;
 use crate::to_db::to_query::{PebbleQueryTextualObject, PebbleQueryTextualObjectTrait};
-use crate::to_db::util_trait::{IntoTextualObject, IntoTextualObjectOption, OrmEntityConverter};
+use crate::to_db::util_trait::{ToOrmMapper, ToOrmMapperTrait};
 use entity::entities::prelude::*;
 use sea_orm::error::DbErr;
 use sea_orm::sea_query::SimpleExpr;
 use sqlx::encode::IsNull::No;
 use uuid::Uuid;
+use carrel_commons::carrel::common::tag::v2::Tag as CommonTagV2;
+use crate::to_tag::to_tag_struct::ToTag;
 
 #[derive(Debug, Error)]
 pub enum ToOrmError {
@@ -64,6 +66,8 @@ pub enum ToOrmError {
     //     DatabaseQueryError
     #[error("Database query error: {0}")]
     DatabaseQueryError(#[source] DbErr),
+    #[error("Database insert error: {0}")]
+    DatabaseInsertError(#[source] DbErr),
     // DatabaseDeleteError
     #[error("Database delete error: {0}")]
     DatabaseDeleteError(#[source] DbErr),
@@ -83,6 +87,32 @@ pub enum ToOrmError {
 #[derive(Debug, Clone)]
 pub struct ToOrm {
     db_path: String,
+}
+
+impl ToOrm {
+    /// Helper function to convert the query results of scalar to with its tags.
+    pub(crate) async fn add_tags_to_to_result(&self, pebble_tag_query_result: PebbleQueryResult<Entity>) -> PebbleQueryResultGeneric<TextualObject> {
+        let mut new_tos: Vec<TextualObject> = vec![];
+
+        for to in pebble_tag_query_result.results.into_iter() {
+            let tags = self.get_tags_by_to(to.clone()).await;
+            let to = ToOrmMapper::to_and_tag_model_to_to_and_tag(to, tags);
+            new_tos.push(to);
+        }
+
+        PebbleQueryResultGeneric {
+            results: new_tos,
+            metadata: pebble_tag_query_result.metadata,
+        }
+    }
+
+    pub async fn get_tags_by_to(&self, to: Model) -> Vec<tag::Model> {
+        let db = self.get_connection().await.unwrap();
+        let mut tags: Vec<tag::Model> = vec![];
+        let to_tags = to.find_related(tag::Entity).all(&db).await.map_err(ToOrmError::DatabaseQueryError).unwrap();
+        tags.extend(to_tags);
+        tags
+    }
 }
 
 impl ToOrm {
@@ -106,17 +136,36 @@ impl ToOrm {
 }
 
 #[async_trait]
-pub trait QueryTo {
+pub trait ToOrmTrait {
     async fn get_connection(&self) -> Result<DatabaseConnection, ToOrmError>;
 
-    // insert
-    async fn insert(&self, to: TextualObject) -> Result<TextualObject, ToOrmError>;
+    ///
+    ///
+    /// # Arguments
+    ///
+    /// * `to`:
+    /// * `to_tags`:
+    ///
+    /// returns: Result<i32, ToOrmError>: id of the last inserted, or error
+    ///
+    ///
+    /// # Examples
+    ///
+    /// ```
+    ///
+    /// ```
+    async fn insert_to(&self, to: TextualObject, to_tags: Vec<ToTag>) -> Result<i32, ToOrmError>;
+
+    async fn find_by_id(&self, id: i32) -> Result<Option<TextualObject>, ToOrmError>;
+
 
     async fn find_by_ticket_id(
         &self,
         ticket_id: &str,
     ) -> Result<Option<textual_objects::Model>, ToOrmError>;
+
     async fn count_tos(&self) -> Result<u64, ToOrmError>;
+
     async fn find_by_ticket_ids(
         &self,
         ticket_ids: Vec<String>,
@@ -209,11 +258,14 @@ pub trait QueryTo {
     async fn query_tos(
         &self,
         query: StandardQuery,
-    ) -> Result<PebbleQueryResult<textual_objects::Entity>, ToOrmError>;
+    ) -> Result<PebbleQueryResultGeneric<TextualObject>, ToOrmError>;
+
+    // insert tags belonging to a TO
+    async fn insert_to_tags(&self, tags: Vec<CommonTagV2>, to_id: i32) -> Result<(), ToOrmError>;
 }
 
 #[async_trait]
-impl QueryTo for ToOrm {
+impl ToOrmTrait for ToOrm {
     async fn get_connection(&self) -> Result<DatabaseConnection, ToOrmError> {
         let db = Database::connect(&self.db_path)
             .await
@@ -221,16 +273,50 @@ impl QueryTo for ToOrm {
         Ok(db)
     }
 
-    async fn insert(&self, to: TextualObject) -> Result<TextualObject, ToOrmError> {
+    async fn insert_to(&self, to: TextualObject, to_tags: Vec<ToTag>) -> Result<i32, ToOrmError> {
         let db = self.get_connection().await?;
-        let to = to.into_db_entity();
+        let to = ToOrmMapper::to_into_active_model(to);
         let insert_result = to
             .insert(&db)
             .await
-            .map_err(ToOrmError::DatabaseQueryError)
+            .map_err(ToOrmError::DatabaseInsertError)
             .unwrap();
-        Ok(insert_result.into_textual_object())
+
+
+        // if there are related tags, insert them with alongside the TO
+        if !to_tags.is_empty() {
+            let tags = ToOrmMapper::to_tags_into_active_models(to_tags, insert_result.id);
+
+            let _ = tag::Entity::insert_many(tags)
+                .exec(&db)
+                .await
+                .map_err(ToOrmError::DatabaseInsertError)
+                .unwrap();
+        }
+
+        // insert tags
+
+
+        Ok(insert_result.id)
     }
+
+    async fn find_by_id(&self, id: i32) -> Result<Option<TextualObject>, ToOrmError> {
+        let db = self.get_connection().await?;
+
+        let to = textual_objects::Entity::find_by_id(id)
+            .one(&db)
+            .await
+            .map_err(ToOrmError::DatabaseQueryError)?;
+        if to.is_none() {
+            return Ok(None);
+        }
+        let to = to.unwrap();
+        let tags = self.get_tags_by_to(to.clone()).await;
+
+        let to = ToOrmMapper::to_and_tag_model_to_to_and_tag(to, tags);
+        Ok(Some(to))
+    }
+
 
     async fn find_by_ticket_id(
         &self,
@@ -335,7 +421,7 @@ impl QueryTo for ToOrm {
 
     async fn insert_one(&self, to: TextualObject) -> Result<Uuid, ToOrmError> {
         let db = self.get_connection().await?;
-        let to_model = to.into_db_entity();
+        let to_model = ToOrmMapper::to_into_active_model(to);
         let result = to_model
             .insert(&db)
             .await
@@ -345,11 +431,12 @@ impl QueryTo for ToOrm {
 
     async fn insert_many(&self, tos: Vec<TextualObject>) -> Result<(), ToOrmError> {
         let db = self.get_connection().await?;
-        let models: Vec<ActiveModel> = tos.into_iter().map(|to| to.into_db_entity()).collect();
+        let models: Vec<ActiveModel> = tos.into_iter().map(|to| ToOrmMapper::to_into_active_model(to)).collect();
         let _ = TextualObjects::insert_many(models)
             .exec(&db)
             .await
             .map_err(ToOrmError::DatabaseConnectionError)?;
+
         Ok(())
     }
 
@@ -388,11 +475,25 @@ impl QueryTo for ToOrm {
     async fn query_tos(
         &self,
         query: StandardQuery,
-    ) -> Result<PebbleQueryResult<textual_objects::Entity>, ToOrmError> {
+    ) -> Result<PebbleQueryResultGeneric<TextualObject>, ToOrmError> {
         let db = self.get_connection().await?;
         let result = PebbleQueryTextualObject::query_textual_objects(&db, query).await?;
 
-        Ok(result)
+        let result_with_tags = self.add_tags_to_to_result(result).await;
+
+        Ok(result_with_tags)
+    }
+
+    async fn insert_to_tags(&self, tags: Vec<CommonTagV2>, to_id: i32) -> Result<(), ToOrmError> {
+        let db = self.get_connection().await?;
+        let models: Vec<tag::ActiveModel> = tags.into_iter().map(|common_tag| {
+            tag::ActiveModel::from_common_v2_and_to(common_tag, to_id)
+        }).collect();
+        let _ = Tag::insert_many(models)
+            .exec(&db)
+            .await
+            .map_err(ToOrmError::DatabaseConnectionError)?;
+        Ok(())
     }
 }
 

@@ -1,14 +1,13 @@
-use crate::app::app_manager::{CarrelAppManager, ManageCarrelApp};
-use crate::project::config::const_config_file_name::CONFIG_DEFAULT_CARREL_DB_NAME;
-use crate::project::config::project_config::ProjectConfig;
-use crate::project::db_manager::carrel_db_manager::CarrelDbManager;
-use crate::project::db_manager::project_db_manager::MangageProjects;
-use crate::project::to_manager::to_manager::{FireflyKepper, KeepFireflies};
+use std::path::PathBuf;
+
 use async_trait::async_trait;
 use carrel_db::entities::project;
 use carrel_utils::datetime::get_iso_string::get_now_iso_string;
 use sea_orm::ActiveValue::Set;
-use std::path::PathBuf;
+
+use crate::project::config::project_config::ProjectConfig;
+use crate::project::db_manager::carrel_db_manager::CarrelDbManager;
+use crate::project::to_manager::to_manager::{FireflyKepper, KeepFireflies};
 
 pub struct CarrelProjectManager {
     pub db: CarrelDbManager,
@@ -97,10 +96,12 @@ impl Default for ToManagerOption {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::project::project_manager::InstantiateFromConfig;
     use carrel_commons::carrel::core::project_manager::v1::CarrelDbType;
     use carrel_utils::test::test_folders::get_random_test_temp_folder_path_buf;
+
+    use crate::project::project_manager::InstantiateFromConfig;
+
+    use super::*;
 
     #[tokio::test]
     async fn test_project_manager_from_config() {

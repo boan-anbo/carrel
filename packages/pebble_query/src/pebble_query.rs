@@ -28,9 +28,9 @@ impl PebbleQuery {
         query: StandardQuery,
         field_column_map: &HashMap<String, E::Column>,
     ) -> SeaOrmFilterConditions
-        where
-            E: EntityTrait<Model=M>,
-            M: FromQueryResult + Sized + Send + Sync,
+    where
+        E: EntityTrait<Model = M>,
+        M: FromQueryResult + Sized + Send + Sync,
     {
         let mut must_conditions = Condition::all();
 
@@ -44,7 +44,7 @@ impl PebbleQuery {
                     filter,
                     field_column_map,
                 )
-                    .unwrap();
+                .unwrap();
             }
 
             for filter in filter_set.any {
@@ -53,7 +53,7 @@ impl PebbleQuery {
                     filter,
                     field_column_map,
                 )
-                    .unwrap();
+                .unwrap();
             }
         };
 
@@ -108,9 +108,9 @@ impl PebbleQuery {
         query: StandardQuery,
         field_to_column_map: &HashMap<String, E::Column>,
     ) -> Result<PebbleQueryResult<E>, DbErr>
-        where
-            E: EntityTrait<Model=M>,
-            M: FromQueryResult + Sized + Send + Sync,
+    where
+        E: EntityTrait<Model = M>,
+        M: FromQueryResult + Sized + Send + Sync,
     {
         let query = Self::normalize_query(query);
 
@@ -138,7 +138,7 @@ impl PebbleQuery {
                         vec![],
                         None,
                     )
-                        .unwrap();
+                    .unwrap();
                 }
             }
         }
@@ -193,9 +193,9 @@ impl PebbleQuery {
         query: &StandardQuery,
         field_to_column_map: &HashMap<String, <E>::Column>,
     ) -> (Condition, Condition)
-        where
-            E: EntityTrait<Model=M>,
-            M: FromQueryResult + Sized + Send + Sync,
+    where
+        E: EntityTrait<Model = M>,
+        M: FromQueryResult + Sized + Send + Sync,
     {
         let mut current_must_condition = Condition::all();
         let mut current_any_condition = Condition::any();
@@ -209,7 +209,7 @@ impl PebbleQuery {
                     filter,
                     field_to_column_map,
                 )
-                    .unwrap();
+                .unwrap();
             }
 
             for filter in filter_set.any {
@@ -218,7 +218,7 @@ impl PebbleQuery {
                     filter,
                     field_to_column_map,
                 )
-                    .unwrap();
+                .unwrap();
             }
         };
         (current_must_condition, current_any_condition)
@@ -350,9 +350,9 @@ impl PebbleQuery {
         sq_filter: carrel_commons::generic::api::query::v1::Condition,
         field_column_map: &HashMap<String, E::Column>,
     ) -> Result<Condition, DbErr>
-        where
-            E: EntityTrait<Model=M>,
-            M: FromQueryResult + Sized + Send + Sync,
+    where
+        E: EntityTrait<Model = M>,
+        M: FromQueryResult + Sized + Send + Sync,
     {
         let result: E::Column = field_column_map
             .into_iter()
@@ -362,7 +362,7 @@ impl PebbleQuery {
                     "Column {} not provided in field_to_column_map",
                     sq_filter.field.as_str() // throw if
                 )
-                    .as_str(),
+                .as_str(),
             )
             .1
             .clone();
@@ -372,7 +372,7 @@ impl PebbleQuery {
             &sq_filter,
             result,
         )
-            .unwrap();
+        .unwrap();
         Ok(result)
     }
 
@@ -382,9 +382,9 @@ impl PebbleQuery {
         filter: &carrel_commons::generic::api::query::v1::Condition,
         column: E::Column,
     ) -> Result<Condition, PebbleQueryError>
-        where
-            E: EntityTrait<Model=M>,
-            M: FromQueryResult + Sized + Send + Sync,
+    where
+        E: EntityTrait<Model = M>,
+        M: FromQueryResult + Sized + Send + Sync,
     {
         let value = filter.value.clone().unwrap_or_else(|| "".to_string());
         let value_list = filter.value_list.clone();
@@ -410,9 +410,9 @@ impl PebbleQuery {
         value_list: Vec<String>,
         value_to: Option<String>,
     ) -> Result<Condition, PebbleQueryError>
-        where
-            E: EntityTrait<Model=M>,
-            M: FromQueryResult + Sized + Send + Sync,
+    where
+        E: EntityTrait<Model = M>,
+        M: FromQueryResult + Sized + Send + Sync,
     {
         let condition = match Operator::from_i32(operator).unwrap_or(Operator::Unspecified) {
             Operator::Contains => {
@@ -472,9 +472,7 @@ impl PebbleQuery {
                     .must
                     .into_iter()
                     .map(|mut condition| {
-                        condition.field = condition.field.to_case(
-                            Case::Snake,
-                        );
+                        condition.field = condition.field.to_case(Case::Snake);
                         condition
                     })
                     .collect();
@@ -482,9 +480,7 @@ impl PebbleQuery {
                     .any
                     .into_iter()
                     .map(|mut condition| {
-                        condition.field = condition.field.to_case(
-                            Case::Snake,
-                        );
+                        condition.field = condition.field.to_case(Case::Snake);
                         condition
                     })
                     .collect();
@@ -494,9 +490,7 @@ impl PebbleQuery {
 
         if query.sort.is_some() {
             query.sort = query.sort.clone().map(|mut sort| {
-                sort.field = sort.field.to_case(
-                    Case::Snake,
-                );
+                sort.field = sort.field.to_case(Case::Snake);
                 sort
             });
         }

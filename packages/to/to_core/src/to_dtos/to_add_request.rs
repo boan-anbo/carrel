@@ -1,6 +1,7 @@
 use carrel_utils::datetime::get_iso_string::get_now_iso_string;
 use carrel_utils::uuid::new_v4;
 use std::collections::HashMap;
+use carrel_commons::carrel::common::tag::v2::Tag as CommonTagV2;
 
 use crate::error::{TextualObjectErrorMessage, ToErrors};
 use chrono::Utc;
@@ -8,10 +9,12 @@ use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use uuid::Uuid;
+use entity::entities::tag::Model;
 
 use crate::to::to_struct::TextualObject;
 use crate::to_card::to_card_convert_rule::ToCardConvertRule;
 use crate::to_card::to_card_struct::ToCard;
+use crate::to_tag::to_tag_struct::ToTag;
 use crate::to_ticket::to_ticket_utils::print_minimal_ticket;
 use crate::utils::get_random_test_database_dir::get_random_test_database_dir;
 use crate::utils::id_generator::generate_id;
@@ -141,6 +144,7 @@ impl ToAddManyRequest {
     }
 }
 
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ToAddRequest {
     // unique ID of the item in the source
@@ -159,6 +163,8 @@ pub struct ToAddRequest {
 
     // item
     pub json: String,
+
+    pub tags: Vec<CommonTagV2>,
 }
 
 // impl default
@@ -172,6 +178,7 @@ impl Default for ToAddRequest {
             json: String::new(),
             json_type: None,
             json_unique_id: None,
+            tags: vec![],
         }
     }
 }
@@ -200,7 +207,8 @@ impl ToAddRequest {
                     "test_array": [1, 2, 3],
                 }
             })
-            .to_string(),
+                .to_string(),
+            tags: vec![],
         }
     }
 }
@@ -210,10 +218,15 @@ impl From<ToAddRequest> for TextualObject {
     fn from(req: ToAddRequest) -> Self {
         let ticket_id = generate_id();
         // create a new textual object, ready to persist to the database
+
+        let totags: Vec<ToTag> = req.tags.into_iter().map(|common_tag_v2| ToTag::from(common_tag_v2)).collect();
+
+        let totags_count = totags.len() as i32;
+
         let mut to = TextualObject {
             id: 0,
 
-            uuid: Uuid::new_v4().to_string(),
+            uuid: Uuid::new_v4(),
 
             source_id: req.source_id.unwrap_or("".to_string()),
             source_id_type: req.source_id_type.unwrap_or("".to_string()),
@@ -239,6 +252,9 @@ impl From<ToAddRequest> for TextualObject {
             json_type: req.json_type,
             ticket_index_in_context: 0,
             json_unique_id: req.json_unique_id,
+
+            tags: totags, // this does not need TO to link the to, because the Common_tag should already have the parent_id etc. If it doesn't, TO will throw because it's receiving an invalid CommonTagV2 as a child tag of a TO.
+            tag_count: totags_count,
         };
         to.update_minimal_ticket()
     }
@@ -276,6 +292,7 @@ mod test {
             json_type: Some("json_type_value".to_string()),
             json_unique_id: Some("json_unique_id_value".to_string()),
             json: json_value.to_string(),
+            tags: vec![],
         };
         let textual_object = TextualObject::from(dto);
         assert_eq!(textual_object.source_id, "source_id_value");

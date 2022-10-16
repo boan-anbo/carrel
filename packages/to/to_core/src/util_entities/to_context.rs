@@ -243,7 +243,7 @@ mod test {
 
     #[test]
     fn should_handle_exception_1() {
-        let position = ToTicketPositionInfo {
+        let position: ToTicketPositionInfo = ToTicketPositionInfo {
             line: 0,
             column: 0,
             length: 8,
@@ -251,7 +251,7 @@ mod test {
             file_path: None,
         };
         let text = "[[id:1]]";
-        let opt = ToContextExtractOption {
+        let opt: ToContextExtractOption = ToContextExtractOption {
             chars_before: 500,
             chars_after: 500,
             whole_line: false,

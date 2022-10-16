@@ -1,5 +1,11 @@
+use std::path::PathBuf;
+
+use carrel_app_db::entity::generated::app_project;
+use carrel_commons::carrel::common::project::v2::Project as CommonProjectV2;
+use carrel_commons::carrel::core::project_manager::v1::ProjectInfo;
+use carrel_db::implementation::project_traits::CommonProjectTrait;
+
 use crate::app::app_manager::entity::implementation::AppProject;
-use crate::project::archivist::archivist::Archivist;
 use crate::project::config::const_config_file_name::CONFIG_DEFAULT_FILE_NAME;
 use crate::project::config::project_config::ProjectConfig;
 use crate::project::db_manager::carrel_db_manager::CarrelDbManagerTrait;
@@ -7,16 +13,8 @@ use crate::project::db_manager::project_db_manager::MangageProjects;
 use crate::project::error::project_config_error::ProjectConfigError;
 use crate::project::error::project_error::ProjectError;
 use crate::project::error::project_error::ProjectError::ProjectFolderDoesNotExit;
-use crate::project::file_manager::file_manager::ManageFileTrait;
 use crate::project::project_manager::{CarrelProjectManager, InstantiateFromConfig};
 use crate::project::to_manager::to_manager::KeepFireflies;
-use carrel_app_db::entity::generated::app_project;
-use carrel_commons::carrel::common::project::v2::Project as CommonProjectV2;
-use carrel_commons::carrel::core::project_manager::v1::ProjectInfo;
-use carrel_db::entities::prelude::Project;
-use carrel_db::implementation::project_traits::CommonProjectTrait;
-use sea_orm::IntoActiveModel;
-use std::path::PathBuf;
 
 /// Methods for managing a project that is already instantiated.
 ///
@@ -26,8 +24,8 @@ pub trait ManageProjectTrait {
     /// open a project from a directory,
     /// main entry for opening a project
     async fn load(path: &str) -> Result<Self, ProjectError>
-    where
-        Self: Sized;
+        where
+            Self: Sized;
     // check if there is a project config file under the directory
     fn is_dir_project(path: &str) -> bool;
 
@@ -36,7 +34,7 @@ pub trait ManageProjectTrait {
     /// If a config file does not exist, a new config file will be created
     fn get_config_file_path(dir: &str) -> Result<PathBuf, ProjectConfigError>;
     fn has_config_file(dir: &str) -> bool;
-    // update projet info in db.
+    // update project info in db.
     async fn update_project_info(&self) -> Result<CommonProjectV2, ProjectError>;
     /// Get the project info
     async fn get_project_info(&self, app_project: app_project::Model) -> ProjectInfo;
@@ -107,7 +105,7 @@ impl ManageProjectTrait for CarrelProjectManager {
                             Err(_) => {
                                 return Err(ProjectConfigError::ConfigWriteError(
                                     created_default_config_path.unwrap_err().to_string(),
-                                ))
+                                ));
                             }
                         }
                     }
@@ -164,7 +162,7 @@ impl ManageProjectTrait for CarrelProjectManager {
                 .to_str()
                 .unwrap()
                 .to_string(),
-            // get the db type from the config and conver it to i32
+            // get the db type from the config and convert it to i32
             db_type: self.config.carrel_db_type as i32,
             project: vec![app_project.into_common_project_v2()],
         }
@@ -178,13 +176,13 @@ impl ManageProjectTrait for CarrelProjectManager {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::project::config::const_config_file_name::{
         CONFIG_DEFAULT_CARREL_DB_NAME, CONFIG_DEFAULT_CARREL_TO_NAME,
     };
     use crate::test_utils::carrel_tester::CarrelTester;
     use crate::test_utils::project_tester::ProjectTester;
-    use carrel_commons::carrel::core::project_manager::v1::CarrelDbType;
+
+    use super::*;
 
     #[tokio::test]
     async fn test_load_simple_project() {

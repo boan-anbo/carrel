@@ -7,7 +7,7 @@ use std::ffi::OsStr;
 use std::io::{BufRead, BufReader};
 use std::path::PathBuf;
 
-#[derive(Deserialize, Serialize, Clone)]
+#[derive(Deserialize, Debug, Serialize, Clone)]
 pub struct ToSnippet {
     pub snippet: String,
     pub line_number: i32,

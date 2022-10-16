@@ -26,6 +26,30 @@ pub enum TextualObjects {
     CardMap,
     Context,
     TicketIndexInContext,
+    TagCount,
+}
+
+#[derive(Iden)]
+pub enum Tag {
+    Table,
+    Id,
+    Key,
+    Value,
+    Note,
+    RawTagString,
+    Uuid,
+    ToId,
+    ToUuid,
+}
+
+/// Learn more at https://docs.rs/sea-query#iden
+#[derive(Iden)]
+pub enum TagRelation {
+    Table,
+    Id,
+    SourceId,
+    TargetId,
+    RelationType,
 }
 
 #[async_trait::async_trait]
@@ -155,10 +179,85 @@ impl MigrationTrait for Migration {
                             .default("0")
                             .not_null(),
                     )
+                    .col(
+                        ColumnDef::new(TextualObjects::TagCount)
+                            .integer()
+                            .default("0")
+                            .not_null(),
+                    )
                     .to_owned(),
             )
             .await
             .unwrap();
+
+        let _ = manager
+            .create_table(
+                Table::create()
+                    .table(Tag::Table)
+                    .if_not_exists()
+                    .col(
+                        ColumnDef::new(Tag::Id)
+                            .integer()
+                            .not_null()
+                            .auto_increment()
+                            .primary_key(),
+                    )
+                    .col(ColumnDef::new(Tag::Key).string().not_null())
+                    .col(ColumnDef::new(Tag::Value).string().null())
+                    .col(ColumnDef::new(Tag::Note).string().null())
+                    .col(ColumnDef::new(Tag::RawTagString).string().not_null())
+                    .col(ColumnDef::new(Tag::Uuid).string().not_null().default("uuid_generate_v4()"))
+                    .col(ColumnDef::new(Tag::ToId).integer().not_null().default(0))
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("to_id")
+                            .from(Tag::Table, Tag::ToId)
+                            .to(TextualObjects::Table, TextualObjects::Id)
+                            .on_delete(ForeignKeyAction::Cascade)
+                            .on_update(ForeignKeyAction::Cascade),
+                    )
+                    .col(ColumnDef::new(Tag::ToUuid).string().not_null().default("uuid_generate_v4()"))
+
+                    .to_owned(),
+            )
+            .await;
+
+        let _ = manager
+            .create_table(
+                Table::create()
+                    .table(TagRelation::Table)
+                    .if_not_exists()
+                    .col(
+                        ColumnDef::new(TagRelation::Id)
+                            .integer()
+                            .not_null()
+                            .auto_increment()
+                            .primary_key(),
+                    )
+
+                    .col(ColumnDef::new(TagRelation::SourceId).string().not_null())
+                    .col(ColumnDef::new(TagRelation::TargetId).string().not_null())
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("source_id")
+                            .from(TagRelation::Table, TagRelation::SourceId)
+                            .to(Tag::Table, Tag::Id)
+                            .on_delete(ForeignKeyAction::Cascade)
+                            .on_update(ForeignKeyAction::Cascade),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .name("target_id")
+                            .from(TagRelation::Table, TagRelation::TargetId)
+                            .to(Tag::Table, Tag::Id)
+                            .on_delete(ForeignKeyAction::Cascade)
+                            .on_update(ForeignKeyAction::Cascade),
+                    )
+                    .col(ColumnDef::new(TagRelation::RelationType).integer().not_null().default(0))
+                    .to_owned(),
+            )
+            .await;
+
 
         seed_database(manager).await;
 
@@ -168,8 +267,16 @@ impl MigrationTrait for Migration {
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         // Replace the sample below with your own migration scripts
 
-        manager
+        let _ = manager
             .drop_table(Table::drop().table(TextualObjects::Table).to_owned())
+            .await;
+
+        let _ = manager
+            .drop_table(Table::drop().table(Tag::Table).to_owned())
+            .await;
+
+        manager
+            .drop_table(Table::drop().table(TagRelation::Table).to_owned())
             .await
     }
 }

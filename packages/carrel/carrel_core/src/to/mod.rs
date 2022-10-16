@@ -1,4 +1,3 @@
-use std::error::Error;
 use to_core::error::ToErrors;
 
 pub struct To {}

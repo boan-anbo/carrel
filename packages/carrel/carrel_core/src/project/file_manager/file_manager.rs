@@ -307,6 +307,7 @@ mod tests {
     use pebble_query::pebble_query_result::PebbleQueryResultUtilTrait;
     use sea_orm::ActiveValue::Set;
     use sea_orm::{ColumnTrait, IntoActiveModel};
+    use super::*;
 
     #[tokio::test]
     async fn test_archive_list_files() {
@@ -459,7 +460,7 @@ mod tests {
         let first_file_entry = query_first_file_entry_result.first().unwrap().clone();
         assert_eq!(first_file_entry.id, 1);
 
-        let query_first_metadata = query_first_file_entry_result.metadata;
+        let query_first_metadata: StandardQueryResultMetadata = query_first_file_entry_result.metadata;
         assert_eq!(query_first_metadata.result_count, 1);
         assert_eq!(query_first_metadata.total_result_count, 4);
 
@@ -480,8 +481,8 @@ mod tests {
         // assert id
         assert_eq!(last_file_entry.id, 4);
         let query_last_metadata = query_last_file_entiry_result.metadata;
-        assert_eq!(query_last_metadata.result_count, 1);
-        assert_eq!(query_last_metadata.total_result_count, 4);
+        assert_eq!(query_last_metadata.result_items, 1);
+        assert_eq!(query_last_metadata.result_total_items, 4);
     }
 
     #[tokio::test]

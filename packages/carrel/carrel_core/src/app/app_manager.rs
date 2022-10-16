@@ -4,7 +4,6 @@ use carrel_app_db::carrel_app_manager::{
 };
 use carrel_app_db::entity::generated::app_project;
 use carrel_commons::carrel::common::project::v2::Project;
-use std::error::Error;
 
 pub use carrel_app_db::*;
 

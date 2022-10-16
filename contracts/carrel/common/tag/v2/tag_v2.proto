@@ -13,4 +13,8 @@ message Tag {
     string uuid = 5;
     repeated string collection_uuids = 6;
     repeated string related_tag_uuids = 7;
+    // db id.
+    optional int32 id = 8;
+    // parent id: usually the uuid of the tag or other entities that this tag is a child of.
+    optional string parent_uuid = 9;
 }

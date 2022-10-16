@@ -9,6 +9,7 @@ use crate::to_dtos::to_scan_dto::{ToScanRequestDto, ToScanResultDto};
 use crate::to_machine::to_machine_struct::ToMachine;
 use crate::to_parser::parser::ToParser;
 use crate::to_parser::parser_option::ToParserOption;
+use crate::to_tag::to_tag_struct::ToTag;
 use crate::to_ticket::to_ticket_struct::ToTicket;
 
 #[async_trait]
@@ -54,6 +55,9 @@ impl ToMPubMethods for ToMachine {
         // iterate over tos IndexMap
         // interate over tos IndexMap asynchronously
         for to_to_add in add_tos_req.tos.iter() {
+            let tags = to_to_add.tags.clone();
+
+            let totags = tags.into_iter().map(|common_ctm| ToTag::from(common_ctm)).collect();
             // convert
             let mut to = TextualObject::from(to_to_add.clone());
 
@@ -66,7 +70,7 @@ impl ToMPubMethods for ToMachine {
             to.store_url = self.store_url.clone();
             to.source_id = String::from(&to_to_add.source_id.clone().unwrap_or("".to_string()));
             // insert to
-            self.add_textual_object(to.clone()).await;
+            self.add_textual_object(to.clone(), totags).await;
             receipt.tos_stored.insert(unique_ticket_id, to);
             receipt.total_tos_stored += 1;
         }
@@ -278,7 +282,7 @@ mod test {
         // random filename
         let random_filename = generate_id();
 
-        let db_path = join_dir_and_file_name(&test_database_dir, &random_filename).to_string();
+        let _db_path = join_dir_and_file_name(&test_database_dir, &random_filename).to_string();
         let find_request_dto = ToFindRequestDto {
             ticket_ids: vec![
                 to_1.ticket_id.clone(),
@@ -306,7 +310,7 @@ mod test {
         assert_eq!(result_missing.missing_tos_ids.len(), 3);
         // add one
         textual_object_machine
-            .add_textual_object(to_1.clone())
+            .add_textual_object(to_1.clone(), vec![])
             .await;
         // search again
         let result_found_one_wrapped = textual_object_machine
@@ -322,10 +326,10 @@ mod test {
         assert_eq!(first_found.ticket_id, to_1.ticket_id);
         // add three
         textual_object_machine
-            .add_textual_object(to_2.clone())
+            .add_textual_object(to_2.clone(), vec![])
             .await;
         textual_object_machine
-            .add_textual_object(to_3.clone())
+            .add_textual_object(to_3.clone(), vec![])
             .await;
         let first_found_to = result_found_one.found_tos.first().unwrap();
         assert_eq!(first_found_to.ticket_id, to_1.ticket_id);

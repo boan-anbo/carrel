@@ -75,9 +75,50 @@ impl<T: EntityTrait> PebbleQueryResultUtilTrait<T> for PebbleQueryResult<T> {
         };
         PebbleQueryResultGeneric { metadata, results }
     }
+
 }
 
 pub struct PebbleQueryResultGeneric<T> {
     pub metadata: StandardQueryResultMetadata,
     pub results: Vec<T>,
+}
+pub trait PebbleQueryResultGenericUtilTraits<O> {
+    fn first(&self) -> Option<&O>;
+
+    fn map_filter_result<TARGET>(
+        self,
+        result_filter_map: fn(O) -> Option<TARGET>,
+        filter_out_reason: Option<String>,
+    ) -> PebbleQueryResultGeneric<TARGET>;
+}
+
+impl<O> PebbleQueryResultGenericUtilTraits<O> for PebbleQueryResultGeneric<O> {
+    fn first(&self) -> Option<&O> {
+        self.results.first()
+    }
+
+    fn map_filter_result<TARGET>(
+        self,
+        result_filter_map: fn(O) -> Option<TARGET>,
+        filter_out_reason: Option<String>,
+    ) -> PebbleQueryResultGeneric<TARGET> {
+        let mut results: Vec<TARGET> = Vec::new();
+
+        let initial_result_count = self.results.len() as u64;
+        for filtered_result in self.results {
+            if let Some(mapped_result) = result_filter_map(filtered_result) {
+                results.push(mapped_result);
+            }
+        }
+        let filtered_result_count = results.len() as u64;
+        let filtered_out_count = initial_result_count.saturating_sub(filtered_result_count);
+        // update the results count in the metadata
+        let metadata = StandardQueryResultMetadata {
+            result_items: results.len() as i32,
+            filter_count: Some(filtered_out_count as i32),
+            filter_reason: filter_out_reason,
+            ..self.metadata
+        };
+        PebbleQueryResultGeneric { metadata, results }
+    }
 }

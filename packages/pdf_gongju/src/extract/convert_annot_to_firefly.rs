@@ -96,10 +96,12 @@ fn convert_to_tag_to_tag(to_tag: ToTag) -> Tag {
         key: to_tag.key,
         value: to_tag.value,
         note: to_tag.note,
-        raw_tag_string: to_tag.tag_string,
+        raw_tag_string: to_tag.raw_tag_string,
         uuid: new_v4().to_string(),
         collection_uuids: vec![],
         related_tag_uuids: vec![],
+        id: None, // the id is not set because here the ToTag is extracted from plain text for the consumer but not persisted in the database yet. This will be populated when later the firefly associated with it is persisted.
+        parent_uuid: None
     }
 }
 

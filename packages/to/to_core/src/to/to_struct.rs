@@ -4,8 +4,11 @@ use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use uuid::Uuid;
+use entity::entities::prelude::Tag;
+use entity::entities::tag;
 
 use crate::to_card::to_card_struct::ToCard;
+use crate::to_tag::to_tag_struct::ToTag;
 use crate::to_ticket::to_ticket_struct::ToTicket;
 use crate::to_ticket::to_ticket_utils::print_minimal_ticket;
 use crate::utils::id_generator::generate_id;
@@ -14,7 +17,7 @@ use crate::utils::id_generator::generate_id;
 pub struct TextualObject {
     /// numerical primary key
     pub id: i32,
-    pub uuid: String,
+    pub uuid: Uuid,
     /// ticket id
     pub ticket_id: String,
     /// unique identifier for the textual object in the original source, e.g. url for webpage, zotero citekey for zotero item, etc, doi for article, etc
@@ -53,6 +56,11 @@ pub struct TextualObject {
     pub context: String,
 
     pub ticket_index_in_context: i32,
+
+    pub tags: Vec<ToTag>,
+
+    pub tag_count: i32,
+
 }
 
 // implement default values for textual object
@@ -61,7 +69,7 @@ impl Default for TextualObject {
         let ticket_id = generate_id();
         TextualObject {
             id: 0,
-            uuid: Uuid::new_v4().to_string(),
+            uuid: Uuid::new_v4(),
             ticket_id: ticket_id.clone(),
             ticket_minimal: print_minimal_ticket(&ticket_id, None),
             source_id: String::new(),
@@ -79,6 +87,23 @@ impl Default for TextualObject {
             card_map: String::new(),
             context: "".to_string(),
             ticket_index_in_context: 0,
+            tags: vec![],
+            tag_count: 0
+        }
+    }
+
+}
+
+pub trait ToStructTrait {
+    fn get_json_value(&self) -> Option<Value>;
+}
+
+impl ToStructTrait for TextualObject {
+    fn get_json_value(&self) -> Option<Value> {
+        let json_value: Value = serde_json::from_str(&self.json).unwrap_or(Value::Null);
+        match json_value {
+            Value::Null => None, // if it's an empty json like `{}`, return None
+            _ => Some(json_value),
         }
     }
 }
@@ -89,7 +114,7 @@ impl TextualObject {
         let ticket_id = generate_id();
         TextualObject {
             id: 0,
-            uuid: uuid.to_string(),
+            uuid,
             ticket_id: ticket_id.clone(),
             ticket_minimal: print_minimal_ticket(&ticket_id, None),
             source_id: String::new(),
@@ -107,6 +132,8 @@ impl TextualObject {
             card_map: String::new(),
             context: "".to_string(),
             ticket_index_in_context: 0,
+            tags: vec![],
+            tag_count: 0
         }
     }
 }
@@ -185,7 +212,7 @@ mod test {
     #[test]
     fn get_sample_test() {
         let textual_object = super::TextualObject::get_sample();
-        assert_ne!(textual_object.uuid, Uuid::new_v4().to_string());
+        assert_ne!(textual_object.uuid, Uuid::new_v4());
     }
 
     // test textual_object to textual_object_ticket

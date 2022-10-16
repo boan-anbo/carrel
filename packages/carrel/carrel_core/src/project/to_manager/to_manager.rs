@@ -1,27 +1,24 @@
-use crate::project::project_manager::ToManagerOption;
-use crate::project::to_manager::error::ToManagerError;
-use crate::project::to_manager::firefly_const::TO_JSON_TYPE_FOR_FIREFLY_V2;
-use crate::project::to_manager::util_trait::{ToFirefliesUtils, ToFireflyUtils};
+use std::path::PathBuf;
+
 use async_trait::async_trait;
 use carrel_commons::carrel::common::firefly::v2::Firefly;
 use carrel_commons::generic::api::query::v1::StandardQuery;
-use pebble_query::pebble_query_result::{
-    PebbleQueryResult, PebbleQueryResultGeneric, PebbleQueryResultUtilTrait,
-};
+use pebble_query::pebble_query_result::{PebbleQueryResultGeneric, PebbleQueryResultGenericUtilTraits, PebbleQueryResultUtilTrait};
 use serde_json::json;
-use std::path::PathBuf;
-use to_core::entities::prelude::TextualObjects;
-use to_core::entities::textual_objects;
 use to_core::enums::store_type::StoreType;
 use to_core::implementation::util_func::ToUtilFunc;
-use to_core::to::to_struct::TextualObject;
-use to_core::to_db::to_orm::{QueryTo, ToOrm};
+use to_core::to_db::to_orm::{ToOrm, ToOrmTrait};
 use to_core::to_dtos::to_add_request::ToAddManyRequest;
 use to_core::to_dtos::to_add_request::ToAddRequest;
 use to_core::to_dtos::to_add_request::ToStoredReceipt;
 use to_core::to_machine::to_machine_option::ToMachineOption;
 use to_core::to_machine::to_machine_pub_op::ToMPubMethods;
 use to_core::to_machine::to_machine_struct::ToMachine;
+
+use crate::project::project_manager::ToManagerOption;
+use crate::project::to_manager::error::ToManagerError;
+use crate::project::to_manager::firefly_const::TO_JSON_TYPE_FOR_FIREFLY_V2;
+use crate::project::to_manager::util_trait::{ToFirefliesUtils, ToFireflyUtils};
 
 pub struct FireflyKepper {
     pub to_db_name: String,
@@ -152,6 +149,7 @@ impl KeepFireflies for FireflyKepper {
             json_type: Some(TO_JSON_TYPE_FOR_FIREFLY_V2.to_string()),
             json_unique_id: Some(firefly.modified_at.clone()),
             json: json!(firefly).to_string(),
+            tags: firefly.tags,
         }
     }
 
@@ -194,7 +192,7 @@ impl KeepFireflies for FireflyKepper {
             .map_err(ToManagerError::ToOrmError)
             .unwrap();
 
-        let fireflies_result = to_results.map_into_generic(
+        let fireflies_result = to_results.map_filter_result(
             |to| to.into_common_firefly_v2(),
             Some("whether the textual object is a firefly".to_string()),
         );
@@ -205,16 +203,18 @@ impl KeepFireflies for FireflyKepper {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::project::to_manager::util_trait::ToFireflyUtils;
-    use crate::test_utils::carrel_tester::CarrelTester;
-    use crate::test_utils::project_tester::ProjectTester;
     use carrel_utils::test::test_folders::get_test_fixture_module_folder_path_buf;
     use carrel_utils::uuid::new_v4;
     use pdf_gongju::extract::extractor::{PdfExtractor, PdfGongju};
     use pdf_gongju::extract::extractor_options::ExtractorOption;
-    use sea_orm::ActiveValue::Set;
     use sea_orm::{ActiveModelTrait, IntoActiveModel};
+    use sea_orm::ActiveValue::Set;
+
+    use crate::project::to_manager::util_trait::ToFireflyUtils;
+    use crate::test_utils::carrel_tester::CarrelTester;
+    use crate::test_utils::project_tester::ProjectTester;
+
+    use super::*;
 
     // test extract firefly from to pdf and store it in to db
     #[tokio::test]

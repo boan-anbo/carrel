@@ -23,10 +23,30 @@ impl From<ToTag> for TagV2 {
             key: tag.key,
             value: tag.value,
             note: tag.note,
-            raw_tag_string: tag.tag_string,
+            raw_tag_string: tag.raw_tag_string,
             uuid: Uuid::new_v4().to_string(),
             collection_uuids: vec![],
             related_tag_uuids: vec![],
+            id: tag.id,
+            parent_uuid: tag.to_uuid.map_or(None, |uuid| Some(uuid.to_string())),
+        }
+    }
+}
+
+pub struct ToTagConverter {}
+
+impl ToTagConverter {
+    pub fn to_tag_to_common_tag_v2(totag: ToTag) -> TagV2 {
+        TagV2 {
+            key: totag.key,
+            value: totag.value,
+            note: totag.note,
+            raw_tag_string: totag.raw_tag_string,
+            uuid: Uuid::new_v4().to_string(),
+            collection_uuids: vec![],
+            related_tag_uuids: vec![],
+            id: totag.id,
+            parent_uuid: totag.to_uuid.map_or(None, |uuid| Some(uuid.to_string())),
         }
     }
 }
@@ -59,10 +79,28 @@ impl From<ToSnippet> for Snippet {
     }
 }
 
+impl From<TagV2> for ToTag {
+    fn from(cmt_2: TagV2) -> Self {
+        ToTag {
+            key: cmt_2.key,
+            value: cmt_2.value,
+            note: cmt_2.note,
+            raw_tag_string: cmt_2.raw_tag_string,
+            snippet: None,
+            uuid: Uuid::parse_str(cmt_2.uuid.as_str()).expect("Failed to parse uuid for incoming common tag v2"),
+            id: cmt_2.id,
+            to_uuid: Some(Uuid::parse_str(cmt_2.uuid.as_str()).expect(
+                "Failed to parse uuid for incoming common tag v2's parent to_uuid"),
+            ),
+        }
+    }
+}
+
 #[cfg(test)]
 mod test {
     use crate::to_parser::parser::ToParser;
     use crate::to_parser::parser_option::ToParserOption;
+    use crate::util_entities::to_snippet::ToSnippet;
 
     #[test]
     fn tag_should_have_snippet_information_when_path_is_provided() {
@@ -72,9 +110,9 @@ mod test {
             md_with_one_tag_fixture.to_str().unwrap(),
             &ToParserOption::default(),
         )
-        .unwrap();
+            .unwrap();
         let first_tag = tags.tos.get(0).unwrap();
         assert_eq!(first_tag.snippet.is_some(), true);
-        let snippet = first_tag.snippet.as_ref();
+        let snippet: Option<&ToSnippet> = first_tag.snippet.as_ref();
     }
 }

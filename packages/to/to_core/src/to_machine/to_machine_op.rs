@@ -6,9 +6,10 @@ use entity::entities::textual_objects::Model;
 use uuid::Uuid;
 
 use crate::to::to_struct::TextualObject;
-use crate::to_db::to_orm::QueryTo;
-use crate::to_db::util_trait::IntoTextualObjectOption;
+use crate::to_db::to_orm::ToOrmTrait;
+use crate::to_db::util_trait::{ToOrmMapper, ToOrmMapperTrait};
 use crate::to_machine::to_machine_struct::ToMachine;
+use crate::to_tag::to_tag_struct::ToTag;
 use crate::utils::id_generator::generate_id;
 
 impl ToMachine {
@@ -20,17 +21,27 @@ impl ToMachine {
 
     // add from
 
-    pub async fn add_textual_object(&mut self, textual_object: TextualObject) -> TextualObject {
-        let added_to = self.to_orm.insert(textual_object).await.unwrap();
+    pub async fn add_textual_object(&mut self, textual_object: TextualObject, tags: Vec<ToTag>) -> TextualObject {
+        let added_to = self.to_orm.insert_to(textual_object, tags).await.unwrap();
         // update to_count
         self.update_to_count().await;
-        added_to
+
+        let inserted_to = self.to_orm.find_by_id(added_to).await.unwrap().expect("to cannot be created");
+
+        inserted_to
     }
 
     // find by ticket id
     pub async fn find_by_ticket_id(&mut self, ticket_id: &str) -> Option<TextualObject> {
-        let to = self.to_orm.find_by_ticket_id(ticket_id).await;
-        to.unwrap().into_textual_object()
+        let to = self.to_orm.find_by_ticket_id(ticket_id).await.unwrap();
+        if to.is_none() {
+            return None
+        }
+        let to = to.unwrap();
+        let tags = self.to_orm.get_tags_by_to(to.clone()).await;
+        let to_with_tags = ToOrmMapper::to_and_tag_model_to_to_and_tag(to, tags);
+        Some(to_with_tags)
+
     }
 
     // find all by ticket ids
@@ -82,12 +93,14 @@ mod test {
     use carrel_utils::test::test_folders::get_random_test_temp_folder_path_buf;
     use carrel_utils::uuid::new_v4;
     use std::path::PathBuf;
+    use uuid::Uuid;
 
     use crate::enums::store_type::StoreType;
     use crate::to::to_struct::TextualObject;
-    use crate::to_db::to_orm::QueryTo;
+    use crate::to_db::to_orm::ToOrmTrait;
     use crate::to_machine::to_machine_option::ToMachineOption;
     use crate::to_machine::to_machine_struct::ToMachine;
+    use crate::to_tag::to_tag_struct::ToTag;
     use crate::utils::get_random_test_database_dir::get_random_test_database_dir;
     use crate::utils::id_generator::generate_id;
 
@@ -133,8 +146,9 @@ mod test {
         assert_eq!(tom.store_type, StoreType::SQLITE);
         // create a new textual object
         let sample_to = TextualObject::get_sample();
+        let sample_tags = ToTag::get_random_totags(sample_to.uuid,  3);
         // add the textual object to the machine
-        let _id = tom.add_textual_object(sample_to).await;
+        let _id = tom.add_textual_object(sample_to, sample_tags).await;
         // check if the textual object is added
         assert_eq!(tom.to_count, current_to_count + 1);
     }
@@ -158,8 +172,9 @@ mod test {
         assert_eq!(tom.store_type, StoreType::SQLITE);
         // create a new textual object
         let sample_to = TextualObject::get_sample();
+        let sample_tags = ToTag::get_random_totags(sample_to.uuid,  3);
         // add the textual object to the machine
-        let _id = tom.add_textual_object(sample_to.clone()).await;
+        let _id = tom.add_textual_object(sample_to.clone(), sample_tags).await;
         // check if the textual object is added
         assert_eq!(tom.to_count, current_to_count + 1);
         // find the textual object by ticket id
@@ -248,9 +263,9 @@ mod test {
         let sample_to2 = TextualObject::get_sample();
         let sample_to3 = TextualObject::get_sample();
         // add the textual objects to the machine
-        let _id1 = tom.add_textual_object(sample_to1.clone()).await;
-        let _id2 = tom.add_textual_object(sample_to2.clone()).await;
-        let _id3 = tom.add_textual_object(sample_to3.clone()).await;
+        let _id1 = tom.add_textual_object(sample_to1.clone(), vec![]).await;
+        let _id2 = tom.add_textual_object(sample_to2.clone(), vec![]).await;
+        let _id3 = tom.add_textual_object(sample_to3.clone(), vec![]).await;
         // find all the textual objects by ticket ids
         let found_tos = tom
             .find_all(&vec![

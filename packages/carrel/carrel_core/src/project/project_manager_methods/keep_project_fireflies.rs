@@ -17,7 +17,6 @@ use pdf_gongju::extract::extractor::{PdfExtractor, PdfGongju};
 use pdf_gongju::extract::extractor_options::ExtractorOption;
 use sea_orm::ActiveValue::Set;
 use sea_orm::IntoActiveModel;
-use sea_orm::{ActiveModelTrait, ColumnTrait};
 use std::path::PathBuf;
 
 #[async_trait]
@@ -127,12 +126,10 @@ mod tests {
     use super::*;
     use crate::test_utils::carrel_tester::CarrelTester;
     use crate::test_utils::project_tester::ProjectTester;
-    use carrel_db::entities::file;
     use carrel_utils::test::test_folders::get_test_fixture_module_folder_path_buf;
     use carrel_utils::uuid::new_v4;
-    use sea_orm::sea_query::ColumnRef;
     use sea_orm::sea_query::SimpleExpr::Column;
-    use to_core::to_db::to_orm::QueryTo;
+    use to_core::to_db::to_orm::{ToOrm, ToOrmTrait};
 
     #[tokio::test]
     async fn test_sync_files() {
@@ -146,7 +143,7 @@ mod tests {
         // find by file name
         let file_no_result = pm
             .db
-            .file_filter_file(file::Column::FileName.eq("chn.pdf"))
+            .file_filter_file(Column::FileName.eq("chn.pdf"))
             .await
             .unwrap();
 
@@ -162,7 +159,7 @@ mod tests {
         // find by file name
         let file_result = pm
             .db
-            .file_filter_file(file::Column::FileName.eq("chn.pdf"))
+            .file_filter_file(Column::FileName.eq("chn.pdf"))
             .await
             .unwrap();
 
@@ -209,7 +206,7 @@ mod tests {
         // find by file name
         let file_result = pm
             .db
-            .file_filter_file(file::Column::FileName.eq("chn.pdf"))
+            .file_filter_file(Column::FileName.eq("chn.pdf"))
             .await
             .unwrap();
 
@@ -228,7 +225,7 @@ mod tests {
         // find by file name
         let file_result = pm
             .db
-            .file_filter_file(file::Column::FileName.eq("chn.pdf"))
+            .file_filter_file(Column::FileName.eq("chn.pdf"))
             .await
             .unwrap();
 
@@ -245,7 +242,7 @@ mod tests {
         // find by file name
         let find_result_after_update = pm
             .db
-            .file_filter_file(file::Column::FileName.eq("chn2.pdf"))
+            .file_filter_file(Column::FileName.eq("chn2.pdf"))
             .await
             .unwrap();
 
