@@ -301,7 +301,7 @@ mod tests {
     use crate::project::file_manager::file_manager::ManageFileTrait;
     use crate::test_utils::carrel_tester::CarrelTester;
     use crate::test_utils::project_tester::ProjectTester;
-    use carrel_commons::generic::api::query::v1::{SortCondition, SortDirection, StandardQuery};
+    use carrel_commons::generic::api::query::v1::{SortCondition, SortDirection, StandardQuery, StandardQueryResultMetadata};
     use carrel_db::entities::file;
     use carrel_utils::test::faker::Language;
     use pebble_query::pebble_query_result::PebbleQueryResultUtilTrait;
@@ -461,8 +461,8 @@ mod tests {
         assert_eq!(first_file_entry.id, 1);
 
         let query_first_metadata: StandardQueryResultMetadata = query_first_file_entry_result.metadata;
-        assert_eq!(query_first_metadata.result_count, 1);
-        assert_eq!(query_first_metadata.total_result_count, 4);
+        assert_eq!(query_first_metadata.result_items, 1);
+        assert_eq!(query_first_metadata.result_total_items, 4);
 
         let query_last_file_entiry_result = project_manager
             .db

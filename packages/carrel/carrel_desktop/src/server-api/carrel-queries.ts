@@ -6,7 +6,7 @@ import { File } from "../carrel_server_client/carrel/common/file/v1/file_v1_pb";
 import { Firefly } from "../carrel_server_client/carrel/common/firefly/v2/firefly_v2_pb";
 import { Project } from "../carrel_server_client/carrel/common/project/v2/project_v2_pb";
 import { TagGroup } from "../carrel_server_client/carrel/common/tag/v2/tag_v2_pb";
-import { ListAllTagGroupsResponse, QueryFilesResponse, QueryFirefliesResponse } from "../carrel_server_client/carrel/server/project_manager/v1/server_project_manager_v1_pb";
+import { ListAllTagGroupsResponse, ListFirefliesByTagResponse, QueryFilesResponse, QueryFirefliesResponse } from "../carrel_server_client/carrel/server/project_manager/v1/server_project_manager_v1_pb";
 import { StandardQuery } from "../carrel_server_client/generic/api/query/v1/query_v1_pb";
 import { carrelApi } from "./carrel-api";
 
@@ -208,7 +208,7 @@ export class ApiQuery {
 
             if (projectDirectory) {
 
-            this.log("ListAllTagGroups", "list_all_tag_groups", { projectDirectory })
+                this.log("ListAllTagGroups", "list_all_tag_groups", { projectDirectory })
                 let result = await carrelApi.listAllTagGroups(
                     {
                         projectDirectory
@@ -218,6 +218,30 @@ export class ApiQuery {
                 return result
             }
             return null;
+        }
+    )
+
+    QueryFirefliesByTags = (projectDirectory?: string, query?: StandardQuery, key?: string, value?: string) => useQuery(
+        ["fireflies_by_tags", query, key, value],
+
+        async (): Promise<ListFirefliesByTagResponse | null> => {
+
+            this.log("QueryFirefliesByTags", "fireflies_by_tags", { projectDirectory, query, key, value })
+
+            if (!projectDirectory || !query || !key) {
+                return null
+            }
+
+            let result = await carrelApi.listFirefliesByTag(
+                {
+                    query,
+                    projectDirectory,
+                    key,
+                    value
+                })
+
+            this.log("QueryFirefliesByTags", "fireflies_by_tags", result)
+            return result
         }
     )
 }

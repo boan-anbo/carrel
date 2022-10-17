@@ -1,7 +1,7 @@
 use carrel_commons::carrel::common::archive::v1::Archive;
 use carrel_commons::carrel::common::file::v1::File;
 use carrel_commons::carrel::server::project_manager::v1::project_manager_service_server::ProjectManagerService;
-use carrel_commons::carrel::server::project_manager::v1::{AddArchiveRequest, ListAllTagGroupsRequest, ListAllTagGroupsResponse};
+use carrel_commons::carrel::server::project_manager::v1::{AddArchiveRequest, ListAllTagGroupsRequest, ListAllTagGroupsResponse, ListFirefliesByTagRequest, ListFirefliesByTagResponse};
 use carrel_commons::carrel::server::project_manager::v1::AddArchiveResponse;
 use carrel_commons::carrel::server::project_manager::v1::AddFilesToArchiveRequest;
 use carrel_commons::carrel::server::project_manager::v1::AddFilesToArchiveResponse;
@@ -24,11 +24,10 @@ use carrel_core::carrel::carrel_core::{CarrelCore, CarrelCoreTrait};
 use carrel_core::carrel_db::implementation::archive_traits::ArchiveTrait;
 use carrel_core::project::archivist::archivist::Archivist;
 use carrel_core::project::file_manager::file_manager::ManageFileTrait;
+use carrel_core::project::fireflies_keeper::keep_project_fireflies::KeepProjectFireflies;
 use carrel_core::project::project_manager::CarrelProjectManager;
-use carrel_core::project::project_manager_methods::keep_project_fireflies::KeepProjectFireflies;
 use carrel_core::project::project_manager_methods::manage_project::ManageProjectTrait;
 use carrel_core::project::to_manager::to_manager::KeepFireflies;
-use carrel_core::project::to_manager::util_trait::ToFireflyUtils;
 use carrel_utils::fs::get_all_files_under_directory::get_all_file_paths_under_directory;
 
 use crate::errors::carrel_server_error::CarrelServerError::InvalidRequestPayload;
@@ -464,6 +463,29 @@ impl ProjectManagerService for ProjectService {
                 project_directory: req.project_directory,
                 tag_group_count: tag_groups.len() as i32,
                 tag_groups,
+            }
+        );
+        Ok(res)
+    }
+
+    async fn list_fireflies_by_tag(&self, request: Request<ListFirefliesByTagRequest>) -> Result<Response<ListFirefliesByTagResponse>, Status> {
+        let req = request.into_inner();
+        let project = CarrelProjectManager::load(
+            req.project_directory.as_str(),
+        )
+            .await
+            .unwrap();
+
+        let query = req.query.unwrap();
+        let key = req.key;
+        let value = req.value;
+
+        let fireflies = project.to.query_fireflies_by_tag_key_value(query, key, value).await.unwrap();
+        let res = Response::new(
+            ListFirefliesByTagResponse {
+                project_directory: req.project_directory,
+                response_metadata: Some(fireflies.metadata),
+                fireflies: fireflies.results,
             }
         );
         Ok(res)

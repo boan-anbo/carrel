@@ -29,6 +29,9 @@ export const Basic = Template.bind({});
 // Story args
 // Learn more: https://storybook.js.org/docs/react/writing-stories/args
 Basic.args = {
+  onSelectionsChange: (selections) => {
+    console.log(selections);
+  },
   config: new DataTreeConfigState(),
   isRoot: true,
   items: [

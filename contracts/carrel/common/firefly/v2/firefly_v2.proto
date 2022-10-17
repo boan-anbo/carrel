@@ -14,7 +14,7 @@ import "carrel/common/importance/v1/importance_v1.proto";
 package carrel.common.firefly.v2;
 
 message Firefly {
-    // Uuid of the source.
+    // uuid, the same as the TO uuid.
     string uuid = 1;
     string title = 2;
     // meta description

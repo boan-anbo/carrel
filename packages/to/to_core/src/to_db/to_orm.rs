@@ -37,7 +37,7 @@
 //! ```
 //!
 use async_trait::async_trait;
-use carrel_commons::generic::api::query::v1::StandardQuery;
+use carrel_commons::generic::api::query::v1::{FilterSet, Operator, StandardQuery};
 use entity::entities::{tag, textual_objects};
 use entity::entities::textual_objects::{ActiveModel, Column, Entity, Model};
 use pebble_query::errors::PebbleQueryError;
@@ -56,6 +56,7 @@ use sea_orm::error::DbErr;
 use sea_orm::sea_query::SimpleExpr;
 use uuid::Uuid;
 use carrel_commons::carrel::common::tag::v2::Tag as CommonTagV2;
+use carrel_commons::generic::api::query::v1::Condition as GenericCondition;
 use crate::to_tag::to_tag_key_group::KeyGroups;
 use crate::to_tag::to_tag_struct::ToTag;
 
@@ -260,6 +261,8 @@ pub trait ToOrmTrait {
         query: StandardQuery,
     ) -> Result<PebbleQueryResultGeneric<TextualObject>, ToOrmError>;
 
+    async fn query_tos_by_uuids(&self, mut query: StandardQuery, uuids: Vec<String>) -> Result<PebbleQueryResultGeneric<TextualObject>, ToOrmError>;
+
     async fn query_tags(
         &self,
         query: StandardQuery,
@@ -278,7 +281,7 @@ pub trait ToOrmTrait {
     async fn find_tags_by_key(&self, key: &str) -> Result<Vec<ToTag>, ToOrmError>;
 
     // get tags by key and value
-    async fn find_tags_by_key_and_value(&self, key: &str, value: &str) -> Result<Vec<ToTag>, ToOrmError>;
+    async fn find_tags_by_key_and_value(&self, key: String, value: String) -> Result<Vec<ToTag>, ToOrmError>;
 }
 
 #[async_trait]
@@ -501,6 +504,33 @@ impl ToOrmTrait for ToOrm {
         Ok(result_with_tags)
     }
 
+    async fn query_tos_by_uuids(&self, mut query: StandardQuery, uuids: Vec<String>) -> Result<PebbleQueryResultGeneric<TextualObject>, ToOrmError> {
+        let new_condition = GenericCondition {
+            field: "uuid".to_string(),
+            operator: Operator::In as i32,
+            value: None,
+            value_list: uuids,
+            value_to: None,
+        };
+
+        if query.filter.is_none() {
+            query.filter = Some(FilterSet {
+                must: vec![
+                    new_condition
+                ],
+                any: vec![],
+                global_filter: None,
+            })
+        } else {
+            let mut filter = query.filter.clone().unwrap();
+            filter.must.push(new_condition);
+            query.filter = Some(filter);
+        }
+
+        let results = self.query_tos(query).await?;
+        Ok(results)
+    }
+
     async fn query_tags(&self, query: StandardQuery) -> Result<PebbleQueryResultGeneric<ToTag>, ToOrmError> {
         let db = self.get_connection().await?;
         let result = PebbleQueryTextualObject::query_tags(&db, query).await?;
@@ -564,7 +594,7 @@ impl ToOrmTrait for ToOrm {
         Ok(tags)
     }
 
-     async fn find_tags_by_key_and_value(&self, key: &str, value: &str) -> Result<Vec<ToTag>, ToOrmError> {
+    async fn find_tags_by_key_and_value(&self, key: String, value: String) -> Result<Vec<ToTag>, ToOrmError> {
         let db = self.get_connection().await?;
         let tags = Tag::find()
             .filter(tag::Column::Key.eq(key))
@@ -701,13 +731,12 @@ mod tests {
         assert_eq!(third_tag_group.key, "tag_key_2");
         assert_eq!(third_tag_group.value, "tag_value_2");
         assert_eq!(third_tag_group.key_count, 1);
-
     }
 
     #[tokio::test]
     async fn find_tag_by_and_and_value() {
         let to_orm = get_to_orm_dev_db();
-        let tags_by_key_and_value = to_orm.find_tags_by_key_and_value("tag_key_1", "tag_value_1").await.unwrap();
+        let tags_by_key_and_value = to_orm.find_tags_by_key_and_value("tag_key_1".to_string(), "tag_value_1".to_string()).await.unwrap();
         assert_eq!(tags_by_key_and_value.len(), 1);
         let first_tag = tags_by_key_and_value.get(0).unwrap();
         assert_eq!(first_tag.key, "tag_key_1".to_owned());
@@ -721,6 +750,5 @@ mod tests {
         let second_tag = tags_by_key.get(1).unwrap();
         assert_eq!(second_tag.key, "tag_key_1");
         assert_eq!(second_tag.value, Some("tag_value_3".to_owned()));
-
     }
 }

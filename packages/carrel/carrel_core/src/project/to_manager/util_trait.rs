@@ -52,7 +52,13 @@ impl ToFireflyUtils for TextualObject {
                     return None
                 }
 
+
+
                 let mut firefly = firefly.unwrap();
+
+                firefly.uuid = self.uuid.to_string();
+
+
 
                 firefly.tags = tags;
 

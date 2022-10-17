@@ -369,12 +369,14 @@ message ListAllTagGroupsResponse {
 message ListFirefliesByTagRequest {
   // the folder of the project
   string project_directory = 1;
+
+  generic.api.query.v1.StandardQuery query = 2;
   // the tag key
-  string key = 2;
+  string key = 3;
   // the tag value
-  optional string value = 3;
+  optional string value = 4;
   // the tag note
-  optional string note = 4;
+  optional string note = 5;
 }
 
 // list tags by tag key and value

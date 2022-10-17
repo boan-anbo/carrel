@@ -1,5 +1,6 @@
 use sea_orm::FromQueryResult;
 use carrel_commons::carrel::common::tag::v2::TagGroup as CommonTagGroup;
+use carrel_utils::uuid::new_v4;
 
 #[derive(Debug, FromQueryResult)]
 pub struct KeyGroups {
@@ -14,6 +15,7 @@ impl KeyGroups {
             key: self.key,
             value: self.value,
             key_count: self.key_count,
+            uuid: Some(new_v4().to_string()),
         }
     }
 }

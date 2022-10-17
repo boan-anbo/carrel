@@ -75,9 +75,9 @@ impl ToOrmMapperTrait for ToOrmMapper {
     fn to_tag_into_active_model(tag: ToTag, to_id: i32) -> tag::ActiveModel {
         tag::ActiveModel {
             id: Default::default(),
-            key: Set(tag.key),
-            value: Set(tag.value),
-            note: Set(tag.note),
+            key: Set(tag.key.to_lowercase()),
+            value: Set(tag.value.map(|v| v.to_lowercase())),
+            note: Set(tag.note.map(|n| n.to_lowercase())),
             raw_tag_string: Set(tag.raw_tag_string),
             uuid: Set(tag.uuid.to_string()),
             to_id: Set(to_id),
@@ -122,6 +122,7 @@ impl ToOrmMapper {
             source_path: to_model.source_path,
             store_info: to_model.store_info,
             store_url: to_model.store_url,
+
             created: to_model.created,
             updated: to_model.updated,
             json: to_model.json,

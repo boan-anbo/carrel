@@ -1,22 +1,54 @@
-import React from 'react';
-import { StandardQuery } from '../../../../../carrel_server_client/generic/api/query/v1/query_v1_pb';
-import { carrelQueries } from '../../../../../server-api/carrel-queries';
-import { FireflyDataTable } from '../../../firefly-keeper/views/components';
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { StandardQuery } from "../../../../../carrel_server_client/generic/api/query/v1/query_v1_pb";
+import { carrelQueries } from "../../../../../server-api/carrel-queries";
+import { RootState } from "../../../../../store/store";
+import { FireflyDataTable } from "../../../firefly-keeper/views/components";
 
-import styles from './TagFireflies.module.scss';
+import styles from "./TagFireflies.module.scss";
 
 export interface TagFirefliesProps {
-  tagKey: string;
+  tagKey?: string;
   tagValue?: string;
+  projectDirectory?: string;
 }
 
+export function TagFireflies({
+  tagKey,
+  tagValue,
+  projectDirectory,
+}: TagFirefliesProps) {
+  const [query, setQuery] = React.useState<StandardQuery>();
 
+  useEffect(() => {
+    console.log("tags changed", tagKey, tagValue);
+    loadInitialData();
+  }, [tagKey, tagValue, projectDirectory]);
 
-export function TagFireflies({tagKey, tagValue}: TagFirefliesProps) {
+  const loadInitialData = () => {
+    const standardQuery = new StandardQuery();
+    standardQuery.length = 20;
+    console.log("loading initial data");
+    setQuery(standardQuery);
+  };
 
-  const {data} = carrelQueries
+  const workingProject = useSelector(
+    (state: RootState) => state.workingProject.workingProject
+  );
 
-  return <FireflyDataTable projectDirectory={''} fireflies={[]} totalPages={0} onQueryChange={function (query: StandardQuery): void {
-    throw new Error('Function not implemented.');
-  } }/>;
+  const { data } = carrelQueries.QueryFirefliesByTags(
+    projectDirectory || workingProject?.directory,
+    query,
+    tagKey,
+    tagValue
+  );
+
+  return (
+    <FireflyDataTable
+      projectDirectory={projectDirectory || workingProject?.directory}
+      fireflies={data?.fireflies}
+      totalPages={data?.responseMetadata?.resultTotalPages}
+      onQueryChange={setQuery}
+    />
+  );
 }

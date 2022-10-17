@@ -57,7 +57,7 @@ impl ToMPubMethods for ToMachine {
         for to_to_add in add_tos_req.tos.iter() {
             let tags = to_to_add.tags.clone();
 
-            let totags = tags.into_iter().map(|common_ctm| ToTag::from(common_ctm)).collect();
+            let totags = tags.into_iter().map(ToTag::from).collect();
             // convert
             let mut to = TextualObject::from(to_to_add.clone());
 

@@ -82,9 +82,9 @@ impl From<ToSnippet> for Snippet {
 impl From<TagV2> for ToTag {
     fn from(cmt_2: TagV2) -> Self {
         ToTag {
-            key: cmt_2.key,
-            value: cmt_2.value,
-            note: cmt_2.note,
+            key: cmt_2.key.to_lowercase(),
+            value: cmt_2.value.map(|v| v.to_lowercase()),
+            note: cmt_2.note.map(|n| n.to_lowercase()),
             raw_tag_string: cmt_2.raw_tag_string,
             snippet: None,
             uuid: Uuid::parse_str(cmt_2.uuid.as_str()).expect("Failed to parse uuid for incoming common tag v2"),

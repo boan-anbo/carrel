@@ -52,9 +52,7 @@ pub trait KeepFireflies {
         query: StandardQuery,
     ) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError>;
 
-    async fn query_fireflies_by_tag_key_value(&self, query: StandardQuery, key: &str, value: Option<&str>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError>;
-
-    async fn query_tos_by_uuids(&self, query: StandardQuery, uuids: Vec<String>) -> Result<PebbleQueryResultGeneric<TextualObject>, ToManagerError>;
+    async fn query_fireflies_by_tag_key_value(&self, query: StandardQuery, key: String, value: Option<String>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError>;
 
 
     async fn list_all_tag_groups(&self) -> Vec<CommonTagGroup>;
@@ -208,17 +206,17 @@ impl KeepFireflies for FireflyKepper {
         Ok(fireflies_result)
     }
 
-    async fn query_fireflies_by_tag_key_value(&self, query: StandardQuery, key: &str, value: Option<&str>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError> {
+    async fn query_fireflies_by_tag_key_value(&self, query: StandardQuery, key: String, value: Option<String>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError> {
         let to = self.get_to_orm().await;
 
         let tags = match value {
             Some(value) => to.find_tags_by_key_and_value(key, value).await.unwrap(),
-            None => to.find_tags_by_key(key).await.unwrap()
+            None => to.find_tags_by_key(key.as_str()).await.unwrap()
         };
 
-        let to_ids: Vec<String> = tags.into_iter().filter(|t| t.to_uuid.is_some()  ).map(|tag| tag.to_uuid.unwrap().to_string()).collect();
+        let to_ids: Vec<String> = tags.into_iter().filter(|t| t.to_uuid.is_some()).map(|tag| tag.to_uuid.unwrap().to_string()).collect();
 
-        let to_results = self.query_tos_by_uuids(query, to_ids).await.unwrap();
+        let to_results = to.query_tos_by_uuids(query, to_ids).await.unwrap();
 
         let fireflies_result = to_results.map_filter_result(
             |to| to.into_common_firefly_v2(),
@@ -227,34 +225,6 @@ impl KeepFireflies for FireflyKepper {
         Ok(fireflies_result)
     }
 
-    async fn query_tos_by_uuids(&self, mut query: StandardQuery, uuids: Vec<String>) -> Result<PebbleQueryResultGeneric<TextualObject>, ToManagerError> {
-        let to = self.get_to_orm().await;
-
-        let new_condition = Condition {
-            field: "to_uuid".to_string(),
-            operator: Operator::In as i32,
-            value: None,
-            value_list: uuids,
-            value_to: None,
-        };
-
-        if query.filter.is_none() {
-            query.filter = Some(FilterSet {
-                must: vec![
-                    new_condition
-                ],
-                any: vec![],
-                global_filter: None,
-            })
-        } else {
-            let mut filter = query.filter.clone().unwrap();
-            filter.must.push(new_condition);
-            query.filter = Some(filter);
-        }
-        to.query_tos(query)
-            .await
-            .map_err(ToManagerError::ToOrmError)
-    }
 
     async fn list_all_tag_groups(&self) -> Vec<CommonTagGroup> {
         let to_orm = self.get_to_orm().await;
@@ -264,7 +234,6 @@ impl KeepFireflies for FireflyKepper {
             .await
             .map_err(ToManagerError::ToOrmError)
             .unwrap();
-
 
         tag_groups.into_iter().map(|tag_group| tag_group.into_common_key_group()).collect()
     }
@@ -477,15 +446,37 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_query_to_by_uuids() {
+    async fn test_query_fireflies_by_tag() {
         let pm = CarrelTester::get_project_manager_with_seeded_db().await;
         let to_orm = pm.to.get_to_orm().await;
-        let tos = to_orm.find_all().await.unwrap();
-        let tos_uuids = tos
-            .into_iter()
-            .map(|to| to.uuid)
-            .collect::<Vec<String>>();
-        let tos = pm.to.query_to_by_uuids(tos_uuids).await.unwrap();
-        assert_eq!(tos.len(), 3);
+
+        let result = to_orm.find_tags_by_key_and_value("tag_key_1".to_string(), "tag_value_1".to_string()).await.unwrap();
+        let to_uuid = result[0].to_uuid.clone().unwrap().to_string();
+        assert_eq!(result.len(), 1);
+
+        let default_query = StandardQuery {
+            sort: None,
+            offset: 0,
+            length: 10,
+            page: 0,
+            filter: None,
+            find_one: false,
+        };
+
+        let to_by_tag_key = pm.to.query_fireflies_by_tag_key_value(default_query, "tag_key_1".to_string(), Some("tag_value_1".to_string())).await.unwrap();
+
+        assert_eq!(to_by_tag_key.results.len(), 1);
+
+        // to should have the same uuid
+        let firstfly = to_by_tag_key.results[0].clone();
+
+        assert_eq!(firstfly.uuid, to_uuid);
+
+        // check if the first fly has the tag
+        assert_eq!(firstfly.tags.len(), 2);
+
+        let first_tag = firstfly.tags[0].clone();
+
+        assert_eq!(first_tag.key, "tag_key_1");
     }
 }

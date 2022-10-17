@@ -9,19 +9,24 @@ import {
   DataTreeConfigState,
   EDataTreeNodeType,
   IDataTreeCollection,
+  IDataTreeNode,
 } from "./i-data-tree-node";
 
 export interface DataTreeProps<T> {
   items: IDataTreeCollection<T>[];
   config: DataTreeConfigState<T>;
   fontSize?: TCarrelSize;
-  isRoot?: boolean;
+  isRoot?: boolean; // this needs to be set to true if this is the root of the tree
+  onSelectionsChange: (selections: IDataTreeNode<T>[]) => void;
 }
 
 export function DataTree({
   items: root = [],
   config,
   fontSize,
+
+  isRoot, 
+  onSelectionsChange,
   ...props
 }: DataTreeProps<any>) {
   if (!config) {
@@ -37,7 +42,13 @@ export function DataTree({
       .filter((i) => i.type === EDataTreeNodeType.COLLECTION)
       .map((item, index) => {
         return (
-          <DataTreeCollectionItem key={index} config={config} item={item} />
+          <DataTreeCollectionItem
+            collectionIndentOverride={isRoot ? 0 : config.collectionIndent}
+            onSelectionsChange={onSelectionsChange}
+            key={index}
+            config={config}
+            item={item}
+          />
         );
       });
   }, [root]);
@@ -46,14 +57,26 @@ export function DataTree({
     return orderedItems
       .filter((i) => i.type === EDataTreeNodeType.ITEM)
       .map((item, index) => {
-        return <DataTreeItem  key={index} config={config} item={item} />;
+        return (
+          <DataTreeItem
+            itemIndentOverride={isRoot ? 10 : config.itemIndent}
+            onSelectionsChange={onSelectionsChange}
+            key={index}
+            config={config}
+            item={item}
+          />
+        );
       });
   }, [root]);
 
   return (
-    <Container fontSize={fontSize} maxW="full" px="0">
-        <VStack pt='1' w="full">{rootCollectionNodes}</VStack>
-        <VStack py={props.isRoot ? '3' : '1'} w="full">{rootItemNodes}</VStack>
+    <Container w='full' fontSize={fontSize} maxW="full" px="0">
+      <VStack pt="1" w="full">
+        {rootCollectionNodes}
+      </VStack>
+      <VStack  py={isRoot ? "3" : "1"} w="full">
+        {rootItemNodes}
+      </VStack>
     </Container>
   );
 }

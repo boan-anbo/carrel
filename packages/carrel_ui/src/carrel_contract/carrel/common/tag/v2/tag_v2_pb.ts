@@ -116,6 +116,11 @@ export class TagGroup extends Message<TagGroup> {
    */
   keyCount = 0;
 
+  /**
+   * @generated from field: optional string uuid = 4;
+   */
+  uuid?: string;
+
   constructor(data?: PartialMessage<TagGroup>) {
     super();
     proto3.util.initPartial(data, this);
@@ -127,6 +132,7 @@ export class TagGroup extends Message<TagGroup> {
     { no: 1, name: "key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 3, name: "key_count", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 4, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TagGroup {

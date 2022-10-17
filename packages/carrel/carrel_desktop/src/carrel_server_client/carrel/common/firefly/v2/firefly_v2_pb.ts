@@ -18,7 +18,7 @@ import {Tag} from "../../tag/v2/tag_v2_pb.js";
  */
 export class Firefly extends Message<Firefly> {
   /**
-   * Uuid of the source.
+   * uuid, the same as the TO uuid.
    *
    * @generated from field: string uuid = 1;
    */

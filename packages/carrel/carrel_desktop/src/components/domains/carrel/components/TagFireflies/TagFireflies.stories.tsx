@@ -3,6 +3,7 @@ import type {Meta, StoryFn} from '@storybook/react';
 
 import type {TagFirefliesProps} from './TagFireflies';
 import {TagFireflies} from './TagFireflies';
+import { mockProjectDirectory } from '../../../../../tests/mock-vars';
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
@@ -29,4 +30,8 @@ export const Basic = Template.bind({});
 
 // Story args
 // Learn more: https://storybook.js.org/docs/react/writing-stories/args
-Basic.args = {};
+Basic.args = {
+    projectDirectory: mockProjectDirectory,
+    tagKey: 'tag_key_1',
+    tagValue: undefined,
+};

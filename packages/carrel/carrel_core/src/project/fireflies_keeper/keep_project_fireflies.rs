@@ -181,8 +181,8 @@ mod tests {
         let count_no_result = to_no_result.to_orm.count_tos().await.unwrap();
         assert_eq!(count_no_result, 0);
 
+        // should have synced the chn.pdf file
         let synced_files = pm.sync_file_fireflies(file_result).await.unwrap();
-
         assert_eq!(synced_files.len(), 1);
 
         let count_one_result = to_no_result.to_orm.count_tos().await.unwrap();
@@ -190,6 +190,24 @@ mod tests {
 
         let first_synced_file = synced_files.first().unwrap();
         assert_eq!(first_synced_file.synced_at.is_some(), true);
+
+        // list all synced fireflies
+        let list_all_firelies = pm.to.list_all_fireflies().await;
+        assert_eq!(list_all_firelies.len(), 3);
+
+        // first firefly
+        let first_firefly = list_all_firelies.first().unwrap();
+        // comment should include Page 0
+        assert!(first_firefly.comment.contains("Highlight Text"));
+
+        // first firefly should have a tag
+        assert_eq!(first_firefly.tags.len(), 1);
+
+        // assert first tag is importance
+        let first_tag = first_firefly.tags.first().unwrap();
+        assert_eq!(first_tag.key, "highlight");
+        assert_eq!(first_tag.value.clone().unwrap(), "argument");
+
     }
 
     #[tokio::test]

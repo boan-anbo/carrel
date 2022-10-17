@@ -127,38 +127,45 @@ export class DataTreeConfigState<T> {
     itemIcon?: ReactNode | undefined = undefined;
     collectionIndent?: number | undefined = 5;
     itemIndent?: number | undefined = 16;
-    onSelectionsChange?: ((selections: string[]) => void) | undefined = undefined;
 
     selectionMode?: "single" | "multiple" | undefined = "single";
-    selectedKeys: string [] = [];
-    select = (key: string) => {
+    selectedItems: IDataTreeNode<T>[] = [];
+    select = (item: IDataTreeNode<T>) => {
         if (this.selectionMode === "single") {
-            this.selectedKeys = [key];
+            this.selectedItems = [item];
         } else {
-            if (!this.selectedKeys.includes(key)) {
-                this.selectedKeys = [...this.selectedKeys, key];
-            }
+            this.selectedItems = [...this.selectedItems, item];
         }
-        this.onSelectionsChange?.(this.selectedKeys);
     }
-    deselect = (key: string) => {
-        this.selectedKeys = this.selectedKeys.filter(k => k !== key);
-        this.onSelectionsChange?.(this.selectedKeys);
+
+    deselect = (item: IDataTreeNode<T>) => {
+        if (this.selectionMode === "single") {
+            this.selectedItems = [];
+        } else {
+            this.selectedItems = this.selectedItems.filter((i) => i.key !== item.key);
+        }
     }
-    isSelected = (key: string) => {
-        return this.selectedKeys.includes(key);
+
+    isSelected = (item: IDataTreeNode<T>) => {
+        return this.selectedItems.some((i) => i.key === item.key);
     }
+
     clearSelection = () => {
-        this.selectedKeys = [];
-        this.onSelectionsChange?.(this.selectedKeys);
+        this.selectedItems = [];
     }
-    toggleSelection = (key: string) => {
-        if (this.isSelected(key)) {
-            this.deselect(key);
+    toggleSelection = (item: IDataTreeNode<T>) => {
+        if (this.isSelected(item)) {
+            this.deselect(item);
         } else {
-            this.select(key);
+            this.select(item);
         }
     }
+
+    // partial constructor
+    constructor(data?: Partial<DataTreeConfigState<T>>) {
+        Object.assign(this, data);
+    }
+
 
 }
 

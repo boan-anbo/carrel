@@ -1,9 +1,10 @@
 import { Badge, Container } from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import React, { MouseEventHandler, useMemo } from "react";
 import {
   DataTreeCollection,
   DataTreeConfigState,
   IDataTreeItem,
+  IDataTreeNode,
 } from "../../i-data-tree-node";
 
 import styles from "./DataTreeItem.module.scss";
@@ -11,12 +12,24 @@ import styles from "./DataTreeItem.module.scss";
 export interface DataTreeItemProps<T> {
   item: IDataTreeItem<T>;
   config: DataTreeConfigState<T>;
+  itemIndentOverride?: number;
+  onSelectionsChange: (selections: IDataTreeNode<T>[]) => void;
 }
 
-export function DataTreeItem({ item, config }: DataTreeItemProps<any>) {
+export function DataTreeItem({
+  item,
+  config,
+  onSelectionsChange,
+  itemIndentOverride,
+}: DataTreeItemProps<any>) {
   const isSelected = useMemo(() => {
-    return config.isSelected(item.key);
-  }, [config.selectedKeys]);
+    return config.isSelected(item);
+  }, [config.selectedItems]);
+
+  const onClickItem = (e: MouseEvent<Element, MouseEvent>) => {
+    config.select(item);
+    onSelectionsChange(config.selectedItems);
+  };
 
   return (
     <Container
@@ -27,16 +40,9 @@ export function DataTreeItem({ item, config }: DataTreeItemProps<any>) {
         background: "primaryBgHover",
       }}
       bg={isSelected ? "primaryBg" : "transparent"}
-      onClick={(e) => {
-        console.log(config.selectedKeys)
-        if (item?.onSingleClick) {
-          item?.onSingleClick(e, item.key, item.data);
-        }
-        config.toggleSelection(item?.key);
-        // e.stopPropagation();
-      }}
+      onClick={onClickItem}
       maxW="full"
-      pl={config.itemIndent}
+      pl={itemIndentOverride ?? config.itemIndent}
       pr="0"
     >
       <Badge colorScheme="orange">{item?.label}</Badge>

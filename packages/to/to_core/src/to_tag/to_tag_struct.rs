@@ -29,7 +29,7 @@ impl From<ToTicket> for ToTag {
         let values: IndexMap<String, String> = to_ticket.values;
         let mut key = String::new();
         if !values.is_empty() {
-            key = values.keys().next().unwrap().to_string();
+            key = values.keys().next().unwrap().to_string().to_lowercase();
         }
         let mut value: Option<String> = None;
         if values.len() >= 2 {
@@ -51,14 +51,15 @@ impl From<ToTicket> for ToTag {
         // use string builder
         let mut tag_string = String::new();
         tag_string.push_str(&to_ticket.to_marker.left_marker);
-        tag_string.push_str(key.as_str());
+        tag_string.push_str(key.to_lowercase().as_str());
+        // lower
         if value.as_ref().is_some() {
             tag_string.push('|');
-            tag_string.push_str(value.as_ref().unwrap().as_str());
+            tag_string.push_str(value.as_ref().unwrap().to_lowercase().as_str());
         }
         if note.as_ref().is_some() {
             tag_string.push('|');
-            tag_string.push_str(note.as_ref().unwrap().as_str());
+            tag_string.push_str(note.as_ref().unwrap().to_lowercase().as_str());
         }
         tag_string.push_str(&to_ticket.to_marker.right_marker);
 

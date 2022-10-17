@@ -164,6 +164,8 @@ impl ManageProjectTrait for CarrelProjectManager {
                 .to_string(),
             // get the db type from the config and convert it to i32
             db_type: self.config.carrel_db_type as i32,
+            archive_count: ,
+            file_count: 0,
             project: vec![app_project.into_common_project_v2()],
         }
     }

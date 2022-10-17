@@ -13,17 +13,23 @@ import { DataTree } from "../../DataTree";
 import {
   DataTreeConfigState,
   IDataTreeCollection,
+  IDataTreeNode,
 } from "../../i-data-tree-node";
 import { DataTreeItem } from "../DataTreeItem";
 
 export interface DataTreeCollectionItemProps<T> {
   item: IDataTreeCollection<T>;
   config: DataTreeConfigState<T>;
+
+  collectionIndentOverride?: number;
+  onSelectionsChange: (selections: IDataTreeNode<T>[]) => void;
 }
 
 export function DataTreeCollectionItem({
   item,
   config,
+  collectionIndentOverride: collectionIndent,
+  onSelectionsChange,
 }: DataTreeCollectionItemProps<any>) {
   if (!item) {
     return null;
@@ -36,22 +42,29 @@ export function DataTreeCollectionItem({
   const [isOpen, setIsOpen] = useState(item.isOpen ?? false);
 
   const isSelected = useMemo(() => {
-    return config.isSelected(item.key);
-  }, [config.selectedKeys]);
+    return config.isSelected(item);
+  }, [config.selectedItems]);
 
   const canOpen = useMemo(() => {
-    return item.subItemIds.length > 0 || item.subCollections.length > 0;
+    return item.subItems.length > 0 || item.subCollections.length > 0;
   }, [item]);
 
   const sortedSubItems = useMemo(() => {
     return item?.subItems.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-  }, [item.subItems, config.selectedKeys]);
+  }, [item.subItems, config.selectedItems]);
 
   const itemNodes = useMemo(() => {
     return sortedSubItems.map((item, index) => {
-      return <DataTreeItem key={index} config={config} item={item} />;
+      return (
+        <DataTreeItem
+          onSelectionsChange={onSelectionsChange}
+          key={index}
+          config={config}
+          item={item}
+        />
+      );
     });
-  }, [sortedSubItems, config.selectedKeys]);
+  }, [sortedSubItems, config.selectedItems]);
 
   const icon = useMemo(() => {
     return isOpen ? <ChevronDownIcon /> : <ChevronRightIcon />;
@@ -59,12 +72,13 @@ export function DataTreeCollectionItem({
 
   const toggleOpenCollection = () => {
     setIsOpen(!isOpen);
-    config.toggleSelection(item.key);
+    config.select(item);
+    onSelectionsChange(config.selectedItems);
   };
 
   return (
     <Container
-      pl={config.collectionIndent}
+      pl={collectionIndent ?? config.collectionIndent}
       pr="0"
       w="full"
       maxW="full"
@@ -92,7 +106,11 @@ export function DataTreeCollectionItem({
       {isOpen && canOpen && (
         <VStack spacing="0" w="full" align="start">
           <HStack w="full">
-            <DataTree config={config} items={item?.subCollections} />
+            <DataTree
+              onSelectionsChange={onSelectionsChange}
+              config={config}
+              items={item?.subCollections}
+            />
           </HStack>
           <VStack spacing="2" w="full">
             {itemNodes}

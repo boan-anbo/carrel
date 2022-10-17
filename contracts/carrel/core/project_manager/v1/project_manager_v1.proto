@@ -71,6 +71,10 @@ message ProjectInfo {
   string to_name = 7;
   // Carrel db type
   CarrelDbType db_type = 8;
+  // archive count
+  int32 archive_count = 9;
+  // file count
+  int32 file_count = 10;
 
   repeated carrel.common.project.v2.Project project = 12;
 }

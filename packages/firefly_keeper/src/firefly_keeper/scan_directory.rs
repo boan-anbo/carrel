@@ -59,8 +59,6 @@ static LAST_CHECKED: Lazy<Mutex<SystemTime>> = Lazy::new(|| Mutex::new(SystemTim
 
 // scan all folders recursively and get all tags
 fn get_all_tags_under_directory_recursive(internal_scan_results: InternalScanResults, directory: &str, opt: &FireflyKeeperOption) -> InternalScanResults {
-
-
     let mut all_tags: Vec<ToTag> = Vec::new();
 
     // file statistics
@@ -95,8 +93,6 @@ fn get_all_tags_under_directory_recursive(internal_scan_results: InternalScanRes
             text_files_scaned += 1;
 
 
-
-
             // append directory to log, root log.txt
             // open log.txt
             // write to log.txt
@@ -117,7 +113,6 @@ fn get_all_tags_under_directory_recursive(internal_scan_results: InternalScanRes
             file.write_all(new_duration.as_bytes()).unwrap();
 
 
-
             // update last checked timestamp
             *LAST_CHECKED.lock().unwrap() = SystemTime::now();
 
@@ -126,14 +121,11 @@ fn get_all_tags_under_directory_recursive(internal_scan_results: InternalScanRes
             file.write_all(b"\n\n").unwrap();
 
 
-
-
             // write to log.txt
-            file.write_all(format!( "path_str: {}", path_str).as_bytes()).unwrap();
+            file.write_all(format!("path_str: {}", path_str).as_bytes()).unwrap();
             // write time marker
             let time_stamp = chrono::Local::now().to_rfc3339();
-            file.write_all(format!( " at {}", time_stamp).as_bytes()).unwrap();
-
+            file.write_all(format!(" at {}", time_stamp).as_bytes()).unwrap();
 
 
             // get file tags
@@ -213,7 +205,6 @@ mod tests {
         ).expect("error scanning directory");
         assert_eq!(result.all_fireflies_count, 1262);
     }
-
 
 
     #[test]
