@@ -272,7 +272,7 @@ pub trait ToOrmTrait {
     async fn find_by_tag_uuid(&self, tag_uuid: Uuid) -> Result<Option<TextualObject>, ToOrmError>;
 
     // list all tags with distinct key groups
-    async fn list_tags_ground_by_key(&self) -> Result<Vec<KeyGroups>, ToOrmError>;
+    async fn list_tags_group_by_key(&self) -> Result<Vec<KeyGroups>, ToOrmError>;
 
     // get tags by key
     async fn find_tags_by_key(&self, key: &str) -> Result<Vec<ToTag>, ToOrmError>;
@@ -537,7 +537,7 @@ impl ToOrmTrait for ToOrm {
         }
     }
 
-    async fn list_tags_ground_by_key(&self) -> Result<Vec<KeyGroups>, ToOrmError> {
+    async fn list_tags_group_by_key(&self) -> Result<Vec<KeyGroups>, ToOrmError> {
         let db = self.get_connection().await?;
         let tags = KeyGroups::find_by_statement(
             Statement::from_string(
@@ -685,7 +685,7 @@ mod tests {
     #[tokio::test]
     async fn test_list_tag_by_keys() {
         let to_orm = get_to_orm_dev_db();
-        let tags = to_orm.list_tags_ground_by_key().await.unwrap();
+        let tags = to_orm.list_tags_group_by_key().await.unwrap();
         assert_eq!(tags.len(), 3);
         let first_tag_group = tags.get(0).unwrap();
         assert_eq!(first_tag_group.key, "tag_key_1");

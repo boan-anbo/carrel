@@ -3,10 +3,11 @@ use std::path::PathBuf;
 use async_trait::async_trait;
 use carrel_commons::carrel::common::firefly::v2::Firefly;
 use carrel_commons::carrel::common::tag::v2::TagGroup as CommonTagGroup;
-use carrel_commons::generic::api::query::v1::StandardQuery;
+use carrel_commons::generic::api::query::v1::{Condition, FilterSet, Operator, StandardQuery};
 use pebble_query::pebble_query_result::{PebbleQueryResultGeneric, PebbleQueryResultGenericUtilTraits};
 use serde_json::json;
 use to_core::enums::store_type::StoreType;
+use to_core::to::to_struct::TextualObject;
 use to_core::to_db::to_orm::{ToOrm, ToOrmTrait};
 use to_core::to_dtos::to_add_request::ToAddManyRequest;
 use to_core::to_dtos::to_add_request::ToAddRequest;
@@ -51,10 +52,12 @@ pub trait KeepFireflies {
         query: StandardQuery,
     ) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError>;
 
-    async fn query_fireflies_by_tag(&self, key: &str, value: Option<&str>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError>;
+    async fn query_fireflies_by_tag_key_value(&self, query: StandardQuery, key: &str, value: Option<&str>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError>;
+
+    async fn query_tos_by_uuids(&self, query: StandardQuery, uuids: Vec<String>) -> Result<PebbleQueryResultGeneric<TextualObject>, ToManagerError>;
+
 
     async fn list_all_tag_groups(&self) -> Vec<CommonTagGroup>;
-
 }
 
 #[async_trait]
@@ -205,28 +208,59 @@ impl KeepFireflies for FireflyKepper {
         Ok(fireflies_result)
     }
 
-    async fn query_fireflies_by_tag(&self, key: &str, value: Option<&str>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError> {
+    async fn query_fireflies_by_tag_key_value(&self, query: StandardQuery, key: &str, value: Option<&str>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError> {
         let to = self.get_to_orm().await;
 
-        let to_results = to
-            .query_tos_by_tag(key, value)
-            .await
-            .map_err(ToManagerError::ToOrmError)
-            .unwrap();
+        let tags = match value {
+            Some(value) => to.find_tags_by_key_and_value(key, value).await.unwrap(),
+            None => to.find_tags_by_key(key).await.unwrap()
+        };
+
+        let to_ids: Vec<String> = tags.into_iter().filter(|t| t.to_uuid.is_some()  ).map(|tag| tag.to_uuid.unwrap().to_string()).collect();
+
+        let to_results = self.query_tos_by_uuids(query, to_ids).await.unwrap();
 
         let fireflies_result = to_results.map_filter_result(
             |to| to.into_common_firefly_v2(),
             Some("whether the textual object is a firefly".to_string()),
         );
-
         Ok(fireflies_result)
+    }
+
+    async fn query_tos_by_uuids(&self, mut query: StandardQuery, uuids: Vec<String>) -> Result<PebbleQueryResultGeneric<TextualObject>, ToManagerError> {
+        let to = self.get_to_orm().await;
+
+        let new_condition = Condition {
+            field: "to_uuid".to_string(),
+            operator: Operator::In as i32,
+            value: None,
+            value_list: uuids,
+            value_to: None,
+        };
+
+        if query.filter.is_none() {
+            query.filter = Some(FilterSet {
+                must: vec![
+                    new_condition
+                ],
+                any: vec![],
+                global_filter: None,
+            })
+        } else {
+            let mut filter = query.filter.clone().unwrap();
+            filter.must.push(new_condition);
+            query.filter = Some(filter);
+        }
+        to.query_tos(query)
+            .await
+            .map_err(ToManagerError::ToOrmError)
     }
 
     async fn list_all_tag_groups(&self) -> Vec<CommonTagGroup> {
         let to_orm = self.get_to_orm().await;
 
         let tag_groups = to_orm
-            .list_tags_ground_by_key()
+            .list_tags_group_by_key()
             .await
             .map_err(ToManagerError::ToOrmError)
             .unwrap();
@@ -440,5 +474,18 @@ mod tests {
         let pm = CarrelTester::get_project_manager_with_seeded_db().await;
         let fireflies = pm.to.list_all_fireflies().await;
         assert_eq!(fireflies.len(), 1); // only one seeded entry has json, hence only one firefly
+    }
+
+    #[tokio::test]
+    async fn test_query_to_by_uuids() {
+        let pm = CarrelTester::get_project_manager_with_seeded_db().await;
+        let to_orm = pm.to.get_to_orm().await;
+        let tos = to_orm.find_all().await.unwrap();
+        let tos_uuids = tos
+            .into_iter()
+            .map(|to| to.uuid)
+            .collect::<Vec<String>>();
+        let tos = pm.to.query_to_by_uuids(tos_uuids).await.unwrap();
+        assert_eq!(tos.len(), 3);
     }
 }
