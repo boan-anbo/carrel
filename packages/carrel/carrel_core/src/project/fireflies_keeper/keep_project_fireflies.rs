@@ -123,12 +123,14 @@ fn pick_outdated_files(files: Vec<file::Model>) -> Vec<file::Model> {
 
 #[cfg(test)]
 mod tests {
+    use carrel_db::entities::file::Column;
     use super::*;
     use crate::test_utils::carrel_tester::CarrelTester;
     use crate::test_utils::project_tester::ProjectTester;
     use carrel_utils::test::test_folders::get_test_fixture_module_folder_path_buf;
     use carrel_utils::uuid::new_v4;
-    use sea_orm::sea_query::SimpleExpr::Column;
+
+    use sea_orm::ColumnTrait;
     use to_core::to_db::to_orm::{ToOrm, ToOrmTrait};
 
     #[tokio::test]
