@@ -1,4 +1,4 @@
-use entity::entities::textual_objects;
+use entity::entities::{tag, textual_objects};
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
 
@@ -26,6 +26,29 @@ pub static TO_MAP_TO_COLUMN_MAP: Lazy<HashMap<String, textual_objects::Column>> 
             "ticket_index_in_context",
             textual_objects::Column::TicketIndexInContext,
         ),
+    ])
+    .into_iter()
+    .map(|(k, v)| (k.to_string(), v))
+    .collect()
+});
+// pub id: i32,
+// pub key: String,
+// pub value: Option<String>,
+// pub note: Option<String>,
+// pub raw_tag_string: String,
+// pub uuid: String,
+// pub to_id: i32,
+// pub to_uuid: String,
+pub static TAG_MAP_TO_COLUMN_MAP: Lazy<HashMap<String, tag::Column>> = Lazy::new(|| {
+    HashMap::from([
+        ("id", tag::Column::Id),
+        ("key", tag::Column::Key),
+        ("value", tag::Column::Value),
+        ("note", tag::Column::Note),
+        ("raw_tag_string", tag::Column::RawTagString),
+        ("uuid", tag::Column::Uuid),
+        ("to_id", tag::Column::ToId),
+        ("to_uuid", tag::Column::ToUuid),
     ])
     .into_iter()
     .map(|(k, v)| (k.to_string(), v))
