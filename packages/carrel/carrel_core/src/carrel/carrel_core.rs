@@ -19,7 +19,6 @@
 //! # For those actions that only needs the app or project managers, instantiate them with `load()`.
 //!
 use async_trait::async_trait;
-use std::error::Error;
 
 use carrel_commons::carrel::core::project_manager::v1::ProjectInfo;
 use carrel_db::implementation::project_traits::CommonProjectTrait;

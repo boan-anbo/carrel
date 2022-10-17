@@ -1,7 +1,7 @@
 import {Route, Routes} from "react-router-dom";
 import {appDomainRoutes} from "../../../routing/app-domain-routes";
 import {ProjectManager} from "../../domains/carrel/pages/project-manage/ProjectManager";
-import {ProjectBoard} from "../../domains/carrel/pages/project-board";
+import {ProjectBoard} from "../../domains/carrel/pages/ProjectBoard/ProjectBoard";
 import {CarrelPageRoutes} from "../../domains/carrel/routes/carrel-page-routes";
 import {FireflyKeeperPageRoutes} from "../../domains/firefly-keeper/routes/firefly-keeper-page-routes";
 import {FireflyHouse} from "../../domains/firefly-keeper/pages/fire-fly-house/FireflyHouse";

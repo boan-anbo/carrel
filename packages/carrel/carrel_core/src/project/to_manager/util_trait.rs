@@ -2,7 +2,6 @@
 
 use carrel_commons::carrel::common::firefly::v2::Firefly;
 use carrel_commons::carrel::common::tag::v2::Tag as CommonTagV2;
-use serde_json::Value;
 use to_core::entities::textual_objects;
 use to_core::implementation::util_func::ToUtilFunc;
 use to_core::to::to_struct::{TextualObject, ToStructTrait};

@@ -359,7 +359,7 @@ impl PebbleQuery {
             .find(|(field_name, _column)| (field_name == &sq_filter.field.as_str()))
             .expect(
                 format!(
-                    "Column {} not provided in field_to_column_map",
+                    "Column \"{}\" not provided in field_to_column_map",
                     sq_filter.field.as_str() // throw if
                 )
                 .as_str(),
@@ -464,6 +464,7 @@ impl PebbleQuery {
         };
         Ok(condition)
     }
+
     fn normalize_query(input_query: StandardQuery) -> StandardQuery {
         let mut query = input_query;
         if query.filter.is_some() {

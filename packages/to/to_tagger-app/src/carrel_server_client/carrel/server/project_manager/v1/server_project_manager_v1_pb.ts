@@ -11,6 +11,7 @@ import {Archive} from "../../../common/archive/v1/archive_v1_pb.js";
 import {Firefly} from "../../../common/firefly/v2/firefly_v2_pb.js";
 import {StandardQuery, StandardQueryResultMetadata} from "../../../../generic/api/query/v1/query_v1_pb.js";
 import {Project} from "../../../common/project/v2/project_v2_pb.js";
+import {TagGroup} from "../../../common/tag/v2/tag_v2_pb.js";
 
 /**
  * message to open a project
@@ -1611,6 +1612,226 @@ export class ListRecentProjectsResponse extends Message<ListRecentProjectsRespon
 
   static equals(a: ListRecentProjectsResponse | PlainMessage<ListRecentProjectsResponse> | undefined, b: ListRecentProjectsResponse | PlainMessage<ListRecentProjectsResponse> | undefined): boolean {
     return proto3.util.equals(ListRecentProjectsResponse, a, b);
+  }
+}
+
+/**
+ * list all tag groups
+ *
+ * @generated from message carrel.server.project_manager.v1.ListAllTagGroupsRequest
+ */
+export class ListAllTagGroupsRequest extends Message<ListAllTagGroupsRequest> {
+  /**
+   * the folder of the project
+   *
+   * @generated from field: string project_directory = 1;
+   */
+  projectDirectory = "";
+
+  constructor(data?: PartialMessage<ListAllTagGroupsRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime = proto3;
+  static readonly typeName = "carrel.server.project_manager.v1.ListAllTagGroupsRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "project_directory", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ListAllTagGroupsRequest {
+    return new ListAllTagGroupsRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ListAllTagGroupsRequest {
+    return new ListAllTagGroupsRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ListAllTagGroupsRequest {
+    return new ListAllTagGroupsRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ListAllTagGroupsRequest | PlainMessage<ListAllTagGroupsRequest> | undefined, b: ListAllTagGroupsRequest | PlainMessage<ListAllTagGroupsRequest> | undefined): boolean {
+    return proto3.util.equals(ListAllTagGroupsRequest, a, b);
+  }
+}
+
+/**
+ * list all tag groups
+ *
+ * @generated from message carrel.server.project_manager.v1.ListAllTagGroupsResponse
+ */
+export class ListAllTagGroupsResponse extends Message<ListAllTagGroupsResponse> {
+  /**
+   * the folder of the project
+   *
+   * @generated from field: string project_directory = 1;
+   */
+  projectDirectory = "";
+
+  /**
+   * the list of tag groups
+   *
+   * @generated from field: repeated carrel.common.tag.v2.TagGroup tag_groups = 2;
+   */
+  tagGroups: TagGroup[] = [];
+
+  /**
+   * tag_group count
+   *
+   * @generated from field: int32 tag_group_count = 3;
+   */
+  tagGroupCount = 0;
+
+  constructor(data?: PartialMessage<ListAllTagGroupsResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime = proto3;
+  static readonly typeName = "carrel.server.project_manager.v1.ListAllTagGroupsResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "project_directory", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "tag_groups", kind: "message", T: TagGroup, repeated: true },
+    { no: 3, name: "tag_group_count", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ListAllTagGroupsResponse {
+    return new ListAllTagGroupsResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ListAllTagGroupsResponse {
+    return new ListAllTagGroupsResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ListAllTagGroupsResponse {
+    return new ListAllTagGroupsResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ListAllTagGroupsResponse | PlainMessage<ListAllTagGroupsResponse> | undefined, b: ListAllTagGroupsResponse | PlainMessage<ListAllTagGroupsResponse> | undefined): boolean {
+    return proto3.util.equals(ListAllTagGroupsResponse, a, b);
+  }
+}
+
+/**
+ * list tags by tag key and value
+ *
+ * @generated from message carrel.server.project_manager.v1.ListFirefliesByTagRequest
+ */
+export class ListFirefliesByTagRequest extends Message<ListFirefliesByTagRequest> {
+  /**
+   * the folder of the project
+   *
+   * @generated from field: string project_directory = 1;
+   */
+  projectDirectory = "";
+
+  /**
+   * the tag key
+   *
+   * @generated from field: string key = 2;
+   */
+  key = "";
+
+  /**
+   * the tag value
+   *
+   * @generated from field: optional string value = 3;
+   */
+  value?: string;
+
+  /**
+   * the tag note
+   *
+   * @generated from field: optional string note = 4;
+   */
+  note?: string;
+
+  constructor(data?: PartialMessage<ListFirefliesByTagRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime = proto3;
+  static readonly typeName = "carrel.server.project_manager.v1.ListFirefliesByTagRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "project_directory", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 4, name: "note", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ListFirefliesByTagRequest {
+    return new ListFirefliesByTagRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ListFirefliesByTagRequest {
+    return new ListFirefliesByTagRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ListFirefliesByTagRequest {
+    return new ListFirefliesByTagRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ListFirefliesByTagRequest | PlainMessage<ListFirefliesByTagRequest> | undefined, b: ListFirefliesByTagRequest | PlainMessage<ListFirefliesByTagRequest> | undefined): boolean {
+    return proto3.util.equals(ListFirefliesByTagRequest, a, b);
+  }
+}
+
+/**
+ * list tags by tag key and value
+ *
+ * @generated from message carrel.server.project_manager.v1.ListFirefliesByTagResponse
+ */
+export class ListFirefliesByTagResponse extends Message<ListFirefliesByTagResponse> {
+  /**
+   * the folder of the project
+   *
+   * @generated from field: string project_directory = 1;
+   */
+  projectDirectory = "";
+
+  /**
+   * the list of tags
+   *
+   * @generated from field: repeated carrel.common.firefly.v2.Firefly fireflies = 2;
+   */
+  fireflies: Firefly[] = [];
+
+  /**
+   * tag count
+   *
+   * @generated from field: generic.api.query.v1.StandardQueryResultMetadata response_metadata = 4;
+   */
+  responseMetadata?: StandardQueryResultMetadata;
+
+  constructor(data?: PartialMessage<ListFirefliesByTagResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime = proto3;
+  static readonly typeName = "carrel.server.project_manager.v1.ListFirefliesByTagResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "project_directory", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "fireflies", kind: "message", T: Firefly, repeated: true },
+    { no: 4, name: "response_metadata", kind: "message", T: StandardQueryResultMetadata },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ListFirefliesByTagResponse {
+    return new ListFirefliesByTagResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ListFirefliesByTagResponse {
+    return new ListFirefliesByTagResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ListFirefliesByTagResponse {
+    return new ListFirefliesByTagResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: ListFirefliesByTagResponse | PlainMessage<ListFirefliesByTagResponse> | undefined, b: ListFirefliesByTagResponse | PlainMessage<ListFirefliesByTagResponse> | undefined): boolean {
+    return proto3.util.equals(ListFirefliesByTagResponse, a, b);
   }
 }
 

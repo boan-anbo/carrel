@@ -1,25 +1,23 @@
-import {ColumnDef, createColumnHelper} from '@tanstack/react-table';
-import React, {ReactNode, useMemo, useState} from 'react';
-import {Firefly} from '../../../../../../carrel_server_client/carrel/common/firefly/v2/firefly_v2_pb';
-import {StandardQuery} from '../../../../../../carrel_server_client/generic/api/query/v1/query_v1_pb';
-import {carrelQueries} from '../../../../../../server-api/carrel-queries';
-import {IndeterminateCheckbox} from '../../../../../ui/DataTable/CarrelDataCheckBox';
-import {CarrelDataTable} from '../../../../../ui/DataTable/CarrelDataTable';
-import {CommentCell} from './CommentCell';
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { ReactNode, useMemo } from 'react';
+import { Firefly } from '../../../../../../carrel_server_client/carrel/common/firefly/v2/firefly_v2_pb';
+import { StandardQuery } from '../../../../../../carrel_server_client/generic/api/query/v1/query_v1_pb';
+import { CarrelDataTable } from '../../../../../ui/DataTable/CarrelDataTable';
+import { CommentCell } from './CommentCell';
 
-import styles from './FireflyDataTable.module.scss';
-import {useSelector} from "react-redux";
-import {RootState} from "../../../../../../store/store";
 
 export interface FireflyDataTableProps {
     isMock?: boolean;
+    projectDirectory: string;
+    fireflies: Firefly[];
+    totalPages: number;
+    onQueryChange: (query: StandardQuery) => void;
 }
 
 const columnHelper = createColumnHelper<Firefly>();
 
-export function FireflyDataTable(props: FireflyDataTableProps) {
+export function FireflyDataTable({projectDirectory, fireflies, totalPages, onQueryChange}: FireflyDataTableProps) {
 
-    const workingProject = useSelector((state: RootState) => state.workingProject.workingProject);
     const columns = useMemo<ColumnDef<Firefly>[]>(
         () => [
             {
@@ -43,20 +41,15 @@ export function FireflyDataTable(props: FireflyDataTableProps) {
         ],
         []
     );
-    const [query, setQuery] = useState<StandardQuery>();
-    const loadData = (query: StandardQuery) => {
-        setQuery(query);
-    };
-
-    const {data} = carrelQueries.QueryFireflies(query, workingProject?.directory, props.isMock);
+s
 
     return (
         <CarrelDataTable
             paginatorPositions="both"
             columns={columns}
-            data={data?.fireflies}
-            resultTotalPages={data?.responseMetadata?.resultTotalPages}
-            onQueryChange={(query) => loadData(query)}
+            data={fireflies}
+            resultTotalPages={totalPages}
+            onQueryChange={onQueryChange}
         ></CarrelDataTable>
     );
 }

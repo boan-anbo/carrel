@@ -31,7 +31,7 @@ export function SplitView({
     return <Allotment>
         <Allotment.Pane snap={firstSnap} minSize={firstMin} preferredSize={firstInitial}>
             {/* The boxes are here to provide scrollable area*/}
-            <Box h={'100%'} w={'100%'}>{first}
+            <Box h={'100%'} w={'100%'}>
                 {first}
             </Box>
         </Allotment.Pane>

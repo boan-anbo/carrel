@@ -31,14 +31,7 @@ pub static TO_MAP_TO_COLUMN_MAP: Lazy<HashMap<String, textual_objects::Column>> 
     .map(|(k, v)| (k.to_string(), v))
     .collect()
 });
-// pub id: i32,
-// pub key: String,
-// pub value: Option<String>,
-// pub note: Option<String>,
-// pub raw_tag_string: String,
-// pub uuid: String,
-// pub to_id: i32,
-// pub to_uuid: String,
+
 pub static TAG_MAP_TO_COLUMN_MAP: Lazy<HashMap<String, tag::Column>> = Lazy::new(|| {
     HashMap::from([
         ("id", tag::Column::Id),

@@ -47,6 +47,20 @@ export class Tag extends Message<Tag> {
    */
   relatedTagUuids: string[] = [];
 
+  /**
+   * db id.
+   *
+   * @generated from field: optional int32 id = 8;
+   */
+  id?: number;
+
+  /**
+   * parent id: usually the uuid of the tag or other entities that this tag is a child of.
+   *
+   * @generated from field: optional string parent_uuid = 9;
+   */
+  parentUuid?: string;
+
   constructor(data?: PartialMessage<Tag>) {
     super();
     proto3.util.initPartial(data, this);
@@ -62,6 +76,8 @@ export class Tag extends Message<Tag> {
     { no: 5, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 6, name: "collection_uuids", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
     { no: 7, name: "related_tag_uuids", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
+    { no: 8, name: "id", kind: "scalar", T: 5 /* ScalarType.INT32 */, opt: true },
+    { no: 9, name: "parent_uuid", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Tag {
@@ -78,6 +94,55 @@ export class Tag extends Message<Tag> {
 
   static equals(a: Tag | PlainMessage<Tag> | undefined, b: Tag | PlainMessage<Tag> | undefined): boolean {
     return proto3.util.equals(Tag, a, b);
+  }
+}
+
+/**
+ * @generated from message carrel.common.tag.v2.TagGroup
+ */
+export class TagGroup extends Message<TagGroup> {
+  /**
+   * @generated from field: string key = 1;
+   */
+  key = "";
+
+  /**
+   * @generated from field: string value = 2;
+   */
+  value = "";
+
+  /**
+   * @generated from field: int32 key_count = 3;
+   */
+  keyCount = 0;
+
+  constructor(data?: PartialMessage<TagGroup>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime = proto3;
+  static readonly typeName = "carrel.common.tag.v2.TagGroup";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "key_count", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TagGroup {
+    return new TagGroup().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): TagGroup {
+    return new TagGroup().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): TagGroup {
+    return new TagGroup().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: TagGroup | PlainMessage<TagGroup> | undefined, b: TagGroup | PlainMessage<TagGroup> | undefined): boolean {
+    return proto3.util.equals(TagGroup, a, b);
   }
 }
 

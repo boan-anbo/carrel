@@ -80,6 +80,7 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
         .to_owned();
 
     manager.exec_stmt(insert_to_1).await.unwrap();
+    let second_to_uuid = new_v4().to_string();
 
     let insert_to_2 = Query::insert()
         .into_table(TextualObjects::Table)
@@ -104,7 +105,7 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
             TextualObjects::TicketIndexInContext,
         ])
         .values_panic([
-            new_v4().to_string().into(),
+            second_to_uuid.clone().into(),
             "ticket_id2".into(),
             "ticket_2_ticket_minimal".into(),
             "source_id2".into(),
@@ -231,6 +232,57 @@ pub async fn seed_database<'a>(manager: &'a SchemaManager<'a>) {
 
     manager.exec_stmt(insert_to_1_tag_2).await.unwrap();
 
+    let insert_to_2_tag_1_but_same_key_1 = Query::insert()
+        .into_table(Tag::Table)
+        .columns(vec![
+            Tag::Id,
+            Tag::Key,
+            Tag::Value,
+            Tag::Note,
+            Tag::RawTagString,
+            Tag::Uuid,
+            Tag::ToUuid,
+            Tag::ToId,
+        ])
+        .values_panic([
+            3.into(),
+            "tag_key_1".into(),
+            "tag_value_3".into(),
+            "tag_note_3".into(),
+            "tag_raw_tag_string_3".into(),
+            new_v4().to_string().into(),
+            second_to_uuid.clone().into(),
+            2.into(),
+        ])
+        .to_owned();
+
+    let insert_to_2_tag_2_with_same_key_and_value = Query::insert()
+        .into_table(Tag::Table)
+        .columns(vec![
+            Tag::Id,
+            Tag::Key,
+            Tag::Value,
+            Tag::Note,
+            Tag::RawTagString,
+            Tag::Uuid,
+            Tag::ToUuid,
+            Tag::ToId,
+        ])
+        .values_panic([
+            4.into(),
+            "tag_key_1".into(),
+            "tag_value_3".into(),
+            "tag_note_4".into(),
+            "tag_raw_tag_string_4".into(),
+            new_v4().to_string().into(),
+            second_to_uuid.clone().into(),
+            2.into(),
+        ])
+        .to_owned();
+
+    manager.exec_stmt(insert_to_2_tag_1_but_same_key_1).await.unwrap();
+
+    manager.exec_stmt(insert_to_2_tag_2_with_same_key_and_value).await.unwrap();
     // Table,
     // SourceId,
     // TargetId,

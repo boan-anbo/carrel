@@ -1,5 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
+import { StandardQuery } from "../../../../../carrel_server_client/generic/api/query/v1/query_v1_pb";
 import { RootState } from "../../../../../store/store";
 import { Logger, LogSource } from "../../../../../utils/logger";
 import { Block } from "../../../../ui/components";
@@ -22,7 +23,9 @@ export function FirefliesPage(props: FirefliesPageProps) {
         description="All the fireflies in the project"
       >
         <Block title="Firefly table">
-          <FireflyDataTable></FireflyDataTable>
+          <FireflyDataTable projectDirectory={""} fireflies={[]} totalPages={0} onQueryChange={function (query: StandardQuery): void {
+            throw new Error("Function not implemented.");
+          } }></FireflyDataTable>
         </Block>
       </Page>
     );

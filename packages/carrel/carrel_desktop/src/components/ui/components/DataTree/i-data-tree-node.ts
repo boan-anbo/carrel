@@ -80,7 +80,11 @@ export interface IDataTreeCollection<T> extends IDataTreeNode<T> {
     /**
      * Whether the collection should expand
      */
-    isExpanded?: boolean;
+    isOpen?: boolean;
+    /**
+     * Count of the items under this collection or items; will be displayed after the item label if provided
+     */
+    count?: number;
 }
 
 export class DataTreeCollection<T> implements IDataTreeCollection<T> {
@@ -89,7 +93,7 @@ export class DataTreeCollection<T> implements IDataTreeCollection<T> {
     subCollections: IDataTreeCollection<T>[] = [];
     subItems: IDataTreeItem<T>[] = [];
     isRoot: boolean = false;
-    isExpanded: boolean = false;
+    isOpen: boolean = false;
     key: string = v4();
     parentKey?: string | null | undefined = undefined;
     label: ReactNode = "";
@@ -116,16 +120,45 @@ export interface IDataTreeItem<T> extends IDataTreeNode<T> {
 
 }
 
-export interface IDataTreeConfiguration<T> {
-    collectionIconCollapsed?: ReactNode;
-    collectionIconExpanded?: ReactNode;
-    itemIcon?: ReactNode;
 
-}
-
-export class DataTreeConfiguration<T> implements IDataTreeConfiguration<T> {
+export class DataTreeConfigState<T> {
     collectionIconCollapsed?: ReactNode | undefined = undefined;
     collectionIconExpanded?: ReactNode | undefined = undefined;
     itemIcon?: ReactNode | undefined = undefined;
+    collectionIndent?: number | undefined = 5;
+    itemIndent?: number | undefined = 16;
+    onSelectionsChange?: ((selections: string[]) => void) | undefined = undefined;
+
+    selectionMode?: "single" | "multiple" | undefined = "single";
+    selectedKeys: string [] = [];
+    select = (key: string) => {
+        if (this.selectionMode === "single") {
+            this.selectedKeys = [key];
+        } else {
+            if (!this.selectedKeys.includes(key)) {
+                this.selectedKeys = [...this.selectedKeys, key];
+            }
+        }
+        this.onSelectionsChange?.(this.selectedKeys);
+    }
+    deselect = (key: string) => {
+        this.selectedKeys = this.selectedKeys.filter(k => k !== key);
+        this.onSelectionsChange?.(this.selectedKeys);
+    }
+    isSelected = (key: string) => {
+        return this.selectedKeys.includes(key);
+    }
+    clearSelection = () => {
+        this.selectedKeys = [];
+        this.onSelectionsChange?.(this.selectedKeys);
+    }
+    toggleSelection = (key: string) => {
+        if (this.isSelected(key)) {
+            this.deselect(key);
+        } else {
+            this.select(key);
+        }
+    }
+
 }
 

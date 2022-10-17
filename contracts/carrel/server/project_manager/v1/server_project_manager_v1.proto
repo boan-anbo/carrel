@@ -14,6 +14,7 @@ import "carrel/common/firefly/v2/firefly_v2.proto";
 import "generic/api/query/v1/query_v1.proto";
 
 import "carrel/common/project/v2/project_v2.proto";
+import "carrel/common/tag/v2/tag_v2.proto";
 
 // services
 service ProjectManagerService {
@@ -56,6 +57,11 @@ service ProjectManagerService {
   // list most recent projects
   rpc ListRecentProjects (ListRecentProjectsRequest) returns (ListRecentProjectsResponse) {}
 
+  // list all tag groups
+  rpc ListAllTagGroups (ListAllTagGroupsRequest) returns (ListAllTagGroupsResponse) {}
+
+  // list all fireflies by tag key and value
+  rpc ListFirefliesByTag (ListFirefliesByTagRequest) returns (ListFirefliesByTagResponse) {}
 
 }
 
@@ -341,4 +347,42 @@ message ListRecentProjectsResponse {
 
   string app_directory = 3;
 
+}
+
+// list all tag groups
+message ListAllTagGroupsRequest {
+  // the folder of the project
+  string project_directory = 1;
+}
+
+// list all tag groups
+message ListAllTagGroupsResponse {
+  // the folder of the project
+  string project_directory = 1;
+  // the list of tag groups
+  repeated carrel.common.tag.v2.TagGroup tag_groups = 2;
+  // tag_group count
+  int32 tag_group_count = 3;
+}
+
+// list tags by tag key and value
+message ListFirefliesByTagRequest {
+  // the folder of the project
+  string project_directory = 1;
+  // the tag key
+  string key = 2;
+  // the tag value
+  optional string value = 3;
+  // the tag note
+  optional string note = 4;
+}
+
+// list tags by tag key and value
+message ListFirefliesByTagResponse {
+  // the folder of the project
+  string project_directory = 1;
+  // the list of tags
+  repeated carrel.common.firefly.v2.Firefly fireflies = 2;
+  // tag count
+  generic.api.query.v1.StandardQueryResultMetadata response_metadata = 4;
 }

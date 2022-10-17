@@ -110,7 +110,7 @@ impl ToOrmMapperTrait for ToOrmMapper {
 /// Private methods that are not exposed.
 /// This is to make sure to and to tags are always mapped together via the public trait, not invidiaully.
 impl ToOrmMapper {
-    fn to_model_to_to(to_model: Model) -> TextualObject {
+    pub fn to_model_to_to(to_model: Model) -> TextualObject {
         TextualObject {
             id: to_model.id,
             uuid: Uuid::parse_str(to_model.uuid.as_str()).unwrap(),
@@ -136,7 +136,7 @@ impl ToOrmMapper {
         }
     }
 
-    fn to_tag_model_to_to_tag(to_tag_model: tag::Model) -> ToTag {
+    pub fn to_tag_model_to_to_tag(to_tag_model: tag::Model) -> ToTag {
         ToTag {
             id: Some(to_tag_model.id),
             key: to_tag_model.key,

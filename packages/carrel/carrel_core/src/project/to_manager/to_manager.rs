@@ -2,11 +2,11 @@ use std::path::PathBuf;
 
 use async_trait::async_trait;
 use carrel_commons::carrel::common::firefly::v2::Firefly;
+use carrel_commons::carrel::common::tag::v2::TagGroup as CommonTagGroup;
 use carrel_commons::generic::api::query::v1::StandardQuery;
-use pebble_query::pebble_query_result::{PebbleQueryResultGeneric, PebbleQueryResultGenericUtilTraits, PebbleQueryResultUtilTrait};
+use pebble_query::pebble_query_result::{PebbleQueryResultGeneric, PebbleQueryResultGenericUtilTraits};
 use serde_json::json;
 use to_core::enums::store_type::StoreType;
-use to_core::implementation::util_func::ToUtilFunc;
 use to_core::to_db::to_orm::{ToOrm, ToOrmTrait};
 use to_core::to_dtos::to_add_request::ToAddManyRequest;
 use to_core::to_dtos::to_add_request::ToAddRequest;
@@ -50,6 +50,11 @@ pub trait KeepFireflies {
         &self,
         query: StandardQuery,
     ) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError>;
+
+    async fn query_fireflies_by_tag(&self, key: &str, value: Option<&str>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError>;
+
+    async fn list_all_tag_groups(&self) -> Vec<CommonTagGroup>;
+
 }
 
 #[async_trait]
@@ -198,6 +203,36 @@ impl KeepFireflies for FireflyKepper {
         );
 
         Ok(fireflies_result)
+    }
+
+    async fn query_fireflies_by_tag(&self, key: &str, value: Option<&str>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError> {
+        let to = self.get_to_orm().await;
+
+        let to_results = to
+            .query_tos_by_tag(key, value)
+            .await
+            .map_err(ToManagerError::ToOrmError)
+            .unwrap();
+
+        let fireflies_result = to_results.map_filter_result(
+            |to| to.into_common_firefly_v2(),
+            Some("whether the textual object is a firefly".to_string()),
+        );
+
+        Ok(fireflies_result)
+    }
+
+    async fn list_all_tag_groups(&self) -> Vec<CommonTagGroup> {
+        let to_orm = self.get_to_orm().await;
+
+        let tag_groups = to_orm
+            .list_tags_ground_by_key()
+            .await
+            .map_err(ToManagerError::ToOrmError)
+            .unwrap();
+
+
+        tag_groups.into_iter().map(|tag_group| tag_group.into_common_key_group()).collect()
     }
 }
 

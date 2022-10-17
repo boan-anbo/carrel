@@ -1,7 +1,7 @@
 use carrel_commons::carrel::common::archive::v1::Archive;
 use carrel_commons::carrel::common::file::v1::File;
 use carrel_commons::carrel::server::project_manager::v1::project_manager_service_server::ProjectManagerService;
-use carrel_commons::carrel::server::project_manager::v1::AddArchiveRequest;
+use carrel_commons::carrel::server::project_manager::v1::{AddArchiveRequest, ListAllTagGroupsRequest, ListAllTagGroupsResponse};
 use carrel_commons::carrel::server::project_manager::v1::AddArchiveResponse;
 use carrel_commons::carrel::server::project_manager::v1::AddFilesToArchiveRequest;
 use carrel_commons::carrel::server::project_manager::v1::AddFilesToArchiveResponse;
@@ -370,7 +370,7 @@ impl ProjectManagerService for ProjectService {
         let mock = req.is_mock;
 
         if mock {
-            return QueryMocker::mock_query_files(req).await
+            return QueryMocker::mock_query_files(req).await;
         }
 
         let project = carrel_core::project::project_manager::CarrelProjectManager::load(
@@ -410,7 +410,7 @@ impl ProjectManagerService for ProjectService {
         let mock = req.is_mock;
 
         if mock {
-            return QueryMocker::mock_query_fireflies(req).await
+            return QueryMocker::mock_query_fireflies(req).await;
         }
 
         let query = req.query.unwrap();
@@ -449,6 +449,24 @@ impl ProjectManagerService for ProjectService {
             app_directory,
         };
         Ok(Response::new(result))
+    }
+
+    async fn list_all_tag_groups(&self, request: Request<ListAllTagGroupsRequest>) -> Result<Response<ListAllTagGroupsResponse>, Status> {
+        let req = request.into_inner();
+        let project = CarrelProjectManager::load(
+            req.project_directory.as_str(),
+        )
+            .await
+            .unwrap();
+        let tag_groups = project.to.list_all_tag_groups().await;
+        let res = Response::new(
+            ListAllTagGroupsResponse {
+                project_directory: req.project_directory,
+                tag_group_count: tag_groups.len() as i32,
+                tag_groups,
+            }
+        );
+        Ok(res)
     }
 }
 

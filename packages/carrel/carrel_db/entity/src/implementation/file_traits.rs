@@ -5,7 +5,6 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use crate::entities::file;
-use crate::entities::prelude::File;
 use carrel_utils::datetime::get_iso_string::get_now_iso_string;
 pub use chrono::prelude::*;
 use sea_orm::ActiveValue::Set;

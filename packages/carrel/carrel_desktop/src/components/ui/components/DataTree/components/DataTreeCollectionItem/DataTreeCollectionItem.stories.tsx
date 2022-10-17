@@ -3,6 +3,7 @@ import type {Meta, StoryFn} from '@storybook/react';
 
 import type {DataTreeCollectionItemProps} from './DataTreeCollectionItem';
 import {DataTreeCollectionItem} from './DataTreeCollectionItem';
+import { EDataTreeNodeType } from '../../i-data-tree-node';
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
@@ -22,11 +23,44 @@ const meta: Meta = {
 export default meta;
 
 // 👇 We create a "template" of how args map to rendering
-const Template: StoryFn<DataTreeCollectionItemProps> = (args) => <DataTreeCollectionItem {...args} />;
+const Template: StoryFn<DataTreeCollectionItemProps<any>> = (args) => <DataTreeCollectionItem {...args} />;
 
 // 👇 Each story then reuses that template
 export const Basic = Template.bind({});
 
 // Story args
 // Learn more: https://storybook.js.org/docs/react/writing-stories/args
-Basic.args = {};
+Basic.args = {
+  item : {
+    "key": "1",
+    "label": "Item 1",
+    "type": EDataTreeNodeType.COLLECTION,
+    "isOpen": true,
+    "subCollections": [
+      {
+        "key": "1.1",
+        "label": "Item 1.1",
+        "type": EDataTreeNodeType.ITEM,
+        "isOpen": true,
+        "subCollections": [
+        ],
+        "subItems": [
+        ],
+        "order": 0,
+        subCollectionIds: [],
+        subItemIds: []
+      },
+    ],
+    "subItems": [
+      {
+        "key": "1.1.1",
+        "label": "Item 1.1.1",
+        "type": EDataTreeNodeType.ITEM,
+      },
+    ],
+    "order": 0,
+    subCollectionIds: [],
+    subItemIds: []
+  }
+
+};

@@ -2,7 +2,7 @@ import type { Meta, StoryFn } from "@storybook/react";
 
 import type { DataTreeProps } from "./DataTree";
 import { DataTree } from "./DataTree";
-import { DataTreeCollection, EDataTreeNodeType } from "./i-data-tree-node";
+import { DataTreeCollection, DataTreeConfigState, EDataTreeNodeType } from "./i-data-tree-node";
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
@@ -29,12 +29,25 @@ export const Basic = Template.bind({});
 // Story args
 // Learn more: https://storybook.js.org/docs/react/writing-stories/args
 Basic.args = {
-  root: [
+  config: new DataTreeConfigState(),
+  isRoot: true,
+  items: [
+    {
+      key: "1",
+      label: "Item 1",
+      type: EDataTreeNodeType.ITEM,
+      subItemIds:[],
+      subCollectionIds: [],
+      subCollections: [],
+      subItems: [],
+
+    },
     {
       key: "I",
       type: EDataTreeNodeType.COLLECTION,
       label: "Collection I",
       order: 1,
+      count: 20,
       subItems: [
         {
           key: "I.1",
@@ -90,5 +103,5 @@ Basic.args = {
       ],
     },
   ],
-  config: {},
+  fontSize: 'xs',
 };

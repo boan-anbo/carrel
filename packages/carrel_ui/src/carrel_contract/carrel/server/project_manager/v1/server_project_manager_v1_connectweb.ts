@@ -3,7 +3,7 @@
 /* eslint-disable */
 /* @ts-nocheck */
 
-import {AddArchiveRequest, AddArchiveResponse, AddDirectoryToArchiveRequest, AddDirectoryToArchiveResponse, AddFilesToArchiveRequest, AddFilesToArchiveResponse, GetArchiveFilesRequest, GetArchiveFilesResponse, ListAllProjectArchivesRequest, ListAllProjectArchivesResponse, ListAllProjectFilesRequest, ListAllProjectFilesResponse, ListAllProjectFirefliesRequest, ListAllProjectFirefliesResponse, ListFilesInArchiveRequest, ListFilesInArchiveResponse, ListRecentProjectsRequest, ListRecentProjectsResponse, OpenProjectRequest, OpenProjectResponse, QueryFilesRequest, QueryFilesResponse, QueryFirefliesRequest, QueryFirefliesResponse, RemoveFilesFromArchiveRequest, RemoveFilesFromArchiveResponse, SyncProjectArchivesRequest, SyncProjectArchivesResponse} from "./server_project_manager_v1_pb.js";
+import {AddArchiveRequest, AddArchiveResponse, AddDirectoryToArchiveRequest, AddDirectoryToArchiveResponse, AddFilesToArchiveRequest, AddFilesToArchiveResponse, GetArchiveFilesRequest, GetArchiveFilesResponse, ListAllProjectArchivesRequest, ListAllProjectArchivesResponse, ListAllProjectFilesRequest, ListAllProjectFilesResponse, ListAllProjectFirefliesRequest, ListAllProjectFirefliesResponse, ListAllTagGroupsRequest, ListAllTagGroupsResponse, ListFilesInArchiveRequest, ListFilesInArchiveResponse, ListFirefliesByTagRequest, ListFirefliesByTagResponse, ListRecentProjectsRequest, ListRecentProjectsResponse, OpenProjectRequest, OpenProjectResponse, QueryFilesRequest, QueryFilesResponse, QueryFirefliesRequest, QueryFirefliesResponse, RemoveFilesFromArchiveRequest, RemoveFilesFromArchiveResponse, SyncProjectArchivesRequest, SyncProjectArchivesResponse} from "./server_project_manager_v1_pb.js";
 import {MethodKind} from "@bufbuild/protobuf";
 
 /**
@@ -161,6 +161,28 @@ export const ProjectManagerService = {
       name: "ListRecentProjects",
       I: ListRecentProjectsRequest,
       O: ListRecentProjectsResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * list all tag groups
+     *
+     * @generated from rpc carrel.server.project_manager.v1.ProjectManagerService.ListAllTagGroups
+     */
+    listAllTagGroups: {
+      name: "ListAllTagGroups",
+      I: ListAllTagGroupsRequest,
+      O: ListAllTagGroupsResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * list all fireflies by tag key and value
+     *
+     * @generated from rpc carrel.server.project_manager.v1.ProjectManagerService.ListFirefliesByTag
+     */
+    listFirefliesByTag: {
+      name: "ListFirefliesByTag",
+      I: ListFirefliesByTagRequest,
+      O: ListFirefliesByTagResponse,
       kind: MethodKind.Unary,
     },
   }

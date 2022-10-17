@@ -18,3 +18,9 @@ message Tag {
     // parent id: usually the uuid of the tag or other entities that this tag is a child of.
     optional string parent_uuid = 9;
 }
+
+message TagGroup {
+    string key = 1;
+    string value = 2;
+    int32 key_count = 3;
+}

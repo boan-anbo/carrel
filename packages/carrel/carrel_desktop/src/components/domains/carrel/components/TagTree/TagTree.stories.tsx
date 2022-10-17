@@ -1,14 +1,14 @@
 import React from 'react';
 import type {Meta, StoryFn} from '@storybook/react';
 
-import type {DataTreeItemProps} from './DataTreeItem';
-import {DataTreeItem} from './DataTreeItem';
-import { DataTreeConfigState, EDataTreeNodeType } from '../../i-data-tree-node';
+import type {TagTreeProps} from './TagTree';
+import {TagTree} from './TagTree';
+import { mockProjectDirectory } from '../../../../../tests/mock-vars';
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
 const meta: Meta = {
-  component: DataTreeItem,
+  component: TagTree,
   parameters: {
     // Embedding Figma designs
     // The embed appears in the "Design" tab of the story
@@ -23,7 +23,7 @@ const meta: Meta = {
 export default meta;
 
 // 👇 We create a "template" of how args map to rendering
-const Template: StoryFn<DataTreeItemProps<any>> = (args) => <DataTreeItem {...args} />;
+const Template: StoryFn<TagTreeProps> = (args) => <TagTree {...args} />;
 
 // 👇 Each story then reuses that template
 export const Basic = Template.bind({});
@@ -31,10 +31,5 @@ export const Basic = Template.bind({});
 // Story args
 // Learn more: https://storybook.js.org/docs/react/writing-stories/args
 Basic.args = {
-  item : {
-    "key": "1",
-    "label": "Item 1",
-    "type": EDataTreeNodeType.ITEM,
-  },
-  config: new DataTreeConfigState()
+  propjectDirectory: mockProjectDirectory
 };

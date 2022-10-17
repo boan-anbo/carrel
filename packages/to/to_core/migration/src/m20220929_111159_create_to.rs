@@ -206,7 +206,7 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Tag::Value).string().null())
                     .col(ColumnDef::new(Tag::Note).string().null())
                     .col(ColumnDef::new(Tag::RawTagString).string().not_null())
-                    .col(ColumnDef::new(Tag::Uuid).string().not_null().default("uuid_generate_v4()"))
+                    .col(ColumnDef::new(Tag::Uuid).string().not_null().unique_key().default("uuid_generate_v4()"))
                     .col(ColumnDef::new(Tag::ToId).integer().not_null().default(0))
                     .foreign_key(
                         ForeignKey::create()
@@ -221,6 +221,29 @@ impl MigrationTrait for Migration {
                     .to_owned(),
             )
             .await;
+
+        // create two indexes for tag_key and tag_uuid
+        let _ = manager
+            .create_index(
+                Index::create()
+                    .name("tag_key")
+                    .table(Tag::Table)
+                    .col(Tag::Key)
+                    .to_owned(),
+            )
+
+            .await;
+
+        let _ = manager
+            .create_index(
+                Index::create()
+                    .name("tag_uuid")
+                    .table(Tag::Table)
+                    .col(Tag::Uuid)
+                    .to_owned(),
+            )
+            .await;
+
 
         let _ = manager
             .create_table(

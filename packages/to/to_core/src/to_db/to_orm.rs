@@ -42,7 +42,7 @@ use entity::entities::{tag, textual_objects};
 use entity::entities::textual_objects::{ActiveModel, Column, Entity, Model};
 use pebble_query::errors::PebbleQueryError;
 use pebble_query::pebble_query_result::{PebbleQueryResult, PebbleQueryResultGeneric, PebbleQueryResultUtilTrait};
-use sea_orm::{Database, DatabaseConnection, DbBackend, ModelTrait, Statement};
+use sea_orm::{Database, DatabaseConnection, DbBackend, FromQueryResult, ModelTrait, Statement};
 use std::io;
 use thiserror::Error;
 // use seaorm query trait
@@ -54,9 +54,9 @@ use crate::to_db::util_trait::{ToOrmMapper, ToOrmMapperTrait};
 use entity::entities::prelude::*;
 use sea_orm::error::DbErr;
 use sea_orm::sea_query::SimpleExpr;
-use sqlx::encode::IsNull::No;
 use uuid::Uuid;
 use carrel_commons::carrel::common::tag::v2::Tag as CommonTagV2;
+use crate::to_tag::to_tag_key_group::KeyGroups;
 use crate::to_tag::to_tag_struct::ToTag;
 
 #[derive(Debug, Error)]
@@ -260,8 +260,25 @@ pub trait ToOrmTrait {
         query: StandardQuery,
     ) -> Result<PebbleQueryResultGeneric<TextualObject>, ToOrmError>;
 
+    async fn query_tags(
+        &self,
+        query: StandardQuery,
+    ) -> Result<PebbleQueryResultGeneric<ToTag>, ToOrmError>;
+
     // insert tags belonging to a TO
     async fn insert_to_tags(&self, tags: Vec<CommonTagV2>, to_id: i32) -> Result<(), ToOrmError>;
+
+    // find to by tag uuid
+    async fn find_by_tag_uuid(&self, tag_uuid: Uuid) -> Result<Option<TextualObject>, ToOrmError>;
+
+    // list all tags with distinct key groups
+    async fn list_tags_ground_by_key(&self) -> Result<Vec<KeyGroups>, ToOrmError>;
+
+    // get tags by key
+    async fn find_tags_by_key(&self, key: &str) -> Result<Vec<ToTag>, ToOrmError>;
+
+    // get tags by key and value
+    async fn find_tags_by_key_and_value(&self, key: &str, value: &str) -> Result<Vec<ToTag>, ToOrmError>;
 }
 
 #[async_trait]
@@ -484,6 +501,14 @@ impl ToOrmTrait for ToOrm {
         Ok(result_with_tags)
     }
 
+    async fn query_tags(&self, query: StandardQuery) -> Result<PebbleQueryResultGeneric<ToTag>, ToOrmError> {
+        let db = self.get_connection().await?;
+        let result = PebbleQueryTextualObject::query_tags(&db, query).await?;
+        // |to_tag_model| ToOrmMapper::to_tag_model_to_to_tag(to_tag_model)
+        let totags = result.map_into_generic::<ToTag>(|to_tag_model| Some(ToOrmMapper::to_tag_model_to_to_tag(to_tag_model)), Some("to_tag_model_to_to_tag".to_string()));
+        Ok(totags)
+    }
+
     async fn insert_to_tags(&self, tags: Vec<CommonTagV2>, to_id: i32) -> Result<(), ToOrmError> {
         let db = self.get_connection().await?;
         let models: Vec<tag::ActiveModel> = tags.into_iter().map(|common_tag| {
@@ -495,6 +520,62 @@ impl ToOrmTrait for ToOrm {
             .map_err(ToOrmError::DatabaseConnectionError)?;
         Ok(())
     }
+
+    async fn find_by_tag_uuid(&self, tag_uuid: Uuid) -> Result<Option<TextualObject>, ToOrmError> {
+        let db = self.get_connection().await?;
+        let tag = Tag::find()
+            .filter(Column::Uuid.eq(tag_uuid.to_string()))
+            .one(&db)
+            .await
+            .map_err(ToOrmError::DatabaseConnectionError)?;
+
+        if let Some(tag) = tag {
+            let to = self.find_by_id(tag.to_id).await?;
+            Ok(to)
+        } else {
+            Ok(None)
+        }
+    }
+
+    async fn list_tags_ground_by_key(&self) -> Result<Vec<KeyGroups>, ToOrmError> {
+        let db = self.get_connection().await?;
+        let tags = KeyGroups::find_by_statement(
+            Statement::from_string(
+                DbBackend::Sqlite,
+                r#"SELECT key, value, Count(key) as 'key_count' from tag group by tag.key, tag.value"#.to_owned(),
+            )
+        )
+            .all(&db)
+            .await
+            .map_err(ToOrmError::DatabaseConnectionError)?;
+
+        Ok(tags)
+    }
+
+    async fn find_tags_by_key(&self, key: &str) -> Result<Vec<ToTag>, ToOrmError> {
+        let db = self.get_connection().await?;
+        let tags = Tag::find()
+            .filter(tag::Column::Key.eq(key))
+            .all(&db)
+            .await
+            .map_err(ToOrmError::DatabaseConnectionError)?;
+
+        let tags = tags.into_iter().map(|tag| ToOrmMapper::to_tag_model_to_to_tag(tag)).collect();
+        Ok(tags)
+    }
+
+     async fn find_tags_by_key_and_value(&self, key: &str, value: &str) -> Result<Vec<ToTag>, ToOrmError> {
+        let db = self.get_connection().await?;
+        let tags = Tag::find()
+            .filter(tag::Column::Key.eq(key))
+            .filter(tag::Column::Value.eq(value))
+            .all(&db)
+            .await
+            .map_err(ToOrmError::DatabaseConnectionError)?;
+
+        let tags = tags.into_iter().map(|tag| ToOrmMapper::to_tag_model_to_to_tag(tag)).collect();
+        Ok(tags)
+    }
 }
 
 #[cfg(test)]
@@ -502,7 +583,7 @@ mod tests {
     use super::*;
     use carrel_utils::uuid::new_v4;
 
-    fn get_to_orm() -> ToOrm {
+    pub fn get_to_orm_dev_db() -> ToOrm {
         dotenv::dotenv().ok();
         let db_path = std::env::var("DATABASE_URL").unwrap();
         let query = ToOrm::new(&db_path);
@@ -511,20 +592,20 @@ mod tests {
 
     #[tokio::test]
     async fn test_find_by_ticket_id() {
-        let first_to = get_to_orm().find_by_ticket_id("ticket_id1").await.unwrap();
+        let first_to = get_to_orm_dev_db().find_by_ticket_id("ticket_id1").await.unwrap();
         assert_eq!(first_to.is_some(), true);
         assert_eq!(first_to.unwrap().ticket_id, "ticket_id1");
     }
 
     #[tokio::test]
     async fn test_count_tos() {
-        let count = get_to_orm().count_tos().await.unwrap();
+        let count = get_to_orm_dev_db().count_tos().await.unwrap();
         assert_eq!(count, 3);
     }
 
     #[tokio::test]
     async fn test_find_by_ticket_ids() {
-        let tos = get_to_orm()
+        let tos = get_to_orm_dev_db()
             .find_by_ticket_ids(vec!["ticket_id1".to_string(), "ticket_id2".to_string()])
             .await
             .unwrap();
@@ -535,57 +616,57 @@ mod tests {
 
     #[tokio::test]
     async fn test_find_by_json_field() {
-        let tos_one_result = get_to_orm()
+        let tos_one_result = get_to_orm_dev_db()
             .find_by_json_field("file_full_name", "chn.pdf")
             .await
             .unwrap();
         assert_eq!(tos_one_result.len(), 1);
         assert_eq!(tos_one_result[0].ticket_id, "ticket_id1");
 
-        let find_first_by_json_field = get_to_orm()
+        let find_first_by_json_field = get_to_orm_dev_db()
             .find_first_by_json_field("file_full_name", "chn.pdf")
             .await
             .unwrap();
 
         assert_eq!(find_first_by_json_field.is_some(), true);
 
-        let find_any_one_result = get_to_orm()
+        let find_any_one_result = get_to_orm_dev_db()
             .find_any_by_json_value("file_full_name", "chn.pdf")
             .await
             .unwrap();
         assert_eq!(find_any_one_result, true);
 
-        let tos_exact_no_result = get_to_orm()
+        let tos_exact_no_result = get_to_orm_dev_db()
             .find_by_json_field("file_full_name", "chn")
             .await
             .unwrap();
         assert_eq!(tos_exact_no_result.len(), 0);
 
-        let find_first_no_result = get_to_orm()
+        let find_first_no_result = get_to_orm_dev_db()
             .find_first_by_json_field("file_full_name", "chn")
             .await
             .unwrap();
         assert_eq!(find_first_no_result.is_some(), false);
 
-        let find_any_no_result = get_to_orm()
+        let find_any_no_result = get_to_orm_dev_db()
             .find_any_by_json_value("file_full_name", "chn")
             .await
             .unwrap();
         assert_eq!(find_any_no_result, false);
 
         // query non existing field
-        let tos_non_existing_field = get_to_orm()
+        let tos_non_existing_field = get_to_orm_dev_db()
             .find_by_json_field(new_v4().to_string().as_str(), "chn")
             .await
             .unwrap();
 
-        let find_first_non_existing_field = get_to_orm()
+        let find_first_non_existing_field = get_to_orm_dev_db()
             .find_first_by_json_field(new_v4().to_string().as_str(), "chn")
             .await
             .unwrap();
         assert_eq!(find_first_non_existing_field.is_some(), false);
 
-        let find_any_non_existing_field = get_to_orm()
+        let find_any_non_existing_field = get_to_orm_dev_db()
             .find_any_by_json_value(new_v4().to_string().as_str(), "chn")
             .await
             .unwrap();
@@ -594,10 +675,52 @@ mod tests {
         assert_eq!(tos_non_existing_field.len(), 0);
 
         // query non existing value
-        let tos_non_existing_value = get_to_orm()
+        let tos_non_existing_value = get_to_orm_dev_db()
             .find_by_json_field("file_full_name", new_v4().to_string().as_str())
             .await
             .unwrap();
         assert_eq!(tos_non_existing_value.len(), 0);
+    }
+
+    #[tokio::test]
+    async fn test_list_tag_by_keys() {
+        let to_orm = get_to_orm_dev_db();
+        let tags = to_orm.list_tags_ground_by_key().await.unwrap();
+        assert_eq!(tags.len(), 3);
+        let first_tag_group = tags.get(0).unwrap();
+        assert_eq!(first_tag_group.key, "tag_key_1");
+        assert_eq!(first_tag_group.value, "tag_value_1");
+        assert_eq!(first_tag_group.key_count, 1);
+
+        let second_tag_group = tags.get(1).unwrap();
+        assert_eq!(second_tag_group.key, "tag_key_1");
+        assert_eq!(second_tag_group.value, "tag_value_3");
+        assert_eq!(second_tag_group.key_count, 1);
+
+        let third_tag_group = tags.get(2).unwrap();
+        assert_eq!(third_tag_group.key, "tag_key_2");
+        assert_eq!(third_tag_group.value, "tag_value_2");
+        assert_eq!(third_tag_group.key_count, 1);
+
+    }
+
+    #[tokio::test]
+    async fn find_tag_by_and_and_value() {
+        let to_orm = get_to_orm_dev_db();
+        let tags_by_key_and_value = to_orm.find_tags_by_key_and_value("tag_key_1", "tag_value_1").await.unwrap();
+        assert_eq!(tags_by_key_and_value.len(), 1);
+        let first_tag = tags_by_key_and_value.get(0).unwrap();
+        assert_eq!(first_tag.key, "tag_key_1".to_owned());
+        assert_eq!(first_tag.value, Some("tag_value_1".to_owned()));
+
+        let tags_by_key = to_orm.find_tags_by_key("tag_key_1").await.unwrap();
+        assert_eq!(tags_by_key.len(), 3);
+        let first_tag = tags_by_key.get(0).unwrap();
+        assert_eq!(first_tag.key, "tag_key_1");
+        assert_eq!(first_tag.value, Some("tag_value_1".to_owned()));
+        let second_tag = tags_by_key.get(1).unwrap();
+        assert_eq!(second_tag.key, "tag_key_1");
+        assert_eq!(second_tag.value, Some("tag_value_3".to_owned()));
+
     }
 }

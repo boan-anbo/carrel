@@ -2,8 +2,8 @@ export const colors = {
     "primaryText": "#326767",
     "primaryHeading": "#326767",
     "primaryTextMute": "#428A8A",
-    "primaryBg": "#eef7f77c",
-    "primaryBgHover": "#CFE8E8",
+    "primaryBg": "#eef7f73b",
+    "primaryBgHover": "#def5f58e",
     "secondaryText": "#EEF7F7",
     "secondaryBg": "#428A8A",
 

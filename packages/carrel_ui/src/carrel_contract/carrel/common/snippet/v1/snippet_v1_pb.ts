@@ -15,6 +15,8 @@ import {Context} from "../../context/v1/context_v1_pb.js";
  */
 export class Snippet extends Message<Snippet> {
   /**
+   * 
+   *
    * @generated from field: string snippet = 1;
    */
   snippet = "";

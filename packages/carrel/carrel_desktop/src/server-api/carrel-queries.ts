@@ -1,10 +1,12 @@
+import { PlainMessage } from "@bufbuild/protobuf/dist/types/message";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { dataDir } from "@tauri-apps/api/path";
 import { Archive } from "../carrel_server_client/carrel/common/archive/v1/archive_v1_pb";
 import { File } from "../carrel_server_client/carrel/common/file/v1/file_v1_pb";
 import { Firefly } from "../carrel_server_client/carrel/common/firefly/v2/firefly_v2_pb";
 import { Project } from "../carrel_server_client/carrel/common/project/v2/project_v2_pb";
-import { QueryFilesResponse, QueryFirefliesResponse } from "../carrel_server_client/carrel/server/project_manager/v1/server_project_manager_v1_pb";
+import { TagGroup } from "../carrel_server_client/carrel/common/tag/v2/tag_v2_pb";
+import { ListAllTagGroupsResponse, QueryFilesResponse, QueryFirefliesResponse } from "../carrel_server_client/carrel/server/project_manager/v1/server_project_manager_v1_pb";
 import { StandardQuery } from "../carrel_server_client/generic/api/query/v1/query_v1_pb";
 import { carrelApi } from "./carrel-api";
 
@@ -186,7 +188,7 @@ export class ApiQuery {
 
             if (!projectDirectory || !query) {
                 return null
-                }
+            }
 
             let result = await carrelApi.queryFireflies(
                 {
@@ -200,7 +202,24 @@ export class ApiQuery {
         }
     )
 
+    ListAllTagGroups = (projectDirectory: string | undefined) => useQuery(
+        ["list_all_tag_groups", projectDirectory],
+        async (): Promise<PlainMessage<ListAllTagGroupsResponse> | null> => {
 
+            if (projectDirectory) {
+
+            this.log("ListAllTagGroups", "list_all_tag_groups", { projectDirectory })
+                let result = await carrelApi.listAllTagGroups(
+                    {
+                        projectDirectory
+                    })
+
+                this.log("ListAllTagGroups", "list_all_tag_groups", result)
+                return result
+            }
+            return null;
+        }
+    )
 }
 
 export const carrelQueries = new ApiQuery()
