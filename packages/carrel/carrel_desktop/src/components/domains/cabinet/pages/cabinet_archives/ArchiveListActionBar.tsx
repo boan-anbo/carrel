@@ -10,7 +10,7 @@ import { notify } from "../../../../../notify/notify";
 import { carrelApi } from "../../../../../server-api/carrel-api";
 import { carrelQueries } from "../../../../../server-api/carrel-queries";
 import { RootState } from "../../../../../store/store";
-import { ActionBar } from "../../../../ui/components/ActionBar/ActionBar";
+import { ActionBar } from "../../../../ui/components";
 
 export const ArchiveListActionBar = (props: {
     selectedArchiveId: number | null,
@@ -67,7 +67,7 @@ export const ArchiveListActionBar = (props: {
           </MenuList>
         </Menu>
         <i className="pi pi-bars p-toolbar-separator mr-2" />
-       
+
         <Button
           className="p-button-success ml-2"
         >Refresh</Button>
@@ -151,7 +151,7 @@ export const ArchiveListActionBar = (props: {
 
     return (
         <div>
-            <ActionBar left={leftContents} right={rightContents}/>
+            <ActionBar top={leftContents} right={rightContents}/>
         </div>
     )
 }

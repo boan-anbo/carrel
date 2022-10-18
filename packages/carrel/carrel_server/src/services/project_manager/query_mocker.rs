@@ -1,7 +1,7 @@
 use carrel_commons::carrel::common::file::v1::File;
 use carrel_commons::carrel::common::firefly::v2::Firefly as FireflyV2;
 use carrel_commons::carrel::server::project_manager::v1::{QueryFilesRequest, QueryFilesResponse, QueryFirefliesRequest, QueryFirefliesResponse};
-use carrel_commons::generic::api::query::v1::{SortCondition, SortDirection, StandardQueryResultMetadata};
+use carrel_commons::generic::api::query::v1::{SortDirection, StandardQueryResultMetadata};
 use carrel_utils::uuid::new_v4;
 use tonic::{async_trait, Response, Status};
 

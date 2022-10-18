@@ -1,11 +1,10 @@
 use std::path::PathBuf;
 use async_trait::async_trait;
 use carrel_utils::datetime::get_iso_string::get_now_iso_string;
-use sea_orm::{ActiveModelTrait, DatabaseConnection, DbErr, QueryFilter, ColumnTrait, EntityTrait, InsertResult, IntoActiveModel, QueryOrder, QuerySelect};
+use sea_orm::{ DatabaseConnection, DbErr, QueryFilter, ColumnTrait, EntityTrait, InsertResult, IntoActiveModel, QueryOrder, QuerySelect};
 use sea_orm::ActiveValue::Set;
 use thiserror::Error;
 use migration::{Migrator, MigratorTrait};
-use entity::generated::prelude::*;
 use entity::generated::app_project;
 use entity::generated::app_project::{ActiveModel, Entity, Model};
 

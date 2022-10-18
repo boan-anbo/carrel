@@ -27,7 +27,7 @@ impl From<AddArchiveDto> for archive::ActiveModel {
 impl ArchiveTrait for archive::Model {
     fn into_archive(self) -> Archive {
         Archive {
-            id: self.id as i64,
+            id: self.id,
             uuid: self.uuid,
             project_uuids: vec![],
             name: self.name,

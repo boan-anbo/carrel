@@ -10,7 +10,7 @@ use carrel_db::errors::database_error::SeaOrmDatabaseError::DatabaseUpdateError;
 use carrel_db::query::query_file::{PebbleQueryFile, PebbleQueryFileTrait};
 use pebble_query::pebble_query_result::PebbleQueryResult;
 use sea_orm::ActiveValue::Set;
-use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, PaginatorTrait, QueryFilter};
+use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, PaginatorTrait, QueryFilter};
 
 use crate::project::archivist::archive_query_conditions::CarrelDbConditions;
 use crate::project::db_manager::carrel_db_manager::{CarrelDbManager, CarrelDbManagerTrait};
@@ -82,6 +82,7 @@ pub trait ManageFileTrait {
     // update one file
     async fn file_update_file(
         &self,
+        db: &DatabaseConnection,
         file: file::ActiveModel,
     ) -> Result<file::Model, SeaOrmDatabaseError>;
 
@@ -262,12 +263,13 @@ impl ManageFileTrait for CarrelDbManager {
         }
     }
 
+    // since this usually involves a large amount of files, the DB needs to be passed in and shared with other processes in order not to exceed the Sqlite resource limit.
     async fn file_update_file(
         &self,
-        file: ActiveModel,
+        db: &DatabaseConnection,
+        file: file::ActiveModel,
     ) -> Result<file::Model, SeaOrmDatabaseError> {
-        let db = self.get_connection().await;
-        let updated = file.update(&db).await.map_err(DatabaseUpdateError)?;
+        let updated = file.update(db).await.map_err(DatabaseUpdateError)?;
         Ok(updated)
     }
 
@@ -385,7 +387,7 @@ mod tests {
 
         let updated_file = project_manager
             .db
-            .file_update_file(file_model)
+            .file_update_file(file_model, )
             .await
             .unwrap();
         assert_eq!(updated_file.file_name, "new_file_name");

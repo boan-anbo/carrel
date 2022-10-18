@@ -4,7 +4,7 @@
 /* @ts-nocheck */
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
-import {Message, proto3, protoInt64} from "@bufbuild/protobuf";
+import {Message, proto3} from "@bufbuild/protobuf";
 import {Document} from "../../document/v1/document_pb.js";
 import {Importance} from "../../importance/v1/importance_v1_pb.js";
 import {File} from "../../file/v1/file_v1_pb.js";
@@ -16,9 +16,9 @@ import {File} from "../../file/v1/file_v1_pb.js";
  */
 export class Archive extends Message<Archive> {
   /**
-   * @generated from field: int64 id = 1;
+   * @generated from field: int32 id = 1;
    */
-  id = protoInt64.zero;
+  id = 0;
 
   /**
    * @generated from field: string uuid = 2;
@@ -95,7 +95,7 @@ export class Archive extends Message<Archive> {
   static readonly runtime = proto3;
   static readonly typeName = "carrel.common.archive.v1.Archive";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "id", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 1, name: "id", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
     { no: 2, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 3, name: "project_uuids", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
     { no: 4, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },

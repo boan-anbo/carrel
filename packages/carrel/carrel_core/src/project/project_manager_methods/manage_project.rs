@@ -4,8 +4,10 @@ use carrel_app_db::entity::generated::app_project;
 use carrel_commons::carrel::common::project::v2::Project as CommonProjectV2;
 use carrel_commons::carrel::core::project_manager::v1::ProjectInfo;
 use carrel_db::implementation::project_traits::CommonProjectTrait;
+use sea_orm::{IntoActiveModel, Set};
 
 use crate::app::app_manager::entity::implementation::AppProject;
+use crate::project::archivist::archivist::Archivist;
 use crate::project::config::const_config_file_name::CONFIG_DEFAULT_FILE_NAME;
 use crate::project::config::project_config::ProjectConfig;
 use crate::project::db_manager::carrel_db_manager::CarrelDbManagerTrait;
@@ -13,6 +15,7 @@ use crate::project::db_manager::project_db_manager::MangageProjects;
 use crate::project::error::project_config_error::ProjectConfigError;
 use crate::project::error::project_error::ProjectError;
 use crate::project::error::project_error::ProjectError::ProjectFolderDoesNotExit;
+use crate::project::file_manager::file_manager::ManageFileTrait;
 use crate::project::project_manager::{CarrelProjectManager, InstantiateFromConfig};
 use crate::project::to_manager::to_manager::KeepFireflies;
 
@@ -38,7 +41,9 @@ pub trait ManageProjectTrait {
     async fn update_project_info(&self) -> Result<CommonProjectV2, ProjectError>;
     /// Get the project info
     async fn get_project_info(&self, app_project: app_project::Model) -> ProjectInfo;
-    async fn get_project(&self) -> CommonProjectV2;
+    async fn get_project_as_common_project(&self) -> CommonProjectV2;
+    // update project stats such as archive and file counts and returns project stats
+    async fn update_project_stats(&self) -> Result<CommonProjectV2, ProjectError>;
 }
 
 #[async_trait::async_trait]
@@ -125,17 +130,18 @@ impl ManageProjectTrait for CarrelProjectManager {
     }
 
     async fn update_project_info(&self) -> Result<CommonProjectV2, ProjectError> {
-        let project_active = self.to_project().await;
-
+        let project_active = self.get_current_project_active_model().await;
         let updated_project_model = self.db.update_project(project_active).await.map_err(|_| {
             ProjectError::ProjectUpdateError("Cannot update project info in db".to_string())
         })?;
-
         Ok(updated_project_model.into_common_project_v2())
     }
 
     // always use the individual folder's version of Project as the ultimate source of truth, EXCEPT for the ID of the project.
     async fn get_project_info(&self, app_project: app_project::Model) -> ProjectInfo {
+        // update project stats first.
+        self.update_project_stats().await.unwrap();
+
         let project = self.db.get_project().await.unwrap();
 
         let directory = self.project_directory.clone();
@@ -164,15 +170,26 @@ impl ManageProjectTrait for CarrelProjectManager {
                 .to_string(),
             // get the db type from the config and convert it to i32
             db_type: self.config.carrel_db_type as i32,
-            archive_count: ,
-            file_count: 0,
+            archive_count: project.archive_count,
+            file_count: project.file_count,
             project: vec![app_project.into_common_project_v2()],
         }
     }
 
-    async fn get_project(&self) -> CommonProjectV2 {
+    async fn get_project_as_common_project(&self) -> CommonProjectV2 {
         let project = self.db.get_project().await.unwrap();
         project.into_common_project_v2()
+    }
+
+    async fn update_project_stats(&self) -> Result<CommonProjectV2, ProjectError> {
+        let project = self.db.get_project().await.unwrap();
+        let archive_counts = self.db.project_count_archives().await.unwrap();
+        let file_counts = self.db.file_count_all_files().await.unwrap();
+        let mut active_project = project.into_active_model();
+        active_project.archive_count = Set(archive_counts as i32);
+        active_project.file_count = Set(file_counts as i32);
+        let updated_project = self.db.update_project(active_project).await.unwrap();
+        Ok(updated_project.into_common_project_v2())
     }
 }
 
@@ -244,5 +261,8 @@ mod tests {
     #[tokio::test]
     async fn get_project_info() {
         let project = CarrelTester::get_project_manager_with_seeded_db().await;
+
     }
+
+
 }

@@ -20,8 +20,9 @@ export function CabinetArchives(props: CabinetArchivesProps) {
         useState<number | null>(null);
 
     const first = (
-        
+
             <ArchiveList
+                selectedArchiveId={selectedArchiveId}
                 projectDirectory={props.projectDirectory}
                 onArchiveIdSelected={setSelectedArchiveId}
             />

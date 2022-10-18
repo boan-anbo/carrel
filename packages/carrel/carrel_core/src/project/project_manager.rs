@@ -19,7 +19,7 @@ pub struct CarrelProjectManager {
 }
 
 impl CarrelProjectManager {
-    pub async fn to_project(&self) -> project::ActiveModel {
+    pub async fn get_current_project_active_model(&self) -> project::ActiveModel {
         let directory = &self.project_directory;
 
         let directory_string = directory.to_str().unwrap().to_string();

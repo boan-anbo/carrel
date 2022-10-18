@@ -107,9 +107,9 @@ export class TagGroup extends Message<TagGroup> {
   key = "";
 
   /**
-   * @generated from field: string value = 2;
+   * @generated from field: optional string value = 2;
    */
-  value = "";
+  value?: string;
 
   /**
    * @generated from field: int32 key_count = 3;
@@ -130,7 +130,7 @@ export class TagGroup extends Message<TagGroup> {
   static readonly typeName = "carrel.common.tag.v2.TagGroup";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
     { no: 3, name: "key_count", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
     { no: 4, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
   ]);

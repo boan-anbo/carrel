@@ -5,7 +5,7 @@ use carrel_utils::uuid::new_v4;
 #[derive(Debug, FromQueryResult)]
 pub struct KeyGroups {
     pub key: String,
-    pub value: String,
+    pub value: Option<String>,
     pub key_count: i32,
 }
 

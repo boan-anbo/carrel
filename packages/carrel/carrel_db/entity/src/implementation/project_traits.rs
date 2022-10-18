@@ -20,6 +20,8 @@ impl From<CreateProjectRequest> for project::ActiveModel {
             to_name: Set(Some(create_project.to_name)),
             create_at: Set(get_now_iso_string()),
             updated_at: Set(get_now_iso_string()),
+            archive_count: Set(0),
+            file_count:Set(0)
         }
     }
 }

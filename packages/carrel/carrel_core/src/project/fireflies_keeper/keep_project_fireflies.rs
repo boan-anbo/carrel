@@ -18,6 +18,7 @@ use pdf_gongju::extract::extractor_options::ExtractorOption;
 use sea_orm::ActiveValue::Set;
 use sea_orm::IntoActiveModel;
 use std::path::PathBuf;
+use crate::project::db_manager::carrel_db_manager::CarrelDbManagerTrait;
 
 #[async_trait]
 pub trait KeepProjectFireflies {
@@ -42,6 +43,7 @@ impl KeepProjectFireflies for CarrelProjectManager {
         let outdated_files = pick_outdated_files(all_files);
         let synced_files = self.sync_file_fireflies(outdated_files).await.unwrap();
         Ok(synced_files)
+        // Ok(vec![])
     }
 
     async fn sync_file_fireflies(
@@ -50,6 +52,7 @@ impl KeepProjectFireflies for CarrelProjectManager {
     ) -> Result<Vec<file::Model>, ProjectError> {
         let mut updated_files: Vec<file::Model> = Vec::new();
         let extractor_opt = &ExtractorOption::default();
+        let db = &self.db.get_connection().await;
         for file in files {
             let extraction_result =
                 PdfGongju::extract_fireflies(file.full_path.as_str(), extractor_opt);
@@ -59,7 +62,7 @@ impl KeepProjectFireflies for CarrelProjectManager {
                     let _receipt = self.to.save_firefly_to_to_db(fireflies).await.unwrap();
                     let mut file_model = file.into_active_model();
                     file_model.set_synced_at_now();
-                    let updated_file = self.db.file_update_file(file_model).await.unwrap();
+                    let updated_file = self.db.file_update_file(&db, file_model, ).await.unwrap();
                     updated_files.push(updated_file);
                 }
                 Err(e) => match e {
@@ -84,27 +87,37 @@ impl KeepProjectFireflies for CarrelProjectManager {
     async fn update_project_file_status(&self) -> Result<(), ProjectError> {
         let all_files = self.db.file_list_all_files().await.unwrap();
         // get active model from modes
-        for file in all_files {
-            // model to active model
-            let mut file_model = file.into_active_model();
+        // this needs to be done in batches otherwise Sqlite Db will panic with "resource unavailable" at around 8000 recents.
 
-            let file_path = PathBuf::from(file_model.full_path.clone().unwrap());
-            if !file_path.exists() {
-                file_model.is_missing_file = Set(1);
+        let db = self.db.get_connection().await;
+        for chunk in all_files
+            .chunks(self.db.batch_insert_size)
+            .map(|chunk| chunk.to_vec())
+        {
+            for file in chunk {
+                // model to active model
+                let mut file_model = file.into_active_model();
+
+                // load file path
+                let file_path = PathBuf::from(file_model.full_path.clone().unwrap());
+                // check if the file exists
+                if !file_path.exists() {
+                    file_model.is_missing_file = Set(1);
+                }
+
+                // this modifies the active model but does not save it to the database
+                let modified_at = file_model.get_file_latested_modified_at();
+
+                file_model.modified_at = Set(modified_at);
+
+                // use the above stats to decide whether the file model is out of sync
+                file_model.is_out_of_sync = if file_model.is_out_of_sync() {
+                    Set(1)
+                } else {
+                    Set(0)
+                };
+                let _ = self.db.file_update_file(&db, file_model, ).await.unwrap();
             }
-
-            // this modifies the active model but does not save it to the database
-            let modified_at = file_model.get_file_latested_modified_at();
-
-            file_model.modified_at = Set(modified_at);
-
-            file_model.is_out_of_sync = if file_model.is_out_of_sync() {
-                Set(1)
-            } else {
-                Set(0)
-            };
-
-            let _ = self.db.file_update_file(file_model).await.unwrap();
         }
         Ok(())
     }
@@ -207,7 +220,6 @@ mod tests {
         let first_tag = first_firefly.tags.first().unwrap();
         assert_eq!(first_tag.key, "highlight");
         assert_eq!(first_tag.value.clone().unwrap(), "argument");
-
     }
 
     #[tokio::test]
@@ -254,7 +266,7 @@ mod tests {
         let mut first_file_model = first_file.into_active_model();
         first_file_model.file_name = Set("chn2.pdf".to_string());
         first_file_model.full_path = Set(new_v4().to_string());
-        let _ = pm.db.file_update_file(first_file_model).await.unwrap();
+        let _ = pm.db.file_update_file(pm.db.get_connection(), first_file_model, ).await.unwrap();
 
         // update file status
         pm.update_project_file_status().await.unwrap();

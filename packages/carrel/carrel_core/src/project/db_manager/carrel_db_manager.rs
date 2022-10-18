@@ -85,7 +85,7 @@ impl CarrelDbManagerTrait for CarrelDbManager {
     async fn get_connection(&self) -> DatabaseConnection {
         get_connection(self.carrel_db_full_path.to_str().unwrap())
             .await
-            .unwrap()
+            .expect(format!("Failed to get connection to the database {}", self.carrel_db_full_path.to_str().unwrap()).as_str())
     }
 }
 

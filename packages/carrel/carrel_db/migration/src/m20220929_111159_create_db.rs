@@ -15,6 +15,8 @@ pub enum Project {
     Directory,
     DbName,
     ToName,
+    ArchiveCount,
+    FileCount,
     CreateAt,
     UpdatedAt,
 }
@@ -85,6 +87,8 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Project::ToName).string().null())
                     .col(ColumnDef::new(Project::CreateAt).string().not_null())
                     .col(ColumnDef::new(Project::UpdatedAt).string().not_null())
+                    .col(ColumnDef::new(Project::ArchiveCount).integer().not_null().default(0))
+                    .col(ColumnDef::new(Project::FileCount).integer().not_null().default(0))
                     .to_owned(),
             )
             .await

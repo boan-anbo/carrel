@@ -277,6 +277,20 @@ export class ProjectInfo extends Message<ProjectInfo> {
   dbType = CarrelDbType.UNSPECIFIED;
 
   /**
+   * archive count
+   *
+   * @generated from field: int32 archive_count = 9;
+   */
+  archiveCount = 0;
+
+  /**
+   * file count
+   *
+   * @generated from field: int32 file_count = 10;
+   */
+  fileCount = 0;
+
+  /**
    * @generated from field: repeated carrel.common.project.v2.Project project = 12;
    */
   project: Project[] = [];
@@ -297,6 +311,8 @@ export class ProjectInfo extends Message<ProjectInfo> {
     { no: 6, name: "db_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 7, name: "to_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 8, name: "db_type", kind: "enum", T: proto3.getEnumType(CarrelDbType) },
+    { no: 9, name: "archive_count", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 10, name: "file_count", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
     { no: 12, name: "project", kind: "message", T: Project, repeated: true },
   ]);
 

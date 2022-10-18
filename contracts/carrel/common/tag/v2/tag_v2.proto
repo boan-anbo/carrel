@@ -22,7 +22,7 @@ message Tag {
 message TagGroup {
     
     string key = 1;
-    string value = 2;
+    optional string value = 2;
     int32 key_count = 3;
     optional string uuid = 4;
 }

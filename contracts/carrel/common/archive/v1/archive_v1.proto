@@ -12,7 +12,7 @@ import "carrel/common/importance/v1/importance_v1.proto";
 
 // A collection of materials for certain purposes and associated with certain projects.
 message Archive {
-    int64 id = 1;
+    int32 id = 1;
 
     string uuid = 2;
     // the project uuid it is associated with
@@ -32,7 +32,6 @@ message Archive {
     bool is_favorite = 9;
 
     repeated carrel.common.file.v1.File files = 10;
-
 
     // time markers
     string created_at = 11;
