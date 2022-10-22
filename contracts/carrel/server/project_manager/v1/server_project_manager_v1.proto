@@ -41,7 +41,7 @@ service ProjectManagerService {
   // List all files stored in the archive with the given ID.
   rpc ListFilesInArchive (ListFilesInArchiveRequest) returns (ListFilesInArchiveResponse) {}
 
-  rpc SyncProjectArchives (SyncProjectArchivesRequest) returns (SyncProjectArchivesResponse) {}
+  rpc SyncProjectArchives (SyncProjectRequest) returns (SyncProjectResponse) {}
 
   rpc ListAllProjectFiles (ListAllProjectFilesRequest) returns (ListAllProjectFilesResponse) {}
 
@@ -243,21 +243,20 @@ message ListFilesInArchiveResponse {
 }
 
 // message to sync archive
-message SyncProjectArchivesRequest {
+message SyncProjectRequest {
   // the folder of the project
   string project_directory = 1;
-  // the id of the archive
-  int32 archive_id = 2;
+  // the app directory
+  string app_directory = 2;
 }
 
-// message to sync archive
-message SyncProjectArchivesResponse {
+// message to sync
+message SyncProjectResponse {
   // the folder of the project
   string project_directory = 1;
   // the id of the archive
-  repeated carrel.common.file.v1.File synced_files = 3;
-
-  repeated carrel.common.firefly.v2.Firefly new_fireflies = 4;
+  string task_uuid = 2;
+  string message = 3;
 }
 
 

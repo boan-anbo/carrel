@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "buf lint",
-    "generate": "buf generate --output ../packages/to/to_tagger-app/src/carrel_server_client && buf generate --output ../packages/carrel/carrel_desktop/src/carrel_server_client && buf generate --output ../packages/carrel_ui/src/carrel_contract"
+    "generate": "buf generate --output ../packages/to/to_tagger-app/src/carrel_server_client && buf generate --output ../packages/carrel/carrel_desktop/src/backend/carrel_server_client"
   },
   "packageManager": "pnpm",
   "author": "",

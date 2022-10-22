@@ -79,3 +79,33 @@ message ProjectInfo {
   repeated carrel.common.project.v2.Project project = 12;
 }
 
+
+
+message Task {
+  int32 id = 1;
+  // this is a string identifier, like "import", "export", "sync", etc.
+  // This should come from enum string options to enforce uniformity.
+  // An identifier can allow or disallow multiple tasks to run at the same time by setting `allow_multiple`` to true or false.
+  string identifier = 2;
+  string uuid = 3;
+  // describe what the task does
+  string description = 4;
+  TaskState state = 5;
+  string created_at = 6;
+  string updated_at = 7;
+  int32 progress = 8;
+  int32 allow_multiple = 9;
+  // the last message the task left
+  string last_message = 10;
+  // who commisioned the task
+  string commissioner = 11;
+}
+
+enum TaskState {
+  TASK_STATE_UNSPECIFIED = 0;
+  TASK_STATE_CREATED = 1;
+  TASK_STATE_RUNNING = 2;
+  TASK_STATE_FINISHED = 3;
+  TASK_STATE_FAILED = 4;
+  TASK_STATE_PAUSED = 5;
+}

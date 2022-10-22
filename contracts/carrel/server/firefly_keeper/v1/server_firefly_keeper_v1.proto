@@ -5,7 +5,7 @@ package carrel.server.firefly_keeper.v1;
 
 
 import "carrel/firefly_keeper/v1/firefly_keeper_v1.proto";
-    
+
 message ScanFolderForFirefliesRequest {
     string directory = 1;
     bool classified_only = 2;
@@ -23,8 +23,15 @@ service FirefliesService {
     ) returns (
         ScanFilesForFirefliesResponse
     );
+
+    // test background
+    rpc TestBackground(
+        TestBackgroundRequest
+    ) returns (
+        TestBackgroundResponse
+    );
 }
- 
+
 message ScanFolderForFirefliesResponse {
     carrel.firefly_keeper.v1.Fireflies fireflies = 1;
 }
@@ -36,4 +43,14 @@ message ScanFilesForFirefliesRequest {
 
 message ScanFilesForFirefliesResponse {
     carrel.firefly_keeper.v1.Fireflies fireflies = 1;
+}
+
+
+
+message TestBackgroundRequest {
+    string message = 1;
+}
+
+message TestBackgroundResponse {
+    string message = 1;
 }
