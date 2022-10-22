@@ -149,12 +149,6 @@ impl MigrationTrait for Migration {
                             .null()
                             .default("NULL"),
                     )
-                    .index(
-                        Index::create()
-                            .name("json_unique_id")
-                            .col(TextualObjects::JsonUniqueId)
-                            .unique(),
-                    )
                     .col(
                         ColumnDef::new(TextualObjects::Card)
                             .json()
@@ -189,6 +183,23 @@ impl MigrationTrait for Migration {
             )
             .await
             .unwrap();
+
+
+        // .index(
+        //     Index::create()
+        //         .name("json_unique_id")
+        //         .col(TextualObjects::JsonUniqueId)
+        //         .unique(),
+        // )
+        let _  = manager
+            .create_index(
+                Index::create()
+                    .name("json_unique_id")
+                    .table(TextualObjects::Table)
+                    .col(TextualObjects::JsonUniqueId)
+                    .to_owned(),
+            )
+            .await;
 
         let _ = manager
             .create_table(

@@ -3,3 +3,4 @@ mod attach_tracing_subscriber;
 pub mod launch_server;
 mod load_cors;
 mod load_health_reporter;
+pub mod event_broadcast;

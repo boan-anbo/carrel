@@ -385,9 +385,11 @@ mod tests {
         let mut file_model = file.into_active_model();
         file_model.file_name = Set("new_file_name".to_string());
 
+        let db = &project_manager.db.get_connection().await;
+
         let updated_file = project_manager
             .db
-            .file_update_file(file_model, )
+            .file_update_file(db, file_model)
             .await
             .unwrap();
         assert_eq!(updated_file.file_name, "new_file_name");

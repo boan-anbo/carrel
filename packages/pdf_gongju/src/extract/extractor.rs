@@ -59,6 +59,8 @@ mod tests {
     use crate::extract::extractor::{PdfExtractor, PdfGongju};
     use crate::extract::extractor_options::ExtractorOption;
 
+
+
     #[test]
     fn test_extract_fireflies() {
         let fireflies = PdfGongju::extract_fireflies("tests/chn.pdf", &ExtractorOption {

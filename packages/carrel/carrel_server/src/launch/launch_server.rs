@@ -5,6 +5,7 @@ use carrel_commons::carrel::server::project_manager::v1::project_manager_service
 use carrel_commons::carrel::server::scaffold::v1::scaffold_new_project_service_server::ScaffoldNewProjectServiceServer;
 use carrel_commons::carrel::FILE_DESCRIPTOR_SET;
 use carrel_commons::grpc::health::v1::health_server::HealthServer;
+use carrel_core::event::carrel_radio::CarrelRadio;
 use tonic::transport::Server;
 
 use crate::consts::server_addr::SERVER_ADDR;
@@ -47,6 +48,9 @@ pub async fn launch_server() {
         .register_encoded_file_descriptor_set(FILE_DESCRIPTOR_SET)
         .build()
         .unwrap();
+
+    // add a shared event broadcaster
+    let event_broadcaster = CarrelRadio::new();
 
     Server::builder()
         .accept_http1(true)

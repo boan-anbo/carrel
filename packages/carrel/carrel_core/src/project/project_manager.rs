@@ -9,6 +9,7 @@ use crate::project::config::project_config::ProjectConfig;
 use crate::project::db_manager::carrel_db_manager::CarrelDbManager;
 use crate::project::to_manager::to_manager::{FireflyKepper, KeepFireflies};
 
+#[derive(Clone)]
 pub struct CarrelProjectManager {
     pub db: CarrelDbManager,
     pub to: FireflyKepper,

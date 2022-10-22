@@ -16,6 +16,7 @@ carrel_app_db_migration = { path = "migration" }
 tokio = { version = "1.13.0", features = ["full"] }
 carrel_utils = { path = "../carrel_utils", features = ["faker"] }
 pebble_query = { path = "../../pebble_query" }
+carrel_commons = { path = "../../carrel_commons" }
 
 
 

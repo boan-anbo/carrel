@@ -20,6 +20,7 @@ use crate::project::to_manager::error::ToManagerError;
 use crate::project::to_manager::firefly_const::TO_JSON_TYPE_FOR_FIREFLY_V2;
 use crate::project::to_manager::util_trait::{ToFirefliesUtils, ToFireflyUtils};
 
+#[derive(Debug, Clone)]
 pub struct FireflyKepper {
     pub to_db_name: String,
     pub to_db_directory: String,

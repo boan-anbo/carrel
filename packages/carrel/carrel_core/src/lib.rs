@@ -15,5 +15,6 @@ pub mod pdf_gongju;
 #[cfg(feature = "test_helper")]
 pub mod test_utils;
 pub mod to;
+pub mod event;
 
 pub use carrel_db;

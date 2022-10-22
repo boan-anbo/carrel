@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use async_trait::async_trait;
 use carrel_utils::datetime::get_iso_string::get_now_iso_string;
-use sea_orm::{ DatabaseConnection, DbErr, QueryFilter, ColumnTrait, EntityTrait, InsertResult, IntoActiveModel, QueryOrder, QuerySelect};
+use sea_orm::{ DatabaseConnection, DbErr, QueryFilter, ColumnTrait, EntityTrait, IntoActiveModel, QueryOrder, QuerySelect};
 use sea_orm::ActiveValue::Set;
 use thiserror::Error;
 use migration::{Migrator, MigratorTrait};
@@ -33,6 +33,7 @@ pub struct CarrelAppDbManager {
 
 #[async_trait]
 pub trait ManageCarrelAppDb {
+    /// The main entrance point of the DbManager
     async fn load(app_directory: &str) -> Result<CarrelAppDbManager, CarrelAppError>;
     async fn init_db(&self) -> Result<(), CarrelAppError>;
     async fn connect(&self) -> Result<DatabaseConnection, CarrelAppError>;

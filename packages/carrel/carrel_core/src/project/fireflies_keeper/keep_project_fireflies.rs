@@ -5,7 +5,9 @@
 //! The specific operations are done by the KeepFireflies trait which provides more general APIs.
 //!
 //! E.g. add_firefly is a general API, but add_firefly_from_project_files is a project level API.
-
+use std::borrow::Borrow;
+use std::ops::Deref;
+use itertools::Itertools;
 use crate::project::error::project_error::ProjectError;
 use crate::project::file_manager::file_manager::ManageFileTrait;
 use crate::project::project_manager::CarrelProjectManager;
@@ -18,12 +20,17 @@ use pdf_gongju::extract::extractor_options::ExtractorOption;
 use sea_orm::ActiveValue::Set;
 use sea_orm::IntoActiveModel;
 use std::path::PathBuf;
+use std::sync::Arc;
+use futures::future::join_all;
+use rayon::prelude::ParallelSliceMut;
+use tokio::spawn;
+use tokio::sync::Mutex;
 use crate::project::db_manager::carrel_db_manager::CarrelDbManagerTrait;
 
 #[async_trait]
 pub trait KeepProjectFireflies {
     /// Go over all archive flies and extract all outdated files and store them into to database.
-    async fn sync_all_project_files(&self) -> Result<Vec<file::Model>, ProjectError>;
+    async fn sync_all_project_files(&self) -> Result<(), ProjectError>;
     /// Check project archive files for:
     /// - out of sync files
     /// - missing files
@@ -32,56 +39,88 @@ pub trait KeepProjectFireflies {
     async fn sync_file_fireflies(
         &self,
         files: Vec<file::Model>,
-    ) -> Result<Vec<file::Model>, ProjectError>;
+    ) -> Result<(), ProjectError>;
 }
 
 #[async_trait]
 impl KeepProjectFireflies for CarrelProjectManager {
-    async fn sync_all_project_files(&self) -> Result<Vec<file::Model>, ProjectError> {
-        let all_files = self.db.file_list_all_files().await.unwrap();
+    async fn sync_all_project_files(&self) -> Result<(), ProjectError> {
+        // update project file status.
         self.update_project_file_status().await.unwrap();
+        // list all files that are out of sync.
+        let all_files = self.db.file_list_all_files().await.unwrap();
         let outdated_files = pick_outdated_files(all_files);
-        let synced_files = self.sync_file_fireflies(outdated_files).await.unwrap();
-        Ok(synced_files)
+        // sync outdated files.
+        self.sync_file_fireflies(outdated_files).await.unwrap();
+        Ok(())
         // Ok(vec![])
     }
 
     async fn sync_file_fireflies(
         &self,
         files: Vec<file::Model>,
-    ) -> Result<Vec<file::Model>, ProjectError> {
-        let mut updated_files: Vec<file::Model> = Vec::new();
-        let extractor_opt = &ExtractorOption::default();
-        let db = &self.db.get_connection().await;
-        for file in files {
-            let extraction_result =
-                PdfGongju::extract_fireflies(file.full_path.as_str(), extractor_opt);
+    ) -> Result<(), ProjectError> {
+        let mut chunks = files.into_iter().chunks(20).into_iter().map(
+            |chunk| chunk.collect())
+            .collect::<Vec<Vec<file::Model>>>();
 
-            match extraction_result {
-                Ok(fireflies) => {
-                    let _receipt = self.to.save_firefly_to_to_db(fireflies).await.unwrap();
-                    let mut file_model = file.into_active_model();
-                    file_model.set_synced_at_now();
-                    let updated_file = self.db.file_update_file(&db, file_model, ).await.unwrap();
-                    updated_files.push(updated_file);
-                }
-                Err(e) => match e {
-                    PdfGongjuError::LoadPdfiumError => {
-                        println!("Error: {:?}", e);
+        let length = chunks.len();
+
+        let shared_db_conn = self.db.get_connection().await;
+        let shared_db = Arc::new(Mutex::new(shared_db_conn));
+        for i in 0..length {
+            // take a chunk
+            let chunk = chunks.remove(i);
+
+            let mut handles = vec![];
+            // let db = self.db.get_connection().await;
+            // make the above arc
+
+            for file_cloned in chunk {
+                let db = Arc::clone(&shared_db);
+                let firefly_keeper = self.to.clone();
+                let carrel_db_manager = self.db.clone();
+                let handle = spawn(
+                    async move {
+                        let extraction_result =
+                            PdfGongju::extract_fireflies(file_cloned.full_path.as_str(), &ExtractorOption::default());
+                        match extraction_result {
+                            Ok(fireflies) => {
+                                // skip if no fireflies
+                                if !fireflies.is_empty() {
+                                    let _receipt = firefly_keeper.save_firefly_to_to_db(fireflies).await.unwrap();
+                                }
+                                let mut file_model = file_cloned.clone().into_active_model();
+                                file_model.set_synced_at_now();
+                                let borrowed_db = db.lock().await;
+                                let _ = carrel_db_manager.file_update_file(borrowed_db.deref(), file_model).await.unwrap();
+                            }
+                            Err(e) => match e {
+                                PdfGongjuError::LoadPdfiumError => {
+                                    println!("Error: {:?}", e);
+                                }
+                                PdfGongjuError::LoadPdfError(_) => {
+                                    println!("Error: {:?}", e);
+                                }
+                                PdfGongjuError::LoadPdfPageError => {
+                                    println!("Error: {:?}", e);
+                                }
+                                PdfGongjuError::LoadPdfAnnotationError => {
+                                    println!("Error: {:?}", e);
+                                }
+                            },
+                        }
                     }
-                    PdfGongjuError::LoadPdfError(_) => {
-                        println!("Error: {:?}", e);
-                    }
-                    PdfGongjuError::LoadPdfPageError => {
-                        println!("Error: {:?}", e);
-                    }
-                    PdfGongjuError::LoadPdfAnnotationError => {
-                        println!("Error: {:?}", e);
-                    }
-                },
+                );
+                handles.push(handle);
+            };
+            // join_all(handles).await; // wait for 10 handles to finish
+            for handle in handles {
+                handle.await.unwrap();
             }
         }
-        Ok(updated_files)
+
+        Ok(())
     }
 
     async fn update_project_file_status(&self) -> Result<(), ProjectError> {
@@ -96,27 +135,48 @@ impl KeepProjectFireflies for CarrelProjectManager {
         {
             for file in chunk {
                 // model to active model
-                let mut file_model = file.into_active_model();
+                let mut file_active_model = file.clone().into_active_model();
 
+                let mut file_missing_file_changed = false;
                 // load file path
-                let file_path = PathBuf::from(file_model.full_path.clone().unwrap());
+                let file_path = PathBuf::from(file.full_path.as_str());
                 // check if the file exists
-                if !file_path.exists() {
-                    file_model.is_missing_file = Set(1);
+                if !file_path.exists() && (file_active_model.is_missing_file.clone().unwrap() == 0) {
+                    file_active_model.is_missing_file = Set(1);
+                    file_missing_file_changed = true;
                 }
 
+
+                let mut file_modified_changed = false;
                 // this modifies the active model but does not save it to the database
-                let modified_at = file_model.get_file_latested_modified_at();
+                let modified_at = file_active_model.get_file_latested_modified_at();
 
-                file_model.modified_at = Set(modified_at);
 
+                // check if the file is outdated (modified_at is different from the one in the database)
+                if modified_at != file.modified_at {
+                    file_active_model.modified_at = Set(modified_at.clone());
+                    file_modified_changed = true;
+                }
+
+                let synced_at = file_active_model.synced_at.clone().unwrap();
+
+                let mut is_modified_later_than_synced = false;
+
+                if synced_at.is_none() || synced_at.unwrap() < modified_at {
+                    is_modified_later_than_synced = true;
+                }
+
+                let mut file_is_out_of_sync_changed = false;
                 // use the above stats to decide whether the file model is out of sync
-                file_model.is_out_of_sync = if file_model.is_out_of_sync() {
+                file_active_model.is_out_of_sync = if file_modified_changed || is_modified_later_than_synced {
                     Set(1)
                 } else {
                     Set(0)
                 };
-                let _ = self.db.file_update_file(&db, file_model, ).await.unwrap();
+                if file_missing_file_changed || file_modified_changed || file_is_out_of_sync_changed {
+                    let result = self.db.file_update_file(&db, file_active_model).await.unwrap();
+                    // println!("Updated file: {:?}", result);
+                }
             }
         }
         Ok(())
@@ -151,6 +211,7 @@ mod tests {
         // get chn fixture file
         let pdf_path = get_test_fixture_module_folder_path_buf("pdfs");
         let chn_pdf_path = pdf_path.join("chn.pdf");
+        let html_path = get_test_fixture_module_folder_path_buf("unsupported_file.html");
         assert!(chn_pdf_path.exists());
 
         let pm = CarrelTester::get_project_manager_with_seeded_db().await;
@@ -167,9 +228,13 @@ mod tests {
 
         // add file to db
         pm.db
-            .archive_add_files(1, &vec![chn_pdf_path.to_str().unwrap().to_string()])
+            .archive_add_files(1, &vec![
+                chn_pdf_path.to_str().unwrap().to_string(),
+                html_path.to_str().unwrap().to_string(),
+            ])
             .await
             .unwrap();
+
 
         // find by file name
         let file_result = pm
@@ -219,7 +284,23 @@ mod tests {
         // assert first tag is importance
         let first_tag = first_firefly.tags.first().unwrap();
         assert_eq!(first_tag.key, "highlight");
-        assert_eq!(first_tag.value.clone().unwrap(), "argument");
+        assert_eq!(first_tag.value.clone().unwrap(), "ARGUMENT");
+
+        // find file unsupported
+        let file_unsupported_result = pm
+            .db
+            .file_filter_file(Column::FileName.eq("unsupported_file.html"))
+            .await
+            .unwrap();
+
+        // check if file is in db
+        assert_eq!(file_unsupported_result.len(), 1);
+
+        let first_unsupported_file = file_unsupported_result.first().unwrap();
+
+        // should have synced the chn.pdf file
+        let synced_unsupported_files = pm.sync_file_fireflies(file_unsupported_result).await.unwrap();
+        assert_eq!(synced_unsupported_files.len(), 0);
     }
 
     #[tokio::test]
@@ -266,7 +347,7 @@ mod tests {
         let mut first_file_model = first_file.into_active_model();
         first_file_model.file_name = Set("chn2.pdf".to_string());
         first_file_model.full_path = Set(new_v4().to_string());
-        let _ = pm.db.file_update_file(pm.db.get_connection(), first_file_model, ).await.unwrap();
+        let _ = pm.db.file_update_file(&pm.db.get_connection().await, first_file_model).await.unwrap();
 
         // update file status
         pm.update_project_file_status().await.unwrap();

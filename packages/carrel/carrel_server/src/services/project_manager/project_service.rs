@@ -1,7 +1,7 @@
 use carrel_commons::carrel::common::archive::v1::Archive;
 use carrel_commons::carrel::common::file::v1::File;
 use carrel_commons::carrel::server::project_manager::v1::project_manager_service_server::ProjectManagerService;
-use carrel_commons::carrel::server::project_manager::v1::{AddArchiveRequest, ListAllTagGroupsRequest, ListAllTagGroupsResponse, ListFirefliesByTagRequest, ListFirefliesByTagResponse};
+use carrel_commons::carrel::server::project_manager::v1::{AddArchiveRequest, ListAllTagGroupsRequest, ListAllTagGroupsResponse, ListFirefliesByTagRequest, ListFirefliesByTagResponse, SyncProjectRequest, SyncProjectResponse};
 use carrel_commons::carrel::server::project_manager::v1::AddArchiveResponse;
 use carrel_commons::carrel::server::project_manager::v1::AddFilesToArchiveRequest;
 use carrel_commons::carrel::server::project_manager::v1::AddFilesToArchiveResponse;
@@ -15,24 +15,29 @@ use carrel_commons::carrel::server::project_manager::v1::{
     ListFilesInArchiveResponse, ListRecentProjectsRequest, ListRecentProjectsResponse,
     OpenProjectRequest, OpenProjectResponse, QueryFilesRequest, QueryFilesResponse,
     QueryFirefliesRequest, QueryFirefliesResponse, RemoveFilesFromArchiveRequest,
-    SyncProjectArchivesRequest, SyncProjectArchivesResponse,
 };
 use carrel_core::app::app_manager::carrel_app_manager::ManageProjectList;
 use carrel_core::app::app_manager::entity::implementation::AppProject;
 use carrel_core::app::app_manager::{CarrelAppManager, ManageCarrelApp};
+use carrel_core::app::app_manager::carrel_task::{CarrelTaskTrait, TaskError};
+use carrel_core::app::app_manager::migration::sea_orm::prelude::Uuid;
 use carrel_core::carrel::carrel_core::{CarrelCore, CarrelCoreTrait};
+use carrel_core::carrel_db::entities::file::Model;
 use carrel_core::carrel_db::implementation::archive_traits::ArchiveTrait;
 use carrel_core::project::archivist::archivist::Archivist;
+use carrel_core::project::error::project_error::ProjectError;
 use carrel_core::project::file_manager::file_manager::ManageFileTrait;
 use carrel_core::project::fireflies_keeper::keep_project_fireflies::KeepProjectFireflies;
 use carrel_core::project::project_manager::CarrelProjectManager;
 use carrel_core::project::project_manager_methods::manage_project::ManageProjectTrait;
 use carrel_core::project::to_manager::to_manager::KeepFireflies;
 use carrel_utils::fs::get_all_files_under_directory::get_all_file_paths_under_directory;
+use tokio::spawn;
 
 use crate::errors::carrel_server_error::CarrelServerError::InvalidRequestPayload;
 use tonic::{Request, Response, Status};
 use crate::services::project_manager::query_mocker::{QueryMocker, QueryMockerTrait};
+use crate::services::task_manager::task_identifiers::TaskIdentifiers;
 
 #[derive(Debug, Default)]
 pub struct ProjectService {}
@@ -272,29 +277,48 @@ impl ProjectManagerService for ProjectService {
 
     async fn sync_project_archives(
         &self,
-        request: Request<SyncProjectArchivesRequest>,
-    ) -> Result<Response<SyncProjectArchivesResponse>, Status> {
+        request: Request<SyncProjectRequest>,
+    ) -> Result<Response<SyncProjectResponse>, Status> {
         let req = request.into_inner();
-        let project = carrel_core::project::project_manager::CarrelProjectManager::load(
-            req.project_directory.as_str(),
-        )
-            .await
-            .unwrap();
-        let all_updated_file_models = project.sync_all_project_files().await.unwrap();
-        let res = SyncProjectArchivesResponse {
-            project_directory: project
-                .project_directory
-                .into_os_string()
-                .into_string()
-                .unwrap(),
-            synced_files: all_updated_file_models
-                .into_iter()
-                .map(move |f| File::from(f))
-                .collect(),
-            new_fireflies: vec![],
-        };
-        let res = Response::new(res);
-        Ok(res)
+        let project_directory = req.project_directory;
+        let app_directory = req.app_directory;
+        let connect = CarrelCore::new(
+            app_directory.as_str(),
+            project_directory.as_str(),
+        ).await;
+        let create_task = connect.app.app_db.add_task(
+            TaskIdentifiers::SyncProjectArchives.to_string().as_str(),
+            "Scanning the whole project archive files and text files for fireflies",
+            "sync_project_archives",
+            true,
+        ).await;
+
+        match create_task {
+            Ok(uuid) => {
+                let result = connect.project.sync_all_project_files().await;
+
+                if result.is_err() {
+                    return Err(Status::internal(format!("Failed to sync project archives: {}", result.err().unwrap())));
+                }
+
+                let res = Response::new(SyncProjectResponse {
+                    project_directory,
+                    task_uuid: uuid.to_string(),
+                    message: "Sync project task started".to_string(),
+                });
+                Ok(res)
+            }
+            Err(err) => {
+                match err {
+                    TaskError::MultipleTaskNotAllowed(_) => {
+                        return Err(Status::new(
+                            tonic::Code::AlreadyExists,
+                            "Task already exists",
+                        ));
+                    }
+                }
+            }
+        }
     }
 
     async fn list_all_project_files(

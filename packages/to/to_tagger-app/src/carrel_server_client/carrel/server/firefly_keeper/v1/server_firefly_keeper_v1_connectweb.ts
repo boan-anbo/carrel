@@ -3,7 +3,7 @@
 /* eslint-disable */
 /* @ts-nocheck */
 
-import {ScanFilesForFirefliesRequest, ScanFilesForFirefliesResponse, ScanFolderForFirefliesRequest, ScanFolderForFirefliesResponse} from "./server_firefly_keeper_v1_pb.js";
+import {ScanFilesForFirefliesRequest, ScanFilesForFirefliesResponse, ScanFolderForFirefliesRequest, ScanFolderForFirefliesResponse, TestBackgroundRequest, TestBackgroundResponse} from "./server_firefly_keeper_v1_pb.js";
 import {MethodKind} from "@bufbuild/protobuf";
 
 /**
@@ -28,6 +28,17 @@ export const FirefliesService = {
       name: "ScanFilesForFireflies",
       I: ScanFilesForFirefliesRequest,
       O: ScanFilesForFirefliesResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * test background
+     *
+     * @generated from rpc carrel.server.firefly_keeper.v1.FirefliesService.TestBackground
+     */
+    testBackground: {
+      name: "TestBackground",
+      I: TestBackgroundRequest,
+      O: TestBackgroundResponse,
       kind: MethodKind.Unary,
     },
   }

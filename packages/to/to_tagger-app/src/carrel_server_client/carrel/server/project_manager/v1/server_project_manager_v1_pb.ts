@@ -1008,9 +1008,9 @@ export class ListFilesInArchiveResponse extends Message<ListFilesInArchiveRespon
 /**
  * message to sync archive
  *
- * @generated from message carrel.server.project_manager.v1.SyncProjectArchivesRequest
+ * @generated from message carrel.server.project_manager.v1.SyncProjectRequest
  */
-export class SyncProjectArchivesRequest extends Message<SyncProjectArchivesRequest> {
+export class SyncProjectRequest extends Message<SyncProjectRequest> {
   /**
    * the folder of the project
    *
@@ -1019,47 +1019,47 @@ export class SyncProjectArchivesRequest extends Message<SyncProjectArchivesReque
   projectDirectory = "";
 
   /**
-   * the id of the archive
+   * the app directory
    *
-   * @generated from field: int32 archive_id = 2;
+   * @generated from field: string app_directory = 2;
    */
-  archiveId = 0;
+  appDirectory = "";
 
-  constructor(data?: PartialMessage<SyncProjectArchivesRequest>) {
+  constructor(data?: PartialMessage<SyncProjectRequest>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime = proto3;
-  static readonly typeName = "carrel.server.project_manager.v1.SyncProjectArchivesRequest";
+  static readonly typeName = "carrel.server.project_manager.v1.SyncProjectRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "project_directory", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "archive_id", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 2, name: "app_directory", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SyncProjectArchivesRequest {
-    return new SyncProjectArchivesRequest().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SyncProjectRequest {
+    return new SyncProjectRequest().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SyncProjectArchivesRequest {
-    return new SyncProjectArchivesRequest().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SyncProjectRequest {
+    return new SyncProjectRequest().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SyncProjectArchivesRequest {
-    return new SyncProjectArchivesRequest().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SyncProjectRequest {
+    return new SyncProjectRequest().fromJsonString(jsonString, options);
   }
 
-  static equals(a: SyncProjectArchivesRequest | PlainMessage<SyncProjectArchivesRequest> | undefined, b: SyncProjectArchivesRequest | PlainMessage<SyncProjectArchivesRequest> | undefined): boolean {
-    return proto3.util.equals(SyncProjectArchivesRequest, a, b);
+  static equals(a: SyncProjectRequest | PlainMessage<SyncProjectRequest> | undefined, b: SyncProjectRequest | PlainMessage<SyncProjectRequest> | undefined): boolean {
+    return proto3.util.equals(SyncProjectRequest, a, b);
   }
 }
 
 /**
- * message to sync archive
+ * message to sync
  *
- * @generated from message carrel.server.project_manager.v1.SyncProjectArchivesResponse
+ * @generated from message carrel.server.project_manager.v1.SyncProjectResponse
  */
-export class SyncProjectArchivesResponse extends Message<SyncProjectArchivesResponse> {
+export class SyncProjectResponse extends Message<SyncProjectResponse> {
   /**
    * the folder of the project
    *
@@ -1070,42 +1070,42 @@ export class SyncProjectArchivesResponse extends Message<SyncProjectArchivesResp
   /**
    * the id of the archive
    *
-   * @generated from field: repeated carrel.common.file.v1.File synced_files = 3;
+   * @generated from field: string task_uuid = 2;
    */
-  syncedFiles: File[] = [];
+  taskUuid = "";
 
   /**
-   * @generated from field: repeated carrel.common.firefly.v2.Firefly new_fireflies = 4;
+   * @generated from field: string message = 3;
    */
-  newFireflies: Firefly[] = [];
+  message = "";
 
-  constructor(data?: PartialMessage<SyncProjectArchivesResponse>) {
+  constructor(data?: PartialMessage<SyncProjectResponse>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime = proto3;
-  static readonly typeName = "carrel.server.project_manager.v1.SyncProjectArchivesResponse";
+  static readonly typeName = "carrel.server.project_manager.v1.SyncProjectResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "project_directory", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "synced_files", kind: "message", T: File, repeated: true },
-    { no: 4, name: "new_fireflies", kind: "message", T: Firefly, repeated: true },
+    { no: 2, name: "task_uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SyncProjectArchivesResponse {
-    return new SyncProjectArchivesResponse().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SyncProjectResponse {
+    return new SyncProjectResponse().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SyncProjectArchivesResponse {
-    return new SyncProjectArchivesResponse().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SyncProjectResponse {
+    return new SyncProjectResponse().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SyncProjectArchivesResponse {
-    return new SyncProjectArchivesResponse().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SyncProjectResponse {
+    return new SyncProjectResponse().fromJsonString(jsonString, options);
   }
 
-  static equals(a: SyncProjectArchivesResponse | PlainMessage<SyncProjectArchivesResponse> | undefined, b: SyncProjectArchivesResponse | PlainMessage<SyncProjectArchivesResponse> | undefined): boolean {
-    return proto3.util.equals(SyncProjectArchivesResponse, a, b);
+  static equals(a: SyncProjectResponse | PlainMessage<SyncProjectResponse> | undefined, b: SyncProjectResponse | PlainMessage<SyncProjectResponse> | undefined): boolean {
+    return proto3.util.equals(SyncProjectResponse, a, b);
   }
 }
 

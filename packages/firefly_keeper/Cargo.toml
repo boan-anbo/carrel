@@ -14,7 +14,7 @@ carrel_commons = {version = "0.1.0", path = "../carrel_commons", features = ["fi
 carrel_utils = { path = "../carrel/carrel_utils" }
 chrono = "0.4.22"
 once_cell = "1.8.0"
-
+rayon = "1.5"
 
 [build-dependencies]
 prost-build = { version = "0.11.0" }

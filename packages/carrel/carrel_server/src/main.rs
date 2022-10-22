@@ -11,6 +11,8 @@ pub(crate) mod services;
 // main
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // for debugging tokio
+    console_subscriber::init();
     launch_server::launch_server().await;
     Ok(())
 }

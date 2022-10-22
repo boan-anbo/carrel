@@ -1,5 +1,6 @@
 use carrel_commons::carrel::common::project::v2::Project;
 use crate::generated::app_project;
+pub mod task_trait;
 
 pub trait AppProject {
 

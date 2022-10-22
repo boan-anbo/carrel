@@ -77,7 +77,6 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(AppProject::NextMeetingAt).string().null())
                     .col(ColumnDef::new(AppProject::CreatedAt).string().not_null())
 
-
                     .col(ColumnDef::new(AppProject::TotalFiles).integer().not_null())
                     .col(ColumnDef::new(AppProject::TotalFireflies).integer().not_null())
                     .col(ColumnDef::new(AppProject::TotalTextDocuments).integer().not_null())

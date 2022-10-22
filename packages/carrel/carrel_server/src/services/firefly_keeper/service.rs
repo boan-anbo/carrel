@@ -1,9 +1,8 @@
 use carrel_commons::carrel::server::firefly_keeper::v1::fireflies_service_server::FirefliesService;
-use carrel_commons::carrel::server::firefly_keeper::v1::{
-    ScanFilesForFirefliesRequest, ScanFilesForFirefliesResponse, ScanFolderForFirefliesRequest,
-    ScanFolderForFirefliesResponse,
-};
+use carrel_commons::carrel::server::firefly_keeper::v1::{ScanFilesForFirefliesRequest, ScanFilesForFirefliesResponse, ScanFolderForFirefliesRequest, ScanFolderForFirefliesResponse, TestBackgroundRequest, TestBackgroundResponse};
 use carrel_core::fireflies::procedures::{scan_file_for_fireflies, FireflyKeeperOption};
+use tokio::spawn;
+use tokio::task::spawn_blocking;
 use tonic::{Request, Response, Status};
 
 #[derive(Debug, Default)]
@@ -48,6 +47,24 @@ impl FirefliesService for FireflyService {
             fireflies: Some(result),
         });
         Ok(res)
+    }
+
+    async fn test_background(&self, request: Request<TestBackgroundRequest>) -> Result<Response<TestBackgroundResponse>, Status> {
+        // spawn a new thread to do the work
+        let req = request.into_inner();
+        let res = spawn(do_something());
+        let res = Response::new(TestBackgroundResponse {
+            message: "ended".to_string(),
+        });
+        Ok(res)
+    }
+}
+
+async fn do_something() {
+    // print a string every 2 seconds
+    for i in 0..10 {
+        println!("{}: doing something", i);
+        std::thread::sleep(std::time::Duration::from_secs(2));
     }
 }
 

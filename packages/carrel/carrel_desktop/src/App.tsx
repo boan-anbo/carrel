@@ -2,13 +2,13 @@ import {Box, Center, Container, VStack} from "@chakra-ui/react";
 import {invoke} from "@tauri-apps/api";
 import {useEffect} from "react";
 import {ToastContainer} from "react-toastify";
-import {Body} from "./components/core/layouts/body";
-import HeaderMenu from "./components/core/nav/HeaderMenu/HeaderMenu";
+import {Body} from "./ui/layout/layouts/body";
+import HeaderMenu from "./ui/layout/nav/HeaderMenu/HeaderMenu";
 import "./theme.css";
 import "./App.css"
-import FooterStatus from "./components/core/StatusBar/FooterStatus";
+import FooterStatus from "./ui/layout/StatusBar/FooterStatus";
 import "allotment/dist/style.css";
-import { BODY_HEIGHT, FOOTER_HEIGHT, HEADER_HEIGHT } from "./styles/constants";
+import {BODY_HEIGHT, FOOTER_HEIGHT, HEADER_HEIGHT} from "./ui/styles/constants";
 export interface AppProps {
 }
 
@@ -18,6 +18,7 @@ function App() {
             console.log("launch_carrel_server result: ", result);
         });
     })
+    // @ts-ignore
     return (
         <Container h='100vh' m='0' maxW="full" maxH="full" px="0" py='0'>
             {/* Spacing needs to be 0 to avoid having space between body and header*/}

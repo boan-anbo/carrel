@@ -10,6 +10,7 @@ use crate::project::config::const_config_file_name::CONFIG_DEFAULT_BATCH_INSERT_
 use crate::project::config::project_config::ProjectConfig;
 use crate::project::error::project_error::ProjectError;
 
+#[derive(Clone)]
 pub struct CarrelDbManager {
     pub(crate) batch_insert_size: usize,
     pub carrel_db_name: PathBuf,

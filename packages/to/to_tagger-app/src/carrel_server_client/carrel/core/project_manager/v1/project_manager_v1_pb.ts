@@ -68,6 +68,50 @@ proto3.util.setEnumType(ArchiveSourceType, "carrel.core.project_manager.v1.Archi
 ]);
 
 /**
+ * @generated from enum carrel.core.project_manager.v1.TaskState
+ */
+export enum TaskState {
+  /**
+   * @generated from enum value: TASK_STATE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: TASK_STATE_CREATED = 1;
+   */
+  CREATED = 1,
+
+  /**
+   * @generated from enum value: TASK_STATE_RUNNING = 2;
+   */
+  RUNNING = 2,
+
+  /**
+   * @generated from enum value: TASK_STATE_FINISHED = 3;
+   */
+  FINISHED = 3,
+
+  /**
+   * @generated from enum value: TASK_STATE_FAILED = 4;
+   */
+  FAILED = 4,
+
+  /**
+   * @generated from enum value: TASK_STATE_PAUSED = 5;
+   */
+  PAUSED = 5,
+}
+// Retrieve enum metadata with: proto3.getEnumType(TaskState)
+proto3.util.setEnumType(TaskState, "carrel.core.project_manager.v1.TaskState", [
+  { no: 0, name: "TASK_STATE_UNSPECIFIED" },
+  { no: 1, name: "TASK_STATE_CREATED" },
+  { no: 2, name: "TASK_STATE_RUNNING" },
+  { no: 3, name: "TASK_STATE_FINISHED" },
+  { no: 4, name: "TASK_STATE_FAILED" },
+  { no: 5, name: "TASK_STATE_PAUSED" },
+]);
+
+/**
  * message to add new archive to a project
  *
  * @generated from message carrel.core.project_manager.v1.AddArchiveDto
@@ -330,6 +374,113 @@ export class ProjectInfo extends Message<ProjectInfo> {
 
   static equals(a: ProjectInfo | PlainMessage<ProjectInfo> | undefined, b: ProjectInfo | PlainMessage<ProjectInfo> | undefined): boolean {
     return proto3.util.equals(ProjectInfo, a, b);
+  }
+}
+
+/**
+ * @generated from message carrel.core.project_manager.v1.Task
+ */
+export class Task extends Message<Task> {
+  /**
+   * @generated from field: int32 id = 1;
+   */
+  id = 0;
+
+  /**
+   * this is a string identifier, like "import", "export", "sync", etc.
+   * This should come from enum string options to enforce uniformity.
+   * An identifier can allow or disallow multiple tasks to run at the same time by setting `allow_multiple`` to true or false.
+   *
+   * @generated from field: string identifier = 2;
+   */
+  identifier = "";
+
+  /**
+   * @generated from field: string uuid = 3;
+   */
+  uuid = "";
+
+  /**
+   * describe what the task does
+   *
+   * @generated from field: string description = 4;
+   */
+  description = "";
+
+  /**
+   * @generated from field: carrel.core.project_manager.v1.TaskState state = 5;
+   */
+  state = TaskState.UNSPECIFIED;
+
+  /**
+   * @generated from field: string created_at = 6;
+   */
+  createdAt = "";
+
+  /**
+   * @generated from field: string updated_at = 7;
+   */
+  updatedAt = "";
+
+  /**
+   * @generated from field: int32 progress = 8;
+   */
+  progress = 0;
+
+  /**
+   * @generated from field: int32 allow_multiple = 9;
+   */
+  allowMultiple = 0;
+
+  /**
+   * the last message the task left
+   *
+   * @generated from field: string last_message = 10;
+   */
+  lastMessage = "";
+
+  /**
+   * who commisioned the task
+   *
+   * @generated from field: string commissioner = 11;
+   */
+  commissioner = "";
+
+  constructor(data?: PartialMessage<Task>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime = proto3;
+  static readonly typeName = "carrel.core.project_manager.v1.Task";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "id", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 2, name: "identifier", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "state", kind: "enum", T: proto3.getEnumType(TaskState) },
+    { no: 6, name: "created_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: "updated_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 8, name: "progress", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 9, name: "allow_multiple", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
+    { no: 10, name: "last_message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 11, name: "commissioner", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Task {
+    return new Task().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Task {
+    return new Task().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Task {
+    return new Task().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: Task | PlainMessage<Task> | undefined, b: Task | PlainMessage<Task> | undefined): boolean {
+    return proto3.util.equals(Task, a, b);
   }
 }
 

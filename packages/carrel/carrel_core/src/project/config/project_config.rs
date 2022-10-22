@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
 /// The single source of truth for Project.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct ProjectConfig {
     /// The relative path to the carrel database file.
     pub carrel_db: PathBuf,

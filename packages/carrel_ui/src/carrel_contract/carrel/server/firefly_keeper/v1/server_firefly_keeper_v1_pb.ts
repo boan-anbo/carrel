@@ -173,3 +173,77 @@ export class ScanFilesForFirefliesResponse extends Message<ScanFilesForFireflies
   }
 }
 
+/**
+ * @generated from message carrel.server.firefly_keeper.v1.TestBackgroundRequest
+ */
+export class TestBackgroundRequest extends Message<TestBackgroundRequest> {
+  /**
+   * @generated from field: string message = 1;
+   */
+  message = "";
+
+  constructor(data?: PartialMessage<TestBackgroundRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime = proto3;
+  static readonly typeName = "carrel.server.firefly_keeper.v1.TestBackgroundRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TestBackgroundRequest {
+    return new TestBackgroundRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): TestBackgroundRequest {
+    return new TestBackgroundRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): TestBackgroundRequest {
+    return new TestBackgroundRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: TestBackgroundRequest | PlainMessage<TestBackgroundRequest> | undefined, b: TestBackgroundRequest | PlainMessage<TestBackgroundRequest> | undefined): boolean {
+    return proto3.util.equals(TestBackgroundRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message carrel.server.firefly_keeper.v1.TestBackgroundResponse
+ */
+export class TestBackgroundResponse extends Message<TestBackgroundResponse> {
+  /**
+   * @generated from field: string message = 1;
+   */
+  message = "";
+
+  constructor(data?: PartialMessage<TestBackgroundResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime = proto3;
+  static readonly typeName = "carrel.server.firefly_keeper.v1.TestBackgroundResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TestBackgroundResponse {
+    return new TestBackgroundResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): TestBackgroundResponse {
+    return new TestBackgroundResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): TestBackgroundResponse {
+    return new TestBackgroundResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: TestBackgroundResponse | PlainMessage<TestBackgroundResponse> | undefined, b: TestBackgroundResponse | PlainMessage<TestBackgroundResponse> | undefined): boolean {
+    return proto3.util.equals(TestBackgroundResponse, a, b);
+  }
+}
+

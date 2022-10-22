@@ -12,14 +12,16 @@ use sea_orm::ActiveValue::Set;
 impl file::ActiveModel {
     pub fn get_file_latested_modified_at(&mut self) -> String {
         let file_path = self.full_path.take().unwrap();
-        let file = fs::File::open(file_path.as_str());
         // if no result, return the original modified_at
-        if file.is_err() {
-            return self.modified_at.take().unwrap();
-        }
+        // if file.is_err() {
+        //     return self.modified_at.take().unwrap();
+        // }
         // to iso string
-        let metadata = file.unwrap().metadata().unwrap();
-        let modified_at = metadata.modified().unwrap();
+        let metadata = fs::metadata(file_path.as_str());
+        if metadata.is_err() {
+            return self.modified_at.take().unwrap_or("".to_string());
+        }
+        let modified_at = metadata.unwrap().modified().unwrap();
         let modified_at = DateTime::<Utc>::from(modified_at);
         modified_at.to_rfc3339()
     }
@@ -55,6 +57,7 @@ impl file::ActiveModel {
     pub fn set_synced_at_now(&mut self) -> () {
         let synced_at = get_now_iso_string();
         self.synced_at = Set(Some(synced_at));
+        self.is_out_of_sync = Set(0);
     }
 }
 

@@ -1,3 +1,4 @@
+#[derive(Copy, Clone)]
 pub struct ExtractorOption {
     /// Whether to include the full text on the page of the annotation
     pub firefly_include_full_text: bool,
