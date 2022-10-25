@@ -1,5 +1,5 @@
 import React from 'react';
 
-import {CarrelEditorCore} from '../CarrelEditorCore';
+import {useCarrelEditorCore} from '../CarrelEditorCore';
 
 describe('<CarrelEditorCore />', () => {});

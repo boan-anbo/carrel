@@ -5,7 +5,7 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
-import {Fireflies} from "../../../firefly_keeper/v1/firefly_keeper_v1_pb";
+import {Fireflies} from "../../../firefly_keeper/v1/firefly_keeper_v1_pb.js";
 
 /**
  * @generated from message carrel.server.firefly_keeper.v1.ScanFolderForFirefliesRequest

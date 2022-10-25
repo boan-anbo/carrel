@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+
+package carrel.server.fs_manager.v1;
+
+import "carrel/common/directory/v1/directory_v1.proto";
+
+service FSManagerService {
+  // convert a directory to a directory tree structure
+  rpc GetDirectoryTree (GetDirectoryTreeRequest) returns (GetDirectoryTreeResponse) {}
+  // read file content
+  rpc ReadFile (ReadFileRequest) returns (ReadFileResponse) {}
+
+  // write file content
+  rpc WriteFile (WriteFileRequest) returns (WriteFileResponse) {}
+}
+
+message GetDirectoryTreeRequest {
+  string directory = 1;
+}
+
+message GetDirectoryTreeResponse {
+  carrel.common.directory.v1.Directory directory_tree = 1;
+}
+
+message ReadFileRequest {
+  string file_path = 1;
+}
+
+message ReadFileResponse {
+  string file_path = 1;
+  string file_content = 2;
+}
+
+message WriteFileRequest {
+  string file_path = 1;
+  string file_content = 2;
+}
+
+message WriteFileResponse {
+  string file_path = 1;
+  string file_content = 2;
+}

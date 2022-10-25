@@ -5,7 +5,7 @@ export const colors = {
   "primaryBg": "#eef7f7",
   "primaryBgLight": "#eef7f779",
   "primaryBgHeavy": "#a5bebe",
-  "primaryBgHover": "#def5f58e",
+  "primaryBgHover": "#a5bebe",
   "secondaryText": "#EEF7F7",
   "secondaryBg": "#428A8A",
 

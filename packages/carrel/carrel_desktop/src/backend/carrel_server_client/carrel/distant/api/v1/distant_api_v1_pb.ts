@@ -5,7 +5,7 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3, protoInt64} from "@bufbuild/protobuf";
-import {Passage} from "../../../common/passage/v1/passage_v1_pb";
+import {Passage} from "../../../common/passage/v1/passage_v1_pb.js";
 
 /**
  * @generated from message carrel.distant.api.v1.DistantApiSearchRequest

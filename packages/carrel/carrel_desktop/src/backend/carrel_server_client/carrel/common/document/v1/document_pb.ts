@@ -10,10 +10,10 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
-import {Person} from "../../person/v1/person_v1_pb";
-import {File} from "../../file/v1/file_v1_pb";
-import {Importance} from "../../importance/v1/importance_v1_pb";
-import {Task} from "../../task/v1/task_v1_pb";
+import {Person} from "../../person/v1/person_v1_pb.js";
+import {File} from "../../file/v1/file_v1_pb.js";
+import {Importance} from "../../importance/v1/importance_v1_pb.js";
+import {Task} from "../../task/v1/task_v1_pb.js";
 
 /**
  * / An abstract document.

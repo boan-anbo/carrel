@@ -5,7 +5,7 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
-import {TaskState} from "../../task_state/v1/task_state_v1_pb";
+import {TaskState} from "../../task_state/v1/task_state_v1_pb.js";
 
 /**
  * / A common tag for carrel system.

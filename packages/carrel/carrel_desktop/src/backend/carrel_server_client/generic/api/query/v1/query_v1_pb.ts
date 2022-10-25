@@ -277,7 +277,7 @@ export class Condition extends Message<Condition> {
   value?: string;
 
   /**
-   * a CarrelList of value, to be used with IN, NOT_IN
+   * a list of value, to be used with IN, NOT_IN
    *
    * @generated from field: repeated string value_list = 4;
    */

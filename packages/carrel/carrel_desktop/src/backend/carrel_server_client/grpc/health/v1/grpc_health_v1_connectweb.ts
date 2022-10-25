@@ -3,7 +3,7 @@
 /* eslint-disable */
 /* @ts-nocheck */
 
-import {HealthCheckRequest, HealthCheckResponse} from "./grpc_health_v1_pb";
+import {HealthCheckRequest, HealthCheckResponse} from "./grpc_health_v1_pb.js";
 import {MethodKind} from "@bufbuild/protobuf";
 
 /**

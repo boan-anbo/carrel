@@ -5,7 +5,7 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3, protoInt64} from "@bufbuild/protobuf";
-import {Archive} from "../../archive/v1/archive_v1_pb";
+import {Archive} from "../../archive/v1/archive_v1_pb.js";
 
 /**
  * @generated from message carrel.common.project.v1.Project

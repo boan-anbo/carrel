@@ -5,7 +5,7 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {FloatValue, Message, proto3} from "@bufbuild/protobuf";
-import {Document} from "../../../common/document/v1/document_pb";
+import {Document} from "../../../common/document/v1/document_pb.js";
 
 /**
  * @generated from message carrel.stacks.services.v1.DocumentResult

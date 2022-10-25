@@ -3,7 +3,7 @@
 /* eslint-disable */
 /* @ts-nocheck */
 
-import {ScaffoldNewProjectRequest, ScaffoldNewProjectResponse} from "./server_scaffold_v1_pb";
+import {ScaffoldNewProjectRequest, ScaffoldNewProjectResponse} from "./server_scaffold_v1_pb.js";
 import {MethodKind} from "@bufbuild/protobuf";
 
 /**

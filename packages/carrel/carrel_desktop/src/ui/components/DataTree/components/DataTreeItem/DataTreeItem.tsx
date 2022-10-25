@@ -1,51 +1,93 @@
-import { Badge, Container } from "@chakra-ui/react";
-import React, { MouseEventHandler, useMemo } from "react";
+import { Container, Flex, Highlight, Text } from "@chakra-ui/react";
+import { MouseEventHandler, useMemo } from "react";
+import { NodeMatch } from "../../filter-item";
 import {
-  DataTreeCollection,
   DataTreeConfigState,
+  DataTreeNodeRef,
   IDataTreeItem,
   IDataTreeNode,
 } from "../../i-data-tree-node";
 
-import styles from "./DataTreeItem.module.scss";
-
 export interface DataTreeItemProps<T> {
-  item: IDataTreeItem<T>;
+  nodeRef: DataTreeNodeRef;
+  loadNode: (ref: DataTreeNodeRef) => IDataTreeNode<T>;
   config: DataTreeConfigState<T>;
   itemIndentOverride?: number;
-  onSelectionsChange: (selections: IDataTreeNode<T>[]) => void;
+  onSelectTreeItem: (e: any, selections: DataTreeNodeRef) => void;
+  /**
+   * The keys of the selected items.
+   */
+  selectedItems: string[];
+  filterResults: NodeMatch[] | undefined;
+  isRoot?: boolean;
 }
 
 export function DataTreeItem({
-  item,
+  nodeRef,
+  loadNode,
   config,
-  onSelectionsChange,
+  onSelectTreeItem,
   itemIndentOverride,
+  filterResults,
+  selectedItems,
+  isRoot,
 }: DataTreeItemProps<any>) {
-  const isSelected = useMemo(() => {
-    return config.isSelected(item);
-  }, [config.selectedItems]);
+  const item: IDataTreeItem<any> = useMemo(() => {
+    return loadNode(nodeRef) as IDataTreeItem<any>;
+  }, [nodeRef, loadNode]);
 
-  const onClickItem = (e: MouseEvent<Element, MouseEvent>) => {
-    config.select(item);
-    onSelectionsChange(config.selectedItems);
+  const isSelected = useMemo(() => {
+    return selectedItems.some((i) => i === item.key);
+  }, [selectedItems]);
+
+  const openIcon = useMemo(() => {
+    return item.iconActive ?? config.itemDefaultIconOpen ?? null;
+  }, [item.iconActive]);
+
+  const itemMatch: NodeMatch | undefined = useMemo(() => {
+    return filterResults?.find((i) => i.key === item.key);
+  }, [filterResults]);
+
+  // check if we should filter this item
+  if (config.enableFilter && filterResults) {
+    if (!itemMatch) {
+      return null;
+    }
+  }
+
+  const onClickItem: MouseEventHandler<HTMLDivElement> = (event) => {
+    if (item.onSingleClick) {
+      item.onSingleClick(event, item.key, item);
+    }
+    onSelectTreeItem(event, nodeRef);
   };
 
   return (
     <Container
-      py="0.5"
+      py={config.spacing}
+      px="0"
       w="full"
       cursor="pointer"
       _hover={{
         background: "primaryBgHover",
       }}
-      bg={isSelected ? "primaryBg" : "transparent"}
+      bg={isSelected ? "primaryBgHeavy" : "transparent"}
       onClick={onClickItem}
       maxW="full"
-      pl={itemIndentOverride ?? config.itemIndent}
-      pr="0"
     >
-      <Badge colorScheme="orange">{item?.label}</Badge>
+      <Flex>
+        <Flex gap={2}>
+          <Flex justifyContent="center" h="full" minW="15px">
+            {openIcon}
+          </Flex>
+            <Highlight
+              query={[itemMatch?.substring ?? ""]}
+              styles={{ bg: "yellow.200", fontWeight: "semibold" }}
+            >
+              {item?.label}
+            </Highlight>
+        </Flex>
+      </Flex>
     </Container>
   );
 }

@@ -5,7 +5,7 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
-import {ToApiTag} from "../../api/v1/to_api_v1_pb";
+import {ToApiTag} from "../../api/v1/to_api_v1_pb.js";
 
 /**
  * @generated from message to.tagger.v1.ScanResult

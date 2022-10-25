@@ -9,14 +9,14 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
-import {Snippet} from "../../snippet/v1/snippet_v1_pb";
-import {Passage} from "../../passage/v1/passage_v1_pb";
-import {Comment} from "../../comment/v1/comment_v1_pb";
-import {Person} from "../../person/v1/person_v1_pb";
-import {Document} from "../../document/v1/document_pb";
-import {StorageInfo} from "../../storage_info/v1/storage_info_v1_pb";
-import {Tag} from "../../tag/v1/tag_v1_pb";
-import {Importance} from "../../importance/v1/importance_v1_pb";
+import {Snippet} from "../../snippet/v1/snippet_v1_pb.js";
+import {Passage} from "../../passage/v1/passage_v1_pb.js";
+import {Comment} from "../../comment/v1/comment_v1_pb.js";
+import {Person} from "../../person/v1/person_v1_pb.js";
+import {Document} from "../../document/v1/document_pb.js";
+import {StorageInfo} from "../../storage_info/v1/storage_info_v1_pb.js";
+import {Tag} from "../../tag/v1/tag_v1_pb.js";
+import {Importance} from "../../importance/v1/importance_v1_pb.js";
 
 /**
  * @generated from message carrel.common.firefly.v1.Firefly

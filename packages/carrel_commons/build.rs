@@ -8,6 +8,8 @@ fn main() {
         "carrel/common/tag/v2/tag_v2.proto",
 
         "carrel/common/file/v1/file_v1.proto",
+        // directory
+        "carrel/common/directory/v1/directory_v1.proto",
         "carrel/common/importance/v1/importance_v1.proto",
         "carrel/common/person/v1/person_v1.proto",
         "carrel/common/passage/v1/passage_v1.proto",
@@ -35,6 +37,8 @@ fn main() {
         "carrel/server/firefly_keeper/v1/server_firefly_keeper_v1.proto",
         // project_manager
         "carrel/server/project_manager/v1/server_project_manager_v1.proto",
+        // fs_manager
+        "carrel/server/fs_manager/v1/server_fs_manager_v1.proto",
 
         // services
         "carrel/stacks/services/v1/stacks_services_v1.proto",

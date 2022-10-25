@@ -6,6 +6,11 @@ import { Panel } from "./Panel";
 import { Block } from "../../../components";
 import { Box } from "@chakra-ui/react";
 import { v4 } from "uuid";
+import { ProjectFileBlock } from "../../../../front/domains/core/components/ProjectFileBlock";
+import { ArchiveFileBlock } from "../../../../front/domains/core/components/ArchiveFileBlock";
+import { TagBlock } from "../../../../front/domains/core/components/TagBlock";
+import { CardBlock } from "../../../../front/domains/core/components/CardBlock";
+import { InspectorBlock } from "../../../../front/domains/core/components/InspectorBlock";
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
@@ -37,7 +42,6 @@ export const Basic = Template.bind({});
 // Story args
 // Learn more: https://storybook.js.org/docs/react/writing-stories/args
 Basic.args = {
-  panelTitle: "Panel Title",
   size: "xs",
   blocks: [
     {
@@ -52,3 +56,23 @@ Basic.args = {
     },
   ],
 };
+
+export const RightPanel = Template.bind({});
+
+// Story args
+RightPanel.args = {
+  size: "xs",
+  blocks: [
+    {
+      id: "card-block",
+      block: <CardBlock/>,
+      title: "Cards",
+    },
+    {
+      id: "inspector-block",
+      block: <InspectorBlock/>,
+      title: "Inspector",
+    }
+  ],
+};
+  

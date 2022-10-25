@@ -5,9 +5,9 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
-import {Document} from "../../document/v1/document_pb";
-import {Importance} from "../../importance/v1/importance_v1_pb";
-import {File} from "../../file/v1/file_v1_pb";
+import {Document} from "../../document/v1/document_pb.js";
+import {Importance} from "../../importance/v1/importance_v1_pb.js";
+import {File} from "../../file/v1/file_v1_pb.js";
 
 /**
  * A collection of materials for certain purposes and associated with certain projects.

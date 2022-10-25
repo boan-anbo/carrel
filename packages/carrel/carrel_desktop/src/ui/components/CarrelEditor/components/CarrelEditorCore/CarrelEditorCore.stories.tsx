@@ -2,12 +2,12 @@ import React from 'react';
 import type {Meta, StoryFn} from '@storybook/react';
 
 import type {CarrelEditorCoreProps} from './CarrelEditorCore';
-import {CarrelEditorCore} from './CarrelEditorCore';
+import {useCarrelEditorCore} from './CarrelEditorCore';
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
 const meta: Meta = {
-  component: CarrelEditorCore,
+  component: useCarrelEditorCore,
   parameters: {
     // Embedding Figma designs
     // The embed appears in the "Design" tab of the story
@@ -22,7 +22,7 @@ const meta: Meta = {
 export default meta;
 
 // 👇 We create a "template" of how args map to rendering
-const Template: StoryFn<CarrelEditorCoreProps> = (args) => <CarrelEditorCore {...args} />;
+const Template: StoryFn<CarrelEditorCoreProps> = (args) => <useCarrelEditorCore {...args} />;
 
 // 👇 Each story then reuses that template
 export const Basic = Template.bind({});

@@ -1,80 +1,95 @@
-import { Box, Container, VStack } from "@chakra-ui/react";
+import { Container, VStack } from "@chakra-ui/react";
 import { useMemo } from "react";
-import { Item } from "react-stately";
-import { TCarrelSize } from "../../../props/i-size";
+import { TCarrelSize } from "../../props/i-size";
 import { DataTreeCollectionItem } from "./components";
 import { DataTreeItem } from "./components/DataTreeItem/DataTreeItem";
+import { NodeMatch } from "./filter-item";
 
 import {
   DataTreeConfigState,
-  EDataTreeNodeType,
-  IDataTreeCollection,
-  IDataTreeNode,
+  DataTreeNodeRef,
+  EDataTreeNodeType, IDataTreeNode
 } from "./i-data-tree-node";
 
 export interface DataTreeProps<T> {
-  items: IDataTreeCollection<T>[];
+  nodeRefs: DataTreeNodeRef[];
+  loadNode: (ref: DataTreeNodeRef) => IDataTreeNode<T>;
   config: DataTreeConfigState<T>;
-  fontSize?: TCarrelSize;
-  isRoot?: boolean; // this needs to be set to true if this is the root of the tree
-  onSelectionsChange: (selections: IDataTreeNode<T>[]) => void;
+  size?: TCarrelSize;
+  isRoot: boolean; // this needs to be set to true if this is the root of the tree
+
+  /**
+   * External source of filter pattern.
+   * If `useBuiltInFilter` is set to true, this will be overridden by the internal filter pattern value.
+   */
+  filterPattern?: RegExp;
+  filterFields?: string[][];
+  filterResults: NodeMatch[] | undefined;
+
+  selectedItems: string[];
+
+  onSelectNode: (e: any, selections: DataTreeNodeRef) => void;
 }
 
 export function DataTree({
-  items: root = [],
+  nodeRefs = [],
+  loadNode,
   config,
-  fontSize,
-
-  isRoot, 
-  onSelectionsChange,
+  size: fontSize,
+  isRoot,
+  onSelectNode,
+  filterResults,
+  selectedItems,
   ...props
 }: DataTreeProps<any>) {
-  if (!config) {
-    config = new DataTreeConfigState();
-  }
-
-  const orderedItems = useMemo(() => {
-    return root.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-  }, []);
+  const orderedNodeRefs = useMemo(() => {
+    return nodeRefs.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  }, [nodeRefs]);
 
   const rootCollectionNodes = useMemo(() => {
-    return orderedItems
+    return orderedNodeRefs
       .filter((i) => i.type === EDataTreeNodeType.COLLECTION)
-      .map((item, index) => {
+      .map((nodeRef, index) => {
         return (
           <DataTreeCollectionItem
-            collectionIndentOverride={isRoot ? 0 : config.collectionIndent}
-            onSelectionsChange={onSelectionsChange}
+            filterResults={filterResults}
+            onSelectCollectionItem={onSelectNode}
+            isRoot={isRoot}
             key={index}
             config={config}
-            item={item}
+            nodeRef={nodeRef}
+            loadNode={loadNode}
+            selectedItems={selectedItems}
           />
         );
       });
-  }, [root]);
+  }, [orderedNodeRefs, filterResults, selectedItems]);
 
   const rootItemNodes = useMemo(() => {
-    return orderedItems
+    return orderedNodeRefs
       .filter((i) => i.type === EDataTreeNodeType.ITEM)
-      .map((item, index) => {
+      .map((nodeRef, index) => {
         return (
           <DataTreeItem
-            itemIndentOverride={isRoot ? 10 : config.itemIndent}
-            onSelectionsChange={onSelectionsChange}
+            isRoot={isRoot}
+            filterResults={filterResults}
+            onSelectTreeItem={onSelectNode}
             key={index}
             config={config}
-            item={item}
+            nodeRef={nodeRef}
+            loadNode={loadNode}
+            selectedItems={selectedItems}
           />
         );
       });
-  }, [root]);
+  }, [orderedNodeRefs, filterResults, selectedItems]);
 
   return (
-    <Container w='full' fontSize={fontSize} maxW="full" px="0">
-      <VStack pt="1" w="full">
+    <Container maxW="full" px="0">
+      <VStack spacing="0" w="full">
         {rootCollectionNodes}
       </VStack>
-      <VStack  py={isRoot ? "3" : "1"} w="full">
+      <VStack spacing="0" w="full">
         {rootItemNodes}
       </VStack>
     </Container>

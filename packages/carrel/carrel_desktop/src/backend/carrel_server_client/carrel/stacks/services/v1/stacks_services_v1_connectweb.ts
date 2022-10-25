@@ -3,7 +3,7 @@
 /* eslint-disable */
 /* @ts-nocheck */
 
-import {SearchRequest, SearchResponse} from "./stacks_services_v1_pb";
+import {SearchRequest, SearchResponse} from "./stacks_services_v1_pb.js";
 import {MethodKind} from "@bufbuild/protobuf";
 
 /**

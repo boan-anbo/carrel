@@ -36,5 +36,6 @@ Basic.args = {
     "label": "Item 1",
     "type": EDataTreeNodeType.ITEM,
   },
-  config: new DataTreeConfigState()
+  config: new DataTreeConfigState(),
+
 };

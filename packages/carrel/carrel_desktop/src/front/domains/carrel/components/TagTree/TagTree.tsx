@@ -93,8 +93,8 @@ export function TagTree({ onSelectionsChange, ...props }: TagTreeProps) {
         <Box>Archive files</Box>
         <DataTree
           isRoot
-          fontSize="xs"
-          onSelectionsChange={onSelectionsChange || (() => {})}
+          size="xs"
+          onSelectNode={onSelectionsChange || (() => {})}
           config={new DataTreeConfigState({})}
           items={items}
         />

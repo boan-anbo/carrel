@@ -5,7 +5,7 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
-import {Firefly} from "../../common/firefly/v1/firefly_v1_pb";
+import {Firefly} from "../../common/firefly/v1/firefly_v1_pb.js";
 
 /**
  * @generated from enum carrel.firefly_keeper.v1.CATEGORY

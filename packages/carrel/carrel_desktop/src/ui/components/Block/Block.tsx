@@ -49,7 +49,7 @@ export const Block = ({
       <VStack spacing="0" h="full">
         <Flex
           onClick={(e) => {
-            console.log(e)
+            console.log(e);
             if (onClickBlockTitle && id) {
               onClickBlockTitle(id);
             }
@@ -60,18 +60,19 @@ export const Block = ({
         >
           <BlockHeader title={title} />
         </Flex>
-        <VStack bg="primaryBg" h="full" w="full">
+        <VStack gap="0" bg="primaryBg" h="full" w="full">
           {/* Top action bar */}
-          <Flex
-            w="full"
-            justifyContent={props.topActionBarJustify}
-            px={props.topActionBarPX}
-            pt="4"
-            fontSize={props.size}
-          >
-            Test {id}
-            <BlockActions actionBar={props.topActionBar} />
-          </Flex>
+          {props.topActionBar && (
+            <Flex
+              w="full"
+              justifyContent={props.topActionBarJustify}
+              px={props.topActionBarPX}
+              pt="4"
+              fontSize={props.size}
+            >
+              <BlockActions actionBar={props.topActionBar} />
+            </Flex>
+          )}
           {/* Content */}
           <Box w="full" h="full">
             <BlockContent contentHeight={contentHeight} content={children} />

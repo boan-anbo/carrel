@@ -3,7 +3,7 @@
 /* eslint-disable */
 /* @ts-nocheck */
 
-import {AddArchiveRequest, AddArchiveResponse, AddDirectoryToArchiveRequest, AddDirectoryToArchiveResponse, AddFilesToArchiveRequest, AddFilesToArchiveResponse, GetArchiveFilesRequest, GetArchiveFilesResponse, ListAllProjectArchivesRequest, ListAllProjectArchivesResponse, ListAllProjectFilesRequest, ListAllProjectFilesResponse, ListAllProjectFirefliesRequest, ListAllProjectFirefliesResponse, ListAllTagGroupsRequest, ListAllTagGroupsResponse, ListFilesInArchiveRequest, ListFilesInArchiveResponse, ListFirefliesByTagRequest, ListFirefliesByTagResponse, ListRecentProjectsRequest, ListRecentProjectsResponse, OpenProjectRequest, OpenProjectResponse, QueryFilesRequest, QueryFilesResponse, QueryFirefliesRequest, QueryFirefliesResponse, RemoveFilesFromArchiveRequest, RemoveFilesFromArchiveResponse, SyncProjectRequest, SyncProjectResponse} from "./server_project_manager_v1_pb";
+import {AddArchiveRequest, AddArchiveResponse, AddDirectoryToArchiveRequest, AddDirectoryToArchiveResponse, AddFilesToArchiveRequest, AddFilesToArchiveResponse, GetArchiveFilesRequest, GetArchiveFilesResponse, ListAllProjectArchivesRequest, ListAllProjectArchivesResponse, ListAllProjectFilesRequest, ListAllProjectFilesResponse, ListAllProjectFirefliesRequest, ListAllProjectFirefliesResponse, ListAllTagGroupsRequest, ListAllTagGroupsResponse, ListFilesInArchiveRequest, ListFilesInArchiveResponse, ListFirefliesByTagRequest, ListFirefliesByTagResponse, ListRecentProjectsRequest, ListRecentProjectsResponse, OpenProjectRequest, OpenProjectResponse, QueryFilesRequest, QueryFilesResponse, QueryFirefliesRequest, QueryFirefliesResponse, RemoveFilesFromArchiveRequest, RemoveFilesFromArchiveResponse, SyncProjectRequest, SyncProjectResponse} from "./server_project_manager_v1_pb.js";
 import {MethodKind} from "@bufbuild/protobuf";
 
 /**
@@ -38,7 +38,7 @@ export const ProjectManagerService = {
       kind: MethodKind.Unary,
     },
     /**
-     * CarrelList all files
+     * list all files
      *
      * @generated from rpc carrel.server.project_manager.v1.ProjectManagerService.GetArchiveFiles
      */
@@ -153,7 +153,7 @@ export const ProjectManagerService = {
       kind: MethodKind.Unary,
     },
     /**
-     * CarrelList most recent projects
+     * list most recent projects
      *
      * @generated from rpc carrel.server.project_manager.v1.ProjectManagerService.ListRecentProjects
      */
@@ -164,7 +164,7 @@ export const ProjectManagerService = {
       kind: MethodKind.Unary,
     },
     /**
-     * CarrelList all tag groups
+     * list all tag groups
      *
      * @generated from rpc carrel.server.project_manager.v1.ProjectManagerService.ListAllTagGroups
      */
@@ -175,7 +175,7 @@ export const ProjectManagerService = {
       kind: MethodKind.Unary,
     },
     /**
-     * CarrelList all fireflies by tag key and value
+     * list all fireflies by tag key and value
      *
      * @generated from rpc carrel.server.project_manager.v1.ProjectManagerService.ListFirefliesByTag
      */

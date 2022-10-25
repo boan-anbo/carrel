@@ -1,1 +1,1 @@
-export {CarrelEditorCore} from './CarrelEditorCore';
+export {useCarrelEditorCore as CarrelEditorCore} from './CarrelEditorCore';

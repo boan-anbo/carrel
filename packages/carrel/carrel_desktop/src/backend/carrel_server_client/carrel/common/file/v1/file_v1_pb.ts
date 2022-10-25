@@ -5,8 +5,8 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
-import {Importance} from "../../importance/v1/importance_v1_pb";
-import {TaskState} from "../../task_state/v1/task_state_v1_pb";
+import {Importance} from "../../importance/v1/importance_v1_pb.js";
+import {TaskState} from "../../task_state/v1/task_state_v1_pb.js";
 
 /**
  * @generated from message carrel.common.file.v1.File

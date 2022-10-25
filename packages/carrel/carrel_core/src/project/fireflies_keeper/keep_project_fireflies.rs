@@ -260,14 +260,12 @@ mod tests {
         assert_eq!(count_no_result, 0);
 
         // should have synced the chn.pdf file
-        let synced_files = pm.sync_file_fireflies(file_result).await.unwrap();
-        assert_eq!(synced_files.len(), 1);
+        pm.sync_file_fireflies(file_result).await.unwrap();
 
         let count_one_result = to_no_result.to_orm.count_tos().await.unwrap();
         assert_eq!(count_one_result, 3);
 
-        let first_synced_file = synced_files.first().unwrap();
-        assert_eq!(first_synced_file.synced_at.is_some(), true);
+
 
         // list all synced fireflies
         let list_all_firelies = pm.to.list_all_fireflies().await;
@@ -298,9 +296,9 @@ mod tests {
 
         let first_unsupported_file = file_unsupported_result.first().unwrap();
 
-        // should have synced the chn.pdf file
-        let synced_unsupported_files = pm.sync_file_fireflies(file_unsupported_result).await.unwrap();
-        assert_eq!(synced_unsupported_files.len(), 0);
+
+
+
     }
 
     #[tokio::test]

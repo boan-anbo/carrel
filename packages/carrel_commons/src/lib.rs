@@ -72,6 +72,12 @@ pub mod carrel {
             }
         }
 
+        pub mod directory {
+            pub mod v1 {
+                include!("generated/carrel_common_directory_v1.rs");
+            }
+        }
+
         pub mod importance {
             pub mod v1 {
                 include!("generated/carrel_common_importance_v1.rs");
@@ -146,6 +152,13 @@ pub mod carrel {
         pub mod project_manager {
             pub mod v1 {
                 include!("generated/carrel_server_project_manager_v1.rs");
+            }
+        }
+
+        // fs_manager
+        pub mod fs_manager {
+            pub mod v1 {
+                include!("generated/carrel_server_fs_manager_v1.rs");
             }
         }
     }

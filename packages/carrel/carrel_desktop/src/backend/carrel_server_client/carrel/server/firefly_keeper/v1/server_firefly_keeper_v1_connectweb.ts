@@ -3,7 +3,7 @@
 /* eslint-disable */
 /* @ts-nocheck */
 
-import {ScanFilesForFirefliesRequest, ScanFilesForFirefliesResponse, ScanFolderForFirefliesRequest, ScanFolderForFirefliesResponse, TestBackgroundRequest, TestBackgroundResponse} from "./server_firefly_keeper_v1_pb";
+import {ScanFilesForFirefliesRequest, ScanFilesForFirefliesResponse, ScanFolderForFirefliesRequest, ScanFolderForFirefliesResponse, TestBackgroundRequest, TestBackgroundResponse} from "./server_firefly_keeper_v1_pb.js";
 import {MethodKind} from "@bufbuild/protobuf";
 
 /**

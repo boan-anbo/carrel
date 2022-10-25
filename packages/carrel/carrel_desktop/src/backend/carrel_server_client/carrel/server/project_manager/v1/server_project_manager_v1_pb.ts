@@ -5,13 +5,13 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3, protoInt64} from "@bufbuild/protobuf";
-import {AddArchiveDto, ProjectInfo} from "../../../core/project_manager/v1/project_manager_v1_pb";
-import {File} from "../../../common/file/v1/file_v1_pb";
-import {Archive} from "../../../common/archive/v1/archive_v1_pb";
-import {Firefly} from "../../../common/firefly/v2/firefly_v2_pb";
-import {StandardQuery, StandardQueryResultMetadata} from "../../../../generic/api/query/v1/query_v1_pb";
-import {Project} from "../../../common/project/v2/project_v2_pb";
-import {TagGroup} from "../../../common/tag/v2/tag_v2_pb";
+import {AddArchiveDto, ProjectInfo} from "../../../core/project_manager/v1/project_manager_v1_pb.js";
+import {File} from "../../../common/file/v1/file_v1_pb.js";
+import {Archive} from "../../../common/archive/v1/archive_v1_pb.js";
+import {Firefly} from "../../../common/firefly/v2/firefly_v2_pb.js";
+import {StandardQuery, StandardQueryResultMetadata} from "../../../../generic/api/query/v1/query_v1_pb.js";
+import {Project} from "../../../common/project/v2/project_v2_pb.js";
+import {TagGroup} from "../../../common/tag/v2/tag_v2_pb.js";
 
 /**
  * message to open a project
@@ -79,7 +79,7 @@ export class OpenProjectResponse extends Message<OpenProjectResponse> {
   projectDirectory = "";
 
   /**
-   * @generated from field: carrel.layout.project_manager.v1.ProjectInfo project_info = 4;
+   * @generated from field: carrel.core.project_manager.v1.ProjectInfo project_info = 4;
    */
   projectInfo?: ProjectInfo;
 
@@ -163,7 +163,7 @@ export class GetProjectInfoResponse extends Message<GetProjectInfoResponse> {
   /**
    * the id of the project
    *
-   * @generated from field: carrel.layout.project_manager.v1.ProjectInfo project_info = 1;
+   * @generated from field: carrel.core.project_manager.v1.ProjectInfo project_info = 1;
    */
   projectInfo?: ProjectInfo;
 
@@ -216,7 +216,7 @@ export class AddArchiveRequest extends Message<AddArchiveRequest> {
   projectId = 0;
 
   /**
-   * @generated from field: carrel.layout.project_manager.v1.AddArchiveDto add_archive_dto = 3;
+   * @generated from field: carrel.core.project_manager.v1.AddArchiveDto add_archive_dto = 3;
    */
   addArchiveDto?: AddArchiveDto;
 
@@ -400,7 +400,7 @@ export class GetArchiveFilesResponse extends Message<GetArchiveFilesResponse> {
   archiveId = 0;
 
   /**
-   * the CarrelList of files
+   * the list of files
    *
    * @generated from field: repeated carrel.common.file.v1.File files = 4;
    */
@@ -458,7 +458,7 @@ export class AddFilesToArchiveRequest extends Message<AddFilesToArchiveRequest> 
   archiveId = 0;
 
   /**
-   * the CarrelList of files
+   * the list of files
    *
    * @generated from field: repeated string file_paths = 4;
    */
@@ -522,7 +522,7 @@ export class AddFilesToArchiveResponse extends Message<AddFilesToArchiveResponse
   archiveId = 0;
 
   /**
-   * the CarrelList of files
+   * the list of files
    *
    * @generated from field: repeated carrel.common.file.v1.File files = 4;
    */
@@ -580,7 +580,7 @@ export class AddDirectoryToArchiveRequest extends Message<AddDirectoryToArchiveR
   archiveId = 0;
 
   /**
-   * the CarrelList of files
+   * the list of files
    *
    * @generated from field: string source_directory = 4;
    */
@@ -637,7 +637,7 @@ export class AddDirectoryToArchiveResponse extends Message<AddDirectoryToArchive
   archiveId = 0;
 
   /**
-   * the CarrelList of files
+   * the list of files
    *
    * @generated from field: repeated carrel.common.file.v1.File files = 4;
    */
@@ -701,7 +701,7 @@ export class RemoveFilesFromArchiveRequest extends Message<RemoveFilesFromArchiv
   archiveId = 0;
 
   /**
-   * the CarrelList of files
+   * the list of files
    *
    * @generated from field: repeated string file_uuids = 4;
    */
@@ -810,7 +810,7 @@ export class RemoveFilesFromArchiveResponse extends Message<RemoveFilesFromArchi
 }
 
 /**
- * message to CarrelList all project archives
+ * message to list all project archives
  *
  * @generated from message carrel.server.project_manager.v1.ListAllProjectArchivesRequest
  */
@@ -851,7 +851,7 @@ export class ListAllProjectArchivesRequest extends Message<ListAllProjectArchive
 }
 
 /**
- * message to CarrelList all project archives
+ * message to list all project archives
  *
  * @generated from message carrel.server.project_manager.v1.ListAllProjectArchivesResponse
  */
@@ -864,7 +864,7 @@ export class ListAllProjectArchivesResponse extends Message<ListAllProjectArchiv
   /**
    * the folder of the project
    *
-   * the CarrelList of archives
+   * the list of archives
    *
    * @generated from field: repeated carrel.common.archive.v1.Archive archives = 3;
    */
@@ -900,7 +900,7 @@ export class ListAllProjectArchivesResponse extends Message<ListAllProjectArchiv
 }
 
 /**
- * message to CarrelList files in archive
+ * message to list files in archive
  *
  * @generated from message carrel.server.project_manager.v1.ListFilesInArchiveRequest
  */
@@ -949,7 +949,7 @@ export class ListFilesInArchiveRequest extends Message<ListFilesInArchiveRequest
 }
 
 /**
- * message to CarrelList files in archive
+ * message to list files in archive
  *
  * @generated from message carrel.server.project_manager.v1.ListFilesInArchiveResponse
  */
@@ -969,7 +969,7 @@ export class ListFilesInArchiveResponse extends Message<ListFilesInArchiveRespon
   archiveId = 0;
 
   /**
-   * the CarrelList of files
+   * the list of files
    *
    * @generated from field: repeated carrel.common.file.v1.File files = 3;
    */
@@ -1110,7 +1110,7 @@ export class SyncProjectResponse extends Message<SyncProjectResponse> {
 }
 
 /**
- * message to CarrelList all project files
+ * message to list all project files
  *
  * @generated from message carrel.server.project_manager.v1.ListAllProjectFilesRequest
  */
@@ -1151,7 +1151,7 @@ export class ListAllProjectFilesRequest extends Message<ListAllProjectFilesReque
 }
 
 /**
- * message to CarrelList all project files
+ * message to list all project files
  *
  * @generated from message carrel.server.project_manager.v1.ListAllProjectFilesResponse
  */
@@ -1164,7 +1164,7 @@ export class ListAllProjectFilesResponse extends Message<ListAllProjectFilesResp
   projectDirectory = "";
 
   /**
-   * the CarrelList of files
+   * the list of files
    *
    * @generated from field: repeated carrel.common.file.v1.File files = 3;
    */
@@ -1200,7 +1200,7 @@ export class ListAllProjectFilesResponse extends Message<ListAllProjectFilesResp
 }
 
 /**
- * message to CarrelList all project fireflies
+ * message to list all project fireflies
  *
  * @generated from message carrel.server.project_manager.v1.ListAllProjectFirefliesRequest
  */
@@ -1241,7 +1241,7 @@ export class ListAllProjectFirefliesRequest extends Message<ListAllProjectFirefl
 }
 
 /**
- * message to CarrelList all project fireflies
+ * message to list all project fireflies
  *
  * @generated from message carrel.server.project_manager.v1.ListAllProjectFirefliesResponse
  */
@@ -1254,7 +1254,7 @@ export class ListAllProjectFirefliesResponse extends Message<ListAllProjectFiref
   projectDirectory = "";
 
   /**
-   * the CarrelList of fireflies
+   * the list of fireflies
    *
    * @generated from field: repeated carrel.common.firefly.v2.Firefly fireflies = 3;
    */
@@ -1368,7 +1368,7 @@ export class QueryFilesResponse extends Message<QueryFilesResponse> {
   projectDirectory = "";
 
   /**
-   * the CarrelList of files
+   * the list of files
    *
    * @generated from field: repeated carrel.common.file.v1.File files = 3;
    */
@@ -1480,7 +1480,7 @@ export class QueryFirefliesResponse extends Message<QueryFirefliesResponse> {
   projectDirectory = "";
 
   /**
-   * the CarrelList of fireflies
+   * the list of fireflies
    *
    * @generated from field: repeated carrel.common.firefly.v2.Firefly fireflies = 3;
    */
@@ -1522,7 +1522,7 @@ export class QueryFirefliesResponse extends Message<QueryFirefliesResponse> {
 }
 
 /**
- * CarrelList more recent project request
+ * list more recent project request
  *
  * @generated from message carrel.server.project_manager.v1.ListRecentProjectsRequest
  */
@@ -1571,7 +1571,7 @@ export class ListRecentProjectsRequest extends Message<ListRecentProjectsRequest
 }
 
 /**
- * CarrelList more recent project response
+ * list more recent project response
  *
  * @generated from message carrel.server.project_manager.v1.ListRecentProjectsResponse
  */
@@ -1616,7 +1616,7 @@ export class ListRecentProjectsResponse extends Message<ListRecentProjectsRespon
 }
 
 /**
- * CarrelList all tag groups
+ * list all tag groups
  *
  * @generated from message carrel.server.project_manager.v1.ListAllTagGroupsRequest
  */
@@ -1657,7 +1657,7 @@ export class ListAllTagGroupsRequest extends Message<ListAllTagGroupsRequest> {
 }
 
 /**
- * CarrelList all tag groups
+ * list all tag groups
  *
  * @generated from message carrel.server.project_manager.v1.ListAllTagGroupsResponse
  */
@@ -1670,7 +1670,7 @@ export class ListAllTagGroupsResponse extends Message<ListAllTagGroupsResponse> 
   projectDirectory = "";
 
   /**
-   * the CarrelList of tag groups
+   * the list of tag groups
    *
    * @generated from field: repeated carrel.common.tag.v2.TagGroup tag_groups = 2;
    */
@@ -1714,7 +1714,7 @@ export class ListAllTagGroupsResponse extends Message<ListAllTagGroupsResponse> 
 }
 
 /**
- * CarrelList tags by tag key and value
+ * list tags by tag key and value
  *
  * @generated from message carrel.server.project_manager.v1.ListFirefliesByTagRequest
  */
@@ -1785,7 +1785,7 @@ export class ListFirefliesByTagRequest extends Message<ListFirefliesByTagRequest
 }
 
 /**
- * CarrelList tags by tag key and value
+ * list tags by tag key and value
  *
  * @generated from message carrel.server.project_manager.v1.ListFirefliesByTagResponse
  */
@@ -1798,7 +1798,7 @@ export class ListFirefliesByTagResponse extends Message<ListFirefliesByTagRespon
   projectDirectory = "";
 
   /**
-   * the CarrelList of tags
+   * the list of tags
    *
    * @generated from field: repeated carrel.common.firefly.v2.Firefly fireflies = 2;
    */

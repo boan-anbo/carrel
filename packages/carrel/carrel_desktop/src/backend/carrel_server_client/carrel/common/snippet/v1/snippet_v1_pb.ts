@@ -5,8 +5,8 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
-import {File} from "../../file/v1/file_v1_pb";
-import {Context} from "../../context/v1/context_v1_pb";
+import {File} from "../../file/v1/file_v1_pb.js";
+import {Context} from "../../context/v1/context_v1_pb.js";
 
 /**
  * describes the location of a snippet of string in a plaintext file.
@@ -15,7 +15,7 @@ import {Context} from "../../context/v1/context_v1_pb";
  */
 export class Snippet extends Message<Snippet> {
   /**
-   *
+   * 
    *
    * @generated from field: string snippet = 1;
    */

@@ -1,27 +1,29 @@
-import type { Meta, StoryFn } from "@storybook/react";
+import React from 'react';
+import type {Meta, StoryFn} from '@storybook/react';
 
-import type { DataTreeProps } from "./DataTree";
-import { DataTree } from "./DataTree";
-import { DataTreeCollection, DataTreeConfigState, EDataTreeNodeType } from "./i-data-tree-node";
+import {DataTreeRoot, DataTreeRootProps} from './DataTreeRoot';
+import { DataTreeConfigState, EDataTreeNodeType } from './i-data-tree-node';
+import { Badge, Box } from '@chakra-ui/react';
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
 const meta: Meta = {
-  component: DataTree,
+  component: DataTreeRoot,
   parameters: {
     // Embedding Figma designs
     // The embed appears in the "Design" tab of the story
     // Learn more: https://pocka.github.io/storybook-addon-designs/?path=/docs/docs-figma-readme--page
     design: {
-      type: "figma",
-      url: "https://www.figma.com/file/...?node-id=...",
+      type: 'figma',
+      url: 'https://www.figma.com/file/...?node-id=...',
     },
   },
 };
+
 export default meta;
 
 // 👇 We create a "template" of how args map to rendering
-const Template: StoryFn<DataTreeProps<any>> = (args) => <DataTree {...args} />;
+const Template: StoryFn<DataTreeRootProps<any>> = (args) => <DataTreeRoot {...args} />;
 
 // 👇 Each story then reuses that template
 export const Basic = Template.bind({});
@@ -29,33 +31,34 @@ export const Basic = Template.bind({});
 // Story args
 // Learn more: https://storybook.js.org/docs/react/writing-stories/args
 Basic.args = {
-  onSelectionsChange: (selections) => {
-    console.log(selections);
+  config: new DataTreeConfigState({
+    enableFilter: true,
+    useBuiltInFilter: true,
+    filterFields: [['label']],
+    selectionMode: 'single',
+  }),
+  onSelectionsChange: (selections: any) => {
+    console.log("Onselections change", selections);
   },
-  config: new DataTreeConfigState(),
-  isRoot: true,
-  items: [
+  treeNodes: [
     {
       key: "1",
       label: "Item 1",
       type: EDataTreeNodeType.ITEM,
-      subItemIds:[],
-      subCollectionIds: [],
       subCollections: [],
       subItems: [],
-
+      collectionIconOpen: <Box bg="red">Open</Box>,
     },
     {
       key: "I",
       type: EDataTreeNodeType.COLLECTION,
       label: "Collection I",
       order: 1,
-      count: 20,
       subItems: [
         {
           key: "I.1",
           type: EDataTreeNodeType.ITEM,
-          label: "Item I.1",
+          label: <Badge colorScheme="orange">Item 1</Badge>,
           order: 1,
         },
         {
@@ -96,9 +99,14 @@ Basic.args = {
               type: EDataTreeNodeType.COLLECTION,
               label: "Collection I.I.I.1",
               order: 1,
-              subItems: [],
-              subCollectionIds: [],
-              subItemIds: [],
+              subItems: [
+                {
+                  key: "I.I.I.1",
+                  type: EDataTreeNodeType.ITEM,
+                  label: "Item I.I.I.1",
+                  order: 1,
+                }
+              ],
               subCollections: [],
             },
           ],
@@ -106,5 +114,5 @@ Basic.args = {
       ],
     },
   ],
-  fontSize: 'xs',
+  size: "xs",
 };

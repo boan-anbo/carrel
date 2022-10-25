@@ -10,8 +10,8 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3, protoInt64} from "@bufbuild/protobuf";
-import {Importance} from "../../importance/v1/importance_v1_pb";
-import {Tag} from "../../tag/v2/tag_v2_pb";
+import {Importance} from "../../importance/v1/importance_v1_pb.js";
+import {Tag} from "../../tag/v2/tag_v2_pb.js";
 
 /**
  * @generated from message carrel.common.firefly.v2.Firefly
@@ -336,7 +336,7 @@ export class Firefly extends Message<Firefly> {
   /**
    * unique id, this is diffferent from uuid.
    * e.g. for a pdf annotation, this is the modified_at
-   * e.g. for a firefly extracted from the textfile, this should the modified date of
+   * e.g. for a firefly extracted from the textfile, this should the modified date of 
    *
    * @generated from field: string unique_id = 47;
    */

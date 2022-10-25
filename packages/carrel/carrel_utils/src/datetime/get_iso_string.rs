@@ -1,3 +1,4 @@
+use std::time::SystemTime;
 pub use chrono::{DateTime, Utc};
 // get ISO string
 
@@ -13,6 +14,11 @@ pub fn get_now_iso_string() -> String {
 
 pub fn get_now() -> DateTime<Utc> {
     Utc::now()
+}
+
+pub fn get_now_from_system_time(system_time: SystemTime) -> String {
+    let date_time = DateTime::<Utc>::from(system_time);
+    get_iso_string(date_time)
 }
 
 

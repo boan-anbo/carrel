@@ -4,6 +4,7 @@ use carrel_commons::carrel::server::firefly_keeper::v1::fireflies_service_server
 use carrel_commons::carrel::server::project_manager::v1::project_manager_service_server::ProjectManagerServiceServer;
 use carrel_commons::carrel::server::scaffold::v1::scaffold_new_project_service_server::ScaffoldNewProjectServiceServer;
 use carrel_commons::carrel::FILE_DESCRIPTOR_SET;
+use carrel_commons::carrel::server::fs_manager::v1::fs_manager_service_server::FsManagerServiceServer;
 use carrel_commons::grpc::health::v1::health_server::HealthServer;
 use carrel_core::event::carrel_radio::CarrelRadio;
 use tonic::transport::Server;
@@ -49,8 +50,6 @@ pub async fn launch_server() {
         .build()
         .unwrap();
 
-    // add a shared event broadcaster
-    let event_broadcaster = CarrelRadio::new();
 
     Server::builder()
         .accept_http1(true)
@@ -69,6 +68,10 @@ pub async fn launch_server() {
                 .allow_all_origins()
                 .enable(ProjectManagerServiceServer::new(ProjectService::default())),
         )
+        // fs manager service
+        .add_service(tonic_web::config().allow_all_origins().enable(
+            FsManagerServiceServer::new(crate::services::fs_manager::service::FsManager::default()),
+        ))
         .add_service(
             tonic_web::config()
                 .allow_all_origins()

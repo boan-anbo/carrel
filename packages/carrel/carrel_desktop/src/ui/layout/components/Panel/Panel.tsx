@@ -26,17 +26,13 @@ export interface PanelBlock {
  * THis is the main panel for displaying the core panels.
  */
 export function Panel({ blocks, size }: PanelProps) {
-  const blockItems = useMemo(
-    () =>
-      blocks?.map((panelBlock, index) => (
+  const blockItems =  blocks?.map((panelBlock, index) => (
         <Allotment.Pane key={index} minSize={BLOCK_HEADER_HEIGHT_NUMBER}>
           <Block headerPosition="end" title={panelBlock.title} id={panelBlock.id}>
             {panelBlock.block}
           </Block>
         </Allotment.Pane>
-      )),
-    [blocks]
-  );
+      ))
   const panelHeaderTitle = useMemo(() => {
     return blocks?.map((panelBlock) => panelBlock.title).join(" | ");
   }, [blocks]);

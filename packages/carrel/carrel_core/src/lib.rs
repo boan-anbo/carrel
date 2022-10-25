@@ -16,5 +16,6 @@ pub mod pdf_gongju;
 pub mod test_utils;
 pub mod to;
 pub mod event;
+pub mod fs;
 
 pub use carrel_db;

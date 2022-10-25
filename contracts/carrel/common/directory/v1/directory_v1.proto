@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+
+package carrel.common.directory.v1;
+
+
+import "carrel/common/file/v1/file_v1.proto";
+
+message Directory {
+  string uuid = 2;
+  // description
+  string description = 3;
+  // directory name
+  string name = 4;
+  // diretory full path
+  string full_path = 8;
+
+  string created_at = 9;
+  string modified_at = 10;
+
+  repeated carrel.common.file.v1.File files = 11;
+  repeated Directory sub_dirs = 12;
+
+}

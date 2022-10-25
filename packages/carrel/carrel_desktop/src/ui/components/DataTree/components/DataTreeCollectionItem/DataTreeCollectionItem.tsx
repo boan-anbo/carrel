@@ -1,121 +1,150 @@
-import {
-  Badge,
-  Box,
-  Container,
-  Flex,
-  HStack,
-  StackDivider,
-  VStack,
-} from "@chakra-ui/react";
-import { ChevronDownIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import { useMemo, useState } from "react";
+import { Box, Container, Flex, VStack } from "@chakra-ui/react";
+import { MouseEventHandler, useMemo, useState } from "react";
 import { DataTree } from "../../DataTree";
+import { NodeMatch } from "../../filter-item";
 import {
   DataTreeConfigState,
+  DataTreeNodeRef,
   IDataTreeCollection,
   IDataTreeNode,
 } from "../../i-data-tree-node";
 import { DataTreeItem } from "../DataTreeItem";
 
 export interface DataTreeCollectionItemProps<T> {
-  item: IDataTreeCollection<T>;
+  nodeRef: DataTreeNodeRef;
+  loadNode: (ref: DataTreeNodeRef) => IDataTreeNode<T>;
   config: DataTreeConfigState<T>;
-
-  collectionIndentOverride?: number;
-  onSelectionsChange: (selections: IDataTreeNode<T>[]) => void;
+  filterResults: NodeMatch[] | undefined;
+  isRoot?: boolean;
+  selectedItems: string[];
+  onSelectCollectionItem: (e: any, selections: DataTreeNodeRef) => void;
 }
 
 export function DataTreeCollectionItem({
-  item,
+  nodeRef,
+  loadNode,
   config,
-  collectionIndentOverride: collectionIndent,
-  onSelectionsChange,
+  onSelectCollectionItem,
+  filterResults,
+  selectedItems,
+  isRoot,
 }: DataTreeCollectionItemProps<any>) {
-  if (!item) {
-    return null;
-  }
-
-  if (!config) {
-    config = new DataTreeConfigState();
-  }
+  const item = useMemo(() => {
+    return loadNode(nodeRef) as IDataTreeCollection<any>;
+  }, [nodeRef, loadNode]);
 
   const [isOpen, setIsOpen] = useState(item.isOpen ?? false);
 
   const isSelected = useMemo(() => {
-    return config.isSelected(item);
-  }, [config.selectedItems]);
+    return selectedItems.some((i) => i === item.key);
+  }, [selectedItems]);
 
   const canOpen = useMemo(() => {
-    return item.subItems.length > 0 || item.subCollections.length > 0;
-  }, [item]);
+    return nodeRef.subItems.length > 0 || nodeRef.subCollections.length > 0;
+  }, [nodeRef]);
+
+  /**
+   * Undefined means we don't know if it's open or not.
+   */
+  const [hasFilterResults, setHasFilterResults] =
+    useState<boolean | undefined>(false);
 
   const sortedSubItems = useMemo(() => {
-    return item?.subItems.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-  }, [item.subItems, config.selectedItems]);
+    return nodeRef.subItems.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  }, [nodeRef.subItems, selectedItems]);
 
+  // generate collection item
   const itemNodes = useMemo(() => {
-    return sortedSubItems.map((item, index) => {
+    return sortedSubItems.map((subNodeRef, index) => {
       return (
         <DataTreeItem
-          onSelectionsChange={onSelectionsChange}
+          filterResults={filterResults}
+          onSelectTreeItem={onSelectCollectionItem}
           key={index}
           config={config}
-          item={item}
+          nodeRef={subNodeRef}
+          loadNode={loadNode}
+          selectedItems={selectedItems}
         />
       );
     });
-  }, [sortedSubItems, config.selectedItems]);
+  }, [sortedSubItems, filterResults, selectedItems]);
 
   const icon = useMemo(() => {
-    return isOpen ? <ChevronDownIcon /> : <ChevronRightIcon />;
+    return isOpen
+      ? item.collectionIconOpen ?? config.collectionDefaultIconExpanded
+      : item.collectionIconClosed ?? config.collectionDefaultIconCollapsed;
   }, [isOpen]);
 
-  const toggleOpenCollection = () => {
+  // it pass along the click event to two handlers: onClick and onSelect
+  const onClickCollectionItem: MouseEventHandler<HTMLDivElement> = (event) => {
     setIsOpen(!isOpen);
-    config.select(item);
-    onSelectionsChange(config.selectedItems);
+
+    if (item.onSingleClick) {
+      item.onSingleClick(event, item.key, item.data);
+    }
+    onSelectCollectionItem(event, nodeRef);
   };
 
-  return (
-    <Container
-      pl={collectionIndent ?? config.collectionIndent}
-      pr="0"
-      w="full"
-      maxW="full"
-      userSelect="none"
-    >
-      {/* Collection item itself */}
-      <HStack
-        cursor="pointer"
-        w="full"
-        py="1"
-        pl={config.collectionIndent}
-        onClick={toggleOpenCollection}
-        bg={isSelected ? "primaryBg" : "transparent"}
-        _hover={{
-          background: "primaryBgHover",
-        }}
-      >
-        <Box>{icon}</Box>
-        <Flex gap="2" w="full">
-          <Badge cursor="pointer">{item?.label}</Badge>
-          {item?.count && <Badge variant="outline">{item?.count}</Badge>}
+  const collectionItem = useMemo(() => {
+    if (config.enableFilter && filterResults) {
+      // check if any of its sub items are in the filter results
+      const hasFilteredSubItems = sortedSubItems.some((subNodeRef) => {
+        return filterResults.some((filterMatch) => filterMatch.key === subNodeRef.key);
+      });
+      if (!hasFilteredSubItems) {
+        return <></>;
+      } else {
+        setHasFilterResults(true);
+      }
+    } else {
+      setHasFilterResults(undefined);
+    }
+    return (
+      <Flex bg={isSelected ? "primaryBgHeavy" : "transparent"}>
+        <Box w={isRoot ? 0 : config.indentation} />
+        <Flex
+          py={config.spacing}
+          cursor="pointer"
+          w="full"
+          onClick={onClickCollectionItem}
+          _hover={{
+            background: "primaryBgHover",
+          }}
+        >
+          <Box>{icon}</Box>
+          <Flex gap="2" w="full">
+            {item?.label}
+            {item?.count && item?.count}
+          </Flex>
         </Flex>
-      </HStack>
+      </Flex>
+    );
+  }, [filterResults]);
+
+  return (
+    <Container w="full" maxW="full" px="0" userSelect="none">
+      {/* Collection item itself */}
+      <>{collectionItem}</>
       {/* Regular Items uncer the collection */}
-      {isOpen && canOpen && (
-        <VStack spacing="0" w="full" align="start">
-          <HStack w="full">
+      {(isOpen || hasFilterResults) && canOpen && (
+        <Flex>
+          <Box w={config.indentation} />
+          <VStack spacing="0" w="full" align="start">
             <DataTree
-              onSelectionsChange={onSelectionsChange}
+              filterResults={filterResults}
+              onSelectNode={onSelectCollectionItem}
               config={config}
-              items={item?.subCollections}
+              nodeRefs={nodeRef.subCollections}
+              loadNode={loadNode}
+              isRoot={false}
+              selectedItems={selectedItems}
             />
-          </HStack>
-          <VStack spacing="2" w="full">
-            {itemNodes}
+            <VStack spacing="0" w="full">
+              {itemNodes}
+            </VStack>
           </VStack>
-        </VStack>
+        </Flex>
       )}
     </Container>
   );

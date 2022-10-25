@@ -5,9 +5,9 @@
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
 import {Message, proto3} from "@bufbuild/protobuf";
-import {Snippet} from "../../snippet/v1/snippet_v1_pb";
-import {File} from "../../file/v1/file_v1_pb";
-import {Passage} from "../../passage/v1/passage_v1_pb";
+import {Snippet} from "../../snippet/v1/snippet_v1_pb.js";
+import {File} from "../../file/v1/file_v1_pb.js";
+import {Passage} from "../../passage/v1/passage_v1_pb.js";
 
 /**
  * / A common tag for carrel system.
