@@ -3,7 +3,7 @@ import { MouseEventHandler, useMemo, useState } from "react";
 import { DataTree } from "../../DataTree";
 import { NodeMatch } from "../../filter-item";
 import {
-  DataTreeConfigState,
+  DataTreeConfig,
   DataTreeNodeRef,
   IDataTreeCollection,
   IDataTreeNode,
@@ -13,7 +13,7 @@ import { DataTreeItem } from "../DataTreeItem";
 export interface DataTreeCollectionItemProps<T> {
   nodeRef: DataTreeNodeRef;
   loadNode: (ref: DataTreeNodeRef) => IDataTreeNode<T>;
-  config: DataTreeConfigState<T>;
+  config: DataTreeConfig<T>;
   filterResults: NodeMatch[] | undefined;
   isRoot?: boolean;
   selectedItems: string[];
@@ -115,12 +115,12 @@ export function DataTreeCollectionItem({
           <Box>{icon}</Box>
           <Flex gap="2" w="full">
             {item?.label}
-            {item?.count && item?.count}
+            {item?.countLabel}
           </Flex>
         </Flex>
       </Flex>
     );
-  }, [filterResults]);
+  }, [filterResults, isOpen]);
 
   return (
     <Container w="full" maxW="full" px="0" userSelect="none">

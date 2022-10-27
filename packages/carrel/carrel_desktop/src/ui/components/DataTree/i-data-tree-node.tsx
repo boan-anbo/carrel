@@ -6,6 +6,7 @@ import {
 import { KeyboardEvent } from "@react-types/shared";
 import { MouseEvent, ReactNode } from "react";
 import { v4 } from "uuid";
+import { TCarrelSize } from "../../props/i-size";
 
 export enum EDataTreeNodeType {
   COLLECTION,
@@ -50,6 +51,10 @@ export interface IDataTreeNode<T> {
    * The label to be displayed.
    */
   label: ReactNode;
+  /**
+   * Plaintext string label to be used for highlight etc.
+   */
+  plainLabel: string;
   /**
    * Aria label.
    */
@@ -110,6 +115,10 @@ export interface IDataTreeCollection<T> extends IDataTreeNode<T> {
    */
   count?: number;
   /**
+   * count label, ReactNode to display after the count.
+   */
+  countLabel?: ReactNode;
+  /**
    * Icon for opened collection node
    */
   collectionIconOpen?: ReactNode;
@@ -121,6 +130,7 @@ export interface IDataTreeCollection<T> extends IDataTreeNode<T> {
 }
 
 export class DataTreeCollection<T> implements IDataTreeCollection<T> {
+  plainLabel: string = '';
   subItemsCount: number = 0;
   subCollectionsCount: number = 0;
   count?: number | undefined;
@@ -166,6 +176,9 @@ export class DataTreeCollection<T> implements IDataTreeCollection<T> {
   ): DataTreeCollection<T> {
     const result = new DataTreeCollection<T>();
     Object.assign(result, data);
+    if (result.label && typeof result.label === "string" && !result.plainLabel) {
+      result.plainLabel = result.label;
+    }
     return result;
   }
 }
@@ -178,7 +191,7 @@ export interface IDataTreeItem<T> extends IDataTreeNode<T> {
   iconInactive?: ReactNode;
 }
 
-export class DataTreeConfigState<T> {
+export class DataTreeConfig<T> {
   collectionDefaultIconCollapsed?: ReactNode | undefined = (
     <ChevronRightIcon />
   );
@@ -187,8 +200,8 @@ export class DataTreeConfigState<T> {
   /**
    * The icon for an item when there is no icon provided for that specific item.
    */
-  itemDefaultIconOpen?: ReactNode | undefined = (<FileIcon />);
-  itemDefaultIconClosed?: ReactNode | undefined = (<FileIcon />);
+  itemDefaultIconOpen?: ReactNode | undefined;
+  itemDefaultIconClosed?: ReactNode | undefined;
   itemDefaultOnClick?: (key: string, item?: T) => void;
 
   indentation?: number | undefined = 5;
@@ -203,13 +216,15 @@ export class DataTreeConfigState<T> {
    * E.g. filter by label: [['label']]
    * Filter by data's `filename` property: [['data', 'fileName']]
    */
-  filterFields: string[][] = [["label"]];
+  filterFields: string[][] = [["plainLabel"]];
 
   selectionMode?: "single" | "multiple" | undefined = "single";
 
   spacing?: number | undefined = 1;
+
+  size?: TCarrelSize = 'xs';
   // partial constructor
-  constructor(data?: Partial<DataTreeConfigState<T>>) {
+  constructor(data?: Partial<DataTreeConfig<T>>) {
     Object.assign(this, data);
   }
 }

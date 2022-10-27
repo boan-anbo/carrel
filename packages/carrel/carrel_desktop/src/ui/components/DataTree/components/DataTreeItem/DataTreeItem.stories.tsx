@@ -3,7 +3,7 @@ import type {Meta, StoryFn} from '@storybook/react';
 
 import type {DataTreeItemProps} from './DataTreeItem';
 import {DataTreeItem} from './DataTreeItem';
-import { DataTreeConfigState, EDataTreeNodeType } from '../../i-data-tree-node';
+import { DataTreeConfig, EDataTreeNodeType } from '../../i-data-tree-node';
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
@@ -36,6 +36,6 @@ Basic.args = {
     "label": "Item 1",
     "type": EDataTreeNodeType.ITEM,
   },
-  config: new DataTreeConfigState(),
+  config: new DataTreeConfig(),
 
 };

@@ -1,9 +1,8 @@
-import React from 'react';
-import type {Meta, StoryFn} from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 
-import type {TagTreeProps} from './TagTree';
-import {TagTree} from './TagTree';
-import { mockProjectDirectory } from '../../../../../../.storybook/mock-vars';
+import { mockProjectDirectoryMac } from '../../../../../../test/fixtures/mock-vars';
+import type { TagTreeProps } from './TagTree';
+import { TagTree } from './TagTree';
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
@@ -31,5 +30,5 @@ export const Basic = Template.bind({});
 // Story args
 // Learn more: https://storybook.js.org/docs/react/writing-stories/args
 Basic.args = {
-  propjectDirectory: mockProjectDirectory
+  propjectDirectory: mockProjectDirectoryMac
 };

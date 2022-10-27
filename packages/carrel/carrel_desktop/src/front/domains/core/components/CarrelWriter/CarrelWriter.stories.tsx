@@ -3,7 +3,7 @@ import type {Meta, StoryFn} from '@storybook/react';
 
 import type {CarrelWriterProps} from './CarrelWriter';
 import {CarrelWriter} from './CarrelWriter';
-import { mockSampleMd } from '../../../../../../.storybook/mock-vars';
+import { mockSampleMd } from '../../../../../../test/fixtures/mock-vars';
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx

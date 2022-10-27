@@ -2,7 +2,7 @@ import React from 'react';
 import type {Meta, StoryFn} from '@storybook/react';
 
 import {DataTreeRoot, DataTreeRootProps} from './DataTreeRoot';
-import { DataTreeConfigState, EDataTreeNodeType } from './i-data-tree-node';
+import { DataTreeConfig, EDataTreeNodeType } from './i-data-tree-node';
 import { Badge, Box } from '@chakra-ui/react';
 
 // Learn how to write stories:
@@ -31,7 +31,7 @@ export const Basic = Template.bind({});
 // Story args
 // Learn more: https://storybook.js.org/docs/react/writing-stories/args
 Basic.args = {
-  config: new DataTreeConfigState({
+  config: new DataTreeConfig({
     enableFilter: true,
     useBuiltInFilter: true,
     filterFields: [['label']],
@@ -44,6 +44,7 @@ Basic.args = {
     {
       key: "1",
       label: "Item 1",
+      plainLabel: "Item 1",
       type: EDataTreeNodeType.ITEM,
       subCollections: [],
       subItems: [],
@@ -53,40 +54,44 @@ Basic.args = {
       key: "I",
       type: EDataTreeNodeType.COLLECTION,
       label: "Collection I",
+      plainLabel: "Collection I",
       order: 1,
       subItems: [
         {
           key: "I.1",
           type: EDataTreeNodeType.ITEM,
           label: <Badge colorScheme="orange">Item 1</Badge>,
+          labelPlaintext: "Item 1",
           order: 1,
         },
         {
           key: "I.2",
           type: EDataTreeNodeType.ITEM,
           label: "Item I.2",
+          labelPlaintext: "Item I.2",
           order: 2,
         },
       ],
-      subCollectionIds: [],
-      subItemIds: [],
       subCollections: [
         {
           key: "I.I",
           type: EDataTreeNodeType.COLLECTION,
           label: "Collection I.I",
+          labelPlaintext: "Collection I.I",
           order: 1,
           subItems: [
             {
               key: "I.I.1",
               type: EDataTreeNodeType.ITEM,
               label: "Item I.I.1",
+              labelPlaintext: "Item I.I.1",
               order: 1,
             },
             {
               key: "I.I.2",
               type: EDataTreeNodeType.ITEM,
               label: "Item I.I.2",
+              labelPlaintext: "Item I.I.2",
 
               order: 2,
             },
@@ -98,12 +103,14 @@ Basic.args = {
               key: "I.I.I",
               type: EDataTreeNodeType.COLLECTION,
               label: "Collection I.I.I.1",
+              labelPlaintext: "Collection I.I.I.1",
               order: 1,
               subItems: [
                 {
                   key: "I.I.I.1",
                   type: EDataTreeNodeType.ITEM,
                   label: "Item I.I.I.1",
+                  labelPlaintext: "Item I.I.I.1",
                   order: 1,
                 }
               ],

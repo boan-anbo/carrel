@@ -112,9 +112,6 @@ export function CarrelWriter({
           {displayFileName}
         </Text>
       </Flex>
-      {
-        currentState?.doc.toString()
-      }
       <CarrelEditor
         initialDoc={initialDoc}
         extensions={[]}

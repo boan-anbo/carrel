@@ -6,7 +6,7 @@ import { File } from "../../../backend/carrel_server_client/carrel/common/file/v
 import { fsManagerQueries } from "../../../backend/server-api/fs-manager-queries";
 import { DataTreeRoot } from "../DataTree/DataTreeRoot";
 import {
-  DataTreeConfigState,
+  DataTreeConfig,
   EDataTreeNodeType,
   IDataTreeNode,
 } from "../DataTree/i-data-tree-node";
@@ -82,7 +82,7 @@ export function DirectoryTree({
       treeNodes={dataTreeCollection}
       onSelectionsChange={onSelectionChange}
       config={
-        new DataTreeConfigState({
+        new DataTreeConfig({
           enableFilter: true,
           useBuiltInFilter: true,
           selectionMode: "single",

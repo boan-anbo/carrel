@@ -1,17 +1,18 @@
-import { Container, Flex, Highlight, Text } from "@chakra-ui/react";
+import { Box, Container, Flex, Highlight } from "@chakra-ui/react";
+import { size } from "lodash";
 import { MouseEventHandler, useMemo } from "react";
 import { NodeMatch } from "../../filter-item";
 import {
-  DataTreeConfigState,
+  DataTreeConfig,
   DataTreeNodeRef,
   IDataTreeItem,
-  IDataTreeNode,
+  IDataTreeNode
 } from "../../i-data-tree-node";
 
 export interface DataTreeItemProps<T> {
   nodeRef: DataTreeNodeRef;
   loadNode: (ref: DataTreeNodeRef) => IDataTreeNode<T>;
-  config: DataTreeConfigState<T>;
+  config: DataTreeConfig<T>;
   itemIndentOverride?: number;
   onSelectTreeItem: (e: any, selections: DataTreeNodeRef) => void;
   /**
@@ -48,6 +49,10 @@ export function DataTreeItem({
     return filterResults?.find((i) => i.key === item.key);
   }, [filterResults]);
 
+  const showHighlight = useMemo(() => {
+    return config.enableFilter && itemMatch && itemMatch.substring.length > 0;
+  }, [config.enableFilter, itemMatch]);
+
   // check if we should filter this item
   if (config.enableFilter && filterResults) {
     if (!itemMatch) {
@@ -55,12 +60,25 @@ export function DataTreeItem({
     }
   }
 
+  // hide the data tree item if it has not label
+  if (!item.label || item.plainLabel.length === 0) {
+    return null;
+  }
+
+  const label = (showHighlight) ? (
+         <Highlight  query={[itemMatch?.substring ?? ""]} styles={{ bg: "yellow.200", fontWeight: "semibold" }} >
+              {item.plainLabel ?? ""}
+            </Highlight>
+    ):  (item.label ?? "");
+
+
   const onClickItem: MouseEventHandler<HTMLDivElement> = (event) => {
     if (item.onSingleClick) {
       item.onSingleClick(event, item.key, item);
     }
     onSelectTreeItem(event, nodeRef);
   };
+
 
   return (
     <Container
@@ -80,12 +98,9 @@ export function DataTreeItem({
           <Flex justifyContent="center" h="full" minW="15px">
             {openIcon}
           </Flex>
-            <Highlight
-              query={[itemMatch?.substring ?? ""]}
-              styles={{ bg: "yellow.200", fontWeight: "semibold" }}
-            >
-              {item?.label}
-            </Highlight>
+          <Box fontSize={config.size}>
+            {label}
+          </Box>
         </Flex>
       </Flex>
     </Container>

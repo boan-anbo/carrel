@@ -1,6 +1,6 @@
 import { Box, Flex } from "@chakra-ui/react";
 import type { Meta, StoryFn } from "@storybook/react";
-import { mockProjectDirectory } from "../../../../../../.storybook/mock-vars";
+import { mockProjectDirectory } from "../../../../../../test/fixtures/mock-vars";
 import { LeftPanel } from "../../../core/components/LeftPanel/LeftPanel";
 import { ProjectFileBlock } from "../../../core/components/ProjectFileBlock";
 

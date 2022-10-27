@@ -3,7 +3,7 @@ import type {Meta, StoryFn} from '@storybook/react';
 
 import type {ProjectBoardProps} from './ProjectBoard';
 import {ProjectBoard} from './ProjectBoard';
-import { mockProjectDirectory } from '../../../../../../.storybook/mock-vars';
+import { mockProjectDirectory } from '../../../../../../test/fixtures/mock-vars';
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx

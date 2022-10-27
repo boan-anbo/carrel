@@ -13,7 +13,7 @@ import {
 } from "./filter-item";
 
 import {
-  DataTreeConfigState,
+  DataTreeConfig,
   DataTreeNodeRef,
   EDataTreeNodeType,
   IDataTreeCollection,
@@ -31,7 +31,7 @@ export interface DataTreeRootProps<T> {
    */
   isLazy?: boolean;
   loadNode?: (ref: DataTreeNodeRef) => IDataTreeNode<T>;
-  config: DataTreeConfigState<T>;
+  config: DataTreeConfig<T>;
   size?: TCarrelSize;
   /**
    * External source of filter pattern.
@@ -82,7 +82,7 @@ export function DataTreeRoot({
     useState<NodeFilterMatch[] | undefined>(undefined);
 
   if (!config) {
-    config = new DataTreeConfigState();
+    config = new DataTreeConfig();
   }
 
   /**

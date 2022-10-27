@@ -6,7 +6,7 @@ import { DataTreeItem } from "./components/DataTreeItem/DataTreeItem";
 import { NodeMatch } from "./filter-item";
 
 import {
-  DataTreeConfigState,
+  DataTreeConfig,
   DataTreeNodeRef,
   EDataTreeNodeType, IDataTreeNode
 } from "./i-data-tree-node";
@@ -14,7 +14,7 @@ import {
 export interface DataTreeProps<T> {
   nodeRefs: DataTreeNodeRef[];
   loadNode: (ref: DataTreeNodeRef) => IDataTreeNode<T>;
-  config: DataTreeConfigState<T>;
+  config: DataTreeConfig<T>;
   size?: TCarrelSize;
   isRoot: boolean; // this needs to be set to true if this is the root of the tree
 

@@ -3,7 +3,7 @@ import type { Meta, StoryFn } from "@storybook/react";
 
 import type { ProjectFileBlockProps } from "./ProjectFileBlock";
 import { ProjectFileBlock } from "./ProjectFileBlock";
-import { mockProjectDirectory } from "../../../../../../.storybook/mock-vars";
+import { mockProjectDirectory } from "../../../../../../test/fixtures/mock-vars";
 import { Block } from "../../../../../ui/components";
 
 // Learn how to write stories:

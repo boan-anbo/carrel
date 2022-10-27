@@ -5,7 +5,7 @@ import type {DirectoryTreeProps} from './DirectoryTree';
 import {DirectoryTree} from './DirectoryTree';
 import * as fs from 'fs';
 import { GetDirectoryTreeResponse } from '../../../backend/carrel_server_client/carrel/server/fs_manager/v1/server_fs_manager_v1_pb';
-import { mockProjectDirectory } from '../../../../.storybook/mock-vars';
+import { mockProjectDirectory } from '../../../../test/fixtures/mock-vars';
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
