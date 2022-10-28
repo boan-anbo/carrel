@@ -17,5 +17,6 @@ pub mod test_utils;
 pub mod to;
 pub mod event;
 pub mod fs;
+pub mod maintenance;
 
 pub use carrel_db;

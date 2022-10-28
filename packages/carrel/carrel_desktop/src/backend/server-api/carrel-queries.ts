@@ -5,8 +5,7 @@ import { Archive } from "../carrel_server_client/carrel/common/archive/v1/archiv
 import { File } from "../carrel_server_client/carrel/common/file/v1/file_v1_pb";
 import { Firefly } from "../carrel_server_client/carrel/common/firefly/v2/firefly_v2_pb";
 import { Project } from "../carrel_server_client/carrel/common/project/v2/project_v2_pb";
-import { TagGroup } from "../carrel_server_client/carrel/common/tag/v2/tag_v2_pb";
-import { GetDirectoryTreeResponse } from "../carrel_server_client/carrel/server/fs_manager/v1/server_fs_manager_v1_pb";
+import { TagKeyValueNote } from "../carrel_server_client/carrel/common/tag/v2/tag_v2_pb";
 import { ListAllTagGroupsResponse, ListFirefliesByTagResponse, QueryFilesResponse, QueryFirefliesResponse } from "../carrel_server_client/carrel/server/project_manager/v1/server_project_manager_v1_pb";
 import { StandardQuery } from "../carrel_server_client/generic/api/query/v1/query_v1_pb";
 import { carrelApi } from "./carrel-api";
@@ -222,32 +221,32 @@ export class ApiQuery {
         }
     )
 
-    QueryFirefliesByTags = (projectDirectory?: string, query?: StandardQuery, key?: string, value?: string) => useQuery(
-        ["fireflies_by_tags", query, key, value],
+    QueryFirefliesByTags = (projectDirectory?: string, query?: StandardQuery, selectedTags?: TagKeyValueNote[]) => useQuery(
+        ["fireflies_by_tags", query, selectedTags],
 
         async (): Promise<ListFirefliesByTagResponse | null> => {
 
-            this.log("QueryFirefliesByTags", "fireflies_by_tags", { projectDirectory, query, key, value })
+            this.log("QueryFirefliesByTags", "fireflies_by_tags", { projectDirectory, query, selectedTags })
 
-            if (!projectDirectory || !query || !key) {
+            if (!projectDirectory || !query || !selectedTags) {
                 return null
             }
 
-            let result = await carrelApi.listFirefliesByTag(
+            let result = await carrelApi.listFirefliesByTags(
                 {
                     query,
                     projectDirectory,
-                    key,
-                    value
+                    selectedTags
                 })
 
-            this.log("QueryFirefliesByTags", "fireflies_by_tags", result)
+            this.log("QueryFirefliesByTags", "fireflies_by_tags", JSON.stringify(result, null, 2))
+            //  this.log("QueryFirefliesByTags", "fireflies_by_tags", result)
             return result
         }
     )
 
-    
-            
+
+
 }
 
 export const carrelQueries = new ApiQuery()

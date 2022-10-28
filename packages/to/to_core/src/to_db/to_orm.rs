@@ -36,27 +36,29 @@
 //!
 //! ```
 //!
+use std::io;
+
 use async_trait::async_trait;
+use carrel_commons::carrel::common::tag::v2::Tag as CommonTagV2;
 use carrel_commons::generic::api::query::v1::{FilterSet, Operator, StandardQuery};
+use carrel_commons::generic::api::query::v1::Condition as GenericCondition;
 use entity::entities::{tag, textual_objects};
+use entity::entities::prelude::*;
 use entity::entities::textual_objects::{ActiveModel, Column, Entity, Model};
 use pebble_query::errors::PebbleQueryError;
 use pebble_query::pebble_query_result::{PebbleQueryResult, PebbleQueryResultGeneric, PebbleQueryResultUtilTrait};
 use sea_orm::{Database, DatabaseConnection, DbBackend, FromQueryResult, ModelTrait, Statement};
-use std::io;
-use thiserror::Error;
 // use seaorm query trait
 use sea_orm::{ActiveModelTrait, ColumnTrait, EntityTrait, PaginatorTrait, QueryFilter};
+use sea_orm::error::DbErr;
+use sea_orm::sea_query::SimpleExpr;
+use thiserror::Error;
+use uuid::Uuid;
+
 // use seaorm errors
 use crate::to::to_struct::TextualObject;
 use crate::to_db::to_query::{PebbleQueryTextualObject, PebbleQueryTextualObjectTrait};
 use crate::to_db::util_trait::{ToOrmMapper, ToOrmMapperTrait};
-use entity::entities::prelude::*;
-use sea_orm::error::DbErr;
-use sea_orm::sea_query::SimpleExpr;
-use uuid::Uuid;
-use carrel_commons::carrel::common::tag::v2::Tag as CommonTagV2;
-use carrel_commons::generic::api::query::v1::Condition as GenericCondition;
 use crate::to_tag::to_tag_key_group::KeyGroups;
 use crate::to_tag::to_tag_struct::ToTag;
 
@@ -293,19 +295,22 @@ impl ToOrmTrait for ToOrm {
         Ok(db)
     }
 
+    /// Insert a TO and its tags into the database.
     async fn insert_to(&self, to: TextualObject, to_tags: Vec<ToTag>) -> Result<i32, ToOrmError> {
         let db = self.get_connection().await?;
         let to = ToOrmMapper::to_into_active_model(to);
+        /// insert to first.
         let insert_result = to
             .insert(&db)
             .await
             .map_err(ToOrmError::DatabaseInsertError)
             .unwrap();
 
+        let to_uuid: Uuid = Uuid::parse_str(&insert_result.uuid).unwrap();
 
         // if there are related tags, insert them with alongside the TO
         if !to_tags.is_empty() {
-            let tags = ToOrmMapper::to_tags_into_active_models(to_tags, insert_result.id);
+            let tags = ToOrmMapper::to_tags_into_active_models(to_tags, insert_result.id, to_uuid);
 
             let _ = tag::Entity::insert_many(tags)
                 .exec(&db)
@@ -610,8 +615,9 @@ impl ToOrmTrait for ToOrm {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use carrel_utils::uuid::new_v4;
+
+    use super::*;
 
     pub fn get_to_orm_dev_db() -> ToOrm {
         dotenv::dotenv().ok();
@@ -719,17 +725,17 @@ mod tests {
         assert_eq!(tags.len(), 3);
         let first_tag_group = tags.get(0).unwrap();
         assert_eq!(first_tag_group.key, "tag_key_1");
-        assert_eq!(first_tag_group.value, "tag_value_1");
+        assert_eq!(first_tag_group.value, Some("tag_value_1".to_owned()));
         assert_eq!(first_tag_group.key_count, 1);
 
         let second_tag_group = tags.get(1).unwrap();
         assert_eq!(second_tag_group.key, "tag_key_1");
-        assert_eq!(second_tag_group.value, "tag_value_3");
+        assert_eq!(second_tag_group.value, Some("tag_value_2".to_owned()));
         assert_eq!(second_tag_group.key_count, 1);
 
         let third_tag_group = tags.get(2).unwrap();
         assert_eq!(third_tag_group.key, "tag_key_2");
-        assert_eq!(third_tag_group.value, "tag_value_2");
+        assert_eq!(third_tag_group.value, Some("tag_value_2".to_owned()));
         assert_eq!(third_tag_group.key_count, 1);
     }
 

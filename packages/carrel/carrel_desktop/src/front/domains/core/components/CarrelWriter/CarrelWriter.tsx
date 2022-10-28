@@ -1,9 +1,10 @@
-import { Text, Box, Container, Flex } from "@chakra-ui/react";
-import { EditorView, ViewUpdate } from "@codemirror/view";
-import { initial } from "lodash";
+import { Container, Flex, Text } from "@chakra-ui/react";
+import { EditorState } from "@codemirror/state";
+import { ViewUpdate } from "@codemirror/view";
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 } from "uuid";
+import { File } from "../../../../../backend/carrel_server_client/carrel/common/file/v1/file_v1_pb";
 import { fsManagerQueries } from "../../../../../backend/server-api/fs-manager-queries";
 import { CarrelEditor } from "../../../../../ui/components";
 import { ECarrelWriterKeyMap } from "../../../../../ui/components/CarrelEditor/carrel-editor-keymap";
@@ -12,10 +13,6 @@ import { BLOCK_HEADER_HEIGHT_NUMBER } from "../../../../../ui/styles/constants";
 import { setActiveEditorId } from "../../../../store/slices/writer-state/writer-state";
 import { RootState } from "../../../../store/store";
 import { isFileSupportedByWriter } from "./carrel-writer-utils";
-import { File } from "../../../../../backend/carrel_server_client/carrel/common/file/v1/file_v1_pb";
-import { EditorState } from "@codemirror/state";
-
-import styles from "./CarrelWriter.module.scss";
 
 export interface CarrelWriterProps {
   filePath?: string;
@@ -116,7 +113,6 @@ export function CarrelWriter({
         initialDoc={initialDoc}
         extensions={[]}
         onViewUpdate={(view: ViewUpdate) => {
-          console.log("view update", view);
           setCurrentState(view.state);
         }}
         onKeyPressed={(key: ECarrelWriterKeyMap) => onKeyPressed(key)}

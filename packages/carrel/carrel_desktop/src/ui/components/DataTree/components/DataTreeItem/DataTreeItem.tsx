@@ -50,7 +50,7 @@ export function DataTreeItem({
   }, [filterResults]);
 
   const showHighlight = useMemo(() => {
-    return config.enableFilter && itemMatch && itemMatch.substring.length > 0;
+    return config.enableFilter && itemMatch && itemMatch.substring?.length > 0;
   }, [config.enableFilter, itemMatch]);
 
   // check if we should filter this item
@@ -61,7 +61,7 @@ export function DataTreeItem({
   }
 
   // hide the data tree item if it has not label
-  if (!item.label || item.plainLabel.length === 0) {
+  if (!item.label || item.plainLabel?.length === 0) {
     return null;
   }
 

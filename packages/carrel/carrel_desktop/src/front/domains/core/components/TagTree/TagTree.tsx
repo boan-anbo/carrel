@@ -1,12 +1,16 @@
 import { Container } from "@chakra-ui/react";
 import { FaSync } from "react-icons/fa";
-import { useSelector } from "react-redux";
-import { TagGroup } from "../../../../../backend/carrel_server_client/carrel/common/tag/v2/tag_v2_pb";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Tag,
+  TagGroup,
+} from "../../../../../backend/carrel_server_client/carrel/common/tag/v2/tag_v2_pb";
 import { carrelApi } from "../../../../../backend/server-api/carrel-api";
 import { carrelQueries } from "../../../../../backend/server-api/carrel-queries";
 import { ActionBar } from "../../../../../ui/components";
 import { Block } from "../../../../../ui/components/Block/Block";
 import {
+  CollectionExpandMode,
   DataTreeConfig,
   IDataTreeCollection,
   IDataTreeNode,
@@ -17,6 +21,7 @@ import { useMemo } from "react";
 import { BiRefresh } from "react-icons/bi";
 import { appDir } from "../../../../../backend/tauri/fs/get_app_data_dir";
 import { DataTreeRoot } from "../../../../../ui/components/DataTree/DataTreeRoot";
+import { setTagsSelected as setCoreTagsSelected } from "../../../../store/slices/appstate/appstate";
 import { getDataTreeNodesFromTagGroups } from "./tag-tree-utils";
 
 export interface TagTreeProps {
@@ -25,6 +30,7 @@ export interface TagTreeProps {
 }
 
 export function TagTree({ onSelectionsChange, ...props }: TagTreeProps) {
+  const dispatch = useDispatch();
   const workingProject = useSelector(
     (state: RootState) => state.workingProject.workingProject
   );
@@ -33,17 +39,19 @@ export function TagTree({ onSelectionsChange, ...props }: TagTreeProps) {
     props.propjectDirectory || workingProject?.directory
   );
 
+  const items: IDataTreeCollection<TagGroup>[] = useMemo(() => {
+    if (data) {
+      return getDataTreeNodesFromTagGroups(data?.tagGroups, {
+        defaultExpanded: true,
+      });
+    } else {
+      return [];
+    }
+  }, [data?.tagGroups]);
+
   if (!data) {
     return null;
   }
-
-  const items: IDataTreeCollection<TagGroup>[] = useMemo(
-    () =>
-      getDataTreeNodesFromTagGroups(data.tagGroups, {
-        defaultExpanded: true,
-      }),
-    [data.tagGroups]
-  );
 
   const actionBar = (
     <ActionBar
@@ -76,6 +84,18 @@ export function TagTree({ onSelectionsChange, ...props }: TagTreeProps) {
     />
   );
 
+  const onCoreTagsSelected = (selections: IDataTreeNode<any>[]) => {
+    onSelectionsChange?.(selections);
+    const tags: Tag[] = selections.map((s) => {
+      if (!s.data) {
+        console.warn("no data for the selected tags", s);
+      }
+      return s.data as Tag;
+    });
+    const setTags = setCoreTagsSelected(tags);
+    dispatch(setTags);
+  };
+
   return (
     <Block
       topActionBar={actionBar}
@@ -84,10 +104,14 @@ export function TagTree({ onSelectionsChange, ...props }: TagTreeProps) {
     >
       <Container w="full" maxW="full" px="0">
         <DataTreeRoot
-          onSelectionsChange={onSelectionsChange}
+          onSelectionsChange={onCoreTagsSelected}
           size="xs"
           treeNodes={items}
-          config={new DataTreeConfig()}
+          config={
+            new DataTreeConfig({
+              collectionDefaultExpandMode: CollectionExpandMode.DOUBLE_CLICK,
+            })
+          }
         />
       </Container>
     </Block>

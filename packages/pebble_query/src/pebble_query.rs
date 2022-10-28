@@ -6,6 +6,7 @@ use carrel_commons::generic::api::query::v1::{
     Operator, SortCondition, SortDirection, StandardQuery,
 };
 use convert_case::{Case, Casing};
+use sea_orm::{ColumnTrait, FromQueryResult, PaginatorTrait};
 use sea_orm::Condition;
 use sea_orm::DatabaseConnection;
 use sea_orm::DbErr;
@@ -14,7 +15,6 @@ use sea_orm::QueryFilter;
 use sea_orm::QueryOrder;
 use sea_orm::QuerySelect;
 use sea_orm::Select;
-use sea_orm::{ColumnTrait, FromQueryResult, PaginatorTrait};
 
 use crate::errors::PebbleQueryError;
 use crate::errors::PebbleQueryError::{InvalidOperator, MissingValue};
@@ -28,9 +28,9 @@ impl PebbleQuery {
         query: StandardQuery,
         field_column_map: &HashMap<String, E::Column>,
     ) -> SeaOrmFilterConditions
-    where
-        E: EntityTrait<Model = M>,
-        M: FromQueryResult + Sized + Send + Sync,
+        where
+            E: EntityTrait<Model=M>,
+            M: FromQueryResult + Sized + Send + Sync,
     {
         let mut must_conditions = Condition::all();
 
@@ -44,7 +44,7 @@ impl PebbleQuery {
                     filter,
                     field_column_map,
                 )
-                .unwrap();
+                    .unwrap();
             }
 
             for filter in filter_set.any {
@@ -53,7 +53,7 @@ impl PebbleQuery {
                     filter,
                     field_column_map,
                 )
-                .unwrap();
+                    .unwrap();
             }
         };
 
@@ -108,9 +108,9 @@ impl PebbleQuery {
         query: StandardQuery,
         field_to_column_map: &HashMap<String, E::Column>,
     ) -> Result<PebbleQueryResult<E>, DbErr>
-    where
-        E: EntityTrait<Model = M>,
-        M: FromQueryResult + Sized + Send + Sync,
+        where
+            E: EntityTrait<Model=M>,
+            M: FromQueryResult + Sized + Send + Sync,
     {
         let query = Self::normalize_query(query);
 
@@ -118,8 +118,8 @@ impl PebbleQuery {
             Self::extract_sea_orm_conditions_from_query::<E, M>(&query, field_to_column_map);
 
         let mut select_with_conditions = E::find()
-            .filter(current_must_condition) // add the must condition
-            .filter(current_any_condition) // add the any condition
+            .filter(current_must_condition.clone()) // add the must condition, this needs to be cloned because it is moved into the paginator later
+            .filter(current_any_condition.clone()) // add the any condition this needs to be cloned because it is moved into the paginator later
             ;
 
         let filter = query.filter.clone();
@@ -138,7 +138,7 @@ impl PebbleQuery {
                         vec![],
                         None,
                     )
-                    .unwrap();
+                        .unwrap();
                 }
             }
         }
@@ -177,7 +177,10 @@ impl PebbleQuery {
             query_result = result
         }
 
+        // a second query to get the total counts and page numbers using the same conditions.
         let total_items_and_pages_number = E::find()
+            .filter(current_must_condition) // add the must condition, same as actual query for results
+            .filter(current_any_condition) // add the any condition, same as actual query for results
             .paginate(db, query.length as usize)
             .num_items_and_pages()
             .await?;
@@ -193,9 +196,9 @@ impl PebbleQuery {
         query: &StandardQuery,
         field_to_column_map: &HashMap<String, <E>::Column>,
     ) -> (Condition, Condition)
-    where
-        E: EntityTrait<Model = M>,
-        M: FromQueryResult + Sized + Send + Sync,
+        where
+            E: EntityTrait<Model=M>,
+            M: FromQueryResult + Sized + Send + Sync,
     {
         let mut current_must_condition = Condition::all();
         let mut current_any_condition = Condition::any();
@@ -209,7 +212,7 @@ impl PebbleQuery {
                     filter,
                     field_to_column_map,
                 )
-                .unwrap();
+                    .unwrap();
             }
 
             for filter in filter_set.any {
@@ -218,7 +221,7 @@ impl PebbleQuery {
                     filter,
                     field_to_column_map,
                 )
-                .unwrap();
+                    .unwrap();
             }
         };
         (current_must_condition, current_any_condition)
@@ -350,9 +353,9 @@ impl PebbleQuery {
         sq_filter: carrel_commons::generic::api::query::v1::Condition,
         field_column_map: &HashMap<String, E::Column>,
     ) -> Result<Condition, DbErr>
-    where
-        E: EntityTrait<Model = M>,
-        M: FromQueryResult + Sized + Send + Sync,
+        where
+            E: EntityTrait<Model=M>,
+            M: FromQueryResult + Sized + Send + Sync,
     {
         let result: E::Column = field_column_map
             .into_iter()
@@ -362,7 +365,7 @@ impl PebbleQuery {
                     "Column \"{}\" not provided in field_to_column_map",
                     sq_filter.field.as_str() // throw if
                 )
-                .as_str(),
+                    .as_str(),
             )
             .1
             .clone();
@@ -372,7 +375,7 @@ impl PebbleQuery {
             &sq_filter,
             result,
         )
-        .unwrap();
+            .unwrap();
         Ok(result)
     }
 
@@ -382,9 +385,9 @@ impl PebbleQuery {
         filter: &carrel_commons::generic::api::query::v1::Condition,
         column: E::Column,
     ) -> Result<Condition, PebbleQueryError>
-    where
-        E: EntityTrait<Model = M>,
-        M: FromQueryResult + Sized + Send + Sync,
+        where
+            E: EntityTrait<Model=M>,
+            M: FromQueryResult + Sized + Send + Sync,
     {
         let value = filter.value.clone().unwrap_or_else(|| "".to_string());
         let value_list = filter.value_list.clone();
@@ -410,9 +413,9 @@ impl PebbleQuery {
         value_list: Vec<String>,
         value_to: Option<String>,
     ) -> Result<Condition, PebbleQueryError>
-    where
-        E: EntityTrait<Model = M>,
-        M: FromQueryResult + Sized + Send + Sync,
+        where
+            E: EntityTrait<Model=M>,
+            M: FromQueryResult + Sized + Send + Sync,
     {
         let condition = match Operator::from_i32(operator).unwrap_or(Operator::Unspecified) {
             Operator::Contains => {

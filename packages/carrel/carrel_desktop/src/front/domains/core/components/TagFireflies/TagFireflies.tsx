@@ -1,29 +1,25 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { TagKeyValueNote } from "../../../../../backend/carrel_server_client/carrel/common/tag/v2/tag_v2_pb";
 import { StandardQuery } from "../../../../../backend/carrel_server_client/generic/api/query/v1/query_v1_pb";
 import { carrelQueries } from "../../../../../backend/server-api/carrel-queries";
 import { RootState } from "../../../../store/store";
 import { FireflyDataTable } from "../../../firefly-keeper/views/components";
 
-import styles from "./TagFireflies.module.scss";
-
 export interface TagFirefliesProps {
-  tagKey?: string;
-  tagValue?: string;
   projectDirectory?: string;
 }
 
-export function TagFireflies({
-  tagKey,
-  tagValue,
-  projectDirectory,
-}: TagFirefliesProps) {
+export function TagFireflies({ projectDirectory }: TagFirefliesProps) {
   const [query, setQuery] = React.useState<StandardQuery>();
 
+  const selectedTags = useSelector(
+    (state: RootState) => state.appstate.coreTagsSelected
+  );
+
   useEffect(() => {
-    console.log("tags changed", tagKey, tagValue);
     loadInitialData();
-  }, [tagKey, tagValue, projectDirectory]);
+  }, [selectedTags, projectDirectory]);
 
   const loadInitialData = () => {
     const standardQuery = new StandardQuery();
@@ -39,8 +35,13 @@ export function TagFireflies({
   const { data } = carrelQueries.QueryFirefliesByTags(
     projectDirectory || workingProject?.directory,
     query,
-    tagKey,
-    tagValue
+    selectedTags?.map((t) => {
+      return {
+        key: t.key,
+        value: t.value,
+        note: t.note,
+      } as TagKeyValueNote;
+    })
   );
 
   return (

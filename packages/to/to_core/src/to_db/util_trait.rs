@@ -1,11 +1,9 @@
-use crate::to::to_struct::TextualObject;
 use entity::entities::{tag, textual_objects};
 use entity::entities::textual_objects::{ActiveModel, Model};
-use migration::Mode;
 use sea_orm::ActiveValue::Set;
 use uuid::Uuid;
-use entity::entities::prelude::Tag;
-use crate::to_machine::to_machine_pub_op::ToMPubMethods;
+
+use crate::to::to_struct::TextualObject;
 use crate::to_tag::to_tag_struct::ToTag;
 
 /// Performs all the conversions to and from db entities
@@ -26,8 +24,8 @@ pub trait ToOrmMapperTrait {
     /// ```
     ///
     /// ```
-    fn to_tag_into_active_model(tag: ToTag, to_id: i32) -> tag::ActiveModel;
-    fn to_tags_into_active_models(tags: Vec<ToTag>, to_id: i32) -> Vec<tag::ActiveModel>;
+    fn to_tag_into_active_model(tag: ToTag, to_id: i32, to_uuid: Uuid) -> tag::ActiveModel;
+    fn to_tags_into_active_models(tags: Vec<ToTag>, to_id: i32, to_uuid: Uuid) -> Vec<tag::ActiveModel>;
     ///
     ///
     /// # Arguments
@@ -72,7 +70,7 @@ impl ToOrmMapperTrait for ToOrmMapper {
         }
     }
 
-    fn to_tag_into_active_model(tag: ToTag, to_id: i32) -> tag::ActiveModel {
+    fn to_tag_into_active_model(tag: ToTag, to_id: i32, to_uuid: Uuid) -> tag::ActiveModel {
         tag::ActiveModel {
             id: Default::default(),
             key: Set(tag.key.to_lowercase()),
@@ -81,16 +79,16 @@ impl ToOrmMapperTrait for ToOrmMapper {
             raw_tag_string: Set(tag.raw_tag_string),
             uuid: Set(tag.uuid.to_string()),
             to_id: Set(to_id),
-            to_uuid: Set(tag.to_uuid.expect(
-                "to_tag_into_active_model: to_uuid is required for tag"
-            ).to_string()),
+            to_uuid: Set(
+                to_uuid.to_string()
+            ),
         }
     }
 
-    fn to_tags_into_active_models(tags: Vec<ToTag>, to_id: i32) -> Vec<tag::ActiveModel> {
+    fn to_tags_into_active_models(tags: Vec<ToTag>, to_id: i32, to_uuid: Uuid) -> Vec<tag::ActiveModel> {
         let mut tag_models: Vec<tag::ActiveModel> = Vec::new();
         for tag in tags {
-            tag_models.push(ToOrmMapper::to_tag_into_active_model(tag, to_id));
+            tag_models.push(ToOrmMapper::to_tag_into_active_model(tag, to_id, to_uuid));
         }
         tag_models
     }

@@ -2,7 +2,10 @@ import { Route, Routes } from "react-router-dom";
 import { CarrelComponent } from "../../../backend/carrel_server_client/carrel/core/shared/v1/core_shared_v1_pb";
 import { CabinetArchives } from "../../../front/domains/cabinet/pages/cabinet_archives/CabinetArchives";
 import { CabinetPageRoutes } from "../../../front/domains/cabinet/routes/cabinet-page-routes";
-import { MainWorkArea } from "../../../front/domains/carrel/components/MainWorkArea/MainWorkArea";
+import {
+  EMainWorkAreaPage,
+  MainWorkArea,
+} from "../../../front/domains/carrel/components/MainWorkArea/MainWorkArea";
 import { ProjectManager } from "../../../front/domains/carrel/pages/project-manage/ProjectManager";
 import { ProjectBoard } from "../../../front/domains/carrel/pages/ProjectBoard/ProjectBoard";
 import { CarrelPageRoutes } from "../../../front/domains/carrel/routes/carrel-page-routes";
@@ -20,7 +23,9 @@ export function WorkareaRoutingCenter() {
           <Route index element={<ProjectManager />} />
           <Route
             path={CarrelPageRoutes.mainWorkArea.relativePath}
-            element={<MainWorkArea />}
+            element={
+              <MainWorkArea firstViewPage={EMainWorkAreaPage.CARREL_WRITER} />
+            }
           />
           <Route
             path={CarrelPageRoutes.home.relativePath}

@@ -15,12 +15,14 @@ export function BlockContent({
 }: BlockContentProps) {
   return (
     <Container
+
       h={contentHeight}
       rounded="xs"
       paddingTop={4}
       paddingBottom={4}
       maxW="full"
       className={styles.BlockContent}
+      overflowY="auto"
     >
       {content}
     </Container>

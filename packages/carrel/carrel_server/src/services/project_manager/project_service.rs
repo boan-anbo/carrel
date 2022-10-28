@@ -1,13 +1,6 @@
 use carrel_commons::carrel::common::archive::v1::Archive;
 use carrel_commons::carrel::common::file::v1::File;
-use carrel_commons::carrel::server::project_manager::v1::project_manager_service_server::ProjectManagerService;
-use carrel_commons::carrel::server::project_manager::v1::{AddArchiveRequest, ListAllTagGroupsRequest, ListAllTagGroupsResponse, ListFirefliesByTagRequest, ListFirefliesByTagResponse, SyncProjectRequest, SyncProjectResponse};
-use carrel_commons::carrel::server::project_manager::v1::AddArchiveResponse;
-use carrel_commons::carrel::server::project_manager::v1::AddFilesToArchiveRequest;
-use carrel_commons::carrel::server::project_manager::v1::AddFilesToArchiveResponse;
-use carrel_commons::carrel::server::project_manager::v1::GetArchiveFilesRequest;
-use carrel_commons::carrel::server::project_manager::v1::GetArchiveFilesResponse;
-use carrel_commons::carrel::server::project_manager::v1::RemoveFilesFromArchiveResponse;
+use carrel_commons::carrel::server::project_manager::v1::{AddArchiveRequest, ListAllTagGroupsRequest, ListAllTagGroupsResponse, ListFirefliesByTagsRequest, ListFirefliesByTagResponse, SyncProjectRequest, SyncProjectResponse};
 use carrel_commons::carrel::server::project_manager::v1::{
     AddDirectoryToArchiveRequest, AddDirectoryToArchiveResponse, ListAllProjectArchivesRequest,
     ListAllProjectArchivesResponse, ListAllProjectFilesRequest, ListAllProjectFilesResponse,
@@ -16,26 +9,29 @@ use carrel_commons::carrel::server::project_manager::v1::{
     OpenProjectRequest, OpenProjectResponse, QueryFilesRequest, QueryFilesResponse,
     QueryFirefliesRequest, QueryFirefliesResponse, RemoveFilesFromArchiveRequest,
 };
-use carrel_core::app::app_manager::carrel_app_manager::ManageProjectList;
-use carrel_core::app::app_manager::entity::implementation::AppProject;
+use carrel_commons::carrel::server::project_manager::v1::AddArchiveResponse;
+use carrel_commons::carrel::server::project_manager::v1::AddFilesToArchiveRequest;
+use carrel_commons::carrel::server::project_manager::v1::AddFilesToArchiveResponse;
+use carrel_commons::carrel::server::project_manager::v1::GetArchiveFilesRequest;
+use carrel_commons::carrel::server::project_manager::v1::GetArchiveFilesResponse;
+use carrel_commons::carrel::server::project_manager::v1::project_manager_service_server::ProjectManagerService;
+use carrel_commons::carrel::server::project_manager::v1::RemoveFilesFromArchiveResponse;
 use carrel_core::app::app_manager::{CarrelAppManager, ManageCarrelApp};
+use carrel_core::app::app_manager::carrel_app_manager::ManageProjectList;
 use carrel_core::app::app_manager::carrel_task::{CarrelTaskTrait, TaskError};
-use carrel_core::app::app_manager::migration::sea_orm::prelude::Uuid;
+use carrel_core::app::app_manager::entity::implementation::AppProject;
 use carrel_core::carrel::carrel_core::{CarrelCore, CarrelCoreTrait};
-use carrel_core::carrel_db::entities::file::Model;
 use carrel_core::carrel_db::implementation::archive_traits::ArchiveTrait;
 use carrel_core::project::archivist::archivist::Archivist;
-use carrel_core::project::error::project_error::ProjectError;
 use carrel_core::project::file_manager::file_manager::ManageFileTrait;
 use carrel_core::project::fireflies_keeper::keep_project_fireflies::KeepProjectFireflies;
 use carrel_core::project::project_manager::CarrelProjectManager;
 use carrel_core::project::project_manager_methods::manage_project::ManageProjectTrait;
 use carrel_core::project::to_manager::to_manager::KeepFireflies;
 use carrel_utils::fs::get_all_files_under_directory::get_all_file_paths_under_directory;
-use tokio::spawn;
+use tonic::{Request, Response, Status};
 
 use crate::errors::carrel_server_error::CarrelServerError::InvalidRequestPayload;
-use tonic::{Request, Response, Status};
 use crate::services::project_manager::query_mocker::{QueryMocker, QueryMockerTrait};
 use crate::services::task_manager::task_identifiers::TaskIdentifiers;
 
@@ -492,7 +488,7 @@ impl ProjectManagerService for ProjectService {
         Ok(res)
     }
 
-    async fn list_fireflies_by_tag(&self, request: Request<ListFirefliesByTagRequest>) -> Result<Response<ListFirefliesByTagResponse>, Status> {
+    async fn list_fireflies_by_tags(&self, request: Request<ListFirefliesByTagsRequest>) -> Result<Response<ListFirefliesByTagResponse>, Status> {
         let req = request.into_inner();
         let project = CarrelProjectManager::load(
             req.project_directory.as_str(),
@@ -501,10 +497,9 @@ impl ProjectManagerService for ProjectService {
             .unwrap();
 
         let query = req.query.unwrap();
-        let key = req.key;
-        let value = req.value;
+        let selected_tags = req.selected_tags;
 
-        let fireflies = project.to.query_fireflies_by_tag_key_value(query, key, value).await.unwrap();
+        let fireflies = project.to.query_fireflies_by_tags(query, selected_tags).await.unwrap();
         let res = Response::new(
             ListFirefliesByTagResponse {
                 project_directory: req.project_directory,
@@ -519,12 +514,13 @@ impl ProjectManagerService for ProjectService {
 // test
 #[cfg(test)]
 mod test {
-    use crate::consts::server_addr::SERVER_ADDR;
     use carrel_commons::carrel::core::project_manager::v1::{AddArchiveDto, ArchiveSourceType};
     use carrel_commons::carrel::server::project_manager::v1::project_manager_service_client::CarrelProjectManagerServiceClient;
     use carrel_core::test_utils::carrel_tester::CarrelTester;
     use carrel_core::test_utils::project_tester::ProjectTester;
     use tonic::transport::Channel;
+
+    use crate::consts::server_addr::SERVER_ADDR;
 
     use super::*;
 

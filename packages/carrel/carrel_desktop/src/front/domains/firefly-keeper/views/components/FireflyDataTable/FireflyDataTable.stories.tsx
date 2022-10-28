@@ -1,5 +1,6 @@
 import React from 'react';
 import type {Meta, StoryFn} from '@storybook/react';
+import { sampleListFirefliesByTags } from './fireflies.sample';
 
 import type {FireflyDataTableProps} from './FireflyDataTable';
 import {FireflyDataTable} from './FireflyDataTable';
@@ -29,4 +30,8 @@ export const Basic = Template.bind({});
 
 // Story args
 // Learn more: https://storybook.js.org/docs/react/writing-stories/args
-Basic.args = {};
+Basic.args = {
+  projectDirectory: sampleListFirefliesByTags.projectDirectory,
+  fireflies: sampleListFirefliesByTags.fireflies,
+  totalPages: sampleListFirefliesByTags.responseMetadata?.resultTotalPages,
+};

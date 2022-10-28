@@ -5,8 +5,10 @@ import "allotment/dist/style.css";
 import React from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
+import "../src/App";
 import store from "../src/front/store/store";
 import { carrelTheme } from "../src/ui/styles/theme";
+import styles from "../src/App.module.scss";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -29,7 +31,7 @@ export const decorators = [
         <QueryClientProvider client={queryClient}>
           <ChakraProvider theme={carrelTheme}>
             <Tooltip.Provider>
-              <Story />
+              <Story className={styles.App} />
             </Tooltip.Provider>
           </ChakraProvider>
         </QueryClientProvider>

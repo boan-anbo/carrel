@@ -1,16 +1,17 @@
-import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  FileIcon,
-} from "@radix-ui/react-icons";
+import { ChevronDownIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { KeyboardEvent } from "@react-types/shared";
 import { MouseEvent, ReactNode } from "react";
 import { v4 } from "uuid";
-import { TCarrelSize } from "../../props/i-size";
 
 export enum EDataTreeNodeType {
   COLLECTION,
   ITEM,
+}
+export enum CollectionExpandMode {
+  UNSPECIFIED,
+  SINGLE_CLICK,
+  DOUBLE_CLICK,
+  NO_ACTION,
 }
 
 export interface IDataTreeNodeRef {
@@ -127,10 +128,14 @@ export interface IDataTreeCollection<T> extends IDataTreeNode<T> {
    * Icon for closed collection node
    */
   collectionIconClosed?: ReactNode;
+  /**
+   * Option to override global expand mode in config
+   */
+  expandMode?: CollectionExpandMode;
 }
 
 export class DataTreeCollection<T> implements IDataTreeCollection<T> {
-  plainLabel: string = '';
+  plainLabel: string = "";
   subItemsCount: number = 0;
   subCollectionsCount: number = 0;
   count?: number | undefined;
@@ -152,6 +157,7 @@ export class DataTreeCollection<T> implements IDataTreeCollection<T> {
   type: EDataTreeNodeType = EDataTreeNodeType.COLLECTION;
   order?: number | undefined = 0;
   isPinned?: boolean | undefined = undefined;
+  expandMode?: CollectionExpandMode = CollectionExpandMode.UNSPECIFIED;
   onPress?:
     | ((event: KeyboardEvent, key: string, data?: T | undefined) => void)
     | undefined = undefined;
@@ -176,7 +182,11 @@ export class DataTreeCollection<T> implements IDataTreeCollection<T> {
   ): DataTreeCollection<T> {
     const result = new DataTreeCollection<T>();
     Object.assign(result, data);
-    if (result.label && typeof result.label === "string" && !result.plainLabel) {
+    if (
+      result.label &&
+      typeof result.label === "string" &&
+      !result.plainLabel
+    ) {
       result.plainLabel = result.label;
     }
     return result;
@@ -196,6 +206,9 @@ export class DataTreeConfig<T> {
     <ChevronRightIcon />
   );
   collectionDefaultIconExpanded?: ReactNode | undefined = (<ChevronDownIcon />);
+
+  collectionDefaultExpandMode: CollectionExpandMode =
+    CollectionExpandMode.SINGLE_CLICK;
   collectionDefaultOnClick?: (key: string, item?: T) => void;
   /**
    * The icon for an item when there is no icon provided for that specific item.
@@ -222,7 +235,7 @@ export class DataTreeConfig<T> {
 
   spacing?: number | undefined = 1;
 
-  size?: TCarrelSize = 'xs';
+  size?: TCarrelSize = "xs";
   // partial constructor
   constructor(data?: Partial<DataTreeConfig<T>>) {
     Object.assign(this, data);

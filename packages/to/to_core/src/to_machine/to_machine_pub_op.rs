@@ -69,7 +69,7 @@ impl ToMPubMethods for ToMachine {
             to.store_info = self.store_info.clone();
             to.store_url = self.store_url.clone();
             to.source_id = String::from(&to_to_add.source_id.clone().unwrap_or("".to_string()));
-            // insert to
+            // insert to together with totags
             self.add_textual_object(to.clone(), totags).await;
             receipt.tos_stored.insert(unique_ticket_id, to);
             receipt.total_tos_stored += 1;

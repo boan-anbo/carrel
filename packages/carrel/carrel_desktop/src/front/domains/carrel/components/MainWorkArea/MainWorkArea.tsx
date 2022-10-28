@@ -11,8 +11,8 @@ export enum EMainWorkAreaPage {
 }
 
 export interface MainWorkAreaProps {
-  firstViewPage: EMainWorkAreaPage;
-  secondViewPage: EMainWorkAreaPage;
+  firstViewPage?: EMainWorkAreaPage;
+  secondViewPage?: EMainWorkAreaPage;
 }
 
 export function MainWorkArea({

@@ -3,10 +3,11 @@ import { MouseEventHandler, useMemo, useState } from "react";
 import { DataTree } from "../../DataTree";
 import { NodeMatch } from "../../filter-item";
 import {
+  CollectionExpandMode,
   DataTreeConfig,
   DataTreeNodeRef,
   IDataTreeCollection,
-  IDataTreeNode,
+  IDataTreeNode
 } from "../../i-data-tree-node";
 import { DataTreeItem } from "../DataTreeItem";
 
@@ -33,7 +34,7 @@ export function DataTreeCollectionItem({
     return loadNode(nodeRef) as IDataTreeCollection<any>;
   }, [nodeRef, loadNode]);
 
-  const [isOpen, setIsOpen] = useState(item.isOpen ?? false);
+  const [isExpanded, setIsExpanded] = useState(item.isOpen ?? false);
 
   const isSelected = useMemo(() => {
     return selectedItems.some((i) => i === item.key);
@@ -71,14 +72,20 @@ export function DataTreeCollectionItem({
   }, [sortedSubItems, filterResults, selectedItems]);
 
   const icon = useMemo(() => {
-    return isOpen
+    return isExpanded
       ? item.collectionIconOpen ?? config.collectionDefaultIconExpanded
       : item.collectionIconClosed ?? config.collectionDefaultIconCollapsed;
-  }, [isOpen]);
+  }, [isExpanded]);
 
   // it pass along the click event to two handlers: onClick and onSelect
   const onClickCollectionItem: MouseEventHandler<HTMLDivElement> = (event) => {
-    setIsOpen(!isOpen);
+    if (
+      config.collectionDefaultExpandMode ===
+        CollectionExpandMode.SINGLE_CLICK ||
+      item.expandMode === CollectionExpandMode.SINGLE_CLICK
+    ) {
+      setIsExpanded(!isExpanded);
+    }
 
     if (item.onSingleClick) {
       item.onSingleClick(event, item.key, item.data);
@@ -86,11 +93,30 @@ export function DataTreeCollectionItem({
     onSelectCollectionItem(event, nodeRef);
   };
 
+  const onDoubleClickCollectionItem: MouseEventHandler<HTMLDivElement> = (
+    event
+  ) => {
+    if (
+      config.collectionDefaultExpandMode ===
+        CollectionExpandMode.DOUBLE_CLICK ||
+      item.expandMode === CollectionExpandMode.DOUBLE_CLICK
+    ) {
+      setIsExpanded(!isExpanded);
+    }
+
+    if (item.onDoubleClick) {
+      item.onDoubleClick(event, item.key, item.data);
+    }
+
+  };
+
   const collectionItem = useMemo(() => {
     if (config.enableFilter && filterResults) {
       // check if any of its sub items are in the filter results
       const hasFilteredSubItems = sortedSubItems.some((subNodeRef) => {
-        return filterResults.some((filterMatch) => filterMatch.key === subNodeRef.key);
+        return filterResults.some(
+          (filterMatch) => filterMatch.key === subNodeRef.key
+        );
       });
       if (!hasFilteredSubItems) {
         return <></>;
@@ -108,6 +134,7 @@ export function DataTreeCollectionItem({
           cursor="pointer"
           w="full"
           onClick={onClickCollectionItem}
+          onDoubleClick={onDoubleClickCollectionItem}
           _hover={{
             background: "primaryBgHover",
           }}
@@ -120,14 +147,14 @@ export function DataTreeCollectionItem({
         </Flex>
       </Flex>
     );
-  }, [filterResults, isOpen]);
+  }, [filterResults, isExpanded]);
 
   return (
     <Container w="full" maxW="full" px="0" userSelect="none">
       {/* Collection item itself */}
       <>{collectionItem}</>
       {/* Regular Items uncer the collection */}
-      {(isOpen || hasFilterResults) && canOpen && (
+      {(isExpanded || hasFilterResults) && canOpen && (
         <Flex>
           <Box w={config.indentation} />
           <VStack spacing="0" w="full" align="start">

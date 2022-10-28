@@ -152,3 +152,52 @@ export class TagGroup extends Message<TagGroup> {
   }
 }
 
+/**
+ * @generated from message carrel.common.tag.v2.TagKeyValueNote
+ */
+export class TagKeyValueNote extends Message<TagKeyValueNote> {
+  /**
+   * @generated from field: string key = 1;
+   */
+  key = "";
+
+  /**
+   * @generated from field: optional string value = 2;
+   */
+  value?: string;
+
+  /**
+   * @generated from field: optional string note = 3;
+   */
+  note?: string;
+
+  constructor(data?: PartialMessage<TagKeyValueNote>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime = proto3;
+  static readonly typeName = "carrel.common.tag.v2.TagKeyValueNote";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 3, name: "note", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): TagKeyValueNote {
+    return new TagKeyValueNote().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): TagKeyValueNote {
+    return new TagKeyValueNote().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): TagKeyValueNote {
+    return new TagKeyValueNote().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: TagKeyValueNote | PlainMessage<TagKeyValueNote> | undefined, b: TagKeyValueNote | PlainMessage<TagKeyValueNote> | undefined): boolean {
+    return proto3.util.equals(TagKeyValueNote, a, b);
+  }
+}
+

@@ -9,7 +9,7 @@
 // V2: completely flatten the structure, using single fields.
 
 import type {BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage} from "@bufbuild/protobuf";
-import {Message, proto3, protoInt64} from "@bufbuild/protobuf";
+import {Message, proto3} from "@bufbuild/protobuf";
 import {Importance} from "../../importance/v1/importance_v1_pb.js";
 import {Tag} from "../../tag/v2/tag_v2_pb.js";
 
@@ -142,9 +142,9 @@ export class Firefly extends Message<Firefly> {
   /**
    * source document publication year
    *
-   * @generated from field: int64 document_publication_year = 19;
+   * @generated from field: int32 document_publication_year = 19;
    */
-  documentPublicationYear = protoInt64.zero;
+  documentPublicationYear = 0;
 
   /**
    * source document publication datetime
@@ -252,9 +252,9 @@ export class Firefly extends Message<Firefly> {
   /**
    * storage numerical id, for this firefly
    *
-   * @generated from field: int64 storage_id_int = 35;
+   * @generated from field: int32 storage_id_int = 35;
    */
-  storageIdInt = protoInt64.zero;
+  storageIdInt = 0;
 
   /**
    * storage description
@@ -329,14 +329,14 @@ export class Firefly extends Message<Firefly> {
   /**
    * document pages
    *
-   * @generated from field: int64 document_pages = 46;
+   * @generated from field: int32 document_pages = 46;
    */
-  documentPages = protoInt64.zero;
+  documentPages = 0;
 
   /**
    * unique id, this is diffferent from uuid.
    * e.g. for a pdf annotation, this is the modified_at
-   * e.g. for a firefly extracted from the textfile, this should the modified date of 
+   * e.g. for a firefly extracted from the textfile, this should the modified date of
    *
    * @generated from field: string unique_id = 47;
    */
@@ -368,7 +368,7 @@ export class Firefly extends Message<Firefly> {
     { no: 16, name: "document_title", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 17, name: "document_description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 18, name: "document_reference", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 19, name: "document_publication_year", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 19, name: "document_publication_year", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
     { no: 20, name: "document_publication_datetime", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 21, name: "document_author", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 22, name: "document_metadata", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "scalar", T: 9 /* ScalarType.STRING */} },
@@ -384,7 +384,7 @@ export class Firefly extends Message<Firefly> {
     { no: 32, name: "select_tag", kind: "message", T: Tag },
     { no: 33, name: "tags", kind: "message", T: Tag, repeated: true },
     { no: 34, name: "storage_id_str", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 35, name: "storage_id_int", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 35, name: "storage_id_int", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
     { no: 36, name: "storage_description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 37, name: "storage_url", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 38, name: "created_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
@@ -395,7 +395,7 @@ export class Firefly extends Message<Firefly> {
     { no: 43, name: "metadata", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "scalar", T: 9 /* ScalarType.STRING */} },
     { no: 44, name: "more_comments", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "scalar", T: 9 /* ScalarType.STRING */} },
     { no: 45, name: "location_actual_modified_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 46, name: "document_pages", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 46, name: "document_pages", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
     { no: 47, name: "unique_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 

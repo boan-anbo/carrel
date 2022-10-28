@@ -2,8 +2,9 @@ use std::path::PathBuf;
 
 use async_trait::async_trait;
 use carrel_commons::carrel::common::firefly::v2::Firefly;
-use carrel_commons::carrel::common::tag::v2::TagGroup as CommonTagGroup;
-use carrel_commons::generic::api::query::v1::{ StandardQuery};
+use carrel_commons::carrel::common::tag::v2::{TagGroup as CommonTagGroup, TagKeyValueNote};
+use carrel_commons::generic::api::query::v1::StandardQuery;
+use futures::StreamExt;
 use pebble_query::pebble_query_result::{PebbleQueryResultGeneric, PebbleQueryResultGenericUtilTraits};
 use serde_json::json;
 use to_core::enums::store_type::StoreType;
@@ -14,6 +15,7 @@ use to_core::to_dtos::to_add_request::ToStoredReceipt;
 use to_core::to_machine::to_machine_option::ToMachineOption;
 use to_core::to_machine::to_machine_pub_op::ToMPubMethods;
 use to_core::to_machine::to_machine_struct::ToMachine;
+use to_core::to_tag::to_tag_struct::ToTag;
 
 use crate::project::project_manager::ToManagerOption;
 use crate::project::to_manager::error::ToManagerError;
@@ -52,7 +54,7 @@ pub trait KeepFireflies {
         query: StandardQuery,
     ) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError>;
 
-    async fn query_fireflies_by_tag_key_value(&self, query: StandardQuery, key: String, value: Option<String>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError>;
+    async fn query_fireflies_by_tags(&self, query: StandardQuery, selected_tags: Vec<TagKeyValueNote>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError>;
 
 
     async fn list_all_tag_groups(&self) -> Vec<CommonTagGroup>;
@@ -206,15 +208,25 @@ impl KeepFireflies for FireflyKepper {
         Ok(fireflies_result)
     }
 
-    async fn query_fireflies_by_tag_key_value(&self, query: StandardQuery, key: String, value: Option<String>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError> {
+    async fn query_fireflies_by_tags(&self, query: StandardQuery, selected_tags: Vec<TagKeyValueNote>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError> {
         let to = self.get_to_orm().await;
 
-        let tags = match value {
-            Some(value) => to.find_tags_by_key_and_value(key, value).await.unwrap(),
-            None => to.find_tags_by_key(key.as_str()).await.unwrap()
-        };
+        let mut all_tags: Vec<ToTag> = vec![];
 
-        let to_ids: Vec<String> = tags.into_iter().filter(|t| t.to_uuid.is_some()).map(|tag| tag.to_uuid.unwrap().to_string()).collect();
+        for tag in selected_tags {
+            let tags = match tag.value {
+                Some(value) => to.find_tags_by_key_and_value(tag.key, value).await.unwrap(),
+                None => to.find_tags_by_key(tag.key.as_str()).await.unwrap()
+            };
+            // check if the tag is already in the all_tags vec
+            for tag in tags {
+                if !all_tags.iter().any(|t| t.uuid == tag.uuid) {
+                    all_tags.push(tag);
+                }
+            }
+        }
+
+        let to_ids: Vec<String> = all_tags.into_iter().filter(|t| t.to_uuid.is_some()).map(|tag| tag.to_uuid.unwrap().to_string()).collect();
 
         let to_results = to.query_tos_by_uuids(query, to_ids).await.unwrap();
 
@@ -463,7 +475,13 @@ mod tests {
             find_one: false,
         };
 
-        let to_by_tag_key = pm.to.query_fireflies_by_tag_key_value(default_query, "tag_key_1".to_string(), Some("tag_value_1".to_string())).await.unwrap();
+        let to_by_tag_key = pm.to.query_fireflies_by_tags(default_query, vec![
+            TagKeyValueNote {
+                key: "tag_key_1".to_string(),
+                value: Some("tag_value_1".to_string()),
+                note: None,
+            }
+        ]).await.unwrap();
 
         assert_eq!(to_by_tag_key.results.len(), 1);
 

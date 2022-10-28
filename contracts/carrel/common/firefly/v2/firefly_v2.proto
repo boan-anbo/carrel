@@ -3,7 +3,7 @@ syntax = "proto3";
 
 
 import "carrel/common/tag/v2/tag_v2.proto";
- 
+
 import "carrel/common/importance/v1/importance_v1.proto";
 
 
@@ -40,7 +40,7 @@ message Firefly {
     string location_actual = 12;
     // location type, e.g. page, url, etc
     string location_actual_type = 13;
-    
+
     // location, this could be raw location such as the index in a pdf file which does not correspond to the actual page number.
     string location_raw = 14;
     string location_raw_type = 15;
@@ -52,7 +52,7 @@ message Firefly {
     // source document reference
     string document_reference = 18;
     // source document publication year
-    int64 document_publication_year = 19;
+    int32 document_publication_year = 19;
     // source document publication datetime
     string document_publication_datetime = 20;
     // source document author
@@ -88,7 +88,7 @@ message Firefly {
     // storage unique id, for this firefly
     string storage_id_str = 34;
     // storage numerical id, for this firefly
-    int64 storage_id_int = 35;
+    int32 storage_id_int = 35;
     // storage description
     string storage_description = 36;
     // storage url, e.g. file name of the db
@@ -119,11 +119,11 @@ message Firefly {
     string location_actual_modified_at = 45;
 
     // document pages
-    int64 document_pages = 46;
+    int32 document_pages = 46;
 
     // unique id, this is diffferent from uuid.
     // e.g. for a pdf annotation, this is the modified_at
-    // e.g. for a firefly extracted from the textfile, this should the modified date of 
+    // e.g. for a firefly extracted from the textfile, this should the modified date of
     string unique_id = 47;
 
 }

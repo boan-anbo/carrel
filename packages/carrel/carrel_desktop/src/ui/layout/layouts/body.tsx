@@ -13,9 +13,9 @@ export function Body() {
     return (
         <Container p="0" maxW="full" maxH='full' h='full'>
             <Flex gap='0' h='full'>
-                <Box w="100px" bg={"primaryBg"}>
+                {/* <Box w="100px" bg={"primaryBg"}>
                     <LeftMenu/>
-                </Box> 
+                </Box>  */}
                 <Box w="full">
                     <Workarea/>
                 </Box>

@@ -1,11 +1,14 @@
-import React from 'react';
-
-import styles from './CardBlock.module.scss';
+import { Block } from "../../../../../ui/components/Block/Block";
+import { TagFireflies } from "../TagFireflies";
 
 export interface CardBlockProps {
   prop?: string;
 }
 
-export function CardBlock({prop = 'default value'}: CardBlockProps) {
-  return <div className={styles.CardBlock}>CardBlock {prop}</div>;
+export function CardBlock({ prop = "default value" }: CardBlockProps) {
+  return (
+    <Block>
+      <TagFireflies />
+    </Block>
+  );
 }

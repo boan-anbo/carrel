@@ -3,13 +3,16 @@ import {createSlice} from '@reduxjs/toolkit'
 import {ProjectInfo} from "../../../../backend/carrel_server_client/carrel/core/project_manager/v1/project_manager_v1_pb";
 import {PlainMessage} from "@bufbuild/protobuf/dist/types/message";
 import {Project} from "../../../../backend/carrel_server_client/carrel/common/project/v2/project_v2_pb";
+import { mockProjectDirectory } from '../../../../../test/fixtures/mock-vars';
 
 export interface WorkingProjectState {
     workingProject: PlainMessage<ProjectInfo> | null
 }
 
 const initialState: WorkingProjectState = {
-    workingProject: null
+    workingProject: {
+        directory: mockProjectDirectory
+    }
 }
 
 export const workingProjectStateSlice = createSlice({

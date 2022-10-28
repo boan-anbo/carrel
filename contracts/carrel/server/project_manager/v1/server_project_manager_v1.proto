@@ -61,7 +61,7 @@ service ProjectManagerService {
   rpc ListAllTagGroups (ListAllTagGroupsRequest) returns (ListAllTagGroupsResponse) {}
 
   // list all fireflies by tag key and value
-  rpc ListFirefliesByTag (ListFirefliesByTagRequest) returns (ListFirefliesByTagResponse) {}
+  rpc ListFirefliesByTags (ListFirefliesByTagsRequest) returns (ListFirefliesByTagResponse) {}
 
 }
 
@@ -364,18 +364,16 @@ message ListAllTagGroupsResponse {
   int32 tag_group_count = 3;
 }
 
+
 // list tags by tag key and value
-message ListFirefliesByTagRequest {
+message ListFirefliesByTagsRequest {
   // the folder of the project
   string project_directory = 1;
 
   generic.api.query.v1.StandardQuery query = 2;
-  // the tag key
-  string key = 3;
-  // the tag value
-  optional string value = 4;
-  // the tag note
-  optional string note = 5;
+
+  // selectedTags
+  repeated carrel.common.tag.v2.TagKeyValueNote selected_tags = 3;
 }
 
 // list tags by tag key and value

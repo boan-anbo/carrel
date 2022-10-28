@@ -21,7 +21,7 @@ export interface AppState {
     /**
      * 
      */
-    tagsSelected: Tag[]
+    coreTagsSelected: Tag[]
 
     workAreaFirstView: EMainWorkAreaPage
     workAreaSecondView: EMainWorkAreaPage
@@ -31,7 +31,7 @@ const initialState: AppState = {
     currentComponent: CurrentComponentUtils.getDefaultComponent(),
     archiveFilesSelected: [],
     projectFilesSelected: [],
-    tagsSelected: [],
+    coreTagsSelected: [],
     workAreaFirstView: EMainWorkAreaPage.DEFAULT,
     workAreaSecondView: EMainWorkAreaPage.DEFAULT
 }
@@ -53,7 +53,7 @@ export const appstateSlice = createSlice({
             state.projectFilesSelected = action.payload
         },
         setTagsSelected: (state, action: PayloadAction<Tag[]>) => {
-            state.tagsSelected = action.payload
+            state.coreTagsSelected = action.payload
         },
         setWorkAreaFirstView: (state, action: PayloadAction<EMainWorkAreaPage>) => {
             state.workAreaFirstView = action.payload

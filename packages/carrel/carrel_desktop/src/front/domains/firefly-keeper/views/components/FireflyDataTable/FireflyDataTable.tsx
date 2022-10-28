@@ -4,6 +4,7 @@ import { Firefly } from "../../../../../../backend/carrel_server_client/carrel/c
 import { StandardQuery } from "../../../../../../backend/carrel_server_client/generic/api/query/v1/query_v1_pb";
 import { CarrelDataTable } from "../../../../../../ui/components/DataTable/CarrelDataTable";
 import { CommentCell } from "./CommentCell";
+import { FireflyDataTableLightCell } from "./components/FireflyDataTableLightCell";
 
 export interface FireflyDataTableProps {
   isMock?: boolean;
@@ -25,7 +26,9 @@ export function FireflyDataTable({
     () => [
       {
         accessorKey: "light",
-        cell: (props) => props.getValue(),
+        cell: (props) => (
+          <FireflyDataTableLightCell fontSize="xs" cell={props} />
+        ),
       },
       {
         accessorKey: "comment",

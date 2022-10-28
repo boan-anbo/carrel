@@ -1,14 +1,11 @@
-import { Box, Container, Flex, HStack, VStack } from "@chakra-ui/react";
-import clsx from "clsx";
-import { ReactNode, useMemo } from "react";
+import { Box, Container, Flex, VStack } from "@chakra-ui/react";
+import { ReactNode } from "react";
 import { TCarrelSize } from "../../props/i-size";
 
-import { ActionBar } from "../ActionBar/ActionBar";
-
-import styles from "./Block.module.scss";
-import { BlockActions, BlockContent, BlockHeader } from "./components";
 import { TCarrelJustify } from "../../props/i-justify";
 import { BLOCK_HEADER_HEIGHT } from "../../styles/constants";
+import styles from "./Block.module.scss";
+import { BlockActions, BlockContent, BlockHeader } from "./components";
 
 export interface BlockProps {
   bg?: string;
@@ -60,19 +57,21 @@ export const Block = ({
         >
           <BlockHeader title={title} />
         </Flex>
-        <VStack gap="0" bg="primaryBg" h="full" w="full">
+        <VStack bg="primaryBg" gap="0" h="full" w="full">
           {/* Top action bar */}
-          {props.topActionBar && (
-            <Flex
-              w="full"
-              justifyContent={props.topActionBarJustify}
-              px={props.topActionBarPX}
-              pt="4"
-              fontSize={props.size}
-            >
+
+          <Flex
+            w="full"
+            justifyContent={props.topActionBarJustify}
+            px={props.topActionBarPX}
+            pt="4"
+            fontSize={props.size}
+          >
+            {props.topActionBar && (
               <BlockActions actionBar={props.topActionBar} />
-            </Flex>
-          )}
+            )}
+          </Flex>
+
           {/* Content */}
           <Box w="full" h="full">
             <BlockContent contentHeight={contentHeight} content={children} />

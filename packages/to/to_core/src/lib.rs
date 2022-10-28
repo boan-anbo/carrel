@@ -36,5 +36,6 @@ pub(crate) mod utils;
 // Handles files etc.
 pub(crate) mod fs;
 pub mod to_db;
+pub mod to_maintainer;
 
 pub use entity::*;

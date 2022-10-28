@@ -32,7 +32,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
             <Tooltip.Provider>
-              <App />
+              <App  />
             </Tooltip.Provider>
           </BrowserRouter>
         </QueryClientProvider>
