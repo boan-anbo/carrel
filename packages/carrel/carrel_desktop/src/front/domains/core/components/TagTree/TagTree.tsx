@@ -7,8 +7,9 @@ import { carrelQueries } from "../../../../../backend/server-api/carrel-queries"
 import { ActionBar } from "../../../../../ui/components";
 import { Block } from "../../../../../ui/components/Block/Block";
 import {
-  DataTreeConfig, IDataTreeCollection,
-  IDataTreeNode
+  DataTreeConfig,
+  IDataTreeCollection,
+  IDataTreeNode,
 } from "../../../../../ui/components/DataTree/i-data-tree-node";
 import { RootState } from "../../../../store/store";
 
@@ -36,14 +37,13 @@ export function TagTree({ onSelectionsChange, ...props }: TagTreeProps) {
     return null;
   }
 
-    const items: IDataTreeCollection<TagGroup>[] = useMemo(() => getDataTreeNodesFromTagGroups(
-    data.tagGroups,
-    {
-      defaultExpanded: true
-    }
-  ), [
-    data.tagGroups
-  ]) 
+  const items: IDataTreeCollection<TagGroup>[] = useMemo(
+    () =>
+      getDataTreeNodesFromTagGroups(data.tagGroups, {
+        defaultExpanded: true,
+      }),
+    [data.tagGroups]
+  );
 
   const actionBar = (
     <ActionBar
@@ -84,6 +84,7 @@ export function TagTree({ onSelectionsChange, ...props }: TagTreeProps) {
     >
       <Container w="full" maxW="full" px="0">
         <DataTreeRoot
+          onSelectionsChange={onSelectionsChange}
           size="xs"
           treeNodes={items}
           config={new DataTreeConfig()}

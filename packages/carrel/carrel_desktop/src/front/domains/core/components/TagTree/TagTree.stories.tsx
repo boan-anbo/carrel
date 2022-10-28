@@ -1,14 +1,13 @@
-import React from 'react';
-import type {Meta, StoryFn} from '@storybook/react';
+import type { Meta, StoryFn } from '@storybook/react';
 
-import type {TagBlockProps} from './TagBlock';
-import {TagBlock} from './TagBlock';
-import { mockProjectDirectory } from '../../../../../../test/fixtures/mock-vars';
+import { mockProjectDirectory, mockProjectDirectoryMac } from '../../../../../../test/fixtures/mock-vars';
+import type { TagTreeProps } from './TagTree';
+import { TagTree } from './TagTree';
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
 const meta: Meta = {
-  component: TagBlock,
+  component: TagTree,
   parameters: {
     // Embedding Figma designs
     // The embed appears in the "Design" tab of the story
@@ -23,7 +22,7 @@ const meta: Meta = {
 export default meta;
 
 // 👇 We create a "template" of how args map to rendering
-const Template: StoryFn<TagBlockProps> = (args) => <TagBlock {...args} />;
+const Template: StoryFn<TagTreeProps> = (args) => <TagTree {...args} />;
 
 // 👇 Each story then reuses that template
 export const Basic = Template.bind({});
@@ -31,5 +30,5 @@ export const Basic = Template.bind({});
 // Story args
 // Learn more: https://storybook.js.org/docs/react/writing-stories/args
 Basic.args = {
-  directory: mockProjectDirectoryMac,
+  propjectDirectory: mockProjectDirectory,
 };
