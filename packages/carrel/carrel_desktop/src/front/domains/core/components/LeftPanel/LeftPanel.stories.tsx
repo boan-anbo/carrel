@@ -25,7 +25,7 @@ export default meta;
 
 // 👇 We create a "template" of how args map to rendering
 const Template: StoryFn<LeftPanelProps> = (args) => (
-  <Flex>
+  <Flex h='1000px'>
     <LeftPanel {...args} />
     <RightPanel />
   </Flex>

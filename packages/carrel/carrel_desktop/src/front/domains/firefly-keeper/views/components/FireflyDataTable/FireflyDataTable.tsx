@@ -11,6 +11,7 @@ export interface FireflyDataTableProps {
   projectDirectory?: string;
   fireflies?: Firefly[];
   totalPages?: number;
+  totalFireflies?: number;
   onQueryChange: (query: StandardQuery) => void;
 }
 
@@ -20,6 +21,7 @@ export function FireflyDataTable({
   projectDirectory,
   fireflies,
   totalPages,
+  totalFireflies,
   onQueryChange,
 }: FireflyDataTableProps) {
   const columns = useMemo<ColumnDef<Firefly>[]>(
@@ -52,10 +54,11 @@ export function FireflyDataTable({
 
   return (
     <CarrelDataTable
-      paginatorPositions="both"
+      paginatorPositions="bottom"
       columns={columns}
       data={fireflies}
       resultTotalPages={totalPages}
+      resultTotalCount={totalFireflies}
       onQueryChange={onQueryChange}
     ></CarrelDataTable>
   );

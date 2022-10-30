@@ -49,6 +49,7 @@ export function TagFireflies({ projectDirectory }: TagFirefliesProps) {
       projectDirectory={projectDirectory || workingProject?.directory}
       fireflies={data?.fireflies}
       totalPages={data?.responseMetadata?.resultTotalPages}
+      totalFireflies={data?.responseMetadata?.resultTotalItems}
       onQueryChange={setQuery}
     />
   );

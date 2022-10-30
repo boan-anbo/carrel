@@ -11,6 +11,7 @@ import { ArchiveFileBlock } from "../../../../front/domains/core/components/Arch
 import { TagBlock } from "../../../../front/domains/core/components/TagBlock";
 import { CardBlock } from "../../../../front/domains/core/components/CardBlock";
 import { InspectorBlock } from "../../../../front/domains/core/components/InspectorBlock";
+import { TagTree } from "../../../../front/domains/core/components/TagTree/TagTree";
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
@@ -64,13 +65,8 @@ RightPanel.args = {
   size: "xs",
   blocks: [
     {
-      id: "card-block",
-      block: <CardBlock/>,
-      title: "Cards",
-    },
-    {
       id: "inspector-block",
-      block: <InspectorBlock/>,
+      block: <TagTree />,
       title: "Inspector",
     }
   ],

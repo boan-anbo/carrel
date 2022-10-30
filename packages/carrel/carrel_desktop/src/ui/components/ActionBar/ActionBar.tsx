@@ -1,11 +1,12 @@
-import { Flex, HStack, Spacer, StackDivider } from '@chakra-ui/react';
-import React, { useMemo } from 'react';
-import { TCarrelFontWeight } from '../../../props/i-font-weight';
-import { TCarrelSize as TCarrelSize } from '../../../props/i-size';
-import { ActionBarItem, ActionBarItemProps } from '../ActionBarItem';
-import { IActionBarItem } from '../ActionBarItem/IActionBarItem';
+import { Flex, HStack, StackDivider } from "@chakra-ui/react";
+import { useMemo } from "react";
+import { TCarrelFontWeight } from "../../../props/i-font-weight";
+import { TCarrelSize } from "../../../props/i-size";
+import { BLOCK_ACTION_BAR_HEIGHT } from "../../styles/constants";
+import { ActionBarItem } from "../ActionBarItem";
+import { IActionBarItem } from "../ActionBarItem/IActionBarItem";
 
-import styles from './ActionBar.module.scss';
+import styles from "./ActionBar.module.scss";
 
 export interface ActionBarProps {
   items?: IActionBarItem[];
@@ -33,7 +34,7 @@ export function ActionBar({
   }, [props.items]);
 
   return (
-    <Flex className={styles.ActionBar}>
+    <Flex h={BLOCK_ACTION_BAR_HEIGHT} className={styles.ActionBar}>
       <HStack
         divider={<StackDivider borderColor="actionDivider" />}
         gap={props.gap}

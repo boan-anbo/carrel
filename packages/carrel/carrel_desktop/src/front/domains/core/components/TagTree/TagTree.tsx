@@ -3,7 +3,7 @@ import { FaSync } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Tag,
-  TagGroup,
+  TagGroup
 } from "../../../../../backend/carrel_server_client/carrel/common/tag/v2/tag_v2_pb";
 import { carrelApi } from "../../../../../backend/server-api/carrel-api";
 import { carrelQueries } from "../../../../../backend/server-api/carrel-queries";
@@ -13,7 +13,7 @@ import {
   CollectionExpandMode,
   DataTreeConfig,
   IDataTreeCollection,
-  IDataTreeNode,
+  IDataTreeNode
 } from "../../../../../ui/components/DataTree/i-data-tree-node";
 import { RootState } from "../../../../store/store";
 
@@ -102,7 +102,7 @@ export function TagTree({ onSelectionsChange, ...props }: TagTreeProps) {
       topActionBarJustify="center"
       title="Firefly tags"
     >
-      <Container w="full" maxW="full" px="0">
+      <Container  w="full" maxW="full" p="0">
         <DataTreeRoot
           onSelectionsChange={onCoreTagsSelected}
           size="xs"

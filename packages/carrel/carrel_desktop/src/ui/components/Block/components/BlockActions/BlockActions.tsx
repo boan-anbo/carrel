@@ -1,14 +1,10 @@
-import React, { ReactNode } from 'react';
-import { ActionBar } from '../../../ActionBar/ActionBar';
+import { ReactNode } from "react";
 
-import styles from './BlockActions.module.scss';
 
 export interface BlockActionsProps {
   actionBar: ReactNode;
 }
 
-export function BlockActions({actionBar}: BlockActionsProps) {
-  return <>
-  {actionBar}
-  </>;
+export function BlockActions({ actionBar }: BlockActionsProps) {
+  return <>{actionBar}</>;
 }

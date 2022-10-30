@@ -7,7 +7,9 @@ export interface CardBlockProps {
 
 export function CardBlock({ prop = "default value" }: CardBlockProps) {
   return (
-    <Block>
+    <Block
+    
+    >
       <TagFireflies />
     </Block>
   );

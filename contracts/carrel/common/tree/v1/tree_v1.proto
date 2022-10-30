@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+
+package carrel.common.tree.v1;
+
+
+import "google/protobuf/any.proto";
+
+enum TreeData {
+  TREE_DATA_UNSPECIFIED = 0;
+  TREE_DATA_ARCHIVE_V1 = 1;
+  TREE_DATA_FILE_V1 = 2;
+
+}
+
+// A collection of materials for certain purposes and associated with certain projects.
+message TreeNodeItem {
+  string uuid = 1;
+  string key = 2;
+  string plain_label = 3;
+  google.protobuf.Any data = 4;
+  // the order of item on the same level
+  int32 order = 5;
+  TreeData data_type = 6;
+}
+
+message TreeNodeCollection {
+  string uuid = 1;
+  string key = 2;
+  string plain_label = 3;
+  bool is_root = 4;
+  optional string parent_uuid = 5;
+  repeated TreeNodeItem sub_items = 6;
+  bool has_sub_items = 7;
+  int32 sub_items_count = 8;
+  repeated TreeNodeCollection sub_collections = 9;
+  bool has_sub_collections = 10;
+  int32 sub_collections_count = 11;
+  int32 order = 12;
+  TreeData data_type = 13;
+}
+
+message Tree {
+  string uuid = 1;
+  string key = 2;
+  repeated TreeNodeCollection root_collections = 3;
+}

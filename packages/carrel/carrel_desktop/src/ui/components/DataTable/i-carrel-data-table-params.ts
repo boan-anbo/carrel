@@ -3,6 +3,7 @@ import { TCarrelSize } from "../../props/i-size";
 
 export interface CarrelDataTableInternalParams<T> {
     table: Table<T>;
+    resultTotalCount?: number;
     isLoaded?: boolean;
-    fontSize?: TCarrelSize;
+    size?: TCarrelSize;
 }

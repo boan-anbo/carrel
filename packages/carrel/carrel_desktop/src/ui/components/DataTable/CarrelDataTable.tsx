@@ -26,6 +26,7 @@ export interface CarraDadaTableParams {
   onQueryChange?: (query: StandardQuery) => void;
   children?: React.ReactNode;
   resultTotalPages?: number;
+  resultTotalCount?: number;
   data: any[] | undefined;
   paginatorPositions?: "top" | "bottom" | "both";
   fontSize?: TCarrelSize;
@@ -39,6 +40,8 @@ export interface CarraDadaTableParams {
 
 export const CarrelDataTable = ({
   fontSize = "xs",
+  data,
+  resultTotalCount,
   ...props
 }: CarraDadaTableParams) => {
   const rerender = useReducer(() => ({}), {})[1];
@@ -138,7 +141,7 @@ export const CarrelDataTable = ({
   }
 
   const table = useReactTable({
-    data: props.data || [],
+    data: data || [],
     columns: calculatedColumns,
     columnResizeMode,
     pageCount: props.resultTotalPages || -1, // use returned metadata to calculate page count
@@ -166,8 +169,10 @@ export const CarrelDataTable = ({
     enableMultiRowSelection: true,
   });
 
+  const resultCount = useMemo(() => data?.length ?? 0, [data]);
+
   return (
-    <Container p="0" m="0" w="full" h="full" maxW="full">
+    <Container p="0" w="full" h="full" maxH='full' maxW="full">
       <VStack spacing="0" p="0" m="0" h="full">
         <Box w="full">
           <Input
@@ -182,20 +187,16 @@ export const CarrelDataTable = ({
         <Box w="full">
           {props.paginatorPositions === "top" ||
           props.paginatorPositions === "both" ? (
-            <CarrelDataPaginator table={table} />
+            <CarrelDataPaginator resultTotalCount={resultTotalCount} table={table} />
           ) : null}
         </Box>
-        <Box h="full" w="full" overflowY='auto'>
-          <CarrelDataTableDisplay
-            fontSize={fontSize}
-            {...props}
-            table={table}
-          />
+        <Box h="full" w="full" overflowY="auto">
+          <CarrelDataTableDisplay size={fontSize} {...props} table={table} />
         </Box>
         <Box w="full">
           {props.paginatorPositions === "bottom" ||
           props.paginatorPositions === "both" ? (
-            <CarrelDataPaginator table={table} />
+            <CarrelDataPaginator resultTotalCount={resultTotalCount} table={table} />
           ) : null}
         </Box>
       </VStack>
