@@ -1,7 +1,7 @@
-import type {PayloadAction} from '@reduxjs/toolkit'
-import {createSlice} from '@reduxjs/toolkit'
-import {CurrentComponentUtils, CurrentComponent} from "./current_component";
-import {CarrelComponent} from "../../../../backend/carrel_server_client/carrel/core/shared/v1/core_shared_v1_pb";
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+import { CurrentComponentUtils, CurrentComponent } from "./current_component";
+import { CarrelComponent } from "../../../../backend/carrel_server_client/carrel/core/shared/v1/core_shared_v1_pb";
 import { File } from '../../../../backend/carrel_server_client/carrel/common/file/v1/file_v1_pb';
 import { Tag } from '../../../../backend/carrel_server_client/carrel/common/tag/v2/tag_v2_pb';
 import { EMainWorkAreaPage } from '../../../domains/carrel/components/MainWorkArea';
@@ -13,11 +13,15 @@ export interface AppState {
     /**
      * The current archive being edited.
      */
-    archiveFilesSelected: File[]
+    coreArchiveFilesSelected: File[]
+    /**
+     * Current selected archive
+     */
+    coreArchiveIdSelected: number | null
     /**
      * Project files selected
      */
-    projectFilesSelected: File[]
+    coreProjectFilesSelected: File[]
     /**
      * 
      */
@@ -29,11 +33,12 @@ export interface AppState {
 
 const initialState: AppState = {
     currentComponent: CurrentComponentUtils.getDefaultComponent(),
-    archiveFilesSelected: [],
-    projectFilesSelected: [],
+    coreArchiveFilesSelected: [],
+    coreProjectFilesSelected: [],
     coreTagsSelected: [],
     workAreaFirstView: EMainWorkAreaPage.DEFAULT,
-    workAreaSecondView: EMainWorkAreaPage.DEFAULT
+    workAreaSecondView: EMainWorkAreaPage.DEFAULT,
+    coreArchiveIdSelected: null
 }
 
 export const appstateSlice = createSlice({
@@ -47,10 +52,10 @@ export const appstateSlice = createSlice({
             state.currentComponent = CurrentComponentUtils.getDefaultComponent()
         },
         setArchiveFilesSelected: (state, action: PayloadAction<File[]>) => {
-            state.archiveFilesSelected = action.payload
+            state.coreArchiveFilesSelected = action.payload
         },
         setProjectFilesSelected: (state, action: PayloadAction<File[]>) => {
-            state.projectFilesSelected = action.payload
+            state.coreProjectFilesSelected = action.payload
         },
         setTagsSelected: (state, action: PayloadAction<Tag[]>) => {
             state.coreTagsSelected = action.payload
@@ -60,7 +65,11 @@ export const appstateSlice = createSlice({
         },
         setWorkAreaSecondView: (state, action: PayloadAction<EMainWorkAreaPage>) => {
             state.workAreaSecondView = action.payload
+        },
+        setCoreArchiveIdSelected: (state, action: PayloadAction<number | null>) => {
+            state.coreArchiveIdSelected = action.payload
         }
+
     },
 })
 
@@ -72,7 +81,9 @@ export const {
     setProjectFilesSelected,
     setTagsSelected,
     setWorkAreaFirstView,
-    setWorkAreaSecondView
+    setWorkAreaSecondView,
+    setCoreArchiveIdSelected
+     
 } = appstateSlice.actions
 
 export default appstateSlice.reducer

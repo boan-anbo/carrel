@@ -2,6 +2,7 @@ import { ReactNode, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { SplitView } from "../../../../../ui/components";
 import Page from "../../../../../ui/components/page/Page";
+import { getViewById } from "../../../../store/slices/view-state/get-views-by-id";
 import { RootState } from "../../../../store/store";
 import { CarrelWriter } from "../../../core/components/CarrelWriter/CarrelWriter";
 
@@ -21,21 +22,29 @@ export function MainWorkArea({
 }: MainWorkAreaProps) {
   const appState = useSelector((state: RootState) => state.appstate);
 
-  const getView = (page: EMainWorkAreaPage): ReactNode => {
-    switch (page) {
-      case EMainWorkAreaPage.CARREL_WRITER:
-        return <CarrelWriter />;
-      case EMainWorkAreaPage.DEFAULT:
-      default:
-        return <div>Default</div>;
-    }
-  };
+  const mainViewContainer = useSelector(
+    (state: RootState) => state.viewStates.WORK_AREA_CONTAINER
+  );
+
   const firstViewComponent = useMemo(() => {
-    return getView(firstViewPage ?? appState.workAreaFirstView);
-  }, [appState.workAreaFirstView, firstViewPage]);
+    const firstRow = mainViewContainer[0];
+    if (firstRow) {
+      const firstView = firstRow[0];
+      if (firstView) {
+        return getViewById(firstView.id);
+      }
+    }
+  }, [mainViewContainer, firstViewPage]);
 
   const secondViewComponent = useMemo(() => {
-    return getView(secondViewPage ?? appState.workAreaSecondView);
+    const firstRow = mainViewContainer[0];
+    if (firstRow) {
+      const secondView = firstRow[1];
+      if (secondView) {
+        return getViewById(secondView.id);
+      }
+    }
+    return null;
   }, [appState.workAreaSecondView, secondViewPage]);
 
   return (

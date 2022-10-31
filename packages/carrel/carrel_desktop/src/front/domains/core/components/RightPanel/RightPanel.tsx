@@ -1,5 +1,6 @@
 import React from "react";
 import { Panel } from "../../../../../ui/layout/components/Panel";
+import { ViewId } from "../../../../store/slices/view-state/view-id";
 import { CardBlock } from "../CardBlock";
 import { InspectorBlock } from "../InspectorBlock";
 
@@ -15,6 +16,9 @@ export function RightPanel({ prop = "default value" }: RightPanelProps) {
       id: "card-block",
       block: <CardBlock />,
       title: "Cards",
+    },
+    {
+      id: ViewId.ARCHIVE_LIST,
     },
     {
       id: "inspector-block",

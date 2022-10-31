@@ -27,7 +27,7 @@ export function CarrelWriter({
   const writerState = useSelector((state: RootState) => state.writerState);
 
   const selectedProjectFiles = useSelector(
-    (state: RootState) => state.appstate.projectFilesSelected
+    (state: RootState) => state.appstate.coreProjectFilesSelected
   );
 
   const [writerId, setWriterId] = React.useState<string>(v4());
