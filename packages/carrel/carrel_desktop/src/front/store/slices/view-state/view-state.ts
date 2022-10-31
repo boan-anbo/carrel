@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ContainerId } from './container-id';
 import { ViewId } from './view-id';
 import { ViewStateAction } from './view-actions';
+import {getViewDefaultName} from "./get-view-default-name";
 
 
 const allViewContainers: ContainerId[] = [
@@ -14,7 +15,7 @@ export interface ViewState<T> {
     id: ViewId;
     order: number;
     title: string;
-    // a state to persist between view switch. 
+    // a state to persist between view switch.
     // For example, a position of a scroll bar, the id of an opened document, etc.
     state?: T;
 }
@@ -48,12 +49,24 @@ export interface AppViewStates {
 }
 
 const initialState: AppViewStates = {
-    [ContainerId.LEFT_PANEL_CONTAINER]: [],
+    [ContainerId.LEFT_PANEL_CONTAINER]: [
+
+    ],
     [ContainerId.RIGHT_PANEL_CONTAINER]: [
         {
             id: ViewId.CORE_TAG_FIREFLIES,
             order: 0,
-            title: 'Tag Tree',
+            title: getViewDefaultName(ViewId.CORE_TAG_FIREFLIES)
+        },
+        {
+            id: ViewId.ARCHIVE_FILES,
+            order: 1,
+            title: getViewDefaultName(ViewId.ARCHIVE_FILES)
+        },
+        {
+            id: ViewId.INSPECTOR_BLOCK,
+            order: 2,
+            title: getViewDefaultName(ViewId.INSPECTOR_BLOCK)
         }
     ],
     [ContainerId.WORK_AREA_CONTAINER]: [

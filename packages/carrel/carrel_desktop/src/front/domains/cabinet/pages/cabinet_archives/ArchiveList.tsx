@@ -147,9 +147,7 @@ export function ArchiveList(props: ArchiveListProps) {
   };
 
   const onArchiveSelected = (selectedItems: SelectItem<any>[]) => {
-    const archiveListId =
-      selectedItems.length > 0 ? parseInt(selectedItems[0].data.id) : null;
-
+    const archiveListId = selectedItems.length > 0 ? parseInt(selectedItems[0].data.id) : null;
     dispatch(setCoreArchiveIdSelected(archiveListId));
   };
 
