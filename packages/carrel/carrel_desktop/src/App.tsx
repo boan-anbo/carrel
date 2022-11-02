@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "./App.css";
 import styles from "./App.module.scss";
 import "./theme.css";
+import { CarrelMenuBar } from "./ui/components/CarrelMenuBar";
 import { Body } from "./ui/layout/layouts/body";
 import HeaderMenu from "./ui/layout/nav/HeaderMenu/HeaderMenu";
 import FooterStatus from "./ui/layout/StatusBar/FooterStatus";
@@ -36,7 +37,8 @@ function App() {
       {/* Spacing needs to be 0 to avoid having space between body and header*/}
       <VStack h="100%" spacing="0" w="full">
         <Center py="0" h={HEADER_HEIGHT} w="100%">
-          <HeaderMenu />
+          {/* <HeaderMenu /> Deprecating */}
+          <CarrelMenuBar />
         </Center>
         <Box py="0" h={BODY_HEIGHT} w={"full"}>
           <Body></Body>

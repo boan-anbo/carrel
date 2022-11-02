@@ -4,7 +4,7 @@ import { Container, HStack } from "@chakra-ui/react";
 import { mockProjectDirectory } from "../../../../../../test/fixtures/mock-vars";
 import type { TagFirefliesProps } from "./TagFireflies";
 import { TagFireflies } from "./TagFireflies";
-import { TagTree } from "../TagTree";
+import { CoreTagTreeBlock } from "../TagTree";
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
@@ -27,7 +27,7 @@ export default meta;
 const Template: StoryFn<TagFirefliesProps> = (args) => (
   <Container maxW="full" w="full">
     <HStack>
-      <TagTree />
+      <CoreTagTreeBlock />
       <TagFireflies {...args} />
     </HStack>
   </Container>

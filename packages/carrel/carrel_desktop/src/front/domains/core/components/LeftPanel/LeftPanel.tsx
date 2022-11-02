@@ -1,9 +1,18 @@
 import React, { useMemo } from "react";
-import { Panel } from "../../../../../ui/layout/components/Panel";
+import { useSelector } from "react-redux";
+import {
+  Panel,
+  PanelBlock,
+  viewStateToPanelBlock,
+} from "../../../../../ui/layout/components/Panel";
+import { getViewDefaultName } from "../../../../store/slices/view-state/get-view-default-name";
+import { getViewById } from "../../../../store/slices/view-state/get-views-by-id";
+import { ViewState } from "../../../../store/slices/view-state/view-state";
+import { RootState } from "../../../../store/store";
 import { ArchiveList } from "../../../cabinet/pages/cabinet_archives/ArchiveList";
 import { ArchiveFileBlock } from "../ArchiveFileBlock";
 import { ProjectFileBlock } from "../ProjectFileBlock";
-import { TagTree } from "../TagTree";
+import { CoreTagTreeBlock } from "../TagTree";
 
 export interface LeftPanelProps {
   prop?: string;
@@ -11,25 +20,16 @@ export interface LeftPanelProps {
 }
 
 export function LeftPanel({ projectDirectory, ...props }: LeftPanelProps) {
+  const leftPanelContainer = useSelector(
+    (state: RootState) => state.viewStates.LEFT_PANEL_CONTAINER
+  );
+
   const panelItems = useMemo(
-    () => [
-      {
-        id: "project-file-block",
-        block: <ProjectFileBlock directory={projectDirectory} />,
-        title: "Project File",
-      },
-      {
-        id: "archive-file-block",
-        block: <ArchiveList />,
-        title: "Archive File",
-      },
-      {
-        id: "tag-block",
-        block: <TagTree />,
-        title: "Tags",
-      },
-    ],
-    [projectDirectory]
+    () =>
+      leftPanelContainer.map((viewState: ViewState<any>) =>
+        viewStateToPanelBlock(viewState)
+      ),
+    [leftPanelContainer]
   );
 
   return <Panel blocks={panelItems} size={"xs"} />;

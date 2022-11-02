@@ -41,6 +41,7 @@ Basic.args = {
           alert('Open directory: ' + data);
         },
         data: 'data',
+        shortcut: 'Ctrl+Shift+N',
       },
       {
         type: CarrelMenuItemType.Separator,

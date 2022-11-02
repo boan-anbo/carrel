@@ -11,7 +11,7 @@ import { ArchiveFileBlock } from "../../../../front/domains/core/components/Arch
 import { TagBlock } from "../../../../front/domains/core/components/TagBlock";
 import { CardBlock } from "../../../../front/domains/core/components/CardBlock";
 import { InspectorBlock } from "../../../../front/domains/core/components/InspectorBlock";
-import { TagTree } from "../../../../front/domains/core/components/TagTree/TagTree";
+import { CoreTagTreeBlock } from "../../../../front/domains/core/components/TagTree/TagTree";
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
@@ -66,7 +66,7 @@ RightPanel.args = {
   blocks: [
     {
       id: "inspector-block",
-      block: <TagTree />,
+      block: <CoreTagTreeBlock />,
       title: "Inspector",
     }
   ],

@@ -56,73 +56,6 @@ impl KeepProjectFireflies for CarrelProjectManager {
         // Ok(vec![])
     }
 
-    async fn sync_file_fireflies(
-        &self,
-        files: Vec<file::Model>,
-    ) -> Result<(), ProjectError> {
-        let mut chunks = files.into_iter().chunks(20).into_iter().map(
-            |chunk| chunk.collect())
-            .collect::<Vec<Vec<file::Model>>>();
-
-        let length = chunks.len();
-
-        let shared_db_conn = self.db.get_connection().await;
-        let shared_db = Arc::new(Mutex::new(shared_db_conn));
-        for i in 0..length {
-            // take a chunk
-            let chunk = chunks.remove(i);
-
-            let mut handles = vec![];
-            // let db = self.db.get_connection().await;
-            // make the above arc
-
-            for file_cloned in chunk {
-                let db = Arc::clone(&shared_db);
-                let firefly_keeper = self.to.clone();
-                let carrel_db_manager = self.db.clone();
-                let handle = spawn(
-                    async move {
-                        let extraction_result =
-                            PdfGongju::extract_fireflies(file_cloned.full_path.as_str(), &ExtractorOption::default());
-                        match extraction_result {
-                            Ok(fireflies) => {
-                                // skip if no fireflies
-                                if !fireflies.is_empty() {
-                                    let _receipt = firefly_keeper.save_firefly_to_to_db(fireflies).await.unwrap();
-                                }
-                                let mut file_model = file_cloned.clone().into_active_model();
-                                file_model.set_synced_at_now();
-                                let borrowed_db = db.lock().await;
-                                let _ = carrel_db_manager.file_update_file(borrowed_db.deref(), file_model).await.unwrap();
-                            }
-                            Err(e) => match e {
-                                PdfGongjuError::LoadPdfiumError => {
-                                    println!("Error: {:?}", e);
-                                }
-                                PdfGongjuError::LoadPdfError(_) => {
-                                    println!("Error: {:?}", e);
-                                }
-                                PdfGongjuError::LoadPdfPageError => {
-                                    println!("Error: {:?}", e);
-                                }
-                                PdfGongjuError::LoadPdfAnnotationError => {
-                                    println!("Error: {:?}", e);
-                                }
-                            },
-                        }
-                    }
-                );
-                handles.push(handle);
-            };
-            // join_all(handles).await; // wait for 10 handles to finish
-            for handle in handles {
-                handle.await.unwrap();
-            }
-        }
-
-        Ok(())
-    }
-
     async fn update_project_file_status(&self) -> Result<(), ProjectError> {
         let all_files = self.db.file_list_all_files().await.unwrap();
         // get active model from modes
@@ -179,6 +112,72 @@ impl KeepProjectFireflies for CarrelProjectManager {
                 }
             }
         }
+        Ok(())
+    }
+
+    async fn sync_file_fireflies(
+        &self,
+        files: Vec<file::Model>,
+    ) -> Result<(), ProjectError> {
+        // break all pdf files to be processed into batches of 20s.
+        let mut chunks_of_20 = files.into_iter().chunks(20).into_iter().map(
+            |chunk| chunk.collect())
+            .collect::<Vec<Vec<file::Model>>>();
+
+        let length = chunks_of_20.len();
+
+        let shared_db_conn = self.db.get_connection().await;
+        let shared_db = Arc::new(Mutex::new(shared_db_conn));
+        for i in 0..length {
+            // take a chunk
+            let chunk = chunks_of_20.remove(i);
+
+            let mut handles = vec![];
+
+            for file_cloned in chunk {
+                let db = Arc::clone(&shared_db);
+                let firefly_keeper = self.to.clone();
+                let carrel_db_manager = self.db.clone();
+                let handle = spawn(
+                    async move {
+                        let extraction_result =
+                            PdfGongju::extract_fireflies(file_cloned.full_path.as_str(), &ExtractorOption::default());
+                        match extraction_result {
+                            Ok(fireflies) => {
+                                // skip if no fireflies
+                                if !fireflies.is_empty() {
+                                    let _receipt = firefly_keeper.save_firefly_to_to_db(fireflies).await.unwrap();
+                                }
+                                let mut file_model = file_cloned.clone().into_active_model();
+                                file_model.set_synced_at_now();
+                                let borrowed_db = db.lock().await;
+                                let _ = carrel_db_manager.file_update_file(borrowed_db.deref(), file_model).await.unwrap();
+                            }
+                            Err(e) => match e {
+                                PdfGongjuError::LoadPdfiumError => {
+                                    println!("Error: {:?}", e);
+                                }
+                                PdfGongjuError::LoadPdfError(_) => {
+                                    println!("Error: {:?}", e);
+                                }
+                                PdfGongjuError::LoadPdfPageError => {
+                                    println!("Error: {:?}", e);
+                                }
+                                PdfGongjuError::LoadPdfAnnotationError => {
+                                    println!("Error: {:?}", e);
+                                }
+                            },
+                        }
+                    }
+                );
+                handles.push(handle);
+            };
+            // join_all(handles).await; // wait for 10 handles to finish
+            for handle in handles {
+                handle.await.unwrap();
+            }
+        }
+
         Ok(())
     }
 }

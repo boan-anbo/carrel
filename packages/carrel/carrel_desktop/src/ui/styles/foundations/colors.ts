@@ -5,7 +5,8 @@ export const colors = {
   "primaryBg": "#eef7f7",
   "primaryBgLight": "#eef7f779",
   "primaryBgHeavy": "#a5bebe",
-  "primaryBgHover": "#a5bebe",
+  "primaryBgHover": "#326767",
+  "primaryTextHover": "#e5f1f1",
   "secondaryText": "#EEF7F7",
   "secondaryBg": "#428A8A",
 
@@ -16,6 +17,7 @@ export const colors = {
   "textDark": "#CFE8E8",
   // regular light text color: dark
   "bgDark": "#326767",
+  "bgDarkHover": "#428a8ab2",
   "teal": {
     "50": "#EEF7F7",
     "100": "#CFE8E8",

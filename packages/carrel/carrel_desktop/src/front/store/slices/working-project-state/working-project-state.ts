@@ -1,8 +1,8 @@
-import type {PayloadAction} from '@reduxjs/toolkit'
-import {createSlice} from '@reduxjs/toolkit'
-import {ProjectInfo} from "../../../../backend/carrel_server_client/carrel/core/project_manager/v1/project_manager_v1_pb";
-import {PlainMessage} from "@bufbuild/protobuf/dist/types/message";
-import {Project} from "../../../../backend/carrel_server_client/carrel/common/project/v2/project_v2_pb";
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+import { ProjectInfo } from "../../../../backend/carrel_server_client/carrel/core/project_manager/v1/project_manager_v1_pb";
+import { PlainMessage } from "@bufbuild/protobuf/dist/types/message";
+import { Project } from "../../../../backend/carrel_server_client/carrel/common/project/v2/project_v2_pb";
 import { mockProjectDirectory } from '../../../../../test/fixtures/mock-vars';
 
 export interface WorkingProjectState {
@@ -10,9 +10,7 @@ export interface WorkingProjectState {
 }
 
 const initialState: WorkingProjectState = {
-    workingProject: {
-        directory: mockProjectDirectory
-    }
+    workingProject: null
 }
 
 export const workingProjectStateSlice = createSlice({
@@ -26,6 +24,6 @@ export const workingProjectStateSlice = createSlice({
     },
 })
 
-export const {setWorkingProject} = workingProjectStateSlice.actions
+export const { setWorkingProject } = workingProjectStateSlice.actions
 
 export default workingProjectStateSlice.reducer;

@@ -151,26 +151,7 @@ export class ApiQuery {
     QueryListRecentProjects = (numberOfProjects: number, isMock?: boolean) => useQuery(
         ["list_recent_projects", numberOfProjects],
         async (): Promise<Project[]> => {
-            if (isMock) {
-                return [
-                    {
-                        id: 1,
-                        name: "Project 1",
-                        description: "Project 1 description",
-                        projectDirectory: "C:\\Users\\user\\Documents\\project1",
-                        createdAt: new Date().toISOString(),
-                    } as Project,
-                    {
-                        id: 2,
-                        name: "Project 2",
-                        description: "Project 2 description",
-                        projectDirectory: "C:\\Users\\user\\Documents\\project2",
-                        createdAt: new Date().toISOString(),
-                    } as Project,
-                ]
-            }
-
-            let appDirectory = await dataDir()
+            let appDirectory = isMock ? "C:\\Script\\carrel\\packages\\carrel\\carrel_desktop\\test\\fixtures\\simple_project" : await dataDir()
             let result = await carrelApi.listRecentProjects(
                 {
                     numberOfProjects: numberOfProjects,
@@ -239,8 +220,6 @@ export class ApiQuery {
                     selectedTags
                 })
 
-            this.log("QueryFirefliesByTags", "fireflies_by_tags", JSON.stringify(result, null, 2))
-            //  this.log("QueryFirefliesByTags", "fireflies_by_tags", result)
             return result
         }
     )

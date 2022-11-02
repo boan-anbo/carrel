@@ -29,7 +29,7 @@ export interface CarraDadaTableParams {
   resultTotalCount?: number;
   data: any[] | undefined;
   paginatorPositions?: "top" | "bottom" | "both";
-  fontSize?: TCarrelSize;
+  size?: TCarrelSize;
   pageSize?: number;
   /**
    * The refreshKey will trigger a reset of values and reload the first page of data
@@ -39,7 +39,7 @@ export interface CarraDadaTableParams {
 }
 
 export const CarrelDataTable = ({
-  fontSize = "xs",
+  size = "xs",
   data,
   resultTotalCount,
   ...props
@@ -191,7 +191,7 @@ export const CarrelDataTable = ({
           ) : null}
         </Box>
         <Box h="full" w="full" overflowY="auto">
-          <CarrelDataTableDisplay size={fontSize} {...props} table={table} />
+          <CarrelDataTableDisplay size={size} {...props} table={table} />
         </Box>
         <Box w="full">
           {props.paginatorPositions === "bottom" ||

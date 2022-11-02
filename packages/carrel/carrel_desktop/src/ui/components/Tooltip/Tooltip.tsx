@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { Box, Center, Flex, Spacer, Text } from '@chakra-ui/react';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 export interface TooltipProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   content: string | undefined;
   type?: 'action' | 'regular';
   side?: 'left' | 'right' | 'top' | 'bottom';

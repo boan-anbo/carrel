@@ -70,7 +70,7 @@ export function SelectList({
 
   const itemCalculated = useMemo(() => {
     return props.items?.map((item, index) => (
-      <HStack w="full">
+      <HStack key={`item-${index}`} w="full">
         {props.showIndex && (
           <Box pl="2" pr="1">
             <Heading  fontSize={size}>{index + 1}</Heading>

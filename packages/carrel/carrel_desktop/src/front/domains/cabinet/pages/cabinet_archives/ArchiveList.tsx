@@ -50,6 +50,8 @@ export function ArchiveList(props: ArchiveListProps) {
     (state: RootState) => state.workingProject.workingProject
   );
 
+  const selectedArchiveId = useSelector( (state: RootState) => state.appstate.coreArchiveIdSelected);
+
   const dispatch = useDispatch();
 
   const { data, isLoading, status, error, refetch } =
@@ -137,10 +139,20 @@ export function ArchiveList(props: ArchiveListProps) {
   );
 
   const addFilesToArchive = async (pickedFiles: string[]) => {
+    LOG.info("Adding files to archive", "files", {
+      projectDirectory:
+        workingProject?.directory ?? props.projectDirectory ?? "",
+      archiveId: selectedArchiveId,
+      filePaths: pickedFiles,
+    });
+    if (!selectedArchiveId) {
+      LOG.error("Adding files to archive", "archive id is null");
+      return;
+    }
     const result = await carrelApi.addFilesToArchive({
       projectDirectory:
         workingProject?.directory ?? props.projectDirectory ?? "",
-      archiveId: props.selectedArchiveId ?? 0,
+      archiveId: selectedArchiveId,
       filePaths: pickedFiles,
     });
     LOG.info("Importing files result", "result", result);
@@ -156,7 +168,7 @@ export function ArchiveList(props: ArchiveListProps) {
       topActionBar={archiveListActionBar}
       topActionBarJustify="center"
       headerPosition="start"
-      title="Archives"
+      title="Archive list"
     >
       <Container maxW="full" maxH="full" w="full" h="full">
         <SelectList

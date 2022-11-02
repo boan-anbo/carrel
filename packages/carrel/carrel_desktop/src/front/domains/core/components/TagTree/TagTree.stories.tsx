@@ -6,12 +6,12 @@ import {
   mockProjectDirectoryMac,
 } from "../../../../../../test/fixtures/mock-vars";
 import type { TagTreeProps } from "./TagTree";
-import { TagTree } from "./TagTree";
+import { CoreTagTreeBlock } from "./TagTree";
 
 // Learn how to write stories:
 // https://github.com/Shopify/web/blob/master/app/stories/02-HowToWriteStories.stories.mdx
 const meta: Meta = {
-  component: TagTree,
+  component: CoreTagTreeBlock,
   parameters: {
     // Embedding Figma designs
     // The embed appears in the "Design" tab of the story
@@ -28,7 +28,7 @@ export default meta;
 // 👇 We create a "template" of how args map to rendering
 const Template: StoryFn<TagTreeProps> = (args) => (
   <Container h='400px'>
-    <TagTree {...args} />
+    <CoreTagTreeBlock {...args} />
   </Container>
 );
 

@@ -134,6 +134,7 @@ impl ProjectManagerService for ProjectService {
         )
             .await
             .unwrap();
+        print!("Archive id: {}\nFile paths: {}", req.archive_id, req.file_paths.join(", "));
         let _ = project
             .db
             .archive_add_files(req.archive_id, &req.file_paths)
@@ -282,40 +283,41 @@ impl ProjectManagerService for ProjectService {
             app_directory.as_str(),
             project_directory.as_str(),
         ).await;
-        let create_task = connect.app.app_db.add_task(
-            TaskIdentifiers::SyncProjectArchives.to_string().as_str(),
-            "Scanning the whole project archive files and text files for fireflies",
-            "sync_project_archives",
-            true,
-        ).await;
 
-        match create_task {
-            Ok(uuid) => {
-                let result = connect.project.sync_all_project_files().await;
+        // let create_task = connect.app.app_db.add_task(
+        //     TaskIdentifiers::SyncProjectArchives.to_string().as_str(),
+        //     "Scanning the whole project archive files and text files for fireflies",
+        //     "sync_project_archives",
+        //     true,
+        // ).await;
+        //
+        // match create_task {
+        //     Ok(uuid) => {
+        let result = connect.project.sync_all_project_files().await;
 
-                if result.is_err() {
-                    return Err(Status::internal(format!("Failed to sync project archives: {}", result.err().unwrap())));
-                }
-
-                let res = Response::new(SyncProjectResponse {
-                    project_directory,
-                    task_uuid: uuid.to_string(),
-                    message: "Sync project task started".to_string(),
-                });
-                Ok(res)
-            }
-            Err(err) => {
-                match err {
-                    TaskError::MultipleTaskNotAllowed(_) => {
-                        return Err(Status::new(
-                            tonic::Code::AlreadyExists,
-                            "Task already exists",
-                        ));
-                    }
-                }
-            }
+        if result.is_err() {
+            return Err(Status::internal(format!("Failed to sync project archives: {}", result.err().unwrap())));
         }
+
+        let res = Response::new(SyncProjectResponse {
+            project_directory,
+            task_uuid: "".to_string(),
+            message: "Sync project task started".to_string(),
+        });
+        Ok(res)
     }
+    // Err(err) => {
+    //     match err {
+    //         TaskError::MultipleTaskNotAllowed(_) => {
+    //             return Err(Status::new(
+    //                 tonic::Code::AlreadyExists,
+    //                 "Task already exists",
+    //             ));
+    //         }
+    //     }
+    // }
+// }
+// }
 
     async fn list_all_project_files(
         &self,

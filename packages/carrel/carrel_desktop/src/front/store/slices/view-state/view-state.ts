@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ContainerId } from './container-id';
 import { ViewId } from './view-id';
 import { ViewStateAction } from './view-actions';
-import {getViewDefaultName} from "./get-view-default-name";
+import { getViewDefaultName } from "./get-view-default-name";
+import { v4 } from 'uuid';
 
 
 const allViewContainers: ContainerId[] = [
@@ -12,12 +13,13 @@ const allViewContainers: ContainerId[] = [
 ];
 
 export interface ViewState<T> {
+    uuid: string;
     id: ViewId;
-    order: number;
     title: string;
     // a state to persist between view switch.
     // For example, a position of a scroll bar, the id of an opened document, etc.
     state?: T;
+    visible?: boolean;
 }
 
 
@@ -50,35 +52,58 @@ export interface AppViewStates {
 
 const initialState: AppViewStates = {
     [ContainerId.LEFT_PANEL_CONTAINER]: [
+        {
+            id: ViewId.PROJECT_FILE,
+            title: getViewDefaultName(ViewId.PROJECT_FILE),
+            visible: true,
+            uuid: v4(),
+        },
 
+        {
+            id: ViewId.CORE_TAG_TREE,
+            title: getViewDefaultName(ViewId.CORE_TAG_TREE),
+            visible: true,
+            uuid: v4(),
+        },
+        {
+            id: ViewId.ARCHIVE_LIST,
+            title: getViewDefaultName(ViewId.ARCHIVE_LIST),
+            visible: true,
+            uuid: v4(),
+        },
     ],
     [ContainerId.RIGHT_PANEL_CONTAINER]: [
         {
-            id: ViewId.CORE_TAG_FIREFLIES,
-            order: 0,
-            title: getViewDefaultName(ViewId.CORE_TAG_FIREFLIES)
+            id: ViewId.INSPECTOR_BLOCK,
+            title: getViewDefaultName(ViewId.INSPECTOR_BLOCK),
+            visible: true,
+            uuid: v4(),
+        },
+        {
+            id: ViewId.CARD_BLOCK,
+            title: getViewDefaultName(ViewId.CARD_BLOCK),
+            visible: true,
+            uuid: v4(),
         },
         {
             id: ViewId.ARCHIVE_FILES,
-            order: 1,
-            title: getViewDefaultName(ViewId.ARCHIVE_FILES)
+            title: getViewDefaultName(ViewId.ARCHIVE_FILES),
+            visible: true,
+            uuid: v4(),
         },
-        {
-            id: ViewId.INSPECTOR_BLOCK,
-            order: 2,
-            title: getViewDefaultName(ViewId.INSPECTOR_BLOCK)
-        }
     ],
     [ContainerId.WORK_AREA_CONTAINER]: [
         {
             id: ViewId.EMPTY,
-            order: 0,
             title: 'Empty view',
+            visible: true,
+            uuid: v4(),
         },
         {
             id: ViewId.CARREL_WRITER,
-            order: 1,
             title: 'Carrel Writer',
+            visible: true,
+            uuid: v4(),
         }
     ],
 }
@@ -87,6 +112,28 @@ export const viewStateSlice = createSlice({
     name: 'view-state',
     initialState,
     reducers: {
+        updateViewStateVisibility: (state, action: PayloadAction<{ uuid: string, visible: boolean }>) => {
+            const { uuid, visible } = action.payload;
+            for (const container of allViewContainers) {
+                const viewState = state[container].find(view => view.uuid === uuid);
+                if (viewState) {
+                    viewState.visible = visible;
+                    return;
+                }
+            }
+        },
+        toggleViewStateVisibility: (state, action: PayloadAction<{ uuid: string }>) => {
+            const { uuid } = action.payload;
+            for (const container of allViewContainers) {
+                const viewState = state[container].find(view => view.uuid === uuid);
+                if (viewState) {
+                    viewState.visible = !viewState.visible;
+                    return;
+                }
+            }
+            console.log('toggleViewStateVisibility: view state not found');
+        },
+
         updateViewState: (state, updateAction: PayloadAction<UpdateViewStatePayload<any>>) => {
             const { action, container, fromContainer, keepState, viewState, removeExisting } = updateAction.payload;
 
@@ -95,7 +142,6 @@ export const viewStateSlice = createSlice({
                     if (!viewState) {
                         throw new Error('viewState is required for ADD action');
                     }
-
                     // whether to remove the existing view state with the same id.
                     // This is used when you just need to move a view to container without worrying about where the view is currently in.
                     if (removeExisting) {
@@ -109,14 +155,7 @@ export const viewStateSlice = createSlice({
                             }
                         }
                     }
-                    // insert the view state to the array by the position of the order.
-                    const addIndex = state[container].findIndex((v) => v.order > viewState.order);
-                    if (addIndex === -1) {
-                        state[container].push(viewState);
-                    } else {
-                        state[container].splice(addIndex, 0, viewState);
-                    }
-
+                    state[container].push(viewState);
                     break;
                 case ViewStateAction.REMOVE:
                     if (!viewState) {
@@ -159,7 +198,8 @@ export const viewStateSlice = createSlice({
 
 export const {
     updateViewState,
-
+    updateViewStateVisibility,
+    toggleViewStateVisibility,
 } = viewStateSlice.actions
 
 export default viewStateSlice.reducer;

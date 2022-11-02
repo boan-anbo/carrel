@@ -1,22 +1,22 @@
-import {ViewId} from "./view-id";
+import { ViewId } from "./view-id";
 
 export const getViewDefaultName = (view: ViewId, language?: any): string => {
     switch (view) {
         case ViewId.EMPTY:
             return 'Empty page'
         case ViewId.CORE_TAG_TREE:
-            return 'Core tag tree'
+            return 'Tags'
         case ViewId.ARCHIVE_LIST:
-            return 'Archive list'
+            return 'Archives'
         case ViewId.CARD_BLOCK:
-            return 'Card block'
+            return 'Cards'
         case ViewId.INSPECTOR_BLOCK:
-            return 'Inspector block'
-        case ViewId.CORE_TAG_FIREFLIES:
-            return 'Core tag fireflies'
+            return 'Inspector'
         case ViewId.CARREL_WRITER:
-            return 'Carrel writer'
+            return 'Writer'
         case ViewId.ARCHIVE_FILES:
-            return 'Archive files'
+            return 'Documents'
+        case ViewId.PROJECT_FILE:
+            return 'Files'
     }
 }

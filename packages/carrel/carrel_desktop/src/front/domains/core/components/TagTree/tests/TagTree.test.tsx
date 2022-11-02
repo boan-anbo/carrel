@@ -1,5 +1,5 @@
 import React from 'react';
 
-import {TagTree} from '../TagTree';
+import {CoreTagTreeBlock} from '../TagTree';
 
 describe('<TagTree />', () => {});

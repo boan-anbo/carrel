@@ -5,6 +5,7 @@ import { CarrelComponent } from "../../../../backend/carrel_server_client/carrel
 import { File } from '../../../../backend/carrel_server_client/carrel/common/file/v1/file_v1_pb';
 import { Tag } from '../../../../backend/carrel_server_client/carrel/common/tag/v2/tag_v2_pb';
 import { EMainWorkAreaPage } from '../../../domains/carrel/components/MainWorkArea';
+import { TCarrelSize } from '../../../../ui/props/i-size';
 export enum SelectedInspectorItemType {
 
 }
@@ -29,6 +30,11 @@ export interface AppState {
 
     workAreaFirstView: EMainWorkAreaPage
     workAreaSecondView: EMainWorkAreaPage
+
+    /**
+     * Configurations
+     */
+    globalSize: TCarrelSize;
 }
 
 const initialState: AppState = {
@@ -38,7 +44,9 @@ const initialState: AppState = {
     coreTagsSelected: [],
     workAreaFirstView: EMainWorkAreaPage.DEFAULT,
     workAreaSecondView: EMainWorkAreaPage.DEFAULT,
-    coreArchiveIdSelected: null
+    coreArchiveIdSelected: null,
+
+    globalSize: 'xs'
 }
 
 export const appstateSlice = createSlice({
@@ -83,7 +91,7 @@ export const {
     setWorkAreaFirstView,
     setWorkAreaSecondView,
     setCoreArchiveIdSelected
-     
+
 } = appstateSlice.actions
 
 export default appstateSlice.reducer
