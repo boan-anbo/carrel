@@ -12,7 +12,6 @@ export const getViewDefaultName = (view: ViewId, language?: any): string => {
             return 'Card block'
         case ViewId.INSPECTOR_BLOCK:
             return 'Inspector block'
-
         case ViewId.CORE_TAG_FIREFLIES:
             return 'Core tag fireflies'
         case ViewId.CARREL_WRITER:
