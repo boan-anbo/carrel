@@ -342,6 +342,13 @@ export class Firefly extends Message<Firefly> {
    */
   uniqueId = "";
 
+  /**
+   * ticket id
+   *
+   * @generated from field: string ticket_id = 48;
+   */
+  ticketId = "";
+
   constructor(data?: PartialMessage<Firefly>) {
     super();
     proto3.util.initPartial(data, this);
@@ -397,6 +404,7 @@ export class Firefly extends Message<Firefly> {
     { no: 45, name: "location_actual_modified_at", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 46, name: "document_pages", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
     { no: 47, name: "unique_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 48, name: "ticket_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Firefly {

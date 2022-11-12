@@ -1,5 +1,5 @@
-use entity::entities::{tag, textual_objects};
-use entity::entities::textual_objects::{ActiveModel, Model};
+use entity::entities::{tag, textual_object};
+use entity::entities::textual_object::{ActiveModel, Model};
 use sea_orm::ActiveValue::Set;
 use uuid::Uuid;
 
@@ -40,7 +40,7 @@ pub trait ToOrmMapperTrait {
     /// ```
     ///
     /// ```
-    fn to_and_tag_model_to_to_and_tag(to_model: textual_objects::Model, tag_models: Vec<tag::Model>) -> TextualObject;
+    fn to_and_tag_model_to_to_and_tag(to_model: textual_object::Model, tag_models: Vec<tag::Model>) -> TextualObject;
 }
 
 impl ToOrmMapperTrait for ToOrmMapper {

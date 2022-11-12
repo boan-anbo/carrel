@@ -26,8 +26,8 @@ use carrel_db::implementation::project_traits::CommonProjectTrait;
 use crate::app::app_manager::{CarrelAppManager, ManageCarrelApp};
 use crate::errors::carrel_core_error::CarrelCoreError;
 use crate::project::db_manager::project_db_manager::MangageProjects;
-use crate::project::project_manager::CarrelProjectManager;
-use crate::project::project_manager_methods::manage_project::ManageProjectTrait;
+use crate::project::project_manager::project_manager::CarrelProjectManager;
+use crate::project::project_manager::project_manager_trait::ManageProjectTrait;
 
 pub struct CarrelCore {
     pub app: CarrelAppManager,

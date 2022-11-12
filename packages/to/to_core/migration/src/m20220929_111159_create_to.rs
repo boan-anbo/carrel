@@ -5,7 +5,7 @@ use sea_orm_migration::prelude::*;
 pub struct Migration;
 
 #[derive(Iden)]
-pub enum TextualObjects {
+pub enum TextualObject {
     Table,
     Id,
     Uuid,
@@ -60,121 +60,121 @@ impl MigrationTrait for Migration {
         let _ = manager
             .create_table(
                 Table::create()
-                    .table(TextualObjects::Table)
+                    .table(TextualObject::Table)
                     .if_not_exists()
                     // id is uuid
                     .col(
-                        ColumnDef::new(TextualObjects::Id)
+                        ColumnDef::new(TextualObject::Id)
                             .integer()
                             .not_null()
                             .primary_key()
                             .auto_increment(),
                     )
-                    .col(ColumnDef::new(TextualObjects::Uuid).text().not_null())
+                    .col(ColumnDef::new(TextualObject::Uuid).text().not_null())
                     .index(
                         Index::create()
                             .name("uuid")
                             .unique()
-                            .col(TextualObjects::Uuid),
+                            .col(TextualObject::Uuid),
                     )
-                    .col(ColumnDef::new(TextualObjects::TicketId).text().not_null())
+                    .col(ColumnDef::new(TextualObject::TicketId).text().not_null())
                     .index(
                         Index::create()
                             .name("ticket_id")
-                            .col(TextualObjects::TicketId)
+                            .col(TextualObject::TicketId)
                             .unique(),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::TicketMinimal)
+                        ColumnDef::new(TextualObject::TicketMinimal)
                             .text()
                             .default("")
                             .not_null(),
                     )
-                    .col(ColumnDef::new(TextualObjects::SourceId).text().not_null())
+                    .col(ColumnDef::new(TextualObject::SourceId).text().not_null())
                     .col(
-                        ColumnDef::new(TextualObjects::SourceName)
-                            .text()
-                            .default("")
-                            .not_null(),
-                    )
-                    .col(
-                        ColumnDef::new(TextualObjects::SourceIdType)
+                        ColumnDef::new(TextualObject::SourceName)
                             .text()
                             .default("")
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::SourcePath)
+                        ColumnDef::new(TextualObject::SourceIdType)
                             .text()
                             .default("")
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::StoreInfo)
+                        ColumnDef::new(TextualObject::SourcePath)
                             .text()
                             .default("")
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::StoreUrl)
+                        ColumnDef::new(TextualObject::StoreInfo)
                             .text()
                             .default("")
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::Created)
+                        ColumnDef::new(TextualObject::StoreUrl)
+                            .text()
+                            .default("")
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(TextualObject::Created)
                             .timestamp()
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::Updated)
+                        ColumnDef::new(TextualObject::Updated)
                             .timestamp()
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::Json)
+                        ColumnDef::new(TextualObject::Json)
                             .json()
                             .default("'{}'")
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::JsonType)
+                        ColumnDef::new(TextualObject::JsonType)
                             .text()
                             .null()
                             .default("NULL"),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::JsonUniqueId)
+                        ColumnDef::new(TextualObject::JsonUniqueId)
                             .text()
                             .null()
                             .default("NULL"),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::Card)
+                        ColumnDef::new(TextualObject::Card)
                             .json()
                             .default("{}")
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::CardMap)
+                        ColumnDef::new(TextualObject::CardMap)
                             .text()
                             .default("")
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::Context)
+                        ColumnDef::new(TextualObject::Context)
                             .text()
                             .default("")
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::TicketIndexInContext)
+                        ColumnDef::new(TextualObject::TicketIndexInContext)
                             .integer()
                             .default("0")
                             .not_null(),
                     )
                     .col(
-                        ColumnDef::new(TextualObjects::TagCount)
+                        ColumnDef::new(TextualObject::TagCount)
                             .integer()
                             .default("0")
                             .not_null(),
@@ -188,15 +188,15 @@ impl MigrationTrait for Migration {
         // .index(
         //     Index::create()
         //         .name("json_unique_id")
-        //         .col(TextualObjects::JsonUniqueId)
+        //         .col(TextualObject::JsonUniqueId)
         //         .unique(),
         // )
         let _  = manager
             .create_index(
                 Index::create()
                     .name("json_unique_id")
-                    .table(TextualObjects::Table)
-                    .col(TextualObjects::JsonUniqueId)
+                    .table(TextualObject::Table)
+                    .col(TextualObject::JsonUniqueId)
                     .to_owned(),
             )
             .await;
@@ -223,7 +223,7 @@ impl MigrationTrait for Migration {
                         ForeignKey::create()
                             .name("to_id")
                             .from(Tag::Table, Tag::ToId)
-                            .to(TextualObjects::Table, TextualObjects::Id)
+                            .to(TextualObject::Table, TextualObject::Id)
                             .on_delete(ForeignKeyAction::Cascade)
                             .on_update(ForeignKeyAction::Cascade),
                     )
@@ -302,7 +302,7 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
 
         let _ = manager
-            .drop_table(Table::drop().table(TextualObjects::Table).to_owned())
+            .drop_table(Table::drop().table(TextualObject::Table).to_owned())
             .await;
 
         let _ = manager

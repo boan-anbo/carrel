@@ -42,9 +42,9 @@ use async_trait::async_trait;
 use carrel_commons::carrel::common::tag::v2::Tag as CommonTagV2;
 use carrel_commons::generic::api::query::v1::{FilterSet, Operator, StandardQuery};
 use carrel_commons::generic::api::query::v1::Condition as GenericCondition;
-use entity::entities::{tag, textual_objects};
+use entity::entities::{tag, textual_object};
 use entity::entities::prelude::*;
-use entity::entities::textual_objects::{ActiveModel, Column, Entity, Model};
+use entity::entities::textual_object::{ActiveModel, Column, Entity, Model};
 use pebble_query::errors::PebbleQueryError;
 use pebble_query::pebble_query_result::{PebbleQueryResult, PebbleQueryResultGeneric, PebbleQueryResultUtilTrait};
 use sea_orm::{Database, DatabaseConnection, DbBackend, FromQueryResult, ModelTrait, Statement};
@@ -94,7 +94,7 @@ pub struct ToOrm {
 
 impl ToOrm {
     /// Helper function to convert the query results of scalar to with its tags.
-    pub(crate) async fn add_tags_to_to_result(&self, pebble_tag_query_result: PebbleQueryResult<Entity>) -> PebbleQueryResultGeneric<TextualObject> {
+    pub(crate) async fn add_tags_to_to_result(&self, pebble_tag_query_result: PebbleQueryResult<textual_object::Entity>) -> PebbleQueryResultGeneric<TextualObject> {
         let mut new_tos: Vec<TextualObject> = vec![];
 
         for to in pebble_tag_query_result.results.into_iter() {
@@ -165,19 +165,19 @@ pub trait ToOrmTrait {
     async fn find_by_ticket_id(
         &self,
         ticket_id: &str,
-    ) -> Result<Option<textual_objects::Model>, ToOrmError>;
+    ) -> Result<Option<textual_object::Model>, ToOrmError>;
 
     async fn count_tos(&self) -> Result<u64, ToOrmError>;
 
     async fn find_by_ticket_ids(
         &self,
         ticket_ids: Vec<String>,
-    ) -> Result<Vec<textual_objects::Model>, ToOrmError>;
+    ) -> Result<Vec<textual_object::Model>, ToOrmError>;
     async fn find(
         &self,
         find_condition: SimpleExpr,
-    ) -> Result<Vec<textual_objects::Model>, ToOrmError>;
-    async fn find_all(&self) -> Result<Vec<textual_objects::Model>, ToOrmError>;
+    ) -> Result<Vec<textual_object::Model>, ToOrmError>;
+    async fn find_all(&self) -> Result<Vec<textual_object::Model>, ToOrmError>;
     /// Query by the json field and value in the TO.json column.
     ///
     /// # Arguments
@@ -185,12 +185,12 @@ pub trait ToOrmTrait {
     /// * `json_field`:
     /// * `json_value`:
     ///
-    /// returns: Result<Vec<textual_objects::Model>, ToOrmError>
+    /// returns: Result<Vec<textual_object::Model>, ToOrmError>
     async fn find_by_json_field(
         &self,
         json_field: &str,
         json_value: &str,
-    ) -> Result<Vec<textual_objects::Model>, ToOrmError>;
+    ) -> Result<Vec<textual_object::Model>, ToOrmError>;
 
     /// Select the first TO with the given json field and value in the TO.json column.
     ///
@@ -210,7 +210,7 @@ pub trait ToOrmTrait {
         &self,
         json_field: &str,
         json_value: &str,
-    ) -> Result<Option<textual_objects::Model>, ToOrmError>;
+    ) -> Result<Option<textual_object::Model>, ToOrmError>;
 
     /// A helper function to check whether the TO.json column contains the given json_field and json_value.
     ///
@@ -245,7 +245,7 @@ pub trait ToOrmTrait {
     // check_if_ticket_id_exists
     async fn check_if_ticket_id_exists(&self, ticket_id: &str) -> Result<bool, ToOrmError>;
 
-    /// Main entry point for complex queries, takes in [StandardQuery] and returns [Vec<textual_objects::Model>]
+    /// Main entry point for complex queries, takes in [StandardQuery] and returns [Vec<textual_object::Model>]
     ///
     /// # Arguments
     ///
@@ -328,7 +328,7 @@ impl ToOrmTrait for ToOrm {
     async fn find_by_id(&self, id: i32) -> Result<Option<TextualObject>, ToOrmError> {
         let db = self.get_connection().await?;
 
-        let to = textual_objects::Entity::find_by_id(id)
+        let to = textual_object::Entity::find_by_id(id)
             .one(&db)
             .await
             .map_err(ToOrmError::DatabaseQueryError)?;
@@ -346,9 +346,9 @@ impl ToOrmTrait for ToOrm {
     async fn find_by_ticket_id(
         &self,
         ticket_id: &str,
-    ) -> Result<Option<textual_objects::Model>, ToOrmError> {
+    ) -> Result<Option<textual_object::Model>, ToOrmError> {
         let db = self.get_connection().await?;
-        let to_model = TextualObjects::find()
+        let to_model = textual_object::Entity::find()
             .filter(Column::TicketId.eq(ticket_id))
             .one(&db)
             .await
@@ -358,7 +358,7 @@ impl ToOrmTrait for ToOrm {
 
     async fn count_tos(&self) -> Result<u64, ToOrmError> {
         let db = self.get_connection().await?;
-        let count = TextualObjects::find()
+        let count = textual_object::Entity::find()
             .count(&db)
             .await
             .map_err(ToOrmError::DatabaseConnectionError)?;
@@ -368,9 +368,9 @@ impl ToOrmTrait for ToOrm {
     async fn find_by_ticket_ids(
         &self,
         ticket_ids: Vec<String>,
-    ) -> Result<Vec<textual_objects::Model>, ToOrmError> {
+    ) -> Result<Vec<textual_object::Model>, ToOrmError> {
         let db = self.get_connection().await?;
-        let files = TextualObjects::find()
+        let files = textual_object::Entity::find()
             .filter(Column::TicketId.is_in(ticket_ids))
             .all(&db)
             .await
@@ -381,9 +381,9 @@ impl ToOrmTrait for ToOrm {
     async fn find(
         &self,
         find_condition: SimpleExpr,
-    ) -> Result<Vec<textual_objects::Model>, ToOrmError> {
+    ) -> Result<Vec<textual_object::Model>, ToOrmError> {
         let db = self.get_connection().await.unwrap();
-        let files = TextualObjects::find()
+        let files = textual_object::Entity::find()
             .filter(find_condition)
             .all(&db)
             .await
@@ -391,9 +391,9 @@ impl ToOrmTrait for ToOrm {
         Ok(files)
     }
 
-    async fn find_all(&self) -> Result<Vec<textual_objects::Model>, ToOrmError> {
+    async fn find_all(&self) -> Result<Vec<textual_object::Model>, ToOrmError> {
         let db = self.get_connection().await?;
-        let files = TextualObjects::find()
+        let files = textual_object::Entity::find()
             .all(&db)
             .await
             .map_err(ToOrmError::DatabaseQueryError)?;
@@ -404,7 +404,7 @@ impl ToOrmTrait for ToOrm {
         &self,
         json_field: &str,
         json_value: &str,
-    ) -> Result<Vec<textual_objects::Model>, ToOrmError> {
+    ) -> Result<Vec<textual_object::Model>, ToOrmError> {
         let db = self.get_connection().await.unwrap();
 
         let sql_statement =
@@ -412,7 +412,7 @@ impl ToOrmTrait for ToOrm {
 
         let field_value = "$.".to_string() + json_field;
 
-        let files = TextualObjects::find()
+        let files = textual_object::Entity::find()
             .from_raw_sql(Statement::from_sql_and_values(
                 DbBackend::Sqlite,
                 sql_statement,
@@ -457,7 +457,7 @@ impl ToOrmTrait for ToOrm {
     async fn insert_many(&self, tos: Vec<TextualObject>) -> Result<(), ToOrmError> {
         let db = self.get_connection().await?;
         let models: Vec<ActiveModel> = tos.into_iter().map(|to| ToOrmMapper::to_into_active_model(to)).collect();
-        let _ = TextualObjects::insert_many(models)
+        let _ = textual_object::Entity::insert_many(models)
             .exec(&db)
             .await
             .map_err(ToOrmError::DatabaseConnectionError)?;
@@ -480,7 +480,7 @@ impl ToOrmTrait for ToOrm {
     async fn clear(&self) -> Result<u64, ToOrmError> {
         let db = self.get_connection().await?;
 
-        let delete_result = TextualObjects::delete_many()
+        let delete_result = textual_object::Entity::delete_many()
             .exec(&db)
             .await
             .map_err(ToOrmError::DatabaseQueryError)?;
@@ -489,7 +489,7 @@ impl ToOrmTrait for ToOrm {
 
     async fn check_if_ticket_id_exists(&self, ticket_id: &str) -> Result<bool, ToOrmError> {
         let db = self.get_connection().await?;
-        let count = TextualObjects::find()
+        let count = textual_object::Entity::find()
             .filter(Column::TicketId.eq(ticket_id))
             .count(&db)
             .await

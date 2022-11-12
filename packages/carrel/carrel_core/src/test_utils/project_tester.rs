@@ -7,9 +7,9 @@
 //! - get seeded DbManager
 //!
 use crate::project::db_manager::carrel_db_manager::CarrelDbManager;
-use crate::project::project_manager::CarrelProjectManager;
 use async_trait::async_trait;
 use carrel_commons::carrel::core::project_manager::v1::CreateProjectRequest;
+use crate::project::project_manager::project_manager::CarrelProjectManager;
 
 #[async_trait]
 pub trait ProjectTester {

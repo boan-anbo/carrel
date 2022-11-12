@@ -7,7 +7,7 @@ authors = ["Bo An"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-sea-orm={version = "0.9.2", features = [
+sea-orm={version = "0.10.1", features = [
     "sqlx-sqlite",
     "runtime-tokio-rustls",
     "mock",

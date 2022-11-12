@@ -6,9 +6,8 @@ use pebble_query::pebble_query::PebbleQuery;
 use pebble_query::pebble_query_result::PebbleQueryResult;
 use sea_orm::{DatabaseConnection, EntityTrait, ItemsAndPagesNumber, PaginatorTrait, QueryFilter};
 use uuid::Uuid;
+use entity::entities::{tag, textual_object};
 
-use entity::entities::{tag, textual_objects};
-use entity::entities::tag::Entity;
 
 use crate::to_db::to_field_to_column_maps::{TAG_MAP_TO_COLUMN_MAP, TO_MAP_TO_COLUMN_MAP};
 
@@ -19,7 +18,7 @@ pub trait PebbleQueryTextualObjectTrait {
     async fn query_textual_objects(
         db: &DatabaseConnection,
         query: StandardQuery,
-    ) -> Result<PebbleQueryResult<textual_objects::Entity>, PebbleQueryError>;
+    ) -> Result<PebbleQueryResult<textual_object::Entity>, PebbleQueryError>;
 
     async fn query_tags(
         db: &DatabaseConnection,
@@ -34,8 +33,8 @@ impl PebbleQueryTextualObjectTrait for PebbleQueryTextualObject {
     async fn query_textual_objects(
         db: &DatabaseConnection,
         query: StandardQuery,
-    ) -> Result<PebbleQueryResult<textual_objects::Entity>, PebbleQueryError> {
-        let result = PebbleQuery::query_sea_orm_entity::<textual_objects::Entity, textual_objects::Model>(
+    ) -> Result<PebbleQueryResult<textual_object::Entity>, PebbleQueryError> {
+        let result = PebbleQuery::query_sea_orm_entity::<textual_object::Entity, textual_object::Model>(
             db,
             query.clone(),
             TO_MAP_TO_COLUMN_MAP.borrow(),
@@ -48,8 +47,8 @@ impl PebbleQueryTextualObjectTrait for PebbleQueryTextualObject {
     }
 
 
-    async fn query_tags(db: &DatabaseConnection, query: StandardQuery) -> Result<PebbleQueryResult<Entity>, PebbleQueryError> {
-        let result = PebbleQuery::query_sea_orm_entity::<Entity, tag::Model>(
+    async fn query_tags(db: &DatabaseConnection, query: StandardQuery) -> Result<PebbleQueryResult<tag::Entity>, PebbleQueryError> {
+        let result = PebbleQuery::query_sea_orm_entity::<tag::Entity, tag::Model>(
             db,
             query.clone(),
             TAG_MAP_TO_COLUMN_MAP.borrow(),

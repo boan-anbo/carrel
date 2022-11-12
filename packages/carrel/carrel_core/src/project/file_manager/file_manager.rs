@@ -1,20 +1,19 @@
 use async_trait::async_trait;
 use carrel_commons::generic::api::query::v1::StandardQuery;
+use carrel_commons::implementations::generic_api_query_v1::QueryMutator;
 use carrel_db::entities::file;
-use carrel_db::entities::file::{ActiveModel, Column, Model};
+use carrel_db::entities::file::{Column, Model};
 use carrel_db::entities::prelude::*;
 use carrel_db::errors::database_error::SeaOrmDatabaseError;
-
-use carrel_commons::implementations::generic_api_query_v1::QueryMutator;
 use carrel_db::errors::database_error::SeaOrmDatabaseError::DatabaseUpdateError;
 use carrel_db::query::query_file::{PebbleQueryFile, PebbleQueryFileTrait};
 use pebble_query::pebble_query_result::PebbleQueryResult;
-use sea_orm::ActiveValue::Set;
 use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, PaginatorTrait, QueryFilter};
+use sea_orm::ActiveValue::Set;
+use sea_orm::sea_query::SimpleExpr;
 
 use crate::project::archivist::archive_query_conditions::CarrelDbConditions;
 use crate::project::db_manager::carrel_db_manager::{CarrelDbManager, CarrelDbManagerTrait};
-use sea_orm::sea_query::SimpleExpr;
 
 #[async_trait]
 pub trait ManageFileTrait {
@@ -300,15 +299,17 @@ impl ManageFileTrait for CarrelDbManager {
 
 #[cfg(test)]
 mod tests {
-    use crate::project::file_manager::file_manager::ManageFileTrait;
-    use crate::test_utils::carrel_tester::CarrelTester;
-    use crate::test_utils::project_tester::ProjectTester;
     use carrel_commons::generic::api::query::v1::{SortCondition, SortDirection, StandardQuery, StandardQueryResultMetadata};
     use carrel_db::entities::file;
     use carrel_utils::test::faker::Language;
     use pebble_query::pebble_query_result::PebbleQueryResultUtilTrait;
-    use sea_orm::ActiveValue::Set;
     use sea_orm::{ColumnTrait, IntoActiveModel};
+    use sea_orm::ActiveValue::Set;
+
+    use crate::project::file_manager::file_manager::ManageFileTrait;
+    use crate::test_utils::carrel_tester::CarrelTester;
+    use crate::test_utils::project_tester::ProjectTester;
+
     use super::*;
 
     #[tokio::test]

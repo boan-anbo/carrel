@@ -99,9 +99,8 @@ impl Default for ToManagerOption {
 mod tests {
     use carrel_commons::carrel::core::project_manager::v1::CarrelDbType;
     use carrel_utils::test::test_folders::get_random_test_temp_folder_path_buf;
-
-    use crate::project::project_manager::InstantiateFromConfig;
-
+    use crate::project::config::project_config::ProjectConfig;
+    use crate::project::project_manager::project_manager::CarrelProjectManager;
     use super::*;
 
     #[tokio::test]

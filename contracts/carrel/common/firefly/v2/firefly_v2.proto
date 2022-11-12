@@ -126,4 +126,7 @@ message Firefly {
     // e.g. for a firefly extracted from the textfile, this should the modified date of
     string unique_id = 47;
 
+    // ticket id
+    string ticket_id = 48;
+
 }

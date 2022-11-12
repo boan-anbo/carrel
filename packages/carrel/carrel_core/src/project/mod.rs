@@ -20,7 +20,7 @@
 //!
 //! ```rust
 //! use carrel_core::project::project_manager::CarrelProjectManager;
-//! use carrel_core::project::project_manager_methods::manage_project::ManageProjectTrait;
+//! use carrel_core::project::project_manager::manage_project::ManageProjectTrait;
 //!
 //! #[tokio::main]
 //! async fn main() {
@@ -41,8 +41,6 @@ pub mod config;
 pub mod db_manager;
 pub mod error;
 pub mod file_manager;
-pub mod project_implementation;
 pub mod project_manager;
-pub mod project_manager_methods;
 pub mod to_manager;
 pub mod fireflies_keeper;

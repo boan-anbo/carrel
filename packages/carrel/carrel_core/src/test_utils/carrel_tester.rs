@@ -3,7 +3,6 @@ use crate::project::config::const_config_file_name::{
 };
 use crate::project::config::project_config::ProjectConfig;
 use crate::project::db_manager::carrel_db_manager::{CarrelDbManager, CarrelDbManagerTrait};
-use crate::project::project_manager::{CarrelProjectManager, ToManagerOption};
 use crate::project::to_manager::to_manager::{FireflyKepper, KeepFireflies};
 use crate::test_utils::project_tester::ProjectTester;
 use async_trait::async_trait;
@@ -11,6 +10,7 @@ use carrel_commons::carrel::core::project_manager::v1::CreateProjectRequest;
 use carrel_utils::test::test_folders::get_random_test_temp_folder_path_buf;
 use std::default::Default;
 use std::path::PathBuf;
+use crate::project::project_manager::project_manager::{CarrelProjectManager, ToManagerOption};
 
 // helper to test the project manager
 pub struct CarrelTester {}

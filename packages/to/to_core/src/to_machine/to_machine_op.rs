@@ -2,7 +2,7 @@
 
 use std::borrow::BorrowMut;
 
-use entity::entities::textual_objects::Model;
+use entity::entities::textual_object::Model;
 use uuid::Uuid;
 
 use crate::to::to_struct::TextualObject;

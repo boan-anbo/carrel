@@ -7,25 +7,26 @@
 //! E.g. add_firefly is a general API, but add_firefly_from_project_files is a project level API.
 use std::borrow::Borrow;
 use std::ops::Deref;
-use itertools::Itertools;
-use crate::project::error::project_error::ProjectError;
-use crate::project::file_manager::file_manager::ManageFileTrait;
-use crate::project::project_manager::CarrelProjectManager;
-use crate::project::to_manager::to_manager::KeepFireflies;
+use std::path::PathBuf;
+use std::sync::Arc;
+
 use async_trait::async_trait;
 use carrel_db::entities::file;
+use itertools::Itertools;
 use pdf_gongju::extract::errors::PdfGongjuError;
 use pdf_gongju::extract::extractor::{PdfExtractor, PdfGongju};
 use pdf_gongju::extract::extractor_options::ExtractorOption;
+use rayon::prelude::ParallelSliceMut;
 use sea_orm::ActiveValue::Set;
 use sea_orm::IntoActiveModel;
-use std::path::PathBuf;
-use std::sync::Arc;
-use futures::future::join_all;
-use rayon::prelude::ParallelSliceMut;
 use tokio::spawn;
 use tokio::sync::Mutex;
+
 use crate::project::db_manager::carrel_db_manager::CarrelDbManagerTrait;
+use crate::project::error::project_error::ProjectError;
+use crate::project::file_manager::file_manager::ManageFileTrait;
+use crate::project::project_manager::project_manager::CarrelProjectManager;
+use crate::project::to_manager::to_manager::KeepFireflies;
 
 #[async_trait]
 pub trait KeepProjectFireflies {
@@ -140,12 +141,14 @@ impl KeepProjectFireflies for CarrelProjectManager {
                 let carrel_db_manager = self.db.clone();
                 let handle = spawn(
                     async move {
+                        // extract results with pdf-gongju
                         let extraction_result =
                             PdfGongju::extract_fireflies(file_cloned.full_path.as_str(), &ExtractorOption::default());
                         match extraction_result {
                             Ok(fireflies) => {
                                 // skip if no fireflies
                                 if !fireflies.is_empty() {
+                                    // save fireflies to db.
                                     let _receipt = firefly_keeper.save_firefly_to_to_db(fireflies).await.unwrap();
                                 }
                                 let mut file_model = file_cloned.clone().into_active_model();
@@ -196,14 +199,15 @@ fn pick_outdated_files(files: Vec<file::Model>) -> Vec<file::Model> {
 #[cfg(test)]
 mod tests {
     use carrel_db::entities::file::Column;
-    use super::*;
-    use crate::test_utils::carrel_tester::CarrelTester;
-    use crate::test_utils::project_tester::ProjectTester;
     use carrel_utils::test::test_folders::get_test_fixture_module_folder_path_buf;
     use carrel_utils::uuid::new_v4;
-
     use sea_orm::ColumnTrait;
-    use to_core::to_db::to_orm::{ToOrm, ToOrmTrait};
+    use to_core::to_db::to_orm::ToOrmTrait;
+
+    use crate::test_utils::carrel_tester::CarrelTester;
+    use crate::test_utils::project_tester::ProjectTester;
+
+    use super::*;
 
     #[tokio::test]
     async fn test_sync_files() {

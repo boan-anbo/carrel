@@ -1,13 +1,14 @@
 use std::ffi::OsStr;
 use std::fs;
 use std::path::PathBuf;
+
 use carrel_commons::carrel::common::directory::v1::Directory;
 use carrel_commons::carrel::common::file::v1::File;
-use carrel_utils::uuid::new_v4;
-use thiserror::Error;
-use std::fs::metadata;
 use carrel_utils::fs::file_metadata::get_file_modified_time_iso_string;
+use carrel_utils::uuid::new_v4;
 use futures::TryFutureExt;
+use thiserror::Error;
+
 use crate::fs::fs_manager::FSManagerError::IOError;
 
 #[derive(Error, Debug)]
@@ -122,13 +123,17 @@ fn generate_dir_tree_recursive(root_dir: &mut Directory) -> Result<&mut Director
         }
     }
 
+    // sort sub_dirs by name
+    root_dir.sub_dirs.sort_by(|a, b| a.name.cmp(&b.name));
+
     Ok(root_dir)
 }
 
 
 #[cfg(test)]
 mod test {
-    use carrel_utils::test::test_folders::{get_test_fixture_module_folder_path, get_test_fixture_module_folder_path_buf};
+    use carrel_utils::test::test_folders::get_test_fixture_module_folder_path_buf;
+
     use super::*;
 
     #[test]

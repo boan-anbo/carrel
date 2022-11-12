@@ -2,8 +2,7 @@ use async_trait::async_trait;
 use sea_orm::{ActiveModelTrait, Database, EntityTrait, IntoActiveModel};
 use sea_orm::ActiveValue::Set;
 use entity::entities::prelude::Tag;
-use entity::entities::tag::Relation::TextualObjects;
-use entity::entities::textual_objects::Entity;
+use entity::entities::textual_object::Entity;
 use crate::to::to_struct::TextualObject;
 
 pub struct ToMaintainer {

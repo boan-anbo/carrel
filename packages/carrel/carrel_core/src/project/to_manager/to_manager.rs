@@ -15,12 +15,14 @@ use to_core::to_dtos::to_add_request::ToStoredReceipt;
 use to_core::to_machine::to_machine_option::ToMachineOption;
 use to_core::to_machine::to_machine_pub_op::ToMPubMethods;
 use to_core::to_machine::to_machine_struct::ToMachine;
+use to_core::to_parser::parser::ToParser;
+use to_core::to_parser::parser_option::ToParserOption;
 use to_core::to_tag::to_tag_struct::ToTag;
 
-use crate::project::project_manager::ToManagerOption;
+use crate::project::project_manager::project_manager::ToManagerOption;
 use crate::project::to_manager::error::ToManagerError;
 use crate::project::to_manager::firefly_const::TO_JSON_TYPE_FOR_FIREFLY_V2;
-use crate::project::to_manager::util_trait::{ToFirefliesUtils, ToFireflyUtils};
+use crate::project::to_manager::to_firefly_conversion_trait::{ToFirefliesUtils, ToFireFlyConversionTrait};
 
 #[derive(Debug, Clone)]
 pub struct FireflyKepper {
@@ -56,8 +58,11 @@ pub trait KeepFireflies {
 
     async fn query_fireflies_by_tags(&self, query: StandardQuery, selected_tags: Vec<TagKeyValueNote>) -> Result<PebbleQueryResultGeneric<Firefly>, ToManagerError>;
 
-
     async fn list_all_tag_groups(&self) -> Vec<CommonTagGroup>;
+
+    async fn get_firefly_by_ticket_id(&self, ticket_id: &str) -> Result<Option<Firefly>, ToManagerError>;
+
+    async fn scan_text_for_firefly(&self, text: &str) -> Result<Vec<Firefly>, ToManagerError>;
 }
 
 #[async_trait]
@@ -134,6 +139,7 @@ impl KeepFireflies for FireflyKepper {
         }
     }
 
+    // this convert a list of fireflies into a ToAddManyRequest so these fireflies can be added to the TO database
     async fn get_add_firefly_many_request(&self, fireflies: Vec<Firefly>) -> ToAddManyRequest {
         let mut wrapper = self.get_empty_add_to_request();
         for firefly in fireflies {
@@ -249,6 +255,44 @@ impl KeepFireflies for FireflyKepper {
 
         tag_groups.into_iter().map(|tag_group| tag_group.into_common_key_group()).collect()
     }
+
+    async fn get_firefly_by_ticket_id(&self, ticket_id: &str) -> Result<Option<Firefly>, ToManagerError> {
+        let to_orm = self.get_to_orm().await;
+
+        let to = to_orm
+            .find_by_ticket_id(ticket_id)
+            .await
+            .map_err(ToManagerError::ToOrmError)
+            .unwrap();
+
+        match to {
+            Some(to) => Ok(Some(to.into_common_firefly_v2().unwrap())),
+            None => Ok(None)
+        }
+    }
+
+    async fn scan_text_for_firefly(&self, text: &str) -> Result<Vec<Firefly>, ToManagerError> {
+        let to_orm = self.get_to_orm().await;
+
+        let all_to_tickets = ToParser::scan_text_for_tickets(text, &ToParserOption::default(), None);
+
+        let tos = to_orm
+            .find_by_ticket_ids(all_to_tickets.into_iter().map(|t| t.ticket_id.to_owned()).collect())
+            .await
+            .map_err(ToManagerError::ToOrmError)
+            .unwrap();
+
+        Ok(tos.into_fireflies())
+    }
+
+    // async fn get_firefly_by_uuid(&self, uuid: &str) -> Result<Firefly, ToManagerError> {
+    //     let firefly = self
+    //         .get_to_orm()
+    //         .await
+    //         .await
+    //         .map_err(ToManagerError::ToOrmError)
+    //         .unwrap();
+    // }
 }
 
 #[cfg(test)]
@@ -260,7 +304,7 @@ mod tests {
     use sea_orm::{ActiveModelTrait, IntoActiveModel};
     use sea_orm::ActiveValue::Set;
 
-    use crate::project::to_manager::util_trait::ToFireflyUtils;
+    use crate::project::to_manager::to_firefly_conversion_trait::ToFireFlyConversionTrait;
     use crate::test_utils::carrel_tester::CarrelTester;
     use crate::test_utils::project_tester::ProjectTester;
 
@@ -496,5 +540,25 @@ mod tests {
         let first_tag = firstfly.tags[0].clone();
 
         assert_eq!(first_tag.key, "tag_key_1");
+    }
+
+    #[tokio::test]
+    async fn test_scan_text_for_fireflies() {
+        let pm = CarrelTester::get_project_manager_with_seeded_db().await;
+
+        let no_result = pm.to.scan_text_for_firefly("hello world").await.unwrap();
+
+        let all_fireflies = pm.to.list_all_fireflies().await;
+
+        assert_eq!(all_fireflies.len(), 1);
+
+        let first_firefly = all_fireflies[0].clone();
+
+        println!("first firefly ticket_id: {:?}", first_firefly.ticket_id);
+
+        let one_result = pm.to.scan_text_for_firefly(format!("hello world [[ticket_id:{}]]", first_firefly.ticket_id).as_str()).await.unwrap();
+
+        assert_eq!(one_result.len(), 1);
+
     }
 }

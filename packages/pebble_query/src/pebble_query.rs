@@ -181,7 +181,7 @@ impl PebbleQuery {
         let total_items_and_pages_number = E::find()
             .filter(current_must_condition) // add the must condition, same as actual query for results
             .filter(current_any_condition) // add the any condition, same as actual query for results
-            .paginate(db, query.length as usize)
+            .paginate(db, query.length as u64)
             .num_items_and_pages()
             .await?;
 

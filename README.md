@@ -1,8 +1,35 @@
 # This is the monorepo of Carrel eco-system
 
-## 1 Main application
+## Documentation
+
+- The carrel system mainly uses four levels of documentation.
+  1. Architectural level: a document that describes the overall design of the system and its parts, such as __this document__.
+  2. Package level: each module has its own architectural documents, usually a README.md at the root of each folder.
+  3. Module level: this is the internal documentation of a module, such as Rust's module documentation which can be generated or read directly at the module roots. This describes internally what a module does.
+  4. Inline documentation: needless to say.
+
+## 1 Components
+
+### Front end
 
 - Carrel Desktop
+
+### Backend
+
+- Carrel Server
+
+  - Carrel core
+    - Fireflies (cards-related activities.)
+    - Textual objects (underlying technology behind fireflies)
+
+  - Project manager
+    - Project information
+    - Archive information
+    - File information
+
+## Roadmap
+
+- Adding historiach.
 
 ## 2 Components and applications
 

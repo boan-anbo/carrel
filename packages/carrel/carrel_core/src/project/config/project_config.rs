@@ -135,7 +135,7 @@ mod tests {
         let config_path = fixture_folder.join(CONFIG_DEFAULT_FILE_NAME);
         assert!(config_path.exists());
         let config = ProjectConfig::from_config_file(config_path.to_str().unwrap()).unwrap();
-        assert_eq!(config.carrel_db.file_name().unwrap(), "simple_db.db");
-        assert_eq!(config.to_db.file_name().unwrap(), "simple_to.db");
+        assert_eq!(config.carrel_db.file_name().unwrap(), "carrel.db");
+        assert_eq!(config.to_db.file_name().unwrap(), "to.db");
     }
 }

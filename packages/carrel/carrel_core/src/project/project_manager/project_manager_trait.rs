@@ -16,7 +16,7 @@ use crate::project::error::project_config_error::ProjectConfigError;
 use crate::project::error::project_error::ProjectError;
 use crate::project::error::project_error::ProjectError::ProjectFolderDoesNotExit;
 use crate::project::file_manager::file_manager::ManageFileTrait;
-use crate::project::project_manager::{CarrelProjectManager, InstantiateFromConfig};
+use crate::project::project_manager::project_manager::{CarrelProjectManager, InstantiateFromConfig};
 use crate::project::to_manager::to_manager::KeepFireflies;
 
 /// Methods for managing a project that is already instantiated.
@@ -218,8 +218,8 @@ mod tests {
             simple_project_fixture_folder
         );
         let config = project_manager.config;
-        assert_eq!(config.carrel_db.file_name().unwrap(), "simple_db.db");
-        assert_eq!(config.to_db.file_name().unwrap(), "simple_to.db");
+        assert_eq!(config.carrel_db.file_name().unwrap(), "carrel.db");
+        assert_eq!(config.to_db.file_name().unwrap(), "to.db");
         // check if the project folder is a project
         assert_eq!(
             CarrelProjectManager::is_dir_project(simple_project_fixture_folder.to_str().unwrap()),

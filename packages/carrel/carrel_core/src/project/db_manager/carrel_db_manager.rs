@@ -95,8 +95,8 @@ mod tests {
     use carrel_utils::test::test_folders::get_random_test_temp_folder_path_buf;
 
     use crate::project::db_manager::project_db_manager::MangageProjects;
-    use crate::project::project_manager::CarrelProjectManager;
-    use crate::project::project_manager_methods::manage_project::ManageProjectTrait;
+    use crate::project::project_manager::project_manager::CarrelProjectManager;
+    use crate::project::project_manager::project_manager_trait::ManageProjectTrait;
     use crate::test_utils::carrel_tester::CarrelTester;
     use crate::test_utils::project_tester::ProjectTester;
 
