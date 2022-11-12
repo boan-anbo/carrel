@@ -10,29 +10,49 @@ use to_core::to_tag::to_tag_converter_v2::ToTagConverter;
 // this handles the conversion of TO to Firefly by connecting two steps:
 // 1. convert TO.json to a json value
 // 2. convert json value to Firefly
-pub trait ToFireflyUtils {
+pub trait ToFireFlyConversionTrait {
     fn into_common_firefly_v2(self) -> Option<Firefly>;
 }
 
-impl ToFireflyUtils for textual_objects::ActiveModel {
+
+impl ToFireFlyConversionTrait for textual_objects::ActiveModel {
     fn into_common_firefly_v2(self) -> Option<Firefly> {
+        let ticket_id = self.ticket_id.clone().unwrap();
         let firefly_json_value = self.get_json_value().unwrap();
-        let firefly = serde_json::from_value::<Option<Firefly>>(firefly_json_value).unwrap_or(None);
-        firefly
+        let mut firefly_json = serde_json::from_value::<Option<Firefly>>(firefly_json_value).unwrap_or(None);
+
+        if let Some(mut firefly) = firefly_json {
+            firefly.ticket_id = ticket_id;
+            firefly_json = Some(firefly);
+        }
+
+        firefly_json
     }
 }
 
-impl ToFireflyUtils for textual_objects::Model {
+impl ToFireFlyConversionTrait for textual_objects::Model {
     fn into_common_firefly_v2(self) -> Option<Firefly> {
+        let ticket_id = self.ticket_id.clone();
         let firefly_json_value = self.get_json_value();
-        match firefly_json_value {
-            Some(json) => serde_json::from_value::<Option<Firefly>>(json).unwrap_or(None),
-            None => None,
+
+        if let Some(firefly_json_value) = firefly_json_value {
+            let mut firefly_json = serde_json::from_value::<Firefly>(firefly_json_value);
+            ;
+
+            if let Ok(mut firefly) = firefly_json {
+                firefly.ticket_id = ticket_id;
+                firefly_json = Ok(firefly);
+            }
+
+            firefly_json.ok()
+        } else {
+            None
         }
     }
 }
 
-impl ToFireflyUtils for TextualObject {
+
+impl ToFireFlyConversionTrait for TextualObject {
     fn into_common_firefly_v2(self) -> Option<Firefly> {
         let firefly_json_value = self.get_json_value();
 
@@ -49,9 +69,8 @@ impl ToFireflyUtils for TextualObject {
                 let firefly = serde_json::from_value::<Option<Firefly>>(json).unwrap_or(None);
 
                 if firefly.is_none() {
-                    return None
+                    return None;
                 }
-
 
 
                 let mut firefly = firefly.unwrap();
@@ -59,11 +78,12 @@ impl ToFireflyUtils for TextualObject {
                 firefly.uuid = self.uuid.to_string();
 
 
-
                 firefly.tags = tags;
 
+                firefly.ticket_id = self.ticket_id;
+
                 Some(firefly)
-            },
+            }
             None => None,
         }
     }
