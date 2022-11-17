@@ -19,6 +19,13 @@
 - Carrel Server
 
   - Carrel core
+    - `carrel-db`
+      - The DB responsible for managing project-related data, mainly project archives, and project files.
+      - The DB is one db for each project directory.
+    - `carrel-app-db`
+      - The DB responsible for managing system-wide data for the Carrel System.
+        - E.g. all the projects that have been opened on this computer.
+      - Each Carrel desktop installation has one App Db.
     - Fireflies (cards-related activities.)
     - Textual objects (underlying technology behind fireflies)
 

@@ -22,7 +22,7 @@ carrel_commons = { path = "../../carrel_commons" }
 
 
 [dependencies.sea-orm]
-version = "0.9.3"
+version = "0.10.2"
 features = [
     "sqlx-sqlite",
     "runtime-tokio-rustls",

@@ -4,27 +4,7 @@ use crate::core::historia_opt::{HistoriaOptions, Language};
 use crate::errors::language_errors::{LanguageError};
 
 /// Regex to tell is a passage contains information about a event in the given language
-///
-/// # Examples
-///
-/// ```
-/// use regex::Regex;
-/// use historiach::core::historia_opt::Language;
-///
-/// let language = Language::CHINESE;
-///
-/// let result = get_selector_regex(language);
-///
-/// assert_eq!(result.is_match("1984年1月20日第一件事"), true);
-///
-/// ```
-///
 pub fn get_selector_regex(language: &Language) -> regex::Regex {
-
-    match language {
-        Language::CHINESE => {}
-        Language::ENGLISH => {},
-    }
 
     let regex_str = match language {
         Language::CHINESE => CHINESE_SELECTOR_REGEX,

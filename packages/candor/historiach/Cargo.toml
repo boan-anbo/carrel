@@ -9,3 +9,6 @@ edition = "2021"
 regex = "1.6.0"
 snafu = "0.7.1"
 snafu-derive = "0.7.1"
+
+[dev-dependencies]
+test-case = "2.2.2"

@@ -2,7 +2,7 @@
 
 use carrel_commons::carrel::common::firefly::v2::Firefly;
 use carrel_commons::carrel::common::tag::v2::Tag as CommonTagV2;
-use to_core::entities::textual_objects;
+use to_core::entities::textual_object;
 use to_core::implementation::util_func::ToUtilFunc;
 use to_core::to::to_struct::{TextualObject, ToStructTrait};
 use to_core::to_tag::to_tag_converter_v2::ToTagConverter;
@@ -15,7 +15,7 @@ pub trait ToFireFlyConversionTrait {
 }
 
 
-impl ToFireFlyConversionTrait for textual_objects::ActiveModel {
+impl ToFireFlyConversionTrait for textual_object::ActiveModel {
     fn into_common_firefly_v2(self) -> Option<Firefly> {
         let ticket_id = self.ticket_id.clone().unwrap();
         let firefly_json_value = self.get_json_value().unwrap();
@@ -30,7 +30,7 @@ impl ToFireFlyConversionTrait for textual_objects::ActiveModel {
     }
 }
 
-impl ToFireFlyConversionTrait for textual_objects::Model {
+impl ToFireFlyConversionTrait for textual_object::Model {
     fn into_common_firefly_v2(self) -> Option<Firefly> {
         let ticket_id = self.ticket_id.clone();
         let firefly_json_value = self.get_json_value();
@@ -93,7 +93,7 @@ pub trait ToFireflyUtilsOption {
     fn into_firefly_option(self) -> Option<Firefly>;
 }
 
-impl ToFireflyUtilsOption for Option<textual_objects::Model> {
+impl ToFireflyUtilsOption for Option<textual_object::Model> {
     fn into_firefly_option(self) -> Option<Firefly> {
         match self {
             Some(to) => to.into_common_firefly_v2(),
@@ -106,7 +106,7 @@ pub trait ToFirefliesUtils {
     fn into_fireflies(self) -> Vec<Firefly>;
 }
 
-impl ToFirefliesUtils for Vec<textual_objects::Model> {
+impl ToFirefliesUtils for Vec<textual_object::Model> {
     fn into_fireflies(self) -> Vec<Firefly> {
         let mut fireflies = Vec::new();
         for to in self {
@@ -120,7 +120,7 @@ impl ToFirefliesUtils for Vec<textual_objects::Model> {
     }
 }
 
-impl ToFirefliesUtils for Vec<textual_objects::ActiveModel> {
+impl ToFirefliesUtils for Vec<textual_object::ActiveModel> {
     fn into_fireflies(self) -> Vec<Firefly> {
         let mut fireflies = Vec::new();
         for to in self {
